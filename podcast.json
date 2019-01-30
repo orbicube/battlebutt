@@ -1,0 +1,30 @@
+{
+	"bombcast": {
+		"url": "https://www.giantbomb.com/feeds/podcast/",
+		"latest_id": "1600-2470",
+		"posted": false
+	},
+	"beastcast": {
+		"url": "https://www.giantbomb.com/podcast-xml/beastcast/",
+		"latest_id": "1600-2473",
+		"posted": false
+	},
+	"aftershow": {
+		"url": "https://www.giantbomb.com/podcast-xml/bombcast-aftermath/",
+		"latest_id": "1600-2482",
+		"posted": false
+	},
+	"goku": {
+		"url": "https://www.giantbomb.com/podcast-xml/all-systems-goku/",
+		"latest_id": "1600-2487",
+		"posted": false
+	},
+	"presents": {
+		"url": "https://www.giantbomb.com/podcast-xml/giant-bomb-presents/",
+		"latest_id": "1600-2486"
+	}
+	"premium": {
+		"url": "https://www.giantbomb.com/podcast-xml/premium/",
+		"latest_id": "1600-2485"
+	}
+}
