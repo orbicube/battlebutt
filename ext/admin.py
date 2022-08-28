@@ -56,7 +56,7 @@ class Admin(commands.Cog):
         self,
         ctx: commands.Context,
         guilds: commands.Greedy[discord.Object],
-        spec: Optional[Literal["~", "*", "^"]] = None) -> None:
+        spec: Optional[Literal["~", "*", "^", "?"]] = None) -> None:
 
         if not guilds:
             if spec == "~":
@@ -68,6 +68,11 @@ class Admin(commands.Cog):
                 ctx.bot.tree.clear_commands(guild=ctx.guild)
                 await ctx.bot.tree.sync(guild=ctx.guild)
                 synced = []
+            elif spec == "?":
+                ctx.bot.tree.clear_commands(guild=None)
+                await ctx.bot.tree.sync()
+                synced = []
+                spec = None
             else:
                 synced = await ctx.bot.tree.sync()
 
