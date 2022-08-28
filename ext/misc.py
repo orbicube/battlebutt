@@ -17,7 +17,7 @@ class Misc(commands.Cog):
 
     @app_commands.command()
     async def shadow(self, interaction: discord.Interaction):
-        """ Random Shadow the Hedgehog ending name and Sonic song. """
+        """ Random Shadow the Hedgehog ending name and Sonic song """
 
         with open('ext/data/shadow.json') as f:
             data = json.load(f)
@@ -30,7 +30,7 @@ class Misc(commands.Cog):
 
     @app_commands.command()
     async def gex(self, interaction: discord.Interaction):
-        """ Random Gex quotes! """
+        """ Random Gex quotes """
 
         with open('ext/data/gex.json') as f:
             data = json.load(f)
@@ -42,7 +42,7 @@ class Misc(commands.Cog):
 
     @app_commands.command()
     async def gameawards(self, interaction: discord.Interaction):
-        """ Countdown to The Game Awards. """
+        """ Countdown to The Game Awards """
 
         date = datetime(2022, 12, 9, 1, 0, 0, tzinfo=timezone.utc)
 
@@ -59,7 +59,7 @@ class Misc(commands.Cog):
     @app_commands.describe(video_number="Specific video number")
     async def classicsofgame(self, interaction: discord.Interaction,
         video_number: Optional[int]):
-        """ Grab a Classics of Game video. """
+        """ Grab a Classics of Game video """
 
         with open('ext/data/classicsofgame.json') as f:
             data = json.load(f)
@@ -78,7 +78,7 @@ class Misc(commands.Cog):
 
     @app_commands.command()
     async def beats(self, interaction: discord.Interaction):
-        """ Tells the current time in Swatch Internet Time. """
+        """ Tells the current time in Swatch Internet Time """
 
         swiss = datetime.now(tz=ZoneInfo("Etc/GMT-1"))
         swatch = round(
