@@ -12,9 +12,9 @@ class Admin(commands.Cog):
 
     @commands.command(name='reload', hidden=True)
     @commands.is_owner()
-    async def _reload(self, ctx, *, ext : str):
+    async def _reload(self, ctx, *, ext: str):
         try:
-            await self.bot.reload_extension(ext)
+            await self.bot.reload_extension(f"ext.{ext}")
         except Exception as e:
             await ctx.send('\N{THINKING FACE}')
             await ctx.send('{}: {}'.format(type(e).__name__, e))
@@ -23,9 +23,9 @@ class Admin(commands.Cog):
 
     @commands.command(name='unload', hidden=True)
     @commands.is_owner()
-    async def _unload(self, ctx, *, ext : str):
+    async def _unload(self, ctx, *, ext: str):
         try:
-            await self.bot.unload_extension(ext)
+            await self.bot.unload_extension(f"ext.{ext}")
         except Exception as e:
             await ctx.send('\N{THINKING FACE}')
             await ctx.send('{}: {}'.format(type(e).__name__, e))
@@ -34,9 +34,9 @@ class Admin(commands.Cog):
 
     @commands.command(name='load', hidden=True)
     @commands.is_owner()
-    async def _load(self, ctx, *, ext : str):
+    async def _load(self, ctx, *, ext: str):
         try:
-            await self.bot.load_extension(ext)
+            await self.bot.load_extension(f"ext.{ext}")
         except Exception as e:
             await ctx.send('\N{THINKING FACE}')
             await ctx.send('{}: {}'.format(type(e).__name__, e))

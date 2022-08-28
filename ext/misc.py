@@ -7,10 +7,41 @@ from typing import Optional
 from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
+import json
+from random import choice
+
 class Misc(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @app_commands.command()
+    async def gameawards(self, interaction: discord.Interaction):
+        """ Countdown to The Game Awards. """
+        date = datetime(2022, 12, 9, 1, 0, 0, tzinfo=timezone.utc)
+
+        if discord.utils.utcnow() < date:
+            countdown = discord.utils.format_dt(date, style='R')
+            await interaction.response.send_message(
+                f"**{countdown}** Gamers will unite to celebrate The Game Awards!")
+        else:
+            await interaction.response.send_message(
+                "gamers have finished uniting and are now in hibernation")
+
+    @app_commands.command()
+    @app_commands.describe(video_number="Specific video number")
+    async def classicsofgame(self, interaction: discord.Interaction,
+        video_number: Optional[int]):
+        """ Grab a Classics of Game video. """
+        with open('ext/data/classicsofgame.json') as f:
+            data = json.load(f)
+
+        if video_number:
+            await interaction.response.send_message(data['vids'][video_number-1])
+        else:
+            await interaction.response.send_message(choice(data['vids']))
+
+
 
     @app_commands.command()
     async def beats(self, interaction: discord.Interaction):
