@@ -9,9 +9,9 @@ import json
 from credentials import DISCORD_TOKEN
 
 extensions = [
-    'admin',
-    'card',
-    'misc'
+    'ext.admin',
+    'ext.card',
+    'ext.misc'
 ]
 
 intents = discord.Intents.default()
