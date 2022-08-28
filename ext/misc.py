@@ -15,6 +15,19 @@ class Misc(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+
+    @app_commands.command()
+    async def shadow(self, interaction: discord.Interaction):
+        """ Random Shadow the Hedgehog ending name and Sonic song. """
+        with open('ext/data/shadow.json') as f:
+            data = json.load(f)
+
+        title = choice(data['names'])
+        song = choice(data['songs'])
+
+        await interaction.response.send_message(f"{title}\n{song}")
+
+
     @app_commands.command()
     async def gameawards(self, interaction: discord.Interaction):
         """ Countdown to The Game Awards. """
@@ -28,6 +41,7 @@ class Misc(commands.Cog):
             await interaction.response.send_message(
                 "gamers have finished uniting and are now in hibernation")
 
+
     @app_commands.command()
     @app_commands.describe(video_number="Specific video number")
     async def classicsofgame(self, interaction: discord.Interaction,
@@ -37,10 +51,15 @@ class Misc(commands.Cog):
             data = json.load(f)
 
         if video_number:
-            await interaction.response.send_message(data['vids'][video_number-1])
+            try:
+                await interaction.response.send_message(
+                    data['vids'][video_number-1])
+            except IndexError:
+                await interaction.response.send_message(
+                    "Invalid video number.",
+                    ephemeral=True)
         else:
             await interaction.response.send_message(choice(data['vids']))
-
 
 
     @app_commands.command()
