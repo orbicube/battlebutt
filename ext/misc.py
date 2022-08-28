@@ -29,6 +29,17 @@ class Misc(commands.Cog):
 
 
     @app_commands.command()
+    async def gex(self, interaction: discord.Interaction):
+        """ Random Gex quotes! """
+        with open('ext/data/gex.json') as f:
+            data = json.load(f)
+
+        await interaction.response.send_message(
+            choice(data['quotes']),
+            file=discord.File("ext/data/gex.png"))
+
+
+    @app_commands.command()
     async def gameawards(self, interaction: discord.Interaction):
         """ Countdown to The Game Awards. """
         date = datetime(2022, 12, 9, 1, 0, 0, tzinfo=timezone.utc)
