@@ -17,9 +17,9 @@ class Card(commands.Cog):
 
     @commands.hybrid_command()
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
-    @app_commands.describe(game="TCG you want to pull a card from.")
+    @app_commands.describe(game="TCG you want to pull a card from")
     async def card(self, ctx, game: Optional[str] = None):
-        """ Pulls a random TCG card. """
+        """ Pulls a random TCG card """
 
         if game:
             if game.startswith("poke"):
@@ -61,7 +61,7 @@ class Card(commands.Cog):
     @commands.command(aliases=['poke'])
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def pokemon(self, ctx):
-        """ Posts a random Pokemon TCG card. """
+        """ Pulls a random Pokemon TCG card """
 
         url = "https://pkmncards.com/?random"
         async with httpx.AsyncClient(http2=True) as client:
@@ -78,7 +78,7 @@ class Card(commands.Cog):
     @commands.command(aliases=['ygo'])
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def yugioh(self, ctx):
-        """ Pulls a random Yu-Gi-Oh! card. """
+        """ Pulls a random Yu-Gi-Oh! card """
        
         url = "https://db.ygoprodeck.com/api/v7/randomcard.php"
         async with httpx.AsyncClient() as client:
@@ -91,7 +91,7 @@ class Card(commands.Cog):
     @commands.command()
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def digimon(self, ctx):
-        """ Posts a random Digimon card. """
+        """ Pulls a random Digimon card. """
 
         url = "https://digimoncard.io/api-public/getAllCards.php?series=Digimon%20Card%20Game"
         async with httpx.AsyncClient() as client:
@@ -105,7 +105,7 @@ class Card(commands.Cog):
     @commands.command(aliases=['magic'])
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def mtg(self, ctx):
-        """ Pulls a random Magic the Gathering card. """
+        """ Pulls a random Magic the Gathering card """
 
         url = "https://api.scryfall.com/cards/random"
         async with httpx.AsyncClient() as client:
@@ -126,7 +126,7 @@ class Card(commands.Cog):
     @commands.command(aliases=['fab'])
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def fleshandblood(self, ctx):
-        """ Posts a random Flesh and Blood card. """
+        """ Pulls a random Flesh and Blood card """
 
         url = "https://api.fabdb.net/cards"
         async with httpx.AsyncClient() as client:
@@ -149,7 +149,7 @@ class Card(commands.Cog):
     @commands.command()
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def gateruler(self, ctx):
-        """ Posts a random Gate Ruler card. """
+        """ Pulls a random Gate Ruler card """
 
         # Defer in case edit takes too long
         await ctx.defer()
@@ -190,7 +190,7 @@ class Card(commands.Cog):
     @commands.command(aliases=['fftcg'])
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def finalfantasy(self, ctx):
-        """ Posts a random Final Fantasy TCG card. """
+        """ Pulls a random Final Fantasy TCG card """
 
         # Defer in case JSON download takes too long
         await ctx.defer()
@@ -208,10 +208,10 @@ class Card(commands.Cog):
             f"https://fftcg.cdn.sewest.net/images/cards/full/{card['Code']}_eg.jpg")
 
 
-    @commands.command(aliases=["cfv", "cfvangaurd"])
+    @commands.command(aliases=["cfvangaurd", "cfv"])
     @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def cardfightvanguard(self, ctx):
-        """ Posts a random Cardfight!! Vanguard card. """
+        """ Pulls a random Cardfight!! Vanguard card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
