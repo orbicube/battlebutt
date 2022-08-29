@@ -149,11 +149,11 @@ class Roles(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def role_db_setup(self, ctx):
+    async def setup_role_db(self, ctx):
 
         async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute('CREATE TABLE role_map (user_id integer, guild_id integer, role_id integer)')
-            await db.execute('CREATE TABLE role_whitelist (guild_id integer, role_id integer)')
+            await db.execute('CREATE TABLE IF NOT EXISTS role_map (user_id integer, guild_id integer, role_id integer, UNIQUE(user_id, guild_id, role_id))')
+            await db.execute('CREATE TABLE IF NOT EXISTS role_whitelist (guild_id integer, role_id integer, UNIQUE(guild_id, role_id))')
             await db.commit()
 
 

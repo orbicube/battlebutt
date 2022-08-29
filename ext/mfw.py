@@ -10,11 +10,6 @@ from random import choice
 
 class MFW(commands.Cog):
 
-    post_channels = [
-        #122087203760242692,        
-        143562235740946432
-    ]
-
     def __init__(self, bot):
         self.bot = bot
         self.check_mfw.start()
@@ -47,17 +42,43 @@ class MFW(commands.Cog):
                 await db.execute('INSERT INTO mfw_list VALUES (?)', (img, ))
                 await db.commit()
 
-                for c in self.post_channels:
-                    await self.bot.get_channel(c).send(
+                # Get channels to post in then post them
+                async with db.execute('SELECT channel_id FROM post_channels') as cursor:
+                    post_channels = await cursor.fetchall()
+                for c in post_channels:
+                    await self.bot.get_channel(c[0]).send(
                         "New MFW added!",
                         file=discord.File(img))
 
 
     @commands.command(hidden=True)
-    async def setup_mfw(self, ctx):
+    async def setup_mfw_db(self, ctx):
 
         async with aiosqlite.connect("ext/data/mfw.db") as db:
-            await db.execute('CREATE TABLE mfw_list (file text)')
+            await db.execute('CREATE TABLE IF NOT EXISTS mfw_list (file text)')
+            await db.execute('CREATE TABLE IF NOT EXISTS post_channels (channel_id integer PRIMARY KEY)')
+            await db.commit()
+
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def add_mfw_channel(self, ctx, channel: discord.TextChannel):
+        """ Add channel for new MFW images to be announced in """
+
+        async with aiosqlite.connect("ext/data/mfw.db") as db:
+            await db.execute('INSERT INTO post_channels VALUES (?)',
+                (channel.id, ))
+            await db.commit()
+
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def remove_mfw_channel(self, ctx, channel: discord.TextChannel):
+        """ Remove MFW announce channel """
+
+        async with aiosqlite.connect("ext/data/mfw.db") as db:
+            await db.execute('DELETE FROM post_channels WHERE channel_id=?', 
+                (channel.id, ))
             await db.commit()
 
 
