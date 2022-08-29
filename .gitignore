@@ -154,3 +154,5 @@ cython_debug/
 credentials.json
 credentials.py
 ext/data/roles.db
+ext/data/mfw/
+ext/data/mfw.db

@@ -88,7 +88,6 @@ class Roles(commands.Cog):
 
     @app_commands.command()
     @app_commands.guild_only()
-    @app_commands.describe(role="The role to be added")
     async def role(self, interaction: discord.Interaction,
         action: Literal["Add", "Remove", "List"],
         role: Optional[discord.Role]):

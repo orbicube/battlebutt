@@ -14,7 +14,8 @@ extensions = [
     'ext.admin',
     'ext.card',
     'ext.misc',
-    'ext.roles'
+    'ext.roles',
+    'ext.mfw'
 ]
 
 intents = discord.Intents.default()
@@ -32,22 +33,26 @@ class ButtTranslator(app_commands.Translator):
         trans_dict = {
             "command_name": {
                 "color": {
-                    "en-GB": "colour"
+                    "en-GB": "colour",
+                    "da": "colour"
                 }
             },
             "command_description": {
                 "Change your role color": {
-                    "en-GB": "Change your role colour"
+                    "en-GB": "Change your role colour",
+                    "da": "Change your role colour"
                 }
             },
             "parameter_description": {
                 "Color hex code (e.g. #135ACF) or 'random'": {
-                    "en-GB": "Colour hex code (e.g. #135ACF) or 'random'"
+                    "en-GB": "Colour hex code (e.g. #135ACF) or 'random'",
+                    "da": "Colour hex code (e.g. #135ACF) or 'random'"
                 }
             },
             "other": {
                 "color": {
-                    "en-GB": "colour"
+                    "en-GB": "colour",
+                    "da": "colour"
                 }
             }
         }
