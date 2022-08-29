@@ -94,6 +94,7 @@ class Funko(commands.Cog):
             embed.set_thumbnail(url=f"https://api.funko.com{funko['additionalImages'][0]}")
         else:
             embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
+            
         await ctx.send(embed=embed)
 
 
