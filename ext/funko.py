@@ -16,6 +16,9 @@ class Funko(commands.Cog):
     async def funko(self, ctx):
         """ Posts a random Funko Pop figure """
 
+        # Defer in case HTTP requests take too long
+        await ctx.defer()
+
         url = "https://api.funko.com/api/search/terms"
         headers = {
             "User-Agent": "Popspedia/1 CFNetwork/1325.0.1 Darwin/21.0.0",
@@ -47,16 +50,49 @@ class Funko(commands.Cog):
             # Get that year's associated count
             year_count = counts[years.index(year)]
 
-            # Grab random page from that 
-            data['page'] = str(randint(1, (year_count / 10) + 1))
+            # 10 items per page so divide item count by 10 and round up
+            data['page'] = str(randint(1, (year_count / 10).__ceil__()))
             data['releaseDate'] = [year]
 
             r = await client.post(url, headers=headers, json=data)
             results = r.json()
 
         funko = choice(results['hits'])
+        embed = discord.Embed(
+            title = funko['title'],
+            color = 5723991)
 
-        await ctx.send(funko['title'])
+        release_date = datetime.strptime(
+            funko['releaseDate'].split('T')[0],
+            "%Y-%m-%d")
+        if release_date.month == 1 and release_date.day == 1:
+            release_value = release_date.year
+        else:
+            day = release_date.day
+            if 4 <= day <= 20 or 24 <= day <= 30:
+                suffix = "th"
+            else:
+                suffix = ["st", "nd", "rd"][day % 10 - 1]
+            release_value = "{} {}{}, {}".format(
+                release_date.strftime("%B"),
+                day, suffix,
+                release_date.strftime("%Y"))
+        embed.add_field(
+            name = "Release Date",
+            value = release_value,
+            inline = True)
+
+        if "marketValue" in funko.keys():
+            embed.add_field(
+                name = "Value",
+                value = f"${funko['marketValue']:n}",
+                inline = True)
+
+        embed.set_footer(text = funko['licenses'][0])
+
+        embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
+        
+        await ctx.send(embed=embed)
 
 
 
