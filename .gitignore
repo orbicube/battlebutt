@@ -156,3 +156,4 @@ credentials.py
 ext/data/roles.db
 ext/data/mfw/
 ext/data/mfw.db
+ext/data/banner/
