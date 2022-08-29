@@ -41,15 +41,15 @@ class Funko(commands.Cog):
             r = await client.post(url, headers=headers, json=data)
             results = r.json()
 
-            # Randomly pick a year based on weighting from item counts
+            # Randomly pick a year based on weighting from item counts.
             years = [year['key'] for year in results['attributes']['releaseDate']]
             counts = [year['count'] for year in results['attributes']['releaseDate']]
             year = choices(years, counts)[0]
 
-            # Get that year's associated count
+            # Get that year's associated count.
             year_count = counts[years.index(year)]
 
-            # 10 items per page so divide item count by 10 and round up
+            # 10 items per page so divide item count by 10 and round up.
             data['page'] = str(randint(1, (year_count / 10).__ceil__()))
             data['releaseDate'] = [year]
 
@@ -61,6 +61,7 @@ class Funko(commands.Cog):
             title = funko['title'],
             color = 5723991)
 
+        # Convert timestamp to human-readable string ("Year"/"Month Xth, Year")
         release_date = datetime.strptime(
             funko['releaseDate'].split('T')[0],
             "%Y-%m-%d")
@@ -81,6 +82,7 @@ class Funko(commands.Cog):
             value = release_value,
             inline = True)
 
+        # Some items do not have this field.
         if "marketValue" in funko.keys():
             embed.add_field(
                 name = "Value",
@@ -89,12 +91,14 @@ class Funko(commands.Cog):
 
         embed.set_footer(text = funko['licenses'][0])
 
+        # More recent items may have multiple images provided.
+        # The first is usually the box while the second is the raw figure.
         if len(funko['additionalImages']) > 1:
             embed.set_image(url=f"https://api.funko.com{funko['additionalImages'][1]}")
             embed.set_thumbnail(url=f"https://api.funko.com{funko['additionalImages'][0]}")
         else:
             embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
-            
+
         await ctx.send(embed=embed)
 
 
