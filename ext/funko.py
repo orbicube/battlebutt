@@ -1,6 +1,5 @@
 import discord
 from discord.ext import commands
-from discord import app_commands
 
 from random import randint, choice, choices
 from datetime import datetime
@@ -90,8 +89,11 @@ class Funko(commands.Cog):
 
         embed.set_footer(text = funko['licenses'][0])
 
-        embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
-        
+        if len(funko['additionalImages']) > 1:
+            embed.set_image(url=f"https://api.funko.com{funko['additionalImages'][1]}")
+            embed.set_thumbnail(url=f"https://api.funko.com{funko['additionalImages'][0]}")
+        else:
+            embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
         await ctx.send(embed=embed)
 
 
