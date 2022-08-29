@@ -22,9 +22,8 @@ class Banner(commands.Cog):
         await self.bot.wait_until_ready()
 
         selected = choice(glob("ext/data/banner/*.jpg"))
-        self.current_banner = selected.rsplit('/')[1]
+        self.current_banner = selected.rsplit('/', 1)[1]
 
-        pass
 
     @app_commands.command()
     async def banner(self, interaction: discord.Interaction):

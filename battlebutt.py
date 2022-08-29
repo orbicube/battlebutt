@@ -15,7 +15,8 @@ extensions = [
     'ext.card',
     'ext.misc',
     'ext.roles',
-    'ext.mfw'
+    'ext.mfw',
+    'ext.banner'
 ]
 
 intents = discord.Intents.default()
