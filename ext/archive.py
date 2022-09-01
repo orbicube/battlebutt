@@ -73,7 +73,8 @@ class Archive(commands.Cog):
             archival.set_image(url=msg.attachments[0].url)
 
         await post_channel.send(embed=archival)
-        await interaction.response.send_message("Archived.", ephemeral=True)
+        await interaction.response.send_message(
+            f"Archived this post: {msg.jump_url}")
 
 
 async def setup(bot):
