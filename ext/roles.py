@@ -119,15 +119,15 @@ class Roles(commands.Cog):
                         "You need to specify a role.", ephemeral=True)
                     return
 
-                # Check if role is whitelisted to be freely added
-                async with db.execute('SELECT role_id FROM role_whitelist WHERE guild_id=? AND role_id=?',
-                    (interaction.guild.id, role.id)) as cursor:
-                    role_in_db = await cursor.fetchone()
+            # Check if role is whitelisted to be freely added
+            async with db.execute('SELECT role_id FROM role_whitelist WHERE guild_id=? AND role_id=?',
+                (interaction.guild.id, role.id)) as cursor:
+                role_in_db = await cursor.fetchone()
 
-        if not role_in_db:
-            await interaction.response.send_message(
-                "That role isn't whitelisted.", ephemeral=True)
-            return
+                if not role_in_db:
+                    await interaction.response.send_message(
+                        "That role isn't whitelisted.", ephemeral=True)
+                    return
 
         if action == "Add":
             if role in interaction.user.roles:
@@ -166,11 +166,11 @@ class Roles(commands.Cog):
         with open('ext/data/rolemap.json') as f:
             data = json.load(f)
 
-        for user_id, role_id in data.items():
-            async with aiosqlite.connect("ext/data/roles.db") as db:
+        async with aiosqlite.connect("ext/data/roles.db") as db:
+            for user_id, role_id in data.items():
                 await db.execute('INSERT INTO role_map VALUES (?, ?, ?)',
                     (int(user_id), guild.id, int(role_id)))
-                await db.commit()
+            await db.commit()
 
 
     @commands.command(hidden=True)

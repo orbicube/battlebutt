@@ -14,7 +14,7 @@ class MFW(commands.Cog):
         self.bot = bot
         self.check_mfw.start()
 
-    def cog_unload(self):
+    async def cog_unload(self):
         self.check_mfw.cancel()
 
     @commands.hybrid_command()

@@ -17,7 +17,8 @@ extensions = [
     'ext.roles',
     'ext.mfw',
     'ext.banner',
-    'ext.funko'
+    'ext.funko',
+    'ext.archive'
 ]
 
 intents = discord.Intents.default()
