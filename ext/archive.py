@@ -53,7 +53,7 @@ class Archive(commands.Cog):
         archival = discord.Embed(
             description = msg.clean_content,
             timestamp = msg.created_at,
-            colour = msg.author.colour
+            color = msg.author.color
         )
 
         archival.set_author(

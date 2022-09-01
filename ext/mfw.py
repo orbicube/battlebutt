@@ -2,7 +2,6 @@ import discord
 from discord.ext import commands, tasks
 from discord import app_commands
 
-import asyncio
 import aiosqlite
 from glob import glob
 from random import choice

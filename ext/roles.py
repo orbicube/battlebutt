@@ -3,7 +3,6 @@ from discord.ext import commands
 from discord import app_commands
 
 from typing import Optional, Literal
-
 from random import randint
 import aiosqlite
 
@@ -59,7 +58,7 @@ class Roles(commands.Cog):
         old_color = str(role.color).upper()
 
         if code == "random":
-            # discord.Color.random() gives somewhat limited results I feel
+            # discord.Color.random() gives somewhat limited results
             role = await role.edit(color=discord.Color.from_rgb(
                 randint(0,255), randint(0,255), randint(0,255)))
         else:
