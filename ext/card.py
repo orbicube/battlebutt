@@ -132,9 +132,8 @@ class Card(commands.Cog):
         params = { "page": page_select }
 
         # Get random card from random page
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url, params=params)
-            page = r.json()
+        r = await self.bot.http_client.get(url, params=params)
+        page = r.json()
         card = choice(page['data'])
 
         await ctx.send(card['image'].split('?')[0])

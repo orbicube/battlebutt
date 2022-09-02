@@ -93,7 +93,6 @@ class Roles(commands.Cog):
         """ Add, remove or list publicly available roles """
 
         async with aiosqlite.connect("ext/data/roles.db") as db:
-
             if action == "List":
                 # Grab all roles for given guild, list them all out
                 async with db.execute('SELECT role_id FROM role_whitelist WHERE guild_id=?',
@@ -220,7 +219,7 @@ class Roles(commands.Cog):
 
 async def setup(bot):
     async with aiosqlite.connect("ext/data/roles.db") as db:
-        await db.execute('CREATE TABLE IF NOT EXISTS role_map (user_id integer, guild_id integer, role_id integer, UNIQUE(user_id, guild_id, role_id))')
+        await db.execute('CREATE TABLE IF NOT EXISTS role_map (user_id integer, guild_id integer, role_id integer, UNIQUE(user_id, guild_id))')
         await db.execute('CREATE TABLE IF NOT EXISTS role_whitelist (guild_id integer, role_id integer, UNIQUE(guild_id, role_id))')
         await db.commit()
     await bot.add_cog(Roles(bot))
