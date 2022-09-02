@@ -52,9 +52,7 @@ class Admin(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def sync(
-        self,
-        ctx: commands.Context,
+    async def sync(self, ctx,
         guilds: commands.Greedy[discord.Object],
         spec: Optional[Literal["~", "*", "^", "?"]] = None) -> None:
 

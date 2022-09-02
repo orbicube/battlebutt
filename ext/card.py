@@ -5,7 +5,6 @@ from discord.ext import commands
 from typing import Optional
 from random import choice, randint
 
-import httpx
 from lxml import html
 from PIL import Image
 from io import BytesIO
@@ -64,8 +63,7 @@ class Card(commands.Cog):
         """ Pulls a random Pokemon TCG card """
 
         url = "https://pkmncards.com/?random"
-        async with httpx.AsyncClient(http2=True) as client:
-            r = await client.get(url, follow_redirects=True)
+        r = await self.bot.http_client.get(url, follow_redirects=True)
 
         # Scrape image from page metadata
         page = html.fromstring(r.text)
@@ -81,9 +79,8 @@ class Card(commands.Cog):
         """ Pulls a random Yu-Gi-Oh! card """
        
         url = "https://db.ygoprodeck.com/api/v7/randomcard.php"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)
-            card = r.json()
+        r = await self.bot.http_client.get(url)
+        card = r.json()
 
         await ctx.send(card['card_images'][0]['image_url'])
 
@@ -94,9 +91,8 @@ class Card(commands.Cog):
         """ Pulls a random Digimon card. """
 
         url = "https://digimoncard.io/api-public/getAllCards.php?series=Digimon%20Card%20Game"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)
-            card_list = r.json()
+        r = await self.bot.http_client.get(url)
+        card_list = r.json()
 
         await ctx.send(
             f"https://images.digimoncard.io/images/cards/{choice(card_list)['cardnumber']}.jpg")
@@ -108,9 +104,8 @@ class Card(commands.Cog):
         """ Pulls a random Magic the Gathering card """
 
         url = "https://api.scryfall.com/cards/random"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)
-            card = r.json()
+        r = await self.bot.http_client.get(url)
+        card = r.json()
 
         # If it doesn't have an image then try again
         if card['image_status'] == 'missing' or card['image_status'] == 'placeholder':
@@ -129,9 +124,8 @@ class Card(commands.Cog):
         """ Pulls a random Flesh and Blood card """
 
         url = "https://api.fabdb.net/cards"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)
-            page = r.json()
+        r = await self.bot_http_client.get(url)
+        page = r.json()
 
         # Pick random page
         page_select = randint(1, page['meta']['last_page'])        
@@ -156,23 +150,21 @@ class Card(commands.Cog):
 
         # Get max page number
         url = "https://www.gateruler-official.com/card_search"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)   
-            page = html.fromstring(r.text)
+        r = await self.bot.http_client.get(url)
+        page = html.fromstring(r.text)
 
-            max_pages = page.xpath("//ul[@class='pagination']/li/a/text()")[-2]
+        max_pages = page.xpath("//ul[@class='pagination']/li/a/text()")[-2]
 
-            # Pick random page
-            params = { "page": randint(1, int(max_pages)) }
-            
-            r = await client.get(url, params=params)
-            page = html.fromstring(r.text)
+        # Pick random page
+        params = { "page": randint(1, int(max_pages)) }
+        r = await self.bot.http_client.get(url, params=params)
+        page = html.fromstring(r.text)
 
-            # Get random card       
-            cards = page.xpath("//li[@class='com_btm']/a/img/@src")
-            card_url = choice(cards)
+        # Get random card       
+        cards = page.xpath("//li[@class='com_btm']/a/img/@src")
+        card_url = choice(cards)
 
-            r = await client.get(card_url)
+        r = await self.bot.http_client.get(card_url)
 
         # Crop borders of card
         card_img = Image.open(BytesIO(r.content))
@@ -196,9 +188,8 @@ class Card(commands.Cog):
         await ctx.defer()
 
         url = "https://fftcg.square-enix-games.com/na/get-cards"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)           
-            cards = r.json()
+        r = await self.bot.http_client.get(url)           
+        cards = r.json()
 
         card = choice(cards['cards'])
         if '\/' in card['Code']:
@@ -218,20 +209,19 @@ class Card(commands.Cog):
 
         # Get first page to figure out max page
         url = "https://en.cf-vanguard.com/cardlist/cardsearch"
-        async with httpx.AsyncClient() as client:
-            r = await client.get(url)
-            page = html.fromstring(r.text)
+        r = await self.bot.http_client.get(url)
+        page = html.fromstring(r.text)
 
-            # 24 cards per page
-            card_count = page.xpath("//div[@class='number']/text()")[0]
-            card_count = int(card_count[:-8])
-            params = {
-                "page": randint(1, int((card_count / 24) + 1))
-            }
+        # 24 cards per page
+        card_count = page.xpath("//div[@class='number']/text()")[0]
+        card_count = int(card_count[:-8])
+        params = {
+            "page": randint(1, int((card_count / 24) + 1))
+        }
 
-            # Get page with cards to pick
-            r = await client.get(url, params=params)
-            page = html.fromstring(r.text)
+        # Get page with cards to pick
+        r = await self.bot.http_client.get(url, params=params)
+        page = html.fromstring(r.text)
 
         # Pick card
         card = "https://en.cf-vanguard.com{}".format(

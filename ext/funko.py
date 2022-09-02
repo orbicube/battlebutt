@@ -4,8 +4,6 @@ from discord.ext import commands
 from random import randint, choice, choices
 from datetime import datetime
 
-import httpx
-
 class Funko(commands.Cog):
 
     def __init__(self, bot):
@@ -37,24 +35,23 @@ class Funko(commands.Cog):
                 "pop! vinyl", "vinyl cubed"]
         }
 
-        async with httpx.AsyncClient() as client:
-            r = await client.post(url, headers=headers, json=data)
-            results = r.json()
+        r = await self.bot.http_client.post(url, headers=headers, json=data)
+        results = r.json()
 
-            # Randomly pick a year based on weighting from item counts.
-            years = [year['key'] for year in results['attributes']['releaseDate']]
-            counts = [year['count'] for year in results['attributes']['releaseDate']]
-            year = choices(years, counts)[0]
+        # Randomly pick a year based on weighting from item counts.
+        years = [year['key'] for year in results['attributes']['releaseDate']]
+        counts = [year['count'] for year in results['attributes']['releaseDate']]
+        year = choices(years, counts)[0]
 
-            # Get that year's associated count.
-            year_count = counts[years.index(year)]
+        # Get that year's associated count.
+        year_count = counts[years.index(year)]
 
-            # 10 items per page so divide item count by 10 and round up.
-            data['page'] = str(randint(1, (year_count / 10).__ceil__()))
-            data['releaseDate'] = [year]
+        # 10 items per page so divide item count by 10 and round up.
+        data['page'] = str(randint(1, (year_count / 10).__ceil__()))
+        data['releaseDate'] = [year]
 
-            r = await client.post(url, headers=headers, json=data)
-            results = r.json()
+        r = await self.bot.http_client.post(url, headers=headers, json=data)
+        results = r.json()
 
         funko = choice(results['hits'])
         embed = discord.Embed(

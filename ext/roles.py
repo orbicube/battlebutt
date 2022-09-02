@@ -148,16 +148,6 @@ class Roles(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def setup_role_db(self, ctx):
-
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute('CREATE TABLE IF NOT EXISTS role_map (user_id integer, guild_id integer, role_id integer, UNIQUE(user_id, guild_id, role_id))')
-            await db.execute('CREATE TABLE IF NOT EXISTS role_whitelist (guild_id integer, role_id integer, UNIQUE(guild_id, role_id))')
-            await db.commit()
-
-
-    @commands.command(hidden=True)
-    @commands.is_owner()
     async def rolemap_json(self, ctx, guild: discord.Guild):
         # Uses a rolemap.json file keyed 'user_id': 'role_id' to map user roles 
         # for a specified guild
@@ -229,5 +219,9 @@ class Roles(commands.Cog):
 
 
 async def setup(bot):
+    async with aiosqlite.connect("ext/data/roles.db") as db:
+        await db.execute('CREATE TABLE IF NOT EXISTS role_map (user_id integer, guild_id integer, role_id integer, UNIQUE(user_id, guild_id, role_id))')
+        await db.execute('CREATE TABLE IF NOT EXISTS role_whitelist (guild_id integer, role_id integer, UNIQUE(guild_id, role_id))')
+        await db.commit()
     await bot.add_cog(Roles(bot))
 
