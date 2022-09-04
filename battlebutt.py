@@ -1,15 +1,15 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
+import asyncio
 
 from typing import Optional
 from pathlib import Path
 import traceback
-import asyncio
 
 import httpx
 
-from credentials import DISCORD_TOKEN
+from credentials import DISCORD_TOKEN, DEBUG_CHANNEL
 from translator import ButtTranslator
 
 intents = discord.Intents.default()
@@ -47,7 +47,7 @@ async def on_app_command_error(interaction: discord.Interaction,
     error_msg += "```"
 
     if not isinstance(error, commands.CommandOnCooldown):
-        await bot.get_channel(669158736782163968).send(error_msg)
+        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
@@ -69,7 +69,7 @@ async def on_command_error(ctx, error):
     error_msg += "```"
 
     if not isinstance(error, commands.CommandOnCooldown):
-        await bot.get_channel(669158736782163968).send(error_msg)
+        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
