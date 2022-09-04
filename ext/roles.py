@@ -186,7 +186,7 @@ class Roles(commands.Cog):
     async def list_mapped_roles(self, ctx, user: discord.User):
 
         async with aiosqlite.connect("ext/data/roles.db") as db:
-            async with db.execute('SELECT role_id FROM role_map WHERE user_id=? and guild_id=?',
+            async with db.execute('SELECT role_id FROM role_map WHERE user_id=? AND guild_id=?',
                 (user.id, ctx.guild.id)) as cursor:
                 roles = await cursor.fetchall()
 

@@ -92,5 +92,14 @@ class Misc(commands.Cog):
             f"It is currently **@{swatch}**.")
 
 
+    @commands.Cog.listener("on_message")
+    async def ask8ball(self, message):
+
+        if self.bot.user in message.mentions:
+            if message.content.endswith("?"):
+                with open ("ext/data/8ball.json") as f:
+                    await message.reply(choice(json.load(f)['responses']))
+
+
 async def setup(bot):
     await bot.add_cog(Misc(bot))

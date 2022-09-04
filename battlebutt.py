@@ -6,6 +6,7 @@ import asyncio
 from typing import Optional
 from pathlib import Path
 import traceback
+import sys
 
 import httpx
 
@@ -14,6 +15,7 @@ from translator import ButtTranslator
 
 intents = discord.Intents.default()
 intents.message_content = True
+intents.members = True
 
 discord.utils.setup_logging()
 
@@ -37,7 +39,6 @@ async def main():
 @bot.tree.error
 async def on_app_command_error(interaction: discord.Interaction, 
     error: app_commands.AppCommandError):
-
     error = getattr(error, 'original', error)
 
     error_msg = (f"Error in **{interaction.command}**\n\n"
@@ -57,8 +58,8 @@ async def on_app_command_error(interaction: discord.Interaction,
 
 @bot.event
 async def on_command_error(ctx, error):
-
     error = getattr(error, 'original', error)
+
     if isinstance(error, (commands.CommandNotFound, commands.NotOwner)):
         return
 
@@ -74,7 +75,6 @@ async def on_command_error(ctx, error):
             type(error), error, error.__traceback__, file=sys.stderr)
 
     await ctx.send(f"**Error**: {error}")
-
 
 
 asyncio.run(main())
