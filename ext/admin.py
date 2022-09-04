@@ -89,5 +89,6 @@ class Admin(commands.Cog):
 
         await ctx.send(f"Synced the tree to {ret}/{len(guilds)}.")
 
+
 async def setup(bot):
     await bot.add_cog(Admin(bot))
