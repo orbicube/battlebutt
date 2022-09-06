@@ -47,9 +47,9 @@ class Misc(commands.Cog):
         date = datetime(2022, 12, 9, 1, 0, 0, tzinfo=timezone.utc)
 
         if discord.utils.utcnow() < date:
-            countdown = discord.utils.format_dt(date, style='R')
-            await interaction.response.send_message(
-                f"**{countdown}** Gamers will unite to celebrate The Game Awards!")
+            await interaction.response.send_message((
+                f"**{discord.utils.format_dt(date, style='R')}**"
+                f"Gamers will unite to celebrate The Game Awards!"))
         else:
             await interaction.response.send_message(
                 "gamers have finished uniting and are now in hibernation")
@@ -99,6 +99,15 @@ class Misc(commands.Cog):
             if message.content.endswith("?"):
                 with open ("ext/data/8ball.json") as f:
                     await message.reply(choice(json.load(f)['responses']))
+
+
+    @commands.Cog.listener("on_message")
+    async def witchmercy(self, message):
+
+        match = ["witch mercy", "witchmercy", "which mercy"]
+        if any(x in message.content for x in match):
+            await message.add_reaction(
+                "<:witchmercydonottouch:809289934182678539>")
 
 
 async def setup(bot):

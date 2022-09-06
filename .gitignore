@@ -157,3 +157,4 @@ ext/data/mfw/
 ext/data/banner/
 ext/data/abe.jpg
 ext/data/*.db
+ext/data/tags.json
