@@ -52,7 +52,7 @@ async def on_app_command_error(interaction: discord.Interaction,
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
-    await interaction.response.send_message(f"**Error**: {error}",
+    await interaction.response.send_message(f"foo**Error**: {error}",
         ephemeral=True)
 
 
@@ -74,7 +74,7 @@ async def on_command_error(ctx, error):
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
-    await ctx.send(f"**Error**: {error}")
+    await ctx.reply(f"**Error**: {error}", ephemeral=True)
 
 
 asyncio.run(main())

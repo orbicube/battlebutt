@@ -9,13 +9,14 @@ from lxml import html
 from PIL import Image
 from io import BytesIO
 
-class Card(commands.Cog):
+class Card(commands.Cog,
+    command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
+        1, 30, commands.BucketType.user)}):
 
     def __init__(self, bot):
         self.bot = bot
 
     @commands.hybrid_command()
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     @app_commands.describe(game="TCG you want to pull a card from")
     async def card(self, ctx, game: Optional[str] = None):
         """ Pulls a random TCG card """
@@ -58,7 +59,6 @@ class Card(commands.Cog):
 
 
     @commands.command(aliases=['poke'])
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def pokemon(self, ctx):
         """ Pulls a random Pokemon TCG card """
 
@@ -70,11 +70,10 @@ class Card(commands.Cog):
         image_url = page.xpath("//meta[@property='og:image']/@content")[0]
         image_url = image_url.split('?')[0]
 
-        await ctx.send(image_url)
+        await ctx.reply(image_url)
 
 
     @commands.command(aliases=['ygo'])
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def yugioh(self, ctx):
         """ Pulls a random Yu-Gi-Oh! card """
        
@@ -82,24 +81,23 @@ class Card(commands.Cog):
         r = await self.bot.http_client.get(url)
         card = r.json()
 
-        await ctx.send(card['card_images'][0]['image_url'])
+        await ctx.reply(card['card_images'][0]['image_url'])
 
 
     @commands.command()
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def digimon(self, ctx):
         """ Pulls a random Digimon card. """
 
-        url = "https://digimoncard.io/api-public/getAllCards.php?series=Digimon%20Card%20Game"
+        url = ("https://digimoncard.io/api-public/"
+            "getAllCards.php?series=Digimon%20Card%20Game")
         r = await self.bot.http_client.get(url)
         card_list = r.json()
 
-        await ctx.send(
-            f"https://images.digimoncard.io/images/cards/{choice(card_list)['cardnumber']}.jpg")
+        await ctx.reply(("https://images.digimoncard.io/images/cards/"
+            f"{choice(card_list)['cardnumber']}.jpg"))
 
 
     @commands.command(aliases=['magic'])
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def mtg(self, ctx):
         """ Pulls a random Magic the Gathering card """
 
@@ -108,18 +106,18 @@ class Card(commands.Cog):
         card = r.json()
 
         # If it doesn't have an image then try again
-        if card['image_status'] == 'missing' or card['image_status'] == 'placeholder':
+        card_status = card['image_status']
+        if card_status == 'missing' or card_status == 'placeholder':
             await self.mtg(ctx)
         else:
             # If card has two sides, pick one side
             if not "image_uris" in card and "card_faces" in card:
                 card['image_uris'] = card['card_faces'][randint(0,1)]['image_uris']
             
-            await ctx.send(card['image_uris']['border_crop'])
+            await ctx.reply(card['image_uris']['border_crop'])
 
 
     @commands.command(aliases=['fab'])
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def fleshandblood(self, ctx):
         """ Pulls a random Flesh and Blood card """
 
@@ -136,11 +134,10 @@ class Card(commands.Cog):
         page = r.json()
         card = choice(page['data'])
 
-        await ctx.send(card['image'].split('?')[0])
+        await ctx.reply(card['image'].split('?')[0])
 
 
     @commands.command()
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def gateruler(self, ctx):
         """ Pulls a random Gate Ruler card """
 
@@ -173,13 +170,12 @@ class Card(commands.Cog):
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.send(file=discord.File(
+            await ctx.reply(file=discord.File(
                 fp=img_binary,
                 filename=card_url.rsplit('/', 1)[1]))
 
 
     @commands.command(aliases=['fftcg'])
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def finalfantasy(self, ctx):
         """ Pulls a random Final Fantasy TCG card """
 
@@ -194,12 +190,11 @@ class Card(commands.Cog):
         if '\/' in card['Code']:
             card['Code'] = card['Code'].split('\/')[0]
 
-        await ctx.send(
-            f"https://fftcg.cdn.sewest.net/images/cards/full/{card['Code']}_eg.jpg")
+        await ctx.reply(("https://fftcg.cdn.sewest.net/images/cards/"
+            f"full/{card['Code']}_eg.jpg"))
 
 
     @commands.command(aliases=["cfvangaurd", "cfv"])
-    @commands.cooldown(rate=1, per=60.0, type=commands.BucketType.user)
     async def cardfightvanguard(self, ctx):
         """ Pulls a random Cardfight!! Vanguard card """
 
@@ -225,7 +220,7 @@ class Card(commands.Cog):
         # Pick card
         card = "https://en.cf-vanguard.com{}".format(
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
-        await ctx.send(card)
+        await ctx.reply(card)
 
 
 async def setup(bot):

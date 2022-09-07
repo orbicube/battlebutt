@@ -83,7 +83,10 @@ class GiantBomb(commands.Cog):
         else:
             self.game["image"] = ""
         self.game["url"] = game["site_detail_url"]
-        self.game["platforms"] = [plat["name"] for plat in game["platforms"]]
+        if game["platforms"]:
+            self.game["platforms"] = [plat["name"] for plat in game["platforms"]]
+        else:
+            self.game["platforms"] = []
         self.game["deck"] = game["deck"]
 
         await self.bot.change_presence(
@@ -105,13 +108,7 @@ class GiantBomb(commands.Cog):
             embed.set_image(url=game["image"])
 
         if game["platforms"]:
-            if len(game["platforms"]) > 1:
-                plat_format = ", ".join(game["platforms"][:-1])
-                plat_format += f" and {game['platforms'][-1]}"
-            else:
-                plat_format = game["platforms"][0]
-
-            embed.set_footer(text=plat_format)
+            embed.set_footer(text=", ".join(game["platforms"]))
 
         await interaction.response.send_message(embed=embed)
 
@@ -156,10 +153,6 @@ class GiantBomb(commands.Cog):
 
                     embed.set_image(url=video["image"]["original_url"])
 
-                    embed.set_author(
-                        name="New Giant Bomb Video",
-                        icon_url=self.gb_logo)
-
                     # Rarely videos don't have attached lengths
                     if video["length_seconds"] > 0:
                         # Format video length in "?h ?m ?s" format
@@ -172,7 +165,8 @@ class GiantBomb(commands.Cog):
                             f"{f'{seconds}s ' if seconds else ''}"))
 
                     for c in self.post_channels:
-                        await self.bot.get_channel(c).send(embed=embed)
+                        await self.bot.get_channel(c).send(
+                            "New Giant Bomb video:", embed=embed)
 
                     await db.execute(""" INSERT INTO video_history
                         VALUES (?)""", (video["id"], ))
@@ -213,14 +207,13 @@ class GiantBomb(commands.Cog):
                         title=up["title"],
                         description=f"Coming up {post_str}.",
                         color=15474724)
-                    embed.set_author(name="Upcoming on Giant Bomb",
-                        icon_url=self.gb_logo)
 
                     if up["image"]:
                         embed.set_image(url=f"https://{up['image']}")
 
                     for c in self.post_channels:
-                        await self.bot.get_channel(c).send(embed=embed)
+                        await self.bot.get_channel(c).send(
+                            "Upcoming on Giant Bomb:", embed=embed)
 
                 await db.execute(""" INSERT INTO upcoming 
                     VALUES (?)""", (up["title"], ))
