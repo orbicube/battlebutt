@@ -3,7 +3,6 @@ from discord import app_commands
 from discord.ext import commands
 import asyncio
 
-from typing import Optional
 from pathlib import Path
 import traceback
 import sys
@@ -19,7 +18,9 @@ intents.members = True
 
 discord.utils.setup_logging()
 
-bot = commands.Bot(command_prefix=commands.when_mentioned_or(), intents=intents)
+bot = commands.Bot(
+    command_prefix=commands.when_mentioned_or(),
+    intents=intents)
 
 async def main():
     async with bot:

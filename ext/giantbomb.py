@@ -92,6 +92,21 @@ class GiantBomb(commands.Cog):
         await self.bot.change_presence(
             activity=discord.Game(name=game["name"]))
 
+    @update_game.error
+    async def update_game_error(self, error):
+        error = getattr(error, 'original', error)
+
+        error_msg = (f"Error in **{interaction.command}**\n\n"
+            f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
+            "**Traceback**:\n```")
+        for t in traceback.format_tb(error.__traceback__):
+            error_msg += f"{t}\n"
+        error_msg += "```"
+
+        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        traceback.print_exception(
+            type(error), error, error.__traceback__, file=sys.stderr)
+
 
     @app_commands.command()
     async def playing(self, interaction: discord.Interaction):
@@ -172,6 +187,21 @@ class GiantBomb(commands.Cog):
                         VALUES (?)""", (video["id"], ))
                     await db.commit()
 
+    @check_videos.error
+    async def check_videos_error(self, error):
+        error = getattr(error, 'original', error)
+
+        error_msg = (f"Error in **{interaction.command}**\n\n"
+            f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
+            "**Traceback**:\n```")
+        for t in traceback.format_tb(error.__traceback__):
+            error_msg += f"{t}\n"
+        error_msg += "```"
+
+        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        traceback.print_exception(
+            type(error), error, error.__traceback__, file=sys.stderr)
+
 
     @tasks.loop(minutes=1.0)
     async def check_upcoming(self):
@@ -218,6 +248,21 @@ class GiantBomb(commands.Cog):
                 await db.execute(""" INSERT INTO upcoming 
                     VALUES (?)""", (up["title"], ))
                 await db.commit()
+
+    @check_upcoming.error
+    async def check_upcoming_error(self, error):
+        error = getattr(error, 'original', error)
+
+        error_msg = (f"Error in **{interaction.command}**\n\n"
+            f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
+            "**Traceback**:\n```")
+        for t in traceback.format_tb(error.__traceback__):
+            error_msg += f"{t}\n"
+        error_msg += "```"
+
+        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        traceback.print_exception(
+            type(error), error, error.__traceback__, file=sys.stderr)
 
 
 async def setup(bot):

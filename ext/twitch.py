@@ -6,10 +6,12 @@ import aiosqlite
 from datetime import datetime
 import time
 import re
-
 from typing import Optional
 
-from credentials import TWITCH_ID, TWITCH_SECRET
+import traceback
+import sys
+
+from credentials import TWITCH_ID, TWITCH_SECRET, DEBUG_CHANNEL
 
 class Twitch(commands.Cog):
 
@@ -83,6 +85,22 @@ class Twitch(commands.Cog):
                 await db.execute("""UPDATE twitch_live SET live = 0
                     WHERE channel=?""", (chan,))
                 await db.commit()
+
+    @check_twitch.error
+    async def check_twitch_error(self, error):
+        error = getattr(error, 'original', error)
+
+        error_msg = (f"Error in **{interaction.command}**\n\n"
+            f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
+            "**Traceback**:\n```")
+        for t in traceback.format_tb(error.__traceback__):
+            error_msg += f"{t}\n"
+        error_msg += "```"
+
+        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        traceback.print_exception(
+            type(error), error, error.__traceback__, file=sys.stderr)
+
 
 
     @app_commands.describe(channel="Twitch channel name or URL")

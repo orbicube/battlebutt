@@ -13,6 +13,22 @@ class Abe(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
+    @app_commands.command()
+    async def abes(self, interaction: discord.Interaction):
+        """ List the amount of abes committed in this server """
+        
+        async with aiosqlite.connect("ext/data/abe.db") as db:
+            async with db.execute("""SELECT sum(count) FROM abe_counts
+                WHERE guild_id=?""", (interaction.guild.id,)) as cursor:
+                abe_count = await cursor.fetchone()
+
+        if abe_count:
+            await interaction.response.send_message(
+                f"{abe_count[0]} total abes committed in this server.")
+        else:
+            await interaction.response.send_message(
+                "No abes have been commited here.")
+
 
     @commands.Cog.listener("on_message")
     async def check_abes(self, message):
