@@ -90,7 +90,7 @@ class Twitch(commands.Cog):
     async def check_twitch_error(self, error):
         error = getattr(error, 'original', error)
 
-        error_msg = (f"Error in **{interaction.command}**\n\n"
+        error_msg = (f"Error in **twitch.check_twitch()**\n\n"
             f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
             "**Traceback**:\n```")
         for t in traceback.format_tb(error.__traceback__):

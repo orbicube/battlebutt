@@ -7,6 +7,9 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 import aiosqlite
 
+import traceback
+import sys
+
 from credentials import GIANT_BOMB_KEY, DEBUG_CHANNEL
 
 class GiantBomb(commands.Cog):
@@ -96,7 +99,7 @@ class GiantBomb(commands.Cog):
     async def update_game_error(self, error):
         error = getattr(error, 'original', error)
 
-        error_msg = (f"Error in **{interaction.command}**\n\n"
+        error_msg = (f"Error in **giantbomb.update_game()**\n\n"
             f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
             "**Traceback**:\n```")
         for t in traceback.format_tb(error.__traceback__):
@@ -134,7 +137,7 @@ class GiantBomb(commands.Cog):
         await self.bot.get_cog("Abe").check_abes(abe_msg)
 
 
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(minutes=5.0)
     async def check_videos(self):
         await self.bot.wait_until_ready()
 
@@ -191,7 +194,7 @@ class GiantBomb(commands.Cog):
     async def check_videos_error(self, error):
         error = getattr(error, 'original', error)
 
-        error_msg = (f"Error in **{interaction.command}**\n\n"
+        error_msg = (f"Error in **giantbomb.check_videos()**\n\n"
             f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
             "**Traceback**:\n```")
         for t in traceback.format_tb(error.__traceback__):
@@ -203,7 +206,7 @@ class GiantBomb(commands.Cog):
             type(error), error, error.__traceback__, file=sys.stderr)
 
 
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(minutes=5.0)
     async def check_upcoming(self):
         await self.bot.wait_until_ready()
 
@@ -215,8 +218,8 @@ class GiantBomb(commands.Cog):
         async with aiosqlite.connect("ext/data/giantbomb.db") as db:
             # Because this is a live updating list
             # we grab all entries then clear the table
-            async with db.execute(""" SELECT upcoming_name 
-                FROM upcoming """) as cursor:
+            async with db.execute("""SELECT upcoming_name 
+                FROM upcoming""") as cursor:
                 upcoming_list = await cursor.fetchall()
                 upcoming_list = [up[0] for up in upcoming_list]
 
@@ -253,7 +256,7 @@ class GiantBomb(commands.Cog):
     async def check_upcoming_error(self, error):
         error = getattr(error, 'original', error)
 
-        error_msg = (f"Error in **{interaction.command}**\n\n"
+        error_msg = (f"Error in **giantbomb.check_upcoming()**:"
             f"**Type**: {type(error)}\n\n**Error**: {error}\n\n"
             "**Traceback**:\n```")
         for t in traceback.format_tb(error.__traceback__):
