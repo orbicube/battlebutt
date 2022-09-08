@@ -62,9 +62,10 @@ class Abe(commands.Cog):
         urls = [url.lower() for url in urls]
 
         for url in urls:
-            if "twitter.com" in url:
+            # regex because of people using twitter proxies 
+            if re.match(r"https?://.*?twitter.*?\.com", url):
                 # Store only tweet IDs since format can change
-                tw_id = re.search(r'/status/(\d+)', urlparse(url).path)
+                tw_id = re.search(r'/status/(\d+)', url)
                 if tw_id:
                     url = f"tw/{tw_id[1]}"
 
