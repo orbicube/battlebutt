@@ -97,7 +97,7 @@ class Twitch(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 

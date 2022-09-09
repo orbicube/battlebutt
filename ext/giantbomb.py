@@ -65,7 +65,7 @@ class GiantBomb(commands.Cog):
         params.pop("limit", None)
         params.pop("offset", None)
         params["field_list"] = ("name,site_detail_url,image,"
-            "platforms,deck,themes")
+            "platforms,deck,themes,original_release_date")
         r = await self.bot.http_client.get(
             results["results"][0]["api_detail_url"],
             headers=self.headers, params=params)
@@ -79,18 +79,19 @@ class GiantBomb(commands.Cog):
         # Snuff out current presence to avoid issues
         await self.bot.change_presence()
 
-        self.game["name"] = game["name"]
+        self.game = game
+        self.game.pop("themes", None)
+
         # If game doesn't have its own image, just don't store it
         if "3026329-gb_default-16_9" not in game["image"]["original_url"]:
             self.game["image"] = game["image"]["original_url"]
         else:
             self.game["image"] = ""
-        self.game["url"] = game["site_detail_url"]
+
         if game["platforms"]:
             self.game["platforms"] = [plat["name"] for plat in game["platforms"]]
         else:
             self.game["platforms"] = []
-        self.game["deck"] = game["deck"]
 
         await self.bot.change_presence(
             activity=discord.Game(name=game["name"]))
@@ -106,7 +107,7 @@ class GiantBomb(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
@@ -119,8 +120,12 @@ class GiantBomb(commands.Cog):
 
         embed = discord.Embed(
             title=game["name"],
-            url=game["url"],
+            url=game["site_detail_url"],
             description=game["deck"] if game["deck"] else "")
+
+        if game["original_release_date"]:
+            embed.timestamp = datetime.strptime(game["original_release_date"],
+                "%Y-%m-%d")
 
         if game["image"]:
             embed.set_image(url=game["image"])
@@ -128,16 +133,17 @@ class GiantBomb(commands.Cog):
         if game["platforms"]:
             embed.set_footer(text=", ".join(game["platforms"]))
 
+
         await interaction.response.send_message(embed=embed)
 
         # Insert URL into database as if the user posted it.
         abe_msg = await interaction.original_response()
-        abe_msg.content = game["url"]
+        abe_msg.content = game["site_detail_url"]
         abe_msg.author = interaction.user
         await self.bot.get_cog("Abe").check_abes(abe_msg)
 
 
-    @tasks.loop(minutes=5.0)
+    @tasks.loop(minutes=2.0)
     async def check_videos(self):
         await self.bot.wait_until_ready()
 
@@ -201,12 +207,12 @@ class GiantBomb(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
 
-    @tasks.loop(minutes=5.0)
+    @tasks.loop(minutes=2.0)
     async def check_upcoming(self):
         await self.bot.wait_until_ready()
 
@@ -263,7 +269,7 @@ class GiantBomb(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
