@@ -25,7 +25,11 @@ class MFW(commands.Cog):
         """ Posts a random reaction image """
 
         imgs = glob("ext/data/mfw/*.jpg") + glob("ext/data/mfw/*.png")
-        await ctx.send(file=discord.File(choice(imgs)))
+        if reason and ctx.interaction:
+            await ctx.send(f"mfw {reason}:",
+                file=discord.File(choice(imgs)))
+        else:
+            await ctx.send(file=discord.File(choice(imgs)))
 
 
     @tasks.loop(seconds=60.0)
