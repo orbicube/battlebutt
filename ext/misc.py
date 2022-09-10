@@ -95,10 +95,11 @@ class Misc(commands.Cog):
 
     @app_commands.command()
     @app_commands.describe(
-        sides="The maximum number the die can roll",
-        dice = "How many dice you want to roll (max 10)")
+        sides="The maximum number each die can roll",
+        dice="How many dice you want to roll (max 10)")
     async def roll(self, interaction: discord.Interaction,
-        sides: int, dice: Optional[app_commands.Range[int, 1, 10]] = 1):
+        sides: app_commands.Range[int, 1],
+        dice: Optional[app_commands.Range[int, 1, 10]] = 1):
         """ Roll some dice! """
 
         rolls = []
@@ -106,9 +107,12 @@ class Misc(commands.Cog):
             rolls.append(randint(1, sides))
 
         if len(rolls) == 1:
-            msg = f"You got {rolls[0]}."
+            if sides == 2:
+                msg = f"You got {'Heads' if rolls[0] == 1 else 'Tails'}."
+            else:
+                msg = f"You got {rolls[0]} out of {sides}."
         else:
-            msg = (f"You got {sum(rolls)}.\n"
+            msg = (f"You got {sum(rolls)} out of {sides * dice}.\n"
                 f"({', '.join([str(roll) for roll in rolls])})")
         await interaction.response.send_message(msg)
 
