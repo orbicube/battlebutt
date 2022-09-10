@@ -11,7 +11,7 @@ from typing import Optional
 import traceback
 import sys
 
-from credentials import TWITCH_ID, TWITCH_SECRET, DEBUG_CHANNEL
+from credentials import TWITCH_ID, TWITCH_SECRET, ERROR_CHANNEL
 
 class Twitch(commands.Cog):
 
@@ -27,7 +27,7 @@ class Twitch(commands.Cog):
         self.check_twitch.cancel()
 
 
-    @tasks.loop(minutes=1.0)
+    @tasks.loop(minutes=2.0)
     async def check_twitch(self):
         await self.bot.wait_until_ready()
 
@@ -47,10 +47,15 @@ class Twitch(commands.Cog):
         params = {
             "user_login": list(channels.keys()) 
         }
-        r = await self.bot.http_client.get(
-            "https://api.twitch.tv/helix/streams",
-            headers=headers, params=params)
-        streams = r.json()["data"]
+        try:
+            r = await self.bot.http_client.get(
+                "https://api.twitch.tv/helix/streams",
+                headers=headers, params=params)
+            streams = r.json()["data"]
+        except Exception as e:
+            await self.bot.get_channel(ERROR_CHANNEL).send(
+                f"Error in twitch.check_twitch(): {type(e)} {e}")
+            return
 
         for stream in streams:
             # If we haven't stored it being live, time to post
@@ -97,7 +102,7 @@ class Twitch(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(ERROR_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 

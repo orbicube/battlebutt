@@ -147,9 +147,8 @@ class Roles(commands.Cog):
 
     @commands.command(hidden=True)
     @commands.is_owner()
-    async def rolemap_json(self, ctx, guild: discord.Guild):
+    async def rolemap_json(self, ctx):
         # Uses a rolemap.json file keyed 'user_id': 'role_id' to map user roles 
-        # for a specified guild
 
         with open('ext/data/rolemap.json') as f:
             data = json.load(f)
@@ -157,7 +156,7 @@ class Roles(commands.Cog):
         async with aiosqlite.connect("ext/data/roles.db") as db:
             for user_id, role_id in data.items():
                 await db.execute('INSERT INTO role_map VALUES (?, ?, ?)',
-                    (int(user_id), guild.id, int(role_id)))
+                    (int(user_id), ctx.guild.id, int(role_id)))
             await db.commit()
 
 

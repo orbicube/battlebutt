@@ -10,7 +10,7 @@ import aiosqlite
 import traceback
 import sys
 
-from credentials import GIANT_BOMB_KEY, DEBUG_CHANNEL
+from credentials import GIANT_BOMB_KEY, ERROR_CHANNEL, DEBUG_CHANNEL
 
 class GiantBomb(commands.Cog):
 
@@ -49,10 +49,15 @@ class GiantBomb(commands.Cog):
             "format": "json"
         }
 
-        r = await self.bot.http_client.get(
-            "https://www.giantbomb.com/api/games/",
-            headers=self.headers, params=params)
-        results = r.json()
+        try:
+            r = await self.bot.http_client.get(
+                "https://www.giantbomb.com/api/games/",
+                headers=self.headers, params=params)
+            results = r.json()
+        except Exception as e:
+            await self.bot.get_channel(ERROR_CHANNEL).send(
+                f"Error in giantbomb.update_game(): {type(e)} {e}")
+            return
 
         # Update max game count
         self.game_count = results["number_of_total_results"]
@@ -66,10 +71,16 @@ class GiantBomb(commands.Cog):
         params.pop("offset", None)
         params["field_list"] = ("name,site_detail_url,image,"
             "platforms,deck,themes,original_release_date")
-        r = await self.bot.http_client.get(
-            results["results"][0]["api_detail_url"],
-            headers=self.headers, params=params)
-        game = r.json()['results']
+
+        try:
+            r = await self.bot.http_client.get(
+                results["results"][0]["api_detail_url"],
+                headers=self.headers, params=params)
+            game = r.json()['results']
+        except Exception as e:
+            await self.bot.get_channel(ERROR_CHANNEL).send(
+                f"Error in giantbomb.update_game(): {type(e)} {e}")
+            return
 
         # We use themes to skip adult games
         if "themes" in game.keys():
@@ -107,7 +118,7 @@ class GiantBomb(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(ERROR_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
@@ -133,7 +144,6 @@ class GiantBomb(commands.Cog):
         if game["platforms"]:
             embed.set_footer(text=", ".join(game["platforms"]))
 
-
         await interaction.response.send_message(embed=embed)
 
         # Insert URL into database as if the user posted it.
@@ -156,10 +166,15 @@ class GiantBomb(commands.Cog):
             "format": "json"
         }
 
-        r = await self.bot.http_client.get(
-            "https://www.giantbomb.com/api/videos/",
-            headers=self.headers, params=params)
-        results = r.json()["results"]
+        try:
+            r = await self.bot.http_client.get(
+                "https://www.giantbomb.com/api/videos/",
+                headers=self.headers, params=params)
+            results = r.json()["results"]
+        except Exception as e:
+            await self.bot.get_channel(ERROR_CHANNEL).send(
+                f"Error in giantbomb.check_videos(): {type(e)} {e}")
+            return
 
         for video in results:
             # Check if video is in the database
@@ -207,7 +222,7 @@ class GiantBomb(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(ERROR_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
@@ -216,10 +231,15 @@ class GiantBomb(commands.Cog):
     async def check_upcoming(self):
         await self.bot.wait_until_ready()
 
-        r = await self.bot.http_client.get(
-            "https://www.giantbomb.com/upcoming_json",
-            headers=self.headers)
-        upcoming = r.json()['upcoming']
+        try:
+            r = await self.bot.http_client.get(
+                "https://www.giantbomb.com/upcoming_json",
+                headers=self.headers)
+            upcoming = r.json()['upcoming']
+        except Exception as e:
+            await self.bot.get_channel(ERROR_CHANNEL).send(
+                f"Error in giantbomb.check_upcoming(): {type(e)} {e}")
+            return
 
         async with aiosqlite.connect("ext/data/giantbomb.db") as db:
             # Because this is a live updating list
@@ -269,7 +289,7 @@ class GiantBomb(commands.Cog):
             error_msg += f"{t}\n"
         error_msg += "```"
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(error_msg)
+        await self.bot.get_channel(ERROR_CHANNEL).send(error_msg)
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 
