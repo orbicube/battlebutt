@@ -109,8 +109,8 @@ class Twitch(commands.Cog):
 
 
     @app_commands.describe(channel="Twitch channel name or URL")
-    @commands.hybrid_command(name="twitch", hidden=True)
-    async def get_twitch(self, ctx, channel: str):
+    @app_commands.command(name="twitch")
+    async def get_twitch(self, interaction: discord.Interaction, channel: str):
         """ Post a nicer Discord embed of the given Twitch channel """
 
         url_match = re.search(r"(?:twitch.tv/)(\w+)/?", channel)
@@ -133,11 +133,11 @@ class Twitch(commands.Cog):
                     {"user_login": channel}, headers)
             except KeyError:
                 # Channel exists
-                await ctx.reply(
+                await interaction.response.send_message(
                     "That channel isn't currently streaming.", ephemeral=True)
             except IndexError:
                 # Channel does not exist
-                await ctx.reply(
+                await interaction.response.send_message(
                     "That isn't a valid Twitch channel.", ephemeral=True)
             return
 
@@ -149,7 +149,7 @@ class Twitch(commands.Cog):
         embed.timestamp = datetime.strptime(
             stream[0]['started_at'], "%Y-%m-%dT%H:%M:%S%z")
 
-        await ctx.reply(embed=embed)
+        await interaction.reponse.send_message(embed=embed)
 
 
     @commands.Cog.listener("on_message")
@@ -185,7 +185,6 @@ class Twitch(commands.Cog):
 
         if embeds:
             await message.reply(embeds=embeds)
-
 
     async def compose_embed(self, stream, headers):
 

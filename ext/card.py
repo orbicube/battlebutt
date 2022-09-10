@@ -134,8 +134,7 @@ class Card(commands.Cog,
         page = r.json()
         card = choice(page['data'])
 
-        await ctx.reply(card['image'].split('?')[0],
-            mention_author=False)
+        await ctx.reply(card['image'].split('?')[0])
 
 
     @commands.command()

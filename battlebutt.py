@@ -12,15 +12,20 @@ import httpx
 from credentials import DISCORD_TOKEN, ERROR_CHANNEL
 from translator import ButtTranslator
 
+discord.utils.setup_logging()
+
 intents = discord.Intents.default()
 intents.message_content = True
 intents.members = True
 
-discord.utils.setup_logging()
+allowed_mentions = discord.AllowedMentions(
+    everyone=False,
+    replied_user=False)
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or(),
-    intents=intents)
+    intents=intents,
+    allowed_mentions=allowed_mentions)
 
 async def main():
     async with bot:
