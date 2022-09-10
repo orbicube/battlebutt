@@ -63,6 +63,8 @@ class Roles(commands.Cog):
                 randint(0,255), randint(0,255), randint(0,255)))
         else:
             # Make sure they entered a viable code
+            if not code.startswith("#"):
+                code = f"#{code}"
             try:
                 new_color = discord.Color.from_str(code)
             except ValueError:
