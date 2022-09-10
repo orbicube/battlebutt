@@ -5,7 +5,7 @@ from discord import app_commands
 import aiosqlite
 from glob import glob
 from random import choice
-
+from typing import Optional
 
 class MFW(commands.Cog):
 
@@ -21,7 +21,7 @@ class MFW(commands.Cog):
         self.check_mfw.cancel()
 
     @commands.hybrid_command()
-    async def mfw(self, ctx):
+    async def mfw(self, ctx, reason: Optional[str]):
         """ Posts a random reaction image """
 
         imgs = glob("ext/data/mfw/*.jpg") + glob("ext/data/mfw/*.png")
