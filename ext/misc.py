@@ -48,8 +48,9 @@ class Misc(commands.Cog):
 
         if discord.utils.utcnow() < date:
             await interaction.response.send_message((
+                f"Gamers will unite "
                 f"**{discord.utils.format_dt(date, style='R')}**"
-                f"Gamers will unite to celebrate The Game Awards!"))
+                " to celebrate The Game Awards!"))
         else:
             await interaction.response.send_message(
                 "gamers have finished uniting and are now in hibernation")
