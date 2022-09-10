@@ -99,7 +99,7 @@ class Misc(commands.Cog):
         if self.bot.user in message.mentions:
             if message.content.endswith("?"):
                 with open ("ext/data/8ball.json") as f:
-                    await message.reply(choice(json.load(f)['responses']))
+                    await message.channel.reply(choice(json.load(f)['responses']))
 
 
     @commands.Cog.listener("on_message")

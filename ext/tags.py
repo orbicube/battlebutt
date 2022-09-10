@@ -27,7 +27,7 @@ class Tags(commands.Cog):
             with open("ext/data/tags.json") as f:
                 tags = json.load(f)
             try:
-                await message.reply(tags[message.content.split()[1]])
+                await message.channel.send(tags[message.content.split()[1]])
             except:
                 pass
 

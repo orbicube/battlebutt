@@ -70,7 +70,7 @@ class Card(commands.Cog,
         image_url = page.xpath("//meta[@property='og:image']/@content")[0]
         image_url = image_url.split('?')[0]
 
-        await ctx.reply(image_url)
+        await ctx.send(image_url)
 
 
     @commands.command(aliases=['ygo'])
@@ -81,7 +81,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url)
         card = r.json()
 
-        await ctx.reply(card['card_images'][0]['image_url'])
+        await ctx.send(card['card_images'][0]['image_url'])
 
 
     @commands.command()
@@ -93,7 +93,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url)
         card_list = r.json()
 
-        await ctx.reply(("https://images.digimoncard.io/images/cards/"
+        await ctx.send(("https://images.digimoncard.io/images/cards/"
             f"{choice(card_list)['cardnumber']}.jpg"))
 
 
@@ -114,7 +114,7 @@ class Card(commands.Cog,
             if not "image_uris" in card and "card_faces" in card:
                 card['image_uris'] = card['card_faces'][randint(0,1)]['image_uris']
             
-            await ctx.reply(card['image_uris']['border_crop'])
+            await ctx.send(card['image_uris']['border_crop'])
 
 
     @commands.command(aliases=['fab'])
@@ -134,7 +134,7 @@ class Card(commands.Cog,
         page = r.json()
         card = choice(page['data'])
 
-        await ctx.reply(card['image'].split('?')[0])
+        await ctx.send(card['image'].split('?')[0])
 
 
     @commands.command()
@@ -170,7 +170,7 @@ class Card(commands.Cog,
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.reply(file=discord.File(
+            await ctx.send(file=discord.File(
                 fp=img_binary,
                 filename=card_url.rsplit('/', 1)[1]))
 
@@ -190,7 +190,7 @@ class Card(commands.Cog,
         if '\/' in card['Code']:
             card['Code'] = card['Code'].split('\/')[0]
 
-        await ctx.reply(("https://fftcg.cdn.sewest.net/images/cards/"
+        await ctx.send(("https://fftcg.cdn.sewest.net/images/cards/"
             f"full/{card['Code']}_eg.jpg"))
 
 
@@ -220,7 +220,7 @@ class Card(commands.Cog,
         # Pick card
         card = "https://en.cf-vanguard.com{}".format(
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
-        await ctx.reply(card)
+        await ctx.send(card)
 
 
 async def setup(bot):

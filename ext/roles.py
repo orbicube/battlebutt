@@ -13,8 +13,8 @@ class Roles(commands.Cog):
 
     @app_commands.command(name="color", description="Change your role color")
     @app_commands.guild_only()
-    @app_commands.describe(code="Color hex code (e.g. #135ACF) or 'random'")
-    async def color(self, interaction: discord.Interaction, code: Optional[str]):
+    @app_commands.describe(code="Hex code (e.g. #135ACF), \"current\" or \"random\"")
+    async def color(self, interaction: discord.Interaction, code: str):
 
         # Color or colour
         c_word = await self.bot.tree.translator.translate(
@@ -24,7 +24,7 @@ class Roles(commands.Cog):
             c_word = "color"
 
         # Tell them their current color
-        if not code:
+        if code.lower() == "current":
             if interaction.user.color == discord.Color.default():
                 await interaction.response.send_message(
                     f"You don't have a {c_word}.", ephemeral=True)
@@ -57,7 +57,7 @@ class Roles(commands.Cog):
 
         old_color = str(role.color).upper()
 
-        if code == "random":
+        if code.lower() == "random":
             # discord.Color.random() gives somewhat limited results
             role = await role.edit(color=discord.Color.from_rgb(
                 randint(0,255), randint(0,255), randint(0,255)))
