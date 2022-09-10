@@ -108,12 +108,16 @@ class Misc(commands.Cog):
 
         if len(rolls) == 1:
             if sides == 2:
-                msg = f"You got {'Heads' if rolls[0] == 1 else 'Tails'}."
+                msg = f"You got {'Heads' if rolls[0] == 2 else 'Tails'}."
             else:
                 msg = f"You got {rolls[0]} out of {sides}."
         else:
-            msg = (f"You got {sum(rolls)} out of {sides * dice}.\n"
-                f"({', '.join([str(roll) for roll in rolls])})")
+            if sides == 2:
+                coin_list = ["Heads" if r == 2 else "Tails" for r in rolls]
+                msg = f"You got {', '.join(coin_list)}."
+            else:
+                msg = (f"You got {sum(rolls)} out of {sides * dice}.\n"
+                    f"({', '.join([str(roll) for roll in rolls])})")
         await interaction.response.send_message(msg)
 
 
