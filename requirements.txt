@@ -1,0 +1,6 @@
+aiosqlite==0.17.0
+dateparser==1.1.1
+discord.py==2.0.1
+httpx==0.23.0
+lxml==4.9.1
+Pillow==9.2.0
