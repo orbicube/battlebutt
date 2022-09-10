@@ -122,7 +122,7 @@ class Card(commands.Cog,
         """ Pulls a random Flesh and Blood card """
 
         url = "https://api.fabdb.net/cards"
-        r = await self.bot_http_client.get(url)
+        r = await self.bot.http_client.get(url)
         page = r.json()
 
         # Pick random page

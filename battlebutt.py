@@ -9,7 +9,7 @@ import sys
 
 import httpx
 
-from credentials import DISCORD_TOKEN, DEBUG_CHANNEL
+from credentials import DISCORD_TOKEN, ERROR_CHANNEL
 from translator import ButtTranslator
 
 intents = discord.Intents.default()
