@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from zoneinfo import ZoneInfo
 
 import json
-from random import choice
+from random import randint, choice
 
 class Misc(commands.Cog):
 
@@ -93,13 +93,31 @@ class Misc(commands.Cog):
             f"It is currently **@{swatch}**.")
 
 
+    @app_commands.command()
+    async def roll(self, interaction: discord.Interaction,
+        sides: int, dice: Optional[app_commands.Range[int, 1, 10]] = 1):
+        """ Roll some dice! """
+
+        rolls = []
+        for die in range(0, dice):
+            rolls.append(randint(1, sides))
+
+        if len(rolls) == 1:
+            msg = f"You got {rolls[0]}."
+        else:
+            msg = (f"You got {sum(rolls)}.\n"
+                f"({', '.join([str(roll) for roll in rolls])})")
+        await interaction.response.send_message(msg)
+
+
     @commands.Cog.listener("on_message")
     async def ask8ball(self, message):
 
         if self.bot.user in message.mentions:
             if message.content.endswith("?"):
                 with open ("ext/data/8ball.json") as f:
-                    await message.channel.reply(choice(json.load(f)['responses']))
+                    await message.channel.send(
+                        choice(json.load(f)['responses']))
 
 
     @commands.Cog.listener("on_message")
