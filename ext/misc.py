@@ -98,7 +98,7 @@ class Misc(commands.Cog):
         sides="The maximum number each die can roll",
         dice="How many dice you want to roll (max 10)")
     async def roll(self, interaction: discord.Interaction,
-        sides: app_commands.Range[int, 1],
+        sides: app_commands.Range[int, 2],
         dice: Optional[app_commands.Range[int, 1, 10]] = 1):
         """ Roll some dice! """
 
