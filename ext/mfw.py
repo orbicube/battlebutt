@@ -22,7 +22,7 @@ class MFW(commands.Cog):
 
     @commands.hybrid_command()
     @app_commands.describe(reason="What you're reacting to")
-    async def mfw(self, ctx, reason: str):
+    async def mfw(self, ctx, reason: Optional[str]):
         """ Posts a random reaction image """
 
         imgs = glob("ext/data/mfw/*.jpg") + glob("ext/data/mfw/*.png")
