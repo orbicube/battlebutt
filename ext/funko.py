@@ -1,8 +1,10 @@
 import discord
 from discord.ext import commands
+from discord import app_commands
 
 from random import randint, choice, choices
 from datetime import datetime
+from typing import Optional
 
 class Funko(commands.Cog):
 
