@@ -10,7 +10,8 @@ class Funko(commands.Cog):
         self.bot = bot
 
     @commands.hybrid_command()
-    async def funko(self, ctx):
+    @app_commands.describe(reason="Why you're pulling a Funko")
+    async def funko(self, ctx, reason: Optional[str]):
         """ Posts a random Funko Pop figure """
 
         # Defer in case HTTP requests take too long
@@ -96,7 +97,10 @@ class Funko(commands.Cog):
         else:
             embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
 
-        await ctx.send(embed=embed)
+        if reason and ctx.interaction:
+            await ctx.send(f"funko {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 async def setup(bot):
