@@ -16,7 +16,8 @@ from credentials import TWITCH_ID, TWITCH_SECRET, ERROR_CHANNEL
 class Twitch(commands.Cog):
 
     post_channels = [
-        143562235740946432
+        143562235740946432,
+        484480133525274645
     ]
 
     def __init__(self, bot):

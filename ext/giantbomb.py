@@ -20,7 +20,8 @@ class GiantBomb(commands.Cog):
         'Host': 'www.giantbomb.com'
     }
     post_channels = [
-        143562235740946432
+        143562235740946432,
+        484480133525274645
     ]
     game_count = 81450
     game = {
