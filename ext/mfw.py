@@ -10,7 +10,8 @@ from typing import Optional
 class MFW(commands.Cog):
 
     post_channels = [
-        143562235740946432
+        143562235740946432,
+        122087203760242692
     ]
 
     def __init__(self, bot):
