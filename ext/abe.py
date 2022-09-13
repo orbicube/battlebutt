@@ -112,7 +112,7 @@ class Abe(commands.Cog):
 
                         await message.reply(
                             file=discord.File("ext/data/abe.jpg"),
-                            content=(f"Abe detected! Already posted by "
+                            content=(f"Already posted by "
                                 f"{users_format}, first linked "
                                 f"{discord.utils.format_dt(first,'R')}."))
 
