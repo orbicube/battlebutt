@@ -112,7 +112,8 @@ class Abe(commands.Cog):
 
                         await message.reply(
                             file=discord.File("ext/data/abe.jpg"),
-                            content=(f"Abed by {users_format}, first linked "
+                            content=(f"Abe detected! Already posted by "
+                                f"{users_format}, first linked "
                                 f"{discord.utils.format_dt(first,'R')}."))
 
                         await db.execute("""INSERT OR IGNORE INTO abe_counts 
