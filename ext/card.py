@@ -38,6 +38,8 @@ class Card(commands.Cog,
                 await self.finalfantasy(ctx)
             elif game.startswith(("cardfightvanguard", "cfv")):
                 await self.cardfightvanguard(ctx)
+            elif game.startswith("grandarchive"):
+                await self.grandarchive(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -52,7 +54,7 @@ class Card(commands.Cog,
         
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'finalfantasy',
-            'cardfightvanguard']
+            'cardfightvanguard', 'grandarchive']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -222,6 +224,18 @@ class Card(commands.Cog,
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
         await ctx.send(card)
 
+
+    @commands.command()
+    async def grandarchive(self, ctx):
+        """ Pulls a random Grand Archive card """
+
+        r = await self.bot.http_client.get(
+            "https://api.gatcg.com/cards/random?amount=1")
+        card = r.json()[0]
+        card_slug = choice(card["editions"])["slug"]
+
+        await ctx.send(f"https://api.gatcg.com/images/cards/{card_slug}.jpg")
+        
 
 async def setup(bot):
     await bot.add_cog(Card(bot))
