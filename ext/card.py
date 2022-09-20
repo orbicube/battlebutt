@@ -20,7 +20,7 @@ class Card(commands.Cog,
 
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
-    async def card(self, ctx, game: Optional[str]):
+    async def card(self, ctx, game: Optional[str] = None):
         """ Pulls a random TCG card """
 
         if game:
@@ -43,14 +43,10 @@ class Card(commands.Cog,
             elif game.startswith("grandarchive"):
                 await self.grandarchive(ctx)
             else:
-                command = choice([x for x in self.get_commands()
-                    if x.name != "card"])
-                await self.bot.get_channel(DEBUG_CHANNEL).send(
-                    f"game: {game} / calling {command.name}")
+                command = choice(self.get_commands())
                 await command.__call__(ctx)
         else:
-            command = choice([x for x in self.get_commands()
-                if x.name != "card"])
+            command = choice(self.get_commands())
             await command.__call__(ctx)
 
     @card.autocomplete('game')
