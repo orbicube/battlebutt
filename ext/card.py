@@ -43,13 +43,14 @@ class Card(commands.Cog,
             elif game.startswith("grandarchive"):
                 await self.grandarchive(ctx)
             else:
-                commands = self.get_commands()
-                command = choice(commands.remove(ctx.command))
+                command = choice([x for x in self.get_commands()
+                    if x.name != "card"])
                 await self.bot.get_channel(DEBUG_CHANNEL).send(
                     f"game: {game} / calling {command.name}")
                 await command.__call__(ctx)
         else:
-            command = choice(self.get_commands().remove(ctx.command))
+            command = choice([x for x in self.get_commands()
+                if x.name != "card"])
             await command.__call__(ctx)
 
     @card.autocomplete('game')
