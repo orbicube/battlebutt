@@ -9,6 +9,8 @@ from lxml import html
 from PIL import Image
 from io import BytesIO
 
+from credentials import DEBUG_CHANNEL
+
 class Card(commands.Cog,
     command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
         1, 30, commands.BucketType.user)}):
@@ -42,6 +44,7 @@ class Card(commands.Cog,
                 await self.grandarchive(ctx)
             else:
                 command = choice(self.get_commands())
+                await self.bot.get_channel(DEBUG_CHANNEL).send(command.name)
                 await command.__call__(ctx)
         else:
             command = choice(self.get_commands())
@@ -235,7 +238,7 @@ class Card(commands.Cog,
         card_slug = choice(card["editions"])["slug"]
 
         await ctx.send(f"https://api.gatcg.com/images/cards/{card_slug}.jpg")
-        
+
 
 async def setup(bot):
     await bot.add_cog(Card(bot))
