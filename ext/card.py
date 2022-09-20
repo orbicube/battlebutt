@@ -44,6 +44,8 @@ class Card(commands.Cog,
                 await self.grandarchive(ctx)
             else:
                 command = choice(self.get_commands().remove(self))
+                await self.bot.get_channel(DEBUG_CHANNEL).send(
+                    f"game: {game} / calling {command.name}")
                 await command.__call__(ctx)
         else:
             command = choice(self.get_commands().remove(self))
