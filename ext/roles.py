@@ -97,7 +97,8 @@ class Roles(commands.Cog):
         async with aiosqlite.connect("ext/data/roles.db") as db:
             if action == "List":
                 # Grab all roles for given guild, list them all out
-                async with db.execute('SELECT role_id FROM role_whitelist WHERE guild_id=?',
+                async with db.execute("""SELECT role_id FROM role_whitelist
+                    WHERE guild_id=?""",
                     (interaction.guild.id,)) as cursor:
                     roles = await cursor.fetchall()
 
@@ -120,7 +121,8 @@ class Roles(commands.Cog):
                     return
 
             # Check if role is whitelisted to be freely added
-            async with db.execute('SELECT role_id FROM role_whitelist WHERE guild_id=? AND role_id=?',
+            async with db.execute("""SELECT role_id FROM role_whitelist
+                WHERE guild_id=? AND role_id=?""",
                 (interaction.guild.id, role.id)) as cursor:
                 role_in_db = await cursor.fetchone()
 
@@ -211,20 +213,30 @@ class Roles(commands.Cog):
                     f"Can't whitelist a role that has admin priviliges.",
                     ephemeral=True)
                 return
+            elif role.id == interaction.guild.id:
+                await interaction.response.send_message(
+                    f"Can't whitelist @everyone. It doesn't even do anything.",
+                    ephemeral=True)
 
-            async with aiosqlite.connect("ext/data/roles.db") as db:
-                await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
-                    (interaction.guild.id, role.id))
-                await db.commit()\
+            try:
+                async with aiosqlite.connect("ext/data/roles.db") as db:
+                    await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
+                        (interaction.guild.id, role.id))
+                    await db.commit()
+            except:
+                await interaction.response.send_message(
+                    f"That role has already been added.",
+                    ephemeral=True)
 
             await interaction.response.send_message(
                 f"Added {role.name} to the role whitelist.")
         else:
             async with aiosqlite.connect("ext/data/roles.db") as db:
-                await db.execute('DELETE FROM role_whitelist WHERE guild_id=? AND role_id=?',
+                await db.execute("""DELETE FROM role_whitelist
+                    WHERE guild_id=? AND role_id=?""",
                     (interaction.guild.id, role.id))
                 await db.commit()
-
+/
             await interaction.response.send_message(
                 f"Removed {role.name} from the whitelist.")
 
