@@ -201,35 +201,32 @@ class Roles(commands.Cog):
     @app_commands.default_permissions(administrator=True)
     @app_commands.checks.has_permissions(administrator=True)
     @app_commands.command()
-    async def whitelist(self, interaction: discord.Interaction, role: discord.Role):
-        """ Add a role to the whitelist, allowing people to add themselves. """
-        if role.permissions.administrator:
+    async def whitelist(self, interaction: discord.Interaction,
+        action: Literal["Add", "Remove"], role: discord.Role):
+        """ Add or remove a role to the whitelist. """
+
+        if action == "Add":
+            if role.permissions.administrator:
+                await interaction.response.send_message(
+                    f"Can't whitelist a role that has admin priviliges.",
+                    ephemeral=True)
+                return
+
+            async with aiosqlite.connect("ext/data/roles.db") as db:
+                await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
+                    (interaction.guild.id, role.id))
+                await db.commit()\
+
             await interaction.response.send_message(
-                f"Can't whitelist a role that has admin priviliges.",
-                ephemeral=True)
-            return
+                f"Added {role.name} to the role whitelist.")
+        else:
+            async with aiosqlite.connect("ext/data/roles.db") as db:
+                await db.execute('DELETE FROM role_whitelist WHERE guild_id=? AND role_id=?',
+                    (interaction.guild.id, role.id))
+                await db.commit()
 
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
-                (interaction.guild.id, role.id))
-            await db.commit()
-
-        await interaction.response.send_message(
-            f"Added {role.name} to the role whitelist.")
-
-
-    @app_commands.default_permissions(administrator=True)
-    @app_commands.checks.has_permissions(administrator=True)
-    @app_commands.command()
-    async def dewhitelist(self, interaction: discord.Interaction, role: discord.Role):
-        """ Remove a role from the whitelist. """
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute('DELETE FROM role_whitelist WHERE guild_id=? AND role_id=?',
-                (ctx.guild.id, role.id))
-            await db.commit()
-
-        await interaction.response.send_message(
-            f"Removed {role.name} from the whitelist.")
+            await interaction.response.send_message(
+                f"Removed {role.name} from the whitelist.")
 
 
 async def setup(bot):
