@@ -236,7 +236,7 @@ class Roles(commands.Cog):
                     WHERE guild_id=? AND role_id=?""",
                     (interaction.guild.id, role.id))
                 await db.commit()
-/
+
             await interaction.response.send_message(
                 f"Removed {role.name} from the whitelist.")
 
