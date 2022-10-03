@@ -230,6 +230,7 @@ class Roles(commands.Cog):
 
             await interaction.response.send_message(
                 f"Added {role.name} to the role whitelist.")
+            
         else:
             async with aiosqlite.connect("ext/data/roles.db") as db:
                 await db.execute("""DELETE FROM role_whitelist
