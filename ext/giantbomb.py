@@ -174,8 +174,7 @@ class GiantBomb(commands.Cog):
             results = r.json()["results"]
         except Exception as e:
             await self.bot.get_channel(ERROR_CHANNEL).send((
-                f"Error in giantbomb.check_videos(): {type(e)} {e}"
-                f" (HTTP Code {r.status_code})"))
+                f"Error in giantbomb.check_videos(): {type(e)} {e}"))
             return
 
         for video in results:
