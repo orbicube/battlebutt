@@ -42,6 +42,8 @@ class Card(commands.Cog,
                 await self.cardfightvanguard(ctx)
             elif game.startswith("grandarchive"):
                 await self.grandarchive(ctx)
+            elif game.startswith("nostalg"):
+                await self.nostalgix(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -56,7 +58,7 @@ class Card(commands.Cog,
         
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'finalfantasy',
-            'cardfightvanguard', 'grandarchive']
+            'cardfightvanguard', 'grandarchive', 'nostalgix']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -238,6 +240,19 @@ class Card(commands.Cog,
 
         await ctx.send(f"https://api.gatcg.com/images/cards/{card_slug}.jpg")
 
+
+    @commands.command()
+    async def nostalgix(self, ctx):
+        """ Pulls a random Nostalgix card """
+
+        r = await self.bot.http_client.get(
+            "https://www.nostalgixtcg.com/cards")
+        page = html.fromstring(r.text)
+
+        cards = page.xpath(
+            "//div[@class='gallery-strips-item-wrapper']/img/@data-src")
+
+        await ctx.send(choice(cards))
 
 async def setup(bot):
     await bot.add_cog(Card(bot))
