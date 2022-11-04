@@ -28,6 +28,7 @@ class OpenAI(commands.Cog):
                 await interaction.response.send_message(
                     f"This is not a valid channel, try <#{allowed_channels[interaction.guild.id]}>.",
                     ephemeral=True)
+                return
         except:
             pass
 
