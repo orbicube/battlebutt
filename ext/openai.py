@@ -12,7 +12,7 @@ class OpenAI(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @app_commands.checks.cooldown(1, 600)
+    @app_commands.checks.cooldown(1, 300)
     @app_commands.describe(prompt="Prompt used to generate the image")
     @app_commands.command()
     async def generate(self, interaction: discord.Interaction, prompt: str):
@@ -22,11 +22,11 @@ class OpenAI(commands.Cog):
             122087203760242692: 991994435191722004,
             143562235740946432: 674578028579258378
         }
-
         try:
             if interaction.channel.id != allowed_channels[interaction.guild.id]:
                 await interaction.response.send_message(
-                    f"This is not a valid channel, try <#{allowed_channels[interaction.guild.id]}>.",
+                    (f"This is not a valid channel, "
+                    f"try <#{allowed_channels[interaction.guild.id]}>."),
                     ephemeral=True)
                 return
         except:
@@ -51,7 +51,13 @@ class OpenAI(commands.Cog):
             url, headers=headers, json=data, timeout=30.0)
         response = r.json()
 
-        image = BytesIO(b64decode(response['data'][0]['b64_json']))
+        try:
+            image = BytesIO(b64decode(response['data'][0]['b64_json']))
+        except:
+            await interaction.followup.send(
+                ("Your prompt was automatically rejected. "
+                "OpenAI likely decided it was profane in some way."))
+            return
 
         await interaction.followup.send(
             file=discord.File(image, filename=f"{interaction.id}.png"))
