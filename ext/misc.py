@@ -140,12 +140,14 @@ class Misc(commands.Cog):
             await message.add_reaction(
                 "<:witchmercydonottouch:809289934182678539>")
 
+
     @commands.Cog.listener("on_message")
     async def elonrofl(self, message):
 
         if re.search(r"https?://.*?twitter.*?\.com/elonmusk/status/",
             message.content):
             await message.add_reaction("🤣")
+
 
 async def setup(bot):
     await bot.add_cog(Misc(bot))
