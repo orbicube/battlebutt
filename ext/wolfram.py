@@ -10,21 +10,23 @@ class Wolfram(commands.Cog):
         self.bot = bot
 
     @app_commands.command()
-    @app_commands.describe(query="What you want to ask")
-    async def query(self, interaction: discord.Interaction, query: str):
+    @app_commands.describe(q="What you want to ask")
+    async def query(self, interaction: discord.Interaction, q: str):
         """ Send a query to Wolfram Alpha """
 
         params = {
             "appid": WOLFRAM_KEY,
-            "i": query
+            "i": q
         }
         r = await self.bot.http_client.get(
             "https://api.wolframalpha.com/v1/spoken",
             params=params)
 
-        await interaction.response.send_message(f"{r.text}.",
+        await interaction.response.send_message(
+            f"{r.text}{'.' if r.text[-1] != '.' else ''}",
             ephemeral=(r.status_code == 501))
 
 
 async def setup(bot):
     await bot.add_cog(Wolfram(bot))
+    
