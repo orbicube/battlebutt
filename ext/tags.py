@@ -31,7 +31,8 @@ class Tags(commands.Cog):
                 await interaction.response.send_message(self.tags[tag])
             except:
                 await interaction.response.send_message(
-                    f"Couldn't find a tag matching `{tag}`.")
+                    f"Couldn't find a tag matching `{tag}`.",
+                    ephemeral=True)
 
     @tags.autocomplete('tag')
     async def tag_autocomplete(self, interaction: discord.Interaction,
