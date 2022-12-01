@@ -288,7 +288,7 @@ class Roles(commands.Cog):
                 roles = await cursor.fetchall()
 
             for role in roles:
-                if not ctx.guild.get_role(role[0])
+                if not ctx.guild.get_role(role[0]):
                     await db.execute("""DELETE FROM role_whitelist
                         WHERE guild_id=? AND role_id=?""",
                         (ctx.guild.id, role[0]))
