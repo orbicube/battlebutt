@@ -296,6 +296,7 @@ class Roles(commands.Cog):
                         WHERE guild_id=? AND role_id=?""",
                         (ctx.guild.id, role[0]))
                     await db.commit()
+                await ctx.send(f"Deleted {role[0]}")
 
 
 async def setup(bot):
