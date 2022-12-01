@@ -13,7 +13,8 @@ class Roles(commands.Cog):
 
     @app_commands.command(name="color", description="Change your role color")
     @app_commands.guild_only()
-    @app_commands.describe(code="Hex code (e.g. #135ACF), \"current\" or \"random\"")
+    @app_commands.describe(
+        code="Hex code (e.g. #123ABC), \"current\", \"random\"")
     async def color(self, interaction: discord.Interaction, code: str):
 
         # Color or colour
@@ -37,7 +38,8 @@ class Roles(commands.Cog):
 
         # Grab user's unique role from DB
         async with aiosqlite.connect("ext/data/roles.db") as db:
-            async with db.execute('SELECT role_id FROM role_map WHERE user_id=? AND guild_id=?',
+            async with db.execute("""SELECT role_id FROM role_map
+                WHERE user_id=? AND guild_id=?""",
                 (interaction.user.id, interaction.guild_id)) as cursor:
                 role_id = await cursor.fetchone()
 
@@ -83,8 +85,9 @@ class Roles(commands.Cog):
 
             role = await role.edit(color=new_color)
 
-        await interaction.response.send_message(
-            f"Your {c_word} has been changed from {old_color} to {str(role.color).upper()}.")
+        await interaction.response.send_message((
+            f"Your {c_word} has been changed from {old_color}"
+            f" to {str(role.color).upper()}."))
 
 
     @app_commands.command()
@@ -179,7 +182,8 @@ class Roles(commands.Cog):
     async def unmap_role(self, ctx, user: discord.User, role: discord.Role):
 
         async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute('DELETE FROM role_map WHERE user_id=? AND guild_id=? AND role_id=?',
+            await db.execute("""DELETE FROM role_map
+                WHERE user_id=? AND guild_id=? AND role_id=?""",
                 (user.id, ctx.guild.id, role.id))
             await db.commit()
 
@@ -189,7 +193,8 @@ class Roles(commands.Cog):
     async def list_mapped_roles(self, ctx, user: discord.User):
 
         async with aiosqlite.connect("ext/data/roles.db") as db:
-            async with db.execute('SELECT role_id FROM role_map WHERE user_id=? AND guild_id=?',
+            async with db.execute("""SELECT role_id FROM role_map
+                WHERE user_id=? AND guild_id=?""",
                 (user.id, ctx.guild.id)) as cursor:
                 roles = await cursor.fetchall()
 
@@ -240,6 +245,38 @@ class Roles(commands.Cog):
 
             await interaction.response.send_message(
                 f"Removed {role.name} from the whitelist.")
+
+
+    @commands.Cog.listener("on_guild_role_update")
+    async def check_mentionable(self, before, after):
+        """ Change whitelist if mentionable status has changed """
+        if before.mentionable != after.mentionable:
+            if after.mentionable:                
+                # Don't let people add admin roles to list
+                if after.permissions.administrator:
+                    return
+
+                async with aiosqlite.connect("ext/data/roles.db") as db:
+                    await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
+                        (after.guild.id, after.id))
+                    await db.commit()
+            else:
+                async with aiosqlite.connect("ext/data/roles.db") as db:
+                    await db.execute("""DELETE FROM role_whitelist
+                        WHERE guild_id=? AND role_id=?""",
+                        (after.guild.id, after.id))
+                    await db.commit()
+
+
+    @commands.Cog.listener("on_guild_role_delete")
+    async def clean_list(self, deleted_role):
+        """ If deleted role was mentionable, remove it from the list """
+        if deleted_role.mentionable:
+            async with aiosqlite.connect("ext/data/roles.db") as db:
+                await db.execute("""DELETE FROM role_whitelist
+                    WHERE guild_id=? AND role_id=?""",
+                    (deleted_role.guild.id, deleted_role.id))
+                await db.commit()
 
 
 async def setup(bot):

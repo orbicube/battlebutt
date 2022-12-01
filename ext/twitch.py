@@ -108,7 +108,6 @@ class Twitch(commands.Cog):
             type(error), error, error.__traceback__, file=sys.stderr)
 
 
-
     @app_commands.describe(channel="Twitch channel name or URL")
     @app_commands.command(name="twitch")
     async def get_twitch(self, interaction: discord.Interaction, channel: str):
