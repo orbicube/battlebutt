@@ -287,16 +287,13 @@ class Roles(commands.Cog):
                 WHERE guild_id=?""", (ctx.guild.id,)) as cursor:
                 roles = await cursor.fetchall()
 
-        for role in roles:
-            try:
-                temp = ctx.guild.get_role(role[0]).mention
-            except:
-                async with aiosqlite.connect("ext/data/roles.db") as db:
+            for role in roles:
+                if not ctx.guild.get_role(role[0])
                     await db.execute("""DELETE FROM role_whitelist
                         WHERE guild_id=? AND role_id=?""",
                         (ctx.guild.id, role[0]))
                     await db.commit()
-                await ctx.send(f"Deleted {role[0]}")
+                    await ctx.send(f"Deleted {role[0]}")
 
 
 async def setup(bot):
