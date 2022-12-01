@@ -282,9 +282,10 @@ class Roles(commands.Cog):
     @commands.command(hidden=True)
     @commands.is_owner()
     async def role_cleanup(self, ctx):
-        async with db.execute("""SELECT role_id FROM role_whitelist
-            WHERE guild_id=?""", (ctx.guild.id,)) as cursor:
-            roles = await cursor.fetchall()
+        async with aiosqlite.connect("ext/data/roles.db") as db:
+            async with db.execute("""SELECT role_id FROM role_whitelist
+                WHERE guild_id=?""", (ctx.guild.id,)) as cursor:
+                roles = await cursor.fetchall()
 
         for role in roles:
             try:
