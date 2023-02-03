@@ -24,6 +24,7 @@ allowed_mentions = discord.AllowedMentions(
 
 bot = commands.Bot(
     command_prefix=commands.when_mentioned_or('/'),
+    case_insensitive=True,
     intents=intents,
     allowed_mentions=allowed_mentions)
 
