@@ -245,14 +245,18 @@ class Card(commands.Cog,
     async def nostalgix(self, ctx):
         """ Pulls a random Nostalgix card """
 
-        r = await self.bot.http_client.get(
-            "https://www.nostalgixtcg.com/cards")
-        page = html.fromstring(r.text)
+        url = "https://play-api.carde.io/v1/cards/63bc844c3e8d2f34e312bc77"
 
-        cards = page.xpath(
-            "//div[@class='gallery-strips-item-wrapper']/img/@data-src")
+        r = await self.bot.http_client.get(url)
+        max_pages = r.json()["pagination"]["totalPages"]
 
-        await ctx.send(choice(cards))
+        params = { "page": randint(1, int(max_pages)) }
+
+        r = await self.bot.http_client.get(url, params=params)
+        cards = r.json()["data"]
+
+        await ctx.send(choice(cards)["imageUrl"])
+        
 
 async def setup(bot):
     await bot.add_cog(Card(bot))
