@@ -21,7 +21,7 @@ class MFW(commands.Cog):
     async def cog_unload(self):
         self.check_mfw.cancel()
 
-    @commands.hybrid_command()
+    @commands.hybrid_command(aliases=["tfw"])
     @app_commands.describe(reason="What you're reacting to")
     async def mfw(self, ctx, reason: Optional[str]):
         """ Posts a random reaction image """
