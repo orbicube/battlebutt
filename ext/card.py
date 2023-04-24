@@ -238,7 +238,7 @@ class Card(commands.Cog,
         card = r.json()[0]
         card_slug = choice(card["editions"])["slug"]
 
-        await ctx.send(f"https://api.gatcg.com/images/cards/{card_slug}.jpg")
+        await ctx.send(f"https://ga-index-public.s3.us-west-2.amazonaws.com/cards/{card_slug}.jpg")
 
 
     @commands.command()
