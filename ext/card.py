@@ -193,11 +193,11 @@ class Card(commands.Cog,
         cards = r.json()
 
         card = choice(cards['cards'])
-        if '\/' in card['Code']:
-            card['Code'] = card['Code'].split('\/')[0]
+        if '\/' in card['code']:
+            card['code'] = card['code'].split('\/')[0]
 
         await ctx.send(("https://fftcg.cdn.sewest.net/images/cards/"
-            f"full/{card['Code']}_eg.jpg"))
+            f"full/{card['code']}_eg.jpg"))
 
 
     @commands.command(aliases=["cfvangaurd", "cfv"])
