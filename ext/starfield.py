@@ -12,7 +12,7 @@ class Starfield(commands.Cog):
     @app_commands.command()
     @app_commands.describe(guess="Your estimation of the Metacritic score.")
     async def starfield(self, interaction: discord.Interaction,
-        guess: app_commands.Range[int, 1, 100] = 80):
+        guess: app_commands.Range[int, 1, 100]):
         """ Guess the Starfield metascore """
 
         # Check for cutoff date
@@ -29,7 +29,7 @@ class Starfield(commands.Cog):
                 saved_guess = await cursor.fetchone()
 
             if not saved_guess:
-                await db.execute("INSERT INTO starfield VALUES (?, ?)",
+                await db.execute("INSERT INTO starfield VALUES (?, ?, ?)",
                     (interaction.user.id, interaction.user.name, guess))
                 await db.commit()
                 await interaction.response.send_message(
@@ -43,6 +43,23 @@ class Starfield(commands.Cog):
                 await db.commit()
                 await interaction.response.send_message(
                     f"Guess changed from *{saved_guess[0]}* to *{guess}*.")
+
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def starfieldwin(self, ctx, guess: int):
+
+        async with aiosqlite.connect("ext/data/starfield.db") as db:
+            async with db.execute("""SELECT user_id from starfield
+                WHERE guess=?""", (guess, )) as cursor:
+                winners = await cursor.fetchall()
+
+        if not winners:
+            await ctx.send(f"No one guessed {guess}!")
+        else:
+            win_list = [f"<@{winner[0]}>" for winner in winners]
+            await ctx.send((f"Congrats to {', '.join(win_list)} for guessing"
+                f" {guess}! Your prize is Todd's eternal gratefulness."))
 
 
 async def setup(bot):
