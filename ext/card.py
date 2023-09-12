@@ -44,6 +44,8 @@ class Card(commands.Cog,
                 await self.grandarchive(ctx)
             elif game.startswith("nostalg"):
                 await self.nostalgix(ctx)
+            elif game.startswith("lorcana"):
+                await self.lorcana(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -58,7 +60,8 @@ class Card(commands.Cog,
         
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'finalfantasy',
-            'cardfightvanguard', 'grandarchive', 'nostalgix']
+            'cardfightvanguard', 'grandarchive', 'nostalgix',
+            'lorcana']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -256,7 +259,21 @@ class Card(commands.Cog,
         cards = r.json()["data"]
 
         await ctx.send(choice(cards)["imageUrl"])
-        
+
+
+    @commands.command()
+    async def lorcana(self, ctx):
+        """ Pulls a random Lorcana card """
+
+        url = "https://lorcania.com/api/cardsSearch"
+        headers = {"Content-Type": "application/json"}
+        data = {"costs": [], "inkwell": [],
+            "language": "English", "sorting": "default"}
+        r = await self.bot.http_client.post(url, headers=headers, json=data)
+        cards = r.json()["cards"]
+
+        await ctx.send(choice(cards)["image"])
+
 
 async def setup(bot):
     await bot.add_cog(Card(bot))
