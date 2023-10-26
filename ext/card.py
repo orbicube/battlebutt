@@ -8,6 +8,7 @@ from random import choice, randint
 from lxml import html
 from PIL import Image
 from io import BytesIO
+from base64 import b64decode
 
 from credentials import DEBUG_CHANNEL
 
@@ -46,6 +47,8 @@ class Card(commands.Cog,
                 await self.nostalgix(ctx)
             elif game.startswith("lorcana"):
                 await self.lorcana(ctx)
+            elif game.startswith("redemption"):
+                await self.redemption(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -61,7 +64,7 @@ class Card(commands.Cog,
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'finalfantasy',
             'cardfightvanguard', 'grandarchive', 'nostalgix',
-            'lorcana']
+            'lorcana', 'redemption']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -273,6 +276,31 @@ class Card(commands.Cog,
         cards = r.json()["cards"]
 
         await ctx.send(choice(cards)["image"])
+
+
+    @commands.command()
+    async def redemption(self, ctx):
+        """ Pulls a random Redemption card """
+
+        # Git tree for cardlist, updated 2023/10/26
+        tree = "8e6cf3ed394a99d55c57a9d103fe11afe05dcf54"
+        url = ("https://api.github.com/repos/MattJBrinkman/"
+            f"RedemptionLackeyCCG/git/trees/{tree}")
+
+        r = await self.bot.http_client.get(url)
+        cards = r.json()["tree"]
+
+        valid_file = False
+        while valid_file is False:
+            card = choice(cards)
+            if ".jpg" in card["path"]:
+                valid_file = True
+
+        r = await self.bot.http_client.get(card["url"])
+        img = b64decode(r.json()["content"])
+        await ctx.send(file=discord.File(
+            fp=BytesIO(img),
+            filename=card["path"]))
 
 
 async def setup(bot):
