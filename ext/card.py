@@ -292,8 +292,8 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url)
         cards = r.json()["tree"]
 
-        # Filter out non-image files
-        cards = [card for card in cards if ".jpg" in card]
+        cards = [card for card in cards if ".jpg" in card["path"]]
+        card = choice(cards)
 
         r = await self.bot.http_client.get(card["url"])
         img = b64decode(r.json()["content"])
