@@ -49,6 +49,8 @@ class Card(commands.Cog,
                 await self.lorcana(ctx)
             elif game.startswith("redemption"):
                 await self.redemption(ctx)
+            elif game.startswith("vampire"):
+                await self.vampire(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -64,7 +66,7 @@ class Card(commands.Cog,
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'finalfantasy',
             'cardfightvanguard', 'grandarchive', 'nostalgix',
-            'lorcana', 'redemption']
+            'lorcana', 'redemption', 'vampire']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -290,11 +292,33 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url)
         cards = r.json()["tree"]
 
-        valid_file = False
-        while valid_file is False:
-            card = choice(cards)
-            if ".jpg" in card["path"]:
-                valid_file = True
+        # Filter out non-image files
+        cards = [card for card in cards if ".jpg" in card]
+
+        r = await self.bot.http_client.get(card["url"])
+        img = b64decode(r.json()["content"])
+        await ctx.send(file=discord.File(
+            fp=BytesIO(img),
+            filename=card["path"]))
+
+    @commands.command()
+    async def vampire(self, ctx):
+        """ Pulls a random Vampire: The Eternal Struggle card """
+
+        # Git tree for cardlist, updated 2023/10/26
+        tree = "ea24251f98006109fef961f2ab54cf605aa50cbf"
+        url = ("https://api.github.com/repos/lionel-panhaleux/"
+            f"krcg-static/git/trees/{tree}")
+
+        r = await self.bot.http_client.get(url)
+        cards = r.json()["tree"]
+
+        # Filter out subdirectories
+        cards = [card for card in cards if card["type"] == "blob"]
+        # Remove entries with size < 100 as they're symlinks
+        cards = [card for card in cards if card["size"] > 100]
+
+        card = choice(cards)
 
         r = await self.bot.http_client.get(card["url"])
         img = b64decode(r.json()["content"])
