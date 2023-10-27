@@ -10,6 +10,8 @@ from PIL import Image
 from io import BytesIO
 from base64 import b64decode
 
+import json
+
 from credentials import DEBUG_CHANNEL
 
 class Card(commands.Cog,
@@ -51,6 +53,8 @@ class Card(commands.Cog,
                 await self.redemption(ctx)
             elif game.startswith("vampire"):
                 await self.vampire(ctx)
+            elif game.startswith("neopets"):
+                await self.neopets(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -66,7 +70,7 @@ class Card(commands.Cog,
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'finalfantasy',
             'cardfightvanguard', 'grandarchive', 'nostalgix',
-            'lorcana', 'redemption', 'vampire']
+            'lorcana', 'redemption', 'vampire', 'neopets']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -301,6 +305,7 @@ class Card(commands.Cog,
             fp=BytesIO(img),
             filename=card["path"]))
 
+
     @commands.command()
     async def vampire(self, ctx):
         """ Pulls a random Vampire: The Eternal Struggle card """
@@ -325,6 +330,24 @@ class Card(commands.Cog,
         await ctx.send(file=discord.File(
             fp=BytesIO(img),
             filename=card["path"]))
+
+
+    @commands.command()
+    async def neopets(self, ctx):
+        """ Pulls a random Neopets card """
+        with open("ext/data/neopets.json") as f:
+            card = choice(json.load(f))
+
+        r = await self.bot.http_client.get(card)
+
+        card_img = Image.open(BytesIO(r.content)).convert('RGB')
+
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'JPEG')
+            img_binary.seek(0)
+            await ctx.send(file=discord.File(
+                fp=img_binary,
+                filename=card.rsplit('/', 1)[1].replace('.gif', '.jpg')))
 
 
 async def setup(bot):
