@@ -343,11 +343,11 @@ class Card(commands.Cog,
         card_img = Image.open(BytesIO(r.content)).convert('RGB')
 
         with BytesIO() as img_binary:
-            card_img.save(img_binary, 'JPEG')
+            card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
             await ctx.send(file=discord.File(
                 fp=img_binary,
-                filename=card.rsplit('/', 1)[1].replace('.gif', '.jpg')))
+                filename=card.rsplit('/', 1)[1].replace('.gif', '.png')))
 
 
 async def setup(bot):
