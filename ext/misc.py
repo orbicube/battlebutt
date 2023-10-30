@@ -170,8 +170,8 @@ class Misc(commands.Cog):
             if re.match(r"https?://(?:twitter|x)\.com", url):
                 tw_id = re.search(r'com/(\S+)/status/(\d+)', url)
                 if tw_id:
-                    tweets.append(
-                        f"https://vxtwitter.com/{tw_id[1]}/status/{tw_id[2]}")
+                    tweets.append(("[.](https://vxtwitter.com/"
+                        f"{tw_id[1]}/status/{tw_id[2]})"))
         
         if tweets:
             await message.channel.send(" ".join(tweets))
