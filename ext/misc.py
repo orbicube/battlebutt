@@ -135,6 +135,9 @@ class Misc(commands.Cog):
     @commands.Cog.listener("on_message")
     async def witchmercy(self, message):
 
+        if message.author == self.bot.user:
+            return
+
         match = ["witch mercy", "witchmercy", "which mercy"]
         if any(x in message.content for x in match):
             await message.add_reaction(
@@ -144,9 +147,34 @@ class Misc(commands.Cog):
     @commands.Cog.listener("on_message")
     async def elonrofl(self, message):
 
+        if message.author == self.bot.user:
+            return
+
         if re.search(r"https?://.*?twitter.*?\.com/elonmusk/status/",
             message.content):
             await message.add_reaction("🤣")
+
+
+    @commands.Cog.listener("on_message")
+    async def twitembed(self, message):
+
+        if message.author == self.bot.user:
+            return
+
+        urls = re.findall(r'(https?://\S+)', message.content)
+        if not urls:
+            return
+
+        tweets = []
+        for url in urls:
+            if re.match(r"https?://(?:twitter|x)\.com", url):
+                tw_id = re.search(r'com/(\S+)/status/(\d+)', url)
+                if tw_id:
+                    tweets.append(
+                        f"https://vxtwitter.com/{tw_id[1]}/status/{tw_id[2]}")
+        
+        if tweets:
+            await message.reply(" ".join(tweets), mention_author=False)
 
 
 async def setup(bot):
