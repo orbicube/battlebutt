@@ -174,7 +174,7 @@ class Misc(commands.Cog):
                         f"https://vxtwitter.com/{tw_id[1]}/status/{tw_id[2]}")
         
         if tweets:
-            await message.reply(" ".join(tweets), mention_author=False)
+            await message.channel.send(" ".join(tweets))
 
 
 async def setup(bot):
