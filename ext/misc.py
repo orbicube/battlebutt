@@ -170,7 +170,7 @@ class Misc(commands.Cog):
             if re.match(r"https?://(?:twitter|x)\.com", url):
                 tw_id = re.search(r'com/(\S+)/status/(\d+)', url)
                 if tw_id:
-                    tweets.append(("[.](https://vxtwitter.com/"
+                    tweets.append(("[⚮](https://vxtwitter.com/"
                         f"{tw_id[1]}/status/{tw_id[2]})"))
         
         if tweets:
