@@ -161,20 +161,13 @@ class Misc(commands.Cog):
         if message.author == self.bot.user:
             return
 
-        urls = re.findall(r'(https?://\S+)', message.content)
-        if not urls:
-            return
-
-        tweets = []
-        for url in urls:
-            if re.match(r"https?://(?:twitter|x)\.com", url):
-                tw_id = re.search(r'com/(\S+)/status/(\d+)', url)
-                if tw_id:
-                    tweets.append(("[⚮](https://vxtwitter.com/"
-                        f"{tw_id[1]}/status/{tw_id[2]})"))
-        
+        tweets = re.findall(
+            r"(?<!<)(?<!\]\()https?://(?:twitter|x)\.com/(\S+)/status/(\d+)(?:\?\S*)?(?!>)\b",
+            message.content)
         if tweets:
-            await message.channel.send(" ".join(tweets))
+            await message.channel.send(" ".join(
+                f"[⚮](https://vxtwitter.com/{tw[0]}/status/{tw[1]}])"
+                for tw in tweets))
 
 
 async def setup(bot):
