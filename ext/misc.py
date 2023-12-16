@@ -166,7 +166,7 @@ class Misc(commands.Cog):
             message.content)
         if tweets:
             await message.channel.send(" ".join(
-                f"[⚮](https://vxtwitter.com/{tw[0]}/status/{tw[1]}])"
+                f"[⚮](https://fxtwitter.com/{tw[0]}/status/{tw[1]}])"
                 for tw in tweets))
 
 
