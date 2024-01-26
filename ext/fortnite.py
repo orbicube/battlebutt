@@ -103,7 +103,10 @@ class Fortnite(commands.Cog):
                     r'CrewPack.(\w+)(\d+)', str(skin["gameplayTags"]))[0]
                 embed.set_footer(text=f"{crewdate[0]} {crewdate[1]} Crew Pack")
 
-        await ctx.send(embed=embed)
+        if reason and ctx.interaction:
+            await ctx.send(f"fortnite {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
     def calc_season_bp(season: int):
