@@ -4,6 +4,7 @@ from discord import app_commands
 
 from random import randint, choice, choices
 from datetime import datetime
+from io import BytesIO
 from typing import Optional
 
 class Funko(commands.Cog):
@@ -19,51 +20,46 @@ class Funko(commands.Cog):
         # Defer in case HTTP requests take too long
         await ctx.defer()
 
-        url = "https://api.funko.com/api/search/terms"
+        url = "https://mobilesearch-prod.funko.com/product_search"
         headers = {
-            "User-Agent": "Popspedia/1 CFNetwork/1325.0.1 Darwin/21.0.0",
-            "Content-Type": "application/json"        
+            "User-Agent": "Popspedia/15 CFNetwork/1490.0.4 Darwin/23.2.0"
         }
 
         # API cannot paginate beyond 10k results so we need to filter.
         # Search results contain metadata on matching items, which we can use
         # to pick a random year with proper weighting to filter results.
 
-        data = {
-            "type": "catalog",
-            "page": "1",
-            "pageCount": "10",
-            "productLines": ["blox", "pop! 8-bit", "pop! mask", "pop! pez", 
-                "pop! moments", "pop! rides", "pop! town", "pop! trains",
-                "pop! vinyl", "vinyl cubed"]
+        params = {
+            "refine_4": "c_productType=Pop!",
+            "count": 1
         }
 
-        r = await self.bot.http_client.post(url, headers=headers, json=data)
+        r = await self.bot.http_client.get(url, headers=headers, params=params)
         results = r.json()
 
         # Randomly pick a year based on weighting from item counts.
-        years = [year['key'] for year in results['attributes']['releaseDate']]
-        counts = [year['count'] for year in results['attributes']['releaseDate']]
+        years = [year['value'] for year in results['refinements'][0]['values']]
+        counts = [year['hit_count'] for year in results['refinements'][0]['values']]
         year = choices(years, counts)[0]
 
         # Get that year's associated count.
         year_count = counts[years.index(year)]
 
         # 10 items per page so divide item count by 10 and round up.
-        data['page'] = str(randint(1, (year_count / 10).__ceil__()))
-        data['releaseDate'] = [year]
+        params['start'] = randint(0, year_count-1)
+        params['refine_5'] = f"c_releaseYear={year}"
 
-        r = await self.bot.http_client.post(url, headers=headers, json=data)
+        r = await self.bot.http_client.get(url, headers=headers, params=params)
         results = r.json()
 
-        funko = choice(results['hits'])
+        funko = results['hits'][0]
         embed = discord.Embed(
-            title = funko['title'],
+            title = funko['c_mobileDisplayName'],
             color = 5723991)
 
         # Convert timestamp to human-readable string ("Year"/"Month Xth, Year")
         release_date = datetime.strptime(
-            funko['releaseDate'].split('T')[0],
+            funko['c_releaseDate'].split('T')[0],
             "%Y-%m-%d")
         if release_date.month == 1 and release_date.day == 1:
             release_value = release_date.year
@@ -82,27 +78,19 @@ class Funko(commands.Cog):
             value = release_value,
             inline = True)
 
-        # Some items do not have this field.
-        if "marketValue" in funko.keys():
-            embed.add_field(
-                name = "Value",
-                value = f"${funko['marketValue']:n}",
-                inline = True)
+        embed.add_field(
+            name = "Value",
+            value = f"${funko['c_sortValue']:n}",
+            inline = True)
 
-        embed.set_footer(text = funko['licenses'][0])
+        embed.set_footer(text=funko['c_license'])
 
-        # More recent items may have multiple images provided.
-        # The first is usually the box while the second is the raw figure.
-        if len(funko['additionalImages']) > 1:
-            embed.set_image(url=f"https://api.funko.com{funko['additionalImages'][1]}")
-            embed.set_thumbnail(url=f"https://api.funko.com{funko['additionalImages'][0]}")
-        else:
-            embed.set_image(url=f"https://api.funko.com{funko['imageUrl']}")
+        embed.set_image(url=funko['image']['link'].replace("sfcc-prod.",""))
 
         if reason and ctx.interaction:
-            await ctx.send(f"funko {reason}:", embed=embed)
+            await ctx.send(f"funko {reason}:", file=file, embed=embed)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(file=file, embed=embed)
 
 
 async def setup(bot):
