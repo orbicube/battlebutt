@@ -45,7 +45,7 @@ class Tags(commands.Cog):
     @commands.Cog.listener("on_message")
     async def scan_tags(self, message):
 
-        if self.bot.user in message.mentions:
+        if self.bot.user in message.mentions or message.startswith("/"):
             try:
                 await message.channel.send(
                     self.tags[message.content.split()[1]])
