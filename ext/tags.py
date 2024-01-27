@@ -51,7 +51,7 @@ class Tags(commands.Cog):
                     self.tags[message.content.split()[1]])
             except:
                 pass
-        elif message.startswith("/"):
+        elif message.content.startswith("/"):
             try:
                 await message.channel.send(
                     self.tags[message.content[1:]])
