@@ -88,9 +88,9 @@ class Funko(commands.Cog):
         embed.set_image(url=funko['image']['link'].replace("sfcc-prod.",""))
 
         if reason and ctx.interaction:
-            await ctx.send(f"funko {reason}:", file=file, embed=embed)
+            await ctx.send(f"funko {reason}:", embed=embed)
         else:
-            await ctx.send(file=file, embed=embed)
+            await ctx.send(embed=embed)
 
 
 async def setup(bot):
