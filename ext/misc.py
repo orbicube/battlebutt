@@ -144,19 +144,19 @@ class Misc(commands.Cog):
                 "<:witchmercydonottouch:809289934182678539>")
 
 
-    #@commands.Cog.listener("on_message")
-    #async def twitembed(self, message):
-    #
-    #    if message.author == self.bot.user:
-    #        return
-    #
-    #   tweets = re.findall(
-    #        r"(?<!<)(?<!\]\()https?://(?:twitter|x)\.com/(\S+)/status/(\d+)(?:\?\S*)?(?!>)\b",
-    #        message.content)
-    #    if tweets:
-    #        await message.channel.send(" ".join(
-    #            f"[⚮](https://fxtwitter.com/{tw[0]}/status/{tw[1]}])"
-    #            for tw in tweets))
+    @commands.Cog.listener("on_message")
+    async def twitembed(self, message):
+    
+        if message.author == self.bot.user:
+            return
+    
+       tweets = re.findall(
+            r"(?<!<)(?<!\]\()https?://(?:twitter|x)\.com/(\S+)/status/(\d+)(?:\?\S*)?(?!>)\b",
+            message.content)
+        if tweets:
+            await message.channel.send(" ".join(
+                f"[⚮](https://fxtwitter.com/{tw[0]}/status/{tw[1]}])"
+                for tw in tweets))
 
 
 async def setup(bot):
