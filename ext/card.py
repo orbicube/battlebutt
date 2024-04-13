@@ -349,6 +349,15 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=card.rsplit('/', 1)[1].replace('.gif', '.png')))
 
+    @commands.command()
+    async def playingcard(self, ctx):
+        """Pulls a random playing card """
+
+        r = await self.bot.http_client.get(
+            "https://www.deckofcardsapi.com/api/deck/new/draw/?count=1&jokers_enabled=True")
+
+        await ctx.send(r.json()["cards"][0]["image"])
+
 
 async def setup(bot):
     await bot.add_cog(Card(bot))
