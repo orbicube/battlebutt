@@ -39,8 +39,6 @@ class Card(commands.Cog,
                 await self.fleshandblood(ctx)
             elif game.startswith("gateruler"):
                 await self.gateruler(ctx)
-            elif game.startswith(("finalfantasy", "fftcg")):
-                await self.finalfantasy(ctx)
             elif game.startswith(("cardfightvanguard", "cfv")):
                 await self.cardfightvanguard(ctx)
             elif game.startswith("grandarchive"):
@@ -68,9 +66,9 @@ class Card(commands.Cog,
         current: str,) -> list[app_commands.Choice[str]]:
         
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
-            'fleshandblood', 'gateruler', 'finalfantasy',
-            'cardfightvanguard', 'grandarchive', 'nostalgix',
-            'lorcana', 'redemption', 'vampire', 'neopets']
+            'fleshandblood', 'gateruler', 'cardfightvanguard', 
+            'grandarchive', 'nostalgix', 'lorcana', 
+            'redemption', 'vampire', 'neopets']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -191,25 +189,6 @@ class Card(commands.Cog,
             await ctx.send(file=discord.File(
                 fp=img_binary,
                 filename=card_url.rsplit('/', 1)[1]))
-
-
-    @commands.command(aliases=['fftcg'])
-    async def finalfantasy(self, ctx):
-        """ Pulls a random Final Fantasy TCG card """
-
-        # Defer in case JSON download takes too long
-        await ctx.defer()
-
-        url = "https://fftcg.square-enix-games.com/na/get-cards"
-        r = await self.bot.http_client.get(url)           
-        cards = r.json()
-
-        card = choice(cards['cards'])
-        if '\/' in card['code']:
-            card['code'] = card['code'].split('\/')[0]
-
-        await ctx.send(("https://fftcg.cdn.sewest.net/images/cards/"
-            f"full/{card['code']}_eg.jpg"))
 
 
     @commands.command(aliases=["cfvangaurd", "cfv"])
