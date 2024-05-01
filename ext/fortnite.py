@@ -47,7 +47,8 @@ class Fortnite(commands.Cog):
         # Grab current list of items and pick random one
         url = "https://fortniteapi.io/v2/items/list"
         params = {
-            "type": "outfit"
+            "type": "outfit",
+            "fields": "id,name"
         }
         headers = {
             "Authorization": FNAPI_KEY
@@ -56,15 +57,26 @@ class Fortnite(commands.Cog):
         items = r.json()
         skin = choice(items["items"])
 
-        while skin["name"] == "TBD":
+        while skin["name"] == "TBD" or not skin["name"] or "_" in skin["name"]:
             skin = choice(items["items"])
+
+        url = "https://fortniteapi.io/v2/items/get"
+        params = {
+            "id": skin["id"]
+        }
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
+        skin = r.json()["item"]
 
         # Start crafting embed with data present for all skins
         embed = discord.Embed(
             title=skin["name"],
             description=skin["description"])
 
-        embed.set_image(url=skin["images"]["background"])
+        if skin["displayAssets"]:
+            br_assets = [ass for ass in skin["displayAssets"] if ass["primaryMode"] == "BattleRoyale"]
+            embed.set_image(url=choice(br_assets)["background"])
+        else:
+            embed.set_image(url=skin["images"]["background"])
 
         # Discord embed colour based on rarity/series
         if skin["series"]:
@@ -81,9 +93,14 @@ class Fortnite(commands.Cog):
 
         # If Shop skin, display price and time since last appearance
         if skin["price"]:
+            footer_text = f"{skin['price']} V-Bucks •"
+
             days_ago = datetime.utcnow() - datetime.strptime(
                 skin["lastAppearance"], "%Y-%m-%d")
-            embed.set_footer(text=f"{skin['price']} V-Bucks • Last seen {days_ago.days} days ago")
+            if days_ago.days == 0:
+                embed.set_footer(text=f"{footer_text} Currently in the shop.")
+            else:
+                embed.set_footer(text=f"{footer_text} Last seen {days_ago.days} days ago")
         # Format Battle Pass footer
         elif skin["battlepass"]:
             bp_format = re.findall(
