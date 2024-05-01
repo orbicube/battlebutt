@@ -98,15 +98,17 @@ class Fortnite(commands.Cog):
             days_ago = datetime.utcnow() - datetime.strptime(
                 skin["lastAppearance"], "%Y-%m-%d")
             if days_ago.days == 0:
-                embed.set_footer(text=f"{footer_text} Currently in the shop.")
+                embed.set_footer(text=f"{footer_text} Currently in the shop")
             else:
                 embed.set_footer(text=f"{footer_text} Last seen {days_ago.days} days ago")
+
         # Format Battle Pass footer
         elif skin["battlepass"]:
             bp_format = re.findall(
                 r'Chapter (\d+) - Season (\d+)',
                 skin['battlepass']['displayText']['chapterSeason'])[0]
             embed.set_footer(text=f"C{bp_format[0]}S{bp_format[1]} Battle Pass")
+            
         # Extra conditionals
         elif not skin["battlepass"]:
             # Battle Pass challenges
