@@ -56,6 +56,7 @@ class Card(commands.Cog,
             elif game.startswith("sorcery"):
                 await self.sorcery(ctx)
             elif game.startswith("wow"):
+                await self.wow(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
