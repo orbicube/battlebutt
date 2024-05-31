@@ -12,7 +12,7 @@ from base64 import b64decode
 
 import json
 
-from credentials import DEBUG_CHANNEL
+from credentials import DEBUG_CHANNEL, GOOGLE_KEY
 
 class Card(commands.Cog,
     command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
@@ -53,6 +53,8 @@ class Card(commands.Cog,
                 await self.vampire(ctx)
             elif game.startswith("neopets"):
                 await self.neopets(ctx)
+            elif game.startswith("sorcery"):
+                await self.sorcery(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -68,7 +70,8 @@ class Card(commands.Cog,
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'cardfightvanguard', 
             'grandarchive', 'nostalgix', 'lorcana', 
-            'redemption', 'vampire', 'neopets']
+            'redemption', 'vampire', 'neopets',
+            'sorcery']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -329,6 +332,60 @@ class Card(commands.Cog,
             await ctx.send(file=discord.File(
                 fp=img_binary,
                 filename=card.rsplit('/', 1)[1].replace('.gif', '.png')))
+
+
+    @commands.command()
+    async def sorcery(self, ctx):
+        """ Pulls a random Sorcery card """
+
+        # Defer in case multiple requests take too long   
+        await ctx.defer()
+
+        # Grab random card and its information
+        card_url = "https://api.sorcerytcg.com/api/cards"
+        r = await self.bot.http_client.get(card_url)
+        card_json = choice(r.json())
+        card_name = card_json["slug"]
+        set_name = choice(card_json["sets"])["name"]
+        if card_json["guardian"]["type"] == "Site":
+            rotate = True
+        else:
+            rotate = False
+
+        # Select proper Google Drive folder based on sets
+        list_url = "https://www.googleapis.com/drive/v3/files"
+        list_params = {
+            "q": f"name = '{set_name}' and '17IrJkRGmIU9fDSTU2JQEU9JlFzb5liLJ' in parents",
+            "key": GOOGLE_KEY
+        }
+        r = await self.bot.http_client.get(list_url, params=list_params)
+        folder_id = r.json()["files"][0]["id"]
+
+        # Find card id from its set's folder
+        list_params["q"] = f"name = '{card_name}.png' and '{folder_id}' in parents"
+        r = await self.bot.http_client.get(list_url, params=list_params)
+        card_id = r.json()["files"][0]["id"]
+
+        # Get card image data
+        get_url = f"https://www.googleapis.com/drive/v3/files/{card_id}"
+        get_params = {
+            "acknowledgeAbuse": True,
+            "alt": "media",
+            "key": GOOGLE_KEY
+        }
+        r = await self.bot.http_client.get(get_url, params=get_params)
+        card_img = Image.open(BytesIO(r.content))
+        if rotate:
+            card_img = card_img.rotate(270, expand=1)
+
+        # Send to Discord
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            await ctx.send(file=discord.File(
+                fp=img_binary,
+                filename=f"{card_name}.png"))
+
 
     @commands.command()
     async def playingcard(self, ctx):
