@@ -253,6 +253,8 @@ class Card(commands.Cog,
     async def lorcana(self, ctx):
         """ Pulls a random Lorcana card """
 
+        await ctx.defer()
+
         url = "https://lorcania.com/api/cardsSearch"
         headers = {"Content-Type": "application/json"}
         data = {"costs": [], "inkwell": [],

@@ -136,7 +136,7 @@ class Fortnite(commands.Cog):
         elif season > 18:
             return f"C3S{season % 18}"
         elif season > 10:
-            return f"C3S{season % 10}"
+            return f"C2S{season % 10}"
 
 
 async def setup(bot):
