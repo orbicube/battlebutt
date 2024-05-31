@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from typing import Optional
-from random import choice, randint
+from random import choice, choices, randint
 
 from lxml import html
 from PIL import Image
@@ -55,6 +55,7 @@ class Card(commands.Cog,
                 await self.neopets(ctx)
             elif game.startswith("sorcery"):
                 await self.sorcery(ctx)
+            elif game.startswith("wow"):
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -71,7 +72,7 @@ class Card(commands.Cog,
             'fleshandblood', 'gateruler', 'cardfightvanguard', 
             'grandarchive', 'nostalgix', 'lorcana', 
             'redemption', 'vampire', 'neopets',
-            'sorcery']
+            'sorcery', 'wow']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -385,6 +386,45 @@ class Card(commands.Cog,
             await ctx.send(file=discord.File(
                 fp=img_binary,
                 filename=f"{card_name}.png"))
+
+
+    @commands.command()
+    async def wow(self, ctx):
+
+        # Defer in case multiple requests take too long
+        await ctx.defer()
+
+        # Get Google Drive folder ID from weighted lists
+        with open("ext/data/wowtcg.json") as f:
+            j = json.load(f)
+        set_id = choices(j["sets"], j["weights"])[0]
+
+        # Get random card file from folder list
+        list_url = "https://www.googleapis.com/drive/v3/files"
+        list_params = {
+            "q": f"'{set_id}' in parents",
+            "key": GOOGLE_KEY
+        }
+        r = await self.bot.http_client.get(list_url, params=list_params)
+        card_id = choice(r.json()["files"])["id"]
+
+        # Get card image binary
+        get_url = f"https://www.googleapis.com/drive/v3/files/{card_id}"
+        get_params = {
+            "acknowledgeAbuse": True,
+            "alt": "media",
+            "key": GOOGLE_KEY
+        }
+        r = await self.bot.http_client.get(get_url, params=get_params)
+        card_img = Image.open(BytesIO(r.content))
+
+        # Send to Discord
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            await ctx.send(file=discord.File(
+                fp=img_binary,
+                filename=f"{card_id}.png"))
 
 
     @commands.command()
