@@ -57,6 +57,8 @@ class Card(commands.Cog,
                 await self.sorcery(ctx)
             elif game.startswith("wow"):
                 await self.wow(ctx)
+            elif game.startsiwth("spellfire"):
+                await self.spellfire(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -73,7 +75,7 @@ class Card(commands.Cog,
             'fleshandblood', 'gateruler', 'cardfightvanguard', 
             'grandarchive', 'nostalgix', 'lorcana', 
             'redemption', 'vampire', 'neopets',
-            'sorcery', 'wow']
+            'sorcery', 'wow', 'spellfire']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -391,6 +393,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wow(self, ctx):
+        """ Pull random World of Warcraft TCG card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -426,6 +429,30 @@ class Card(commands.Cog,
             await ctx.send(file=discord.File(
                 fp=img_binary,
                 filename=f"{card_id}.png"))
+
+
+    @commands.command()
+    async def spellfire(self, ctx):
+        """ Pull random Spellfire card """
+
+        with open ("ext/data/spellfire.json") as f:
+            j = json.load(f)
+        set_tree = choices(j["sets"], j["weights"])[0]
+
+        url = ("https://api.github.com/repos/dumsantos/Spellfire_EN-BR/"
+            f"git/trees/{set_tree}")
+
+        r = await self.bot.http_client.get(url)
+        cards = r.json()["tree"]
+
+        cards = [card for card in cards if ".jpg" in card["path"]]
+        card = choice(cards)
+
+        r = await self.bot.http_client.get(card["url"])
+        img = b64decode(r.json()["content"])
+        await ctx.send(file=discord.File(
+            fp=BytesIO(img),
+            filename=card["path"]))
 
 
     @commands.command()
