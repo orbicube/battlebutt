@@ -57,7 +57,7 @@ class Card(commands.Cog,
                 await self.sorcery(ctx)
             elif game.startswith("wow"):
                 await self.wow(ctx)
-            elif game.startsiwth("spellfire"):
+            elif game.startswith("spellfire"):
                 await self.spellfire(ctx)
             else:
                 command = choice(self.get_commands())
