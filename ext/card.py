@@ -59,6 +59,8 @@ class Card(commands.Cog,
                 await self.wow(ctx)
             elif game.startswith("spellfire"):
                 await self.spellfire(ctx)
+            elif game.startswith("shadowverse"):
+                await self.shadowverse(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -74,7 +76,7 @@ class Card(commands.Cog,
         games = ['pokemon', 'yugioh', 'magic', 'digimon',
             'fleshandblood', 'gateruler', 'cardfightvanguard', 
             'grandarchive', 'nostalgix', 'lorcana', 
-            'redemption', 'vampire', 'neopets',
+            'redemption', 'vampire', 'neopets', 'shadowverse',
             'sorcery', 'wow', 'spellfire']
 
         return [app_commands.Choice(name=game, value=game)
@@ -454,6 +456,34 @@ class Card(commands.Cog,
             fp=BytesIO(img),
             filename=card["path"]))
 
+    @commands.command()
+    async def shadowverse(self, ctx):
+        """ Pull random Shadowverse: Evolve card """
+
+        # Defer in case multiple requests take too long
+        await ctx.defer()
+
+        # Get max card count
+        url = "https://en.shadowverse-evolve.com/cards/searchresults/"
+        r = await self.bot.http_client.get(url)
+        page = html.fromstring(r.text)
+
+        # 15 cards per page
+        card_count = page.xpath("//span[@class='num bold']/text()")[0]
+        card_count = int(card_count)
+        params = {
+            "page": randint(1, int((card_count / 15) + 1))
+        }
+
+        # Get page with cards to pick
+        r = await self.bot.http_client.get(url, params=params)
+        page = html.fromstring(r.text)
+
+        # Pick card
+        card = "https://en.shadowverse-evolve.com{}".format(
+            choice(page.xpath("//img[@class='object-fit-img']/@src")))
+        await ctx.send(card)
+        
 
     @commands.command()
     async def playingcard(self, ctx):
