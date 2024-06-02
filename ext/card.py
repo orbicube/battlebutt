@@ -61,6 +61,8 @@ class Card(commands.Cog,
                 await self.spellfire(ctx)
             elif game.startswith("shadowverse"):
                 await self.shadowverse(ctx)
+            elif game.startswith(("starwars", "swu")):
+                await self.starwars(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -77,7 +79,7 @@ class Card(commands.Cog,
             'fleshandblood', 'gateruler', 'cardfightvanguard', 
             'grandarchive', 'nostalgix', 'lorcana', 
             'redemption', 'vampire', 'neopets', 'shadowverse',
-            'sorcery', 'wow', 'spellfire']
+            'sorcery', 'wow', 'spellfire', 'starwars']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -483,7 +485,19 @@ class Card(commands.Cog,
         card = "https://en.shadowverse-evolve.com{}".format(
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
         await ctx.send(card)
-        
+
+
+    @commands.command(aliases=['swu'])
+    async def starwars(self, ctx):
+        """ Pulls a random Star Wars Unlimited card """
+
+        url = "https://swudb.com/random"
+        r = await self.bot.http_client.get(url, follow_redirects=True)
+
+        page = html.fromstring(r.text)
+        image_url = page.xpath("//img[@class='img-fluid']/@src")
+        await ctx.send(f"https://swudb.com{choice(image_url)}")
+
 
     @commands.command()
     async def playingcard(self, ctx):
