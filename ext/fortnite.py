@@ -72,8 +72,9 @@ class Fortnite(commands.Cog):
             title=skin["name"],
             description=skin["description"])
 
+        # used to be ass["primaryMode"] == "BattleRoyale", using ass["productTag"] == "Product.BR" temp
         if skin["displayAssets"]:
-            br_assets = [ass for ass in skin["displayAssets"] if ass["primaryMode"] == "BattleRoyale"]
+            br_assets = [ass for ass in skin["displayAssets"] if ass["productTag"] == "Product.BR"]
             embed.set_image(url=choice(br_assets)["background"])
         else:
             embed.set_image(url=skin["images"]["background"])
