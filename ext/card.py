@@ -63,6 +63,8 @@ class Card(commands.Cog,
                 await self.shadowverse(ctx)
             elif game.startswith(("starwars", "swu")):
                 await self.starwars(ctx)
+            elif game.startswith(("battlespirits")):
+                await self.battlespirits(ctx)
             else:
                 command = choice(self.get_commands())
                 await command.__call__(ctx)
@@ -79,7 +81,8 @@ class Card(commands.Cog,
             'fleshandblood', 'gateruler', 'cardfightvanguard', 
             'grandarchive', 'nostalgix', 'lorcana', 
             'redemption', 'vampire', 'neopets', 'shadowverse',
-            'sorcery', 'wow', 'spellfire', 'starwars']
+            'sorcery', 'wow', 'spellfire', 'starwars',
+            'battlespirits']
 
         return [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower() ] 
@@ -497,6 +500,19 @@ class Card(commands.Cog,
         page = html.fromstring(r.text)
         image_url = page.xpath("//img[@class='img-fluid']/@src")
         await ctx.send(f"https://swudb.com{choice(image_url)}")
+
+
+    @commands.command()
+    async def battlespirits(self, ctx):
+
+        url = "https://www.bssdb.dev/cards/bss/"
+        r = await self.bot.http_client.get(url)
+
+        page = html.fromstring(r.text)
+        image_url = page.xpath("//tr/td[2]/a/text()")
+        filtered_imgs = [i for i in image_url if ".png" in i and "TOKEN" not in i]
+
+        await ctx.send(f"{url}{choice(filtered_imgs)}")
 
 
     @commands.command()
