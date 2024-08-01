@@ -51,7 +51,7 @@ class IGDB(commands.Cog):
     game_count = 254151
     game = {}
     filter_query = "where themes != (42) & (cover != null | summary != null | first_release_date != null | platforms != null) & category != (13);"
-    fields_query = "fields name,cover.url,screenshots.url,summary,first_release_date,platforms.name,slug,category,parent_game.platforms.name;"
+    fields_query = "fields name,cover.url,screenshots.url,summary,first_release_date,platforms.name,slug,category,parent_game.name,parent_game.platforms.name;"
 
 
     def __init__(self, bot):
@@ -93,12 +93,17 @@ class IGDB(commands.Cog):
                 pass
 
         inherit_plats = False
-        # Category 0 is main game, doesn't need distinction
-        if game["category"]:
-            # Inherit parent game for everything except ports/remakes/remasters
-            if game["category"] not in [3, 8, 9, 11]:
-                inherit_plats = True
-            embed.set_author(name=f"{self.category_enum[game['category']]}")
+        # Highlight that it's a mod and highlight game if not obvious
+        if game["category"] == 5:
+            cat_name = "Mod"
+            if game["parent_game"]["name"] not in game["name"]:
+                cat_name += f" of {game['parent_game']['name']}"
+
+            embed.set_author(name=cat_name)
+
+        # Inherit parent game for everything except ports/remakes/remasters
+        if game["category"] and game["category"] not in [3, 8, 9, 10, 11]:
+            inherit_plats = True
 
         # Set platforms if exists
         try:
@@ -146,7 +151,7 @@ class IGDB(commands.Cog):
                 f"Error in igdb.update_game(): {type(e)} {e}")
             return          
 
-        await self.bot.get_channel(ERROR_CHANNEL).send(self.game)
+        await self.bot.get_channel(ERROR_CHANNEL).send(str(self.game)[:1999])
 
         await self.bot.change_presence()
         await self.bot.change_presence(
