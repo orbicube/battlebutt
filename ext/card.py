@@ -270,7 +270,6 @@ class Card(commands.Cog,
         await ctx.defer()
 
         r = await self.bot.http_client.get("https://api.lorcana-api.com/bulk/cards")
-        await ctx.send(r.text[:2000])
         cards = r.json()
 
         await ctx.send(choice(cards)["Image"])
