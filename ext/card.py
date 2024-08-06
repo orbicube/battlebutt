@@ -269,14 +269,10 @@ class Card(commands.Cog,
 
         await ctx.defer()
 
-        url = "https://lorcania.com/api/cardsSearch"
-        headers = {"Content-Type": "application/json"}
-        data = {"costs": [], "inkwell": [],
-            "language": "English", "sorting": "default"}
-        r = await self.bot.http_client.post(url, headers=headers, json=data)
-        cards = r.json()["cards"]
+        r = await self.bot.http_client.get("http://api.lorcana-api.com/bulk/cards")
+        cards = r.json()
 
-        await ctx.send(choice(cards)["image"])
+        await ctx.send(choice(cards)["Image"])
 
 
     @commands.command()
