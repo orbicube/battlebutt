@@ -45,7 +45,7 @@ class IGDB(commands.Cog):
         "NEC PC-6000 Series": "PC-60",
         "TRS-80 Color Computer": "TRS-80 CoCo",
         "PC-8800 Series": "PC-88",
-        "Handheld Electronic LCD": "LCD Handheld",
+        "Handheld Electronic LCD": "Handheld",
         "Web browser": "Browser"
     }
     game_count = 254151
