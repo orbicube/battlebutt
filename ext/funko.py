@@ -80,10 +80,13 @@ class Funko(commands.Cog,
             value = release_value,
             inline = True)
 
-        embed.add_field(
-            name = "Value",
-            value = f"${funko['c_sortValue']:n}",
-            inline = True)
+        try:
+            embed.add_field(
+                name = "Value",
+                value = f"${funko['c_sortValue']:n}",
+                inline = True)
+        except:
+            pass
 
         embed.set_footer(text=funko['c_license'])
 
