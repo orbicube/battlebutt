@@ -27,7 +27,7 @@ class HLTB(commands.Cog):
 					url=game.game_web_link)
 
 				if game.game_image_url:
-					embed.set_image(url=game.game_image_url)
+					embed.set_thumbnail(url=game.game_image_url)
 
 				if game.main_story:
 					embed.add_field(name="Main Story", value=self.convert_hours(game.main_story))
