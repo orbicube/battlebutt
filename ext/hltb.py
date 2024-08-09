@@ -24,7 +24,8 @@ class HLTB(commands.Cog):
 			else:
 				embed = discord.Embed(
 					title=game.game_name,
-					url=game.game_web_link)
+					url=game.game_web_link,
+					colour=0x2b7ab9)
 
 				if game.game_image_url:
 					embed.set_thumbnail(url=game.game_image_url)

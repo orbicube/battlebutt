@@ -72,7 +72,8 @@ class IGDB(commands.Cog):
         embed = discord.Embed(
             title=game["name"],
             url=f"https://igdb.com/games/{game['slug']}",
-            description=game["summary"] if "summary" in game else "")
+            description=game["summary"] if "summary" in game else "",
+            colour=0x9147ff)
 
         # Set release date if exists
         try:
