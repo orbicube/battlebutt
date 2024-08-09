@@ -57,7 +57,7 @@ class Funko(commands.Cog,
         funko = results['hits'][0]
         embed = discord.Embed(
             title = funko['c_mobileDisplayName'],
-            color = 5723991)
+            color = 0xCCAB4B)
 
         # Convert timestamp to human-readable string ("Year"/"Month Xth, Year")
         release_date = datetime.strptime(
