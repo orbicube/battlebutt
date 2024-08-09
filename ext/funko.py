@@ -29,7 +29,7 @@ class Funko(commands.Cog,
 
         # API cannot paginate beyond 10k results so we need to filter.
         # Search results contain metadata on matching items, which we can use
-        # to pick a random year with proper weighting to filter results.
+        # to pick a random license with proper weighting to filter results.
 
         params = {
             "refine_4": "c_productType=Pop!",
@@ -40,16 +40,16 @@ class Funko(commands.Cog,
         results = r.json()
 
         # Randomly pick a year based on weighting from item counts.
-        years = [year['value'] for year in results['refinements'][0]['values']]
-        counts = [year['hit_count'] for year in results['refinements'][0]['values']]
-        year = choices(years, counts)[0]
+        licenses = [license['value'] for license in results['refinements'][4]['values']]
+        counts = [license['hit_count'] for license in results['refinements'][4]['values']]
+        license = choices(licenses, counts)[0]
 
         # Get that year's associated count.
-        year_count = counts[years.index(year)]
+        license_count = counts[licenses.index(license)]
 
         # 10 items per page so divide item count by 10 and round up.
-        params['start'] = randint(0, year_count-1)
-        params['refine_5'] = f"c_releaseYear={year}"
+        params['start'] = randint(0, license_count-1)
+        params['refine_5'] = f"c_license={license}"
 
         r = await self.bot.http_client.get(url, headers=headers, params=params)
         results = r.json()
