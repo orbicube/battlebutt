@@ -13,7 +13,7 @@ class Funko(commands.Cog):
         self.bot = bot
 
     @commands.command(hidden=True)
-    async def funko(self, ctx):
+    async def funko(self, ctx, reason: Optional[str]):
         """ Posts a random Funko Pop figure """
 
         # Defer in case HTTP requests take too long
@@ -84,7 +84,7 @@ class Funko(commands.Cog):
 
         embed.set_footer(text=funko['c_license'])
 
-        embed.set_image(url=funko['image']['link'].replace("sfcc-prod.",""))
+        embed.set_image(url=funko['image']['link'])
 
         if reason and ctx.interaction:
             await ctx.send(f"funko {reason}:", embed=embed)
