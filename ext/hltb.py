@@ -36,7 +36,7 @@ class HLTB(commands.Cog):
 				if game.completionist:
 					embed.add_field(name="Completionist", value=self.convert_hours(game.completionist))
 
-			await interaction.response.send_message(embed=embed)
+				await interaction.response.send_message(embed=embed)
 		else:
 			await interaction.response.send_message("No game found", ephemeral=True)
 
