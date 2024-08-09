@@ -17,19 +17,24 @@ class HLTB(commands.Cog):
 
 		if results:
 			game = max(results, key=lambda element: element.similarity)
-			embed = discord.Embed(
-				title=game.game_name,
-				url=game.game_web_link)
 
-			if game.game_image_url:
-				embed.set_image(url=game.game_image_url)
+			if not game.main_story and not game.main_extra and not game.completionist:
+				await interaction.response.send_message(f"{game.game_name} has no completion data available",
+					ephemeral=True)
+			else:
+				embed = discord.Embed(
+					title=game.game_name,
+					url=game.game_web_link)
 
-			if game.main_story:
-				embed.add_field(name="Main Story", value=self.convert_hours(game.main_story))
-			if game.main_extra:
-				embed.add_field(name="Main + Extra", value=self.convert_hours(game.main_extra))
-			if game.completionist:
-				embed.add_field(name="Completionist", value=self.convert_hours(game.completionist))
+				if game.game_image_url:
+					embed.set_image(url=game.game_image_url)
+
+				if game.main_story:
+					embed.add_field(name="Main Story", value=self.convert_hours(game.main_story))
+				if game.main_extra:
+					embed.add_field(name="Main + Extra", value=self.convert_hours(game.main_extra))
+				if game.completionist:
+					embed.add_field(name="Completionist", value=self.convert_hours(game.completionist))
 
 			await interaction.response.send_message(embed=embed)
 		else:
@@ -50,7 +55,7 @@ class HLTB(commands.Cog):
 	def convert_hours(self, hours):
 
 		minutes = int((hours * 60) % 60)
-		return f"{f'{int(hours)}h ' if hours > 0 else ''}{f'{minutes:02d}m' if minutes > 0 else ''}"
+		return f"{f'{int(hours)}h ' if int(hours) > 0 else ''}{f'{minutes:02d}m' if minutes > 0 else ''}"
 
 
 async def setup(bot):

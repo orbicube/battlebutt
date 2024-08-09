@@ -49,7 +49,7 @@ class Card(commands.Cog,
                 await self.lorcana(ctx)
             elif game.startswith("redemption"):
                 await self.redemption(ctx)
-            elif game.startswith("vampire"):
+            elif game.startswith("vampire", "vtm"):
                 await self.vampire(ctx)
             elif game.startswith("neopets"):
                 await self.neopets(ctx)
