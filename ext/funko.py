@@ -12,7 +12,7 @@ class Funko(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-    @commands.command(hidden=True)
+    @commands.hybrid_command()
     async def funko(self, ctx, reason: Optional[str]):
         """ Posts a random Funko Pop figure """
 
