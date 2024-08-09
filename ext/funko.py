@@ -7,12 +7,15 @@ from datetime import datetime
 from io import BytesIO
 from typing import Optional
 
-class Funko(commands.Cog):
+class Funko(commands.Cog,
+    command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
+        1, 30, commands.BucketType.user)}):
 
     def __init__(self, bot):
         self.bot = bot
 
     @commands.hybrid_command()
+    @app_commands.describe(reason="Why you're pulling a Funko")
     async def funko(self, ctx, reason: Optional[str]):
         """ Posts a random Funko Pop figure """
 
