@@ -27,7 +27,6 @@ class Fortnite(commands.Cog):
         "DCUSeries": "#0031e0",
         "FrozenSeries": "#afd7ff",
         "CreatorCollabSeries": "#1be2e4",
-        "Series_Lamborghini": "#DDD7ED",
         "Lava_Series": "#f39d09",
         "MarvelSeries": "#d70204",
         "PlatformSeries": "#3730FF",
