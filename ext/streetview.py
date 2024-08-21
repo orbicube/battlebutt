@@ -26,6 +26,7 @@ class StreetView(commands.Cog):
 		("Austria",100000),
 		("Bahrain",2000),
 		("Bangladesh",250000),
+		("Bhutan",20000),
 		("Bolivia",500000),
 		("Botswana",100000),
 		("Brazil",4000000),
