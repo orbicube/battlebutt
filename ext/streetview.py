@@ -9,6 +9,7 @@ from random import randint, choices
 from PIL import Image
 from io import BytesIO
 import json
+from typing import Optional
 
 from credentials import GMAPS_KEY
 
@@ -25,6 +26,7 @@ class StreetView(commands.Cog):
 		("Austria",100000),
 		("Bahrain",2000),
 		("Bangladesh",250000),
+		("Bolivia",500000),
 		("Botswana",100000),
 		("Brazil",4000000),
 		("Bulgaria",200000),
@@ -57,6 +59,7 @@ class StreetView(commands.Cog):
 		("Iceland",100000),
 		("India",3000000),
 		("Indonesia",1000000),
+		("Ireland",100000),
 		("Isle of Man",1000),
 		("Israel",25000),
 		("Italy",500000),
@@ -319,16 +322,18 @@ class StreetView(commands.Cog):
 		]
 	}
 	@app_commands.command()
-	async def streetview(self, interaction: discord.Interaction):
+	async def streetview(self, interaction: discord.Interaction,
+		country: Optional[str] = None):
 		""" Get a random Google Street View image."""
 
 		# Defer due to multiple http requests
 		await interaction.response.defer()
 
-		# Get random country, weighted roughly by area and coverage
 		countries = [x[0] for x in self.gmaps_countries]
-		weights = [x[1] for x in self.gmaps_countries]
-		country = choices(countries, weights)[0]
+		if not country or country not in countries:
+			# Get random country, weighted roughly by area and coverage
+			weights = [x[1] for x in self.gmaps_countries]
+			country = choices(countries, weights)[0]
 		query = {"country": country}
 
 		# Filter down some larger countries to bias towards coverage
@@ -399,6 +404,14 @@ class StreetView(commands.Cog):
 					fp=img_binary,
 					filename="streetview.png"))
 
+	@streetview.autocomplete('country')
+	async def streetview_autocomplete(self,
+		interaction: discord.Interaction,
+		current: str,) -> list[app_commands.Choice[str]]:
+
+		return [app_commands.Choice(name=country[0], value=country[0])
+			for country in self.gmaps_countries
+			if current.lower() in country[0].lower()]
 
 
 async def setup(bot):
