@@ -75,6 +75,7 @@ class StreetView(commands.Cog):
 		("Lithuania",75000),
 		("Luxembourg",10000),
 		("Macau",50),
+		("Malaysia",300000),
 		("Malta",2000),
 		("Martinique",500),
 		("Mexico",1500000),
@@ -332,11 +333,13 @@ class StreetView(commands.Cog):
 		# Defer due to multiple http requests
 		await interaction.response.defer()
 
+		radius = 5000
 		countries = [x[0] for x in self.gmaps_countries]
 		if not country or country not in countries:
 			# Get random country, weighted roughly by area and coverage
 			weights = [x[1] for x in self.gmaps_countries]
 			country = choices(countries, weights)[0]
+			radius = 499999
 		query = {"country": country}
 
 		# Filter down some larger countries to bias towards coverage
@@ -368,7 +371,7 @@ class StreetView(commands.Cog):
 				"key": GMAPS_KEY,
 				"location": f"{rand_point.y[0]},{rand_point.x[0]}",
 				"size": "640x480",
-				"radius": "499999",
+				"radius": radius,
 				"heading": randint(0,359),
 				"pitch": randint(0,20),
 				"source": "outdoor"
