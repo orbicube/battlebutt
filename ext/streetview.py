@@ -322,8 +322,10 @@ class StreetView(commands.Cog):
 		]
 	}
 	@app_commands.command()
+	@app_commands.describe(reason="Why you're grabbing Street View imagery")
+	@app_commands.describe(country="Country you want, leave empty for random")
 	async def streetview(self, interaction: discord.Interaction,
-		country: Optional[str] = None):
+		reason: Optional[str], country: Optional[str] = None):
 		""" Get a random Google Street View image."""
 
 		# Defer due to multiple http requests
@@ -398,8 +400,9 @@ class StreetView(commands.Cog):
 		with BytesIO() as img_binary:
 			strview_img.save(img_binary, 'PNG')
 			img_binary.seek(0)
+			nl = "\n"
 			await interaction.followup.send(
-				f"[{address}](<https://google.com/maps/place/{coords}>)",
+				f"{f'{reason}:{nl}' if reason else ''}[{address}](<https://google.com/maps/place/{coords}>)",
 				file=discord.File(
 					fp=img_binary,
 					filename="streetview.png"))
