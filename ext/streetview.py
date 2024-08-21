@@ -411,7 +411,7 @@ class StreetView(commands.Cog):
 
 		return [app_commands.Choice(name=country[0], value=country[0])
 			for country in self.gmaps_countries
-			if current.lower() in country[0].lower()]
+			if current.lower() in country[0].lower()][:25]
 
 
 async def setup(bot):
