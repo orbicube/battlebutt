@@ -41,7 +41,6 @@ class StreetView(commands.Cog):
 		("Denmark",50000),
 		("Dominican Republic",10000),
 		("Ecuador",100000),
-		("Egypt",50000),
 		("El Salvador",20000),
 		("Estonia",100000),
 		("Eswatini",20000),
