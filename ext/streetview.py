@@ -327,7 +327,7 @@ class StreetView(commands.Cog):
 	@app_commands.describe(reason="Why you're grabbing Street View imagery")
 	@app_commands.describe(country="Country you want, leave empty for random")
 	async def streetview(self, interaction: discord.Interaction,
-		reason: Optional[str], country: Optional[str] = None):
+		country: Optional[str] = None, reason: Optional[str]):
 		""" Get a random Google Street View image."""
 
 		# Defer due to multiple http requests
