@@ -334,8 +334,8 @@ class StreetView(commands.Cog):
 		await interaction.response.defer()
 
 		radius = 5000
-		countries = [x[0] for x in self.gmaps_countries]
-		if not country or country not in countries:
+		countries = [x[0].lower() for x in self.gmaps_countries]
+		if not country or country.lower() not in countries:
 			# Get random country, weighted roughly by area and coverage
 			weights = [x[1] for x in self.gmaps_countries]
 			country = choices(countries, weights)[0]
