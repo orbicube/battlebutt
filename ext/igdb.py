@@ -139,17 +139,16 @@ class IGDB(commands.Cog):
         headers = await self.twitch_auth()
         headers['Content-Type']: "text/plain"
 
-        query = f"{self.fields_query} {self.filter_query} limit 1; offset {randint(0, (self.game_count - 1))};"
-
         allowed_game = False
         while not allowed_game:
             try: 
+                query = f"{self.fields_query} {self.filter_query} limit 1; offset {randint(0, (self.game_count - 1))};"
                 r = await self.bot.http_client.post(
                     "https://api.igdb.com/v4/games/",
                     headers=headers,
                     data=query)
                 game = r.json()[0]
-                if game["category"] != 1 or "MP0" not in game["name"]:
+                if game["category"] != 1 or not ("MP0" in game["name"] or "Tiger" in game["name"]):
                     allowed_game = True
             except Exception as e:
                 await self.bot.get_channel(ERROR_CHANNEL).send(
