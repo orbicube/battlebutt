@@ -141,16 +141,22 @@ class IGDB(commands.Cog):
 
         query = f"{self.fields_query} {self.filter_query} limit 1; offset {randint(0, (self.game_count - 1))};"
 
-        try: 
-            r = await self.bot.http_client.post(
-                "https://api.igdb.com/v4/games/",
-                headers=headers,
-                data=query)
-            self.game = r.json()[0]
-        except Exception as e:
-            await self.bot.get_channel(ERROR_CHANNEL).send(
-                f"Error in igdb.update_game(): {type(e)} {e}")
-            return          
+        allowed_game = False
+        while not allowed_game:
+            try: 
+                r = await self.bot.http_client.post(
+                    "https://api.igdb.com/v4/games/",
+                    headers=headers,
+                    data=query)
+                game = r.json()[0]
+                if game["category"] != 1 or "MP0" not in game["name"]:
+                    allowed_game = True
+            except Exception as e:
+                await self.bot.get_channel(ERROR_CHANNEL).send(
+                    f"Error in igdb.update_game(): {type(e)} {e}")
+                return          
+
+        self.game = game
 
         await self.bot.get_channel(ERROR_CHANNEL).send(str(self.game)[:1999])
 
