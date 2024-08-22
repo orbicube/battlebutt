@@ -107,10 +107,11 @@ class Card(commands.Cog,
     async def yugioh(self, ctx):
         """ Pulls a random Yu-Gi-Oh! card """
        
-        url = "https://db.ygoprodeck.com/api/v7/randomcard.php"
-        r = await self.bot.http_client.get(url)
-
-        await self.bot.get_channel(DEBUG_CHANNEL).send(r.text[:1999])
+        url = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
+        params = {
+            "num": 1, "offset": 0, "sort": "random", "cachebust": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
         card = r.json()
 
         await ctx.send(card['card_images'][0]['image_url'])
