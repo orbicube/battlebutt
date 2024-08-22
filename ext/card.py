@@ -109,6 +109,8 @@ class Card(commands.Cog,
        
         url = "https://db.ygoprodeck.com/api/v7/randomcard.php"
         r = await self.bot.http_client.get(url)
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(r.text[:1999])
         card = r.json()
 
         await ctx.send(card['card_images'][0]['image_url'])
