@@ -112,7 +112,7 @@ class Card(commands.Cog,
             "num": 1, "offset": 0, "sort": "random", "cachebust": 1
         }
         r = await self.bot.http_client.get(url, params=params)
-        card = r.json()
+        card = r.json()["data"][0]
 
         await ctx.send(card['card_images'][0]['image_url'])
 
