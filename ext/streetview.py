@@ -5,7 +5,7 @@ from discord import app_commands
 from geopy.adapters import AioHTTPAdapter
 from geopy.geocoders import Nominatim
 import geopandas
-from random import randint, choices
+from random import randint, choices, sample
 from PIL import Image
 from io import BytesIO
 import json
@@ -415,9 +415,14 @@ class StreetView(commands.Cog):
 		interaction: discord.Interaction,
 		current: str,) -> list[app_commands.Choice[str]]:
 
-		return [app_commands.Choice(name=country[0], value=country[0])
+
+		completes = [app_commands.Choice(name=country[0], value=country[0])
 			for country in self.gmaps_countries
-			if current.lower() in country[0].lower()][:25]
+			if current.lower() in country[0].lower()]
+		if not current:
+			completes = sample(completes, 25)
+
+		return completes[:25]
 
 
 async def setup(bot):
