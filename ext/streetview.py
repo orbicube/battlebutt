@@ -415,7 +415,6 @@ class StreetView(commands.Cog):
 		interaction: discord.Interaction,
 		current: str,) -> list[app_commands.Choice[str]]:
 
-
 		completes = [app_commands.Choice(name=country[0], value=country[0])
 			for country in self.gmaps_countries
 			if current.lower() in country[0].lower()]
