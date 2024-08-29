@@ -3,7 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from typing import Optional
-from random import choice, choices, randint
+from random import choice, choices, randint, sample
 
 from lxml import html
 from PIL import Image
@@ -23,69 +23,32 @@ class Card(commands.Cog,
 
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
-    async def card(self, ctx, game: Optional[str] = None):
+    async def card(self, ctx, game: Optional[str]):
         """ Pulls a random TCG card """
-
-        if game:
-            if game.startswith("poke"):
-                await self.pokemon(ctx)
-            elif game.startswith(("yugioh", "ygo")):
-                await self.yugioh(ctx)
-            elif game.startswith(("mtg", "magic")):
-                await self.mtg(ctx)
-            elif game.startswith("digi"):
-                await self.digimon(ctx)
-            elif game.startswith(("flesh", "fab")):
-                await self.fleshandblood(ctx)
-            elif game.startswith("gateruler"):
-                await self.gateruler(ctx)
-            elif game.startswith(("cardfightvanguard", "cfv")):
-                await self.cardfightvanguard(ctx)
-            elif game.startswith("grandarchive"):
-                await self.grandarchive(ctx)
-            elif game.startswith("nostalg"):
-                await self.nostalgix(ctx)
-            elif game.startswith("lorcana"):
-                await self.lorcana(ctx)
-            elif game.startswith("redemption"):
-                await self.redemption(ctx)
-            elif game.startswith(("vampire", "vtm")):
-                await self.vampire(ctx)
-            elif game.startswith("neopets"):
-                await self.neopets(ctx)
-            elif game.startswith("sorcery"):
-                await self.sorcery(ctx)
-            elif game.startswith("wow"):
-                await self.wow(ctx)
-            elif game.startswith("spellfire"):
-                await self.spellfire(ctx)
-            elif game.startswith("shadowverse"):
-                await self.shadowverse(ctx)
-            elif game.startswith(("starwars", "swu")):
-                await self.starwars(ctx)
-            elif game.startswith(("battlespirits")):
-                await self.battlespirits(ctx)
-            else:
-                command = choice(self.get_commands())
-                await command.__call__(ctx)
+        
+        commands = self.get_commands()
+        selected_comm = next((
+            c for c in commands if c.name == game or game in c.aliases), None)
+        if selected_comm and selected_comm.name != "playingcard":
+            await selected_comm.__call__(ctx)
         else:
-            command = choice(self.get_commands())
-            await command.__call__(ctx)
+            await choice(commands).__call__(ctx)
+
 
     @card.autocomplete('game')
     async def card_autocomplete(self, 
         interaction: discord.Interaction,
         current: str,) -> list[app_commands.Choice[str]]:
-        
-        games = ['pokemon', 'yugioh', 'magic', 'digimon',
-            'fleshandblood', 'gateruler', 'cardfightvanguard', 
-            'grandarchive', 'nostalgix', 'lorcana', 
-            'redemption', 'vampire', 'neopets', 'shadowverse',
-            'sorcery', 'wow', 'spellfire', 'starwars',
-            'battlespirits']
 
-        return [app_commands.Choice(name=game, value=game)
-            for game in games if current.lower() in game.lower() ] 
+        games = [c.name for c in self.get_commands()
+            if not "playingcard" in c.name and not "card" in c.name]
+        completes = [app_commands.Choice(name=game, value=game)
+            for game in games if current.lower() in game.lower()]
+
+        if not current:
+            completes = sample(completes, len(completes))
+
+        return completes[:25] 
 
 
     @commands.command(aliases=['poke'])
@@ -208,7 +171,7 @@ class Card(commands.Cog,
                 filename=card_url.rsplit('/', 1)[1]))
 
 
-    @commands.command(aliases=["cfvangaurd", "cfv"])
+    @commands.command(aliases=["cfv"])
     async def cardfightvanguard(self, ctx):
         """ Pulls a random Cardfight!! Vanguard card """
 
@@ -459,6 +422,7 @@ class Card(commands.Cog,
         await ctx.send(file=discord.File(
             fp=BytesIO(img),
             filename=card["path"]))
+
 
     @commands.command()
     async def shadowverse(self, ctx):
