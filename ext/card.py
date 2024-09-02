@@ -117,20 +117,18 @@ class Card(commands.Cog,
     async def fleshandblood(self, ctx):
         """ Pulls a random Flesh and Blood card """
 
-        url = "https://api.fabdb.net/cards"
-        r = await self.bot.http_client.get(url)
-        page = r.json()
-
-        # Pick random page
-        page_select = randint(1, page['meta']['last_page'])        
-        params = { "page": page_select }
-
-        # Get random card from random page
+        url = "https://cards.fabtcg.com/api/search/v1/cards/"
+        params = {
+            "limit": 1
+        }
         r = await self.bot.http_client.get(url, params=params)
-        page = r.json()
-        card = choice(page['data'])
+        card_count = r.json()["count"]
 
-        await ctx.send(card['image'].split('?')[0])
+        params["offset"] = randint(0, int(card_count)-1)
+        r = await self.bot.http_client.get(url, params=params)
+        card = r.json()["results"][0]
+
+        await ctx.send(card["image"]["large"])
 
 
     @commands.command()
