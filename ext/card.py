@@ -23,7 +23,7 @@ class Card(commands.Cog,
 
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
-    async def card(self, ctx, game: Optional[str]):
+    async def card(self, ctx, game: Optional[str] = None):
         """ Pulls a random TCG card """
         
         commands = self.get_commands()
