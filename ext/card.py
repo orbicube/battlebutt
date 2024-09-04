@@ -518,6 +518,46 @@ class Card(commands.Cog,
 
 
     @commands.command()
+    async def elestrals(self, ctx):
+        """ Pulls a random Elestrals card """
+
+        url = "https://play-api.carde.io/v1/cards/64a31866dd516a3cc4c8d45c"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+        pages = r.json()["pagination"]["totalPages"]
+
+        selected_page = randint(1, int(pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["data"][0]["imageUrl"]
+
+        await ctx.send(card_img)
+
+
+    @commands.command()
+    async def fabledsagas(self, ctx):
+        """ Pulls a random Fabled Sagas card """
+
+        url = "https://play-api.carde.io/v1/cards/64626b9a9d5830157996b180"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+        pages = r.json()["pagination"]["totalPages"]
+
+        selected_page = randint(1, int(pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["data"][0]["imageUrl"]
+
+        await ctx.send(card_img)
+
+
+    @commands.command()
     async def playingcard(self, ctx):
         """Pulls a random playing card """
 
