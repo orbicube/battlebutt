@@ -465,6 +465,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def battlespirits(self, ctx):
+        """ Pulls a random Battle Spirits Saga card """
 
         url = "https://www.bssdb.dev/cards/bss/"
         r = await self.bot.http_client.get(url)
@@ -474,6 +475,46 @@ class Card(commands.Cog,
         filtered_imgs = [i for i in image_url if ".png" in i and "TOKEN" not in i]
 
         await ctx.send(f"{url}{choice(filtered_imgs)}")
+
+
+    @commands.command()
+    async def alphaclash(self, ctx):
+        """ Pulls a random Alpha Clash card """
+
+        url = "https://play-api.carde.io/v1/cards/64483da67fc2aee28c8427bf"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+        pages = r.json()["pagination"]["totalPages"]
+
+        selected_page = randint(1, int(pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["data"][0]["imageUrl"]
+
+        await ctx.send(card_img)
+
+
+    @commands.command()
+    async def altered(self, ctx):
+        """ Pulls a random Altered TCG card """
+
+        url = "https://api.altered.gg/cards"
+        params = {
+            "itemsPerPage": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+        pages = r.json()["hydra:totalItems"]
+
+        selected_page = randint(1, int(pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["hydra:member"][0]["imagePath"]
+
+        await ctx.send(card_img)
 
 
     @commands.command()
