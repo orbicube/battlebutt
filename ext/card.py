@@ -597,6 +597,31 @@ class Card(commands.Cog,
         await ctx.send(card_img)
 
 
+    @commands.command(aliases=['fow'])
+    async def forceofwill(self, ctx):
+        """ Pulls a random Force of Will card """
+
+        url = "https://www.fowtcg.com/card_search"
+        params = {
+            "_method": "GET"
+        }
+
+        r = await self.bot.http_client.get(url, params=params)
+        page = html.fromstring(r.text)
+
+        max_pages = page.xpath(
+            "//nav[@role='navigation']/div/div/span/a/text()")[-3]
+        selected_page = randint(1, int(max_pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        page = html.fromstring(r.text)
+
+        selected_card = choice(page.xpath(
+            "//li[@class='lg:w-4/12 px-4 text-center my-4']/a/img/@src"))
+        await ctx.send(selected_card)
+
+
     @commands.command()
     async def playingcard(self, ctx):
         """Pulls a random playing card """
