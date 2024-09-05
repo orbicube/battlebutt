@@ -558,6 +558,46 @@ class Card(commands.Cog,
 
 
     @commands.command()
+    async def akora(self, ctx):
+        """ Pulls a random Akora card """
+
+        url = "https://play-api.carde.io/v1/cards/636855fc34369ca07c26f17d"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+        pages = r.json()["pagination"]["totalPages"]
+
+        selected_page = randint(1, int(pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["data"][0]["imageUrl"]
+
+        await ctx.send(card_img)
+
+
+    @commands.command()
+    async def metazoo(self, ctx):
+        """ Pulls a random MetaZoo card """
+
+        url = "https://play-api.carde.io/v1/cards/6362b23bafcb45c0e3070ddf"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+        pages = r.json()["pagination"]["totalPages"]
+
+        selected_page = randint(1, int(pages))
+        params["page"] = selected_page
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["data"][0]["imageUrl"]
+
+        await ctx.send(card_img)
+
+
+    @commands.command()
     async def playingcard(self, ctx):
         """Pulls a random playing card """
 
