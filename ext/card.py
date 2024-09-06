@@ -9,6 +9,7 @@ from lxml import html
 from PIL import Image
 from io import BytesIO
 from base64 import b64decode
+from urllib.parse import quote
 
 import json
 
@@ -628,7 +629,7 @@ class Card(commands.Cog,
 
         url = "https://www.grotto-bestiary.com/cards"
         r = await self.bot.http_client.post(url)
-        card = choice(r.json())["Name"]
+        card = quote(choice(r.json())["Name"])
 
         await ctx.send(
             f"https://www.grotto-bestiary.com/images/digital-cards/{card}.jpg")
