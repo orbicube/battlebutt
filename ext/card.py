@@ -30,6 +30,7 @@ class Card(commands.Cog,
         commands = self.get_commands()
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(select_comm.name)
         if selected_comm and selected_comm.name != "playingcard":
             await selected_comm.__call__(ctx)
         else:
@@ -464,7 +465,7 @@ class Card(commands.Cog,
         await ctx.send(f"https://swudb.com{choice(image_url)}")
 
 
-    @commands.command()
+    @commands.command(aliases=['bss'])
     async def battlespirits(self, ctx):
         """ Pulls a random Battle Spirits Saga card """
 
