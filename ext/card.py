@@ -627,18 +627,6 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def grottobeasts(self, ctx):
-        """ Pulls a random Grotto Beasts card """
-
-        url = "https://www.grotto-bestiary.com/cards"
-        r = await self.bot.http_client.post(url)
-        card = quote(choice(r.json())["Name"]).replace("'", '%27')
-
-        await ctx.send(
-            f"https://www.grotto-bestiary.com/images/digital-cards/{card}.jpg")
-
-
-    @commands.command()
     async def playingcard(self, ctx):
         """Pulls a random playing card """
 
