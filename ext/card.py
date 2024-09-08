@@ -30,7 +30,7 @@ class Card(commands.Cog,
         commands = self.get_commands()
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(select_comm.name)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
         if selected_comm and selected_comm.name != "playingcard":
             await selected_comm.__call__(ctx)
         else:
