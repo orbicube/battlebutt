@@ -36,7 +36,7 @@ class Card(commands.Cog,
         else:
             selected_comm = choice(commands)
             await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
-            await choice(selected_comm).__call__(ctx)
+            await selected_comm.__call__(ctx)
 
 
     @card.autocomplete('game')
