@@ -17,7 +17,7 @@ from credentials import DEBUG_CHANNEL, GOOGLE_KEY
 
 class Card(commands.Cog,
     command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
-        1, 30, commands.BucketType.user)}):
+        2, 15, commands.BucketType.user)}):
 
     def __init__(self, bot):
         self.bot = bot
