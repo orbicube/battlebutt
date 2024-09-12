@@ -173,7 +173,7 @@ class Card(commands.Cog,
                 filename=card_url.rsplit('/', 1)[1]))
 
 
-    @commands.command(aliases=["cfv"])
+    @commands.command(aliases=["cfv", "vanguard", "cardfight"])
     async def cardfightvanguard(self, ctx):
         """ Pulls a random Cardfight!! Vanguard card """
 
