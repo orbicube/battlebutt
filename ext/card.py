@@ -45,7 +45,7 @@ class Card(commands.Cog,
         current: str,) -> list[app_commands.Choice[str]]:
 
         games = [c.name for c in self.get_commands()
-            if not "playingcard" in c.name and not "card" in c.name]
+            if not "playingcard" in c.name and not c.name == "card"]
         completes = [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower()]
 
