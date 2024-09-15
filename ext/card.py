@@ -406,6 +406,9 @@ class Card(commands.Cog,
     async def spellfire(self, ctx):
         """ Pull random Spellfire card """
 
+         # Defer in case multiple requests take too long
+        await ctx.defer()
+
         with open ("ext/data/spellfire.json") as f:
             j = json.load(f)
         set_tree = choices(j["sets"], j["weights"])[0]
@@ -605,6 +608,9 @@ class Card(commands.Cog,
     async def forceofwill(self, ctx):
         """ Pulls a random Force of Will card """
 
+        # Defer in case multiple requests take too long
+        await ctx.defer()
+
         url = "https://www.fowtcg.com/card_search"
         params = {
             "_method": "GET"
@@ -624,6 +630,34 @@ class Card(commands.Cog,
         selected_card = choice(page.xpath(
             "//li[@class='lg:w-4/12 px-4 text-center my-4']/a/img/@src"))
         await ctx.send(selected_card)
+
+
+    @commands.command(aliases=['dm'])
+    async def duelmasters(self, ctx):
+        """ Pulls a random Japanese Duel Masters card """
+
+        # Defer in case multiple requests take too long
+        await ctx.defer()
+
+        url = "https://dm.takaratomy.co.jp"
+        c_url = url + "/card/"
+
+        data = {
+            "pagenum": 1
+        }
+        r = await self.bot.http_client.post(c_url, data=data)
+        page = html.fromstring(r.text)
+
+        card_count = page.xpath("//span[@id='total_count']/text()")[0]
+        max_pages = int(int(card_count) / 50) + 1
+        data["pagenum"] = randint(1, max_pages)
+
+        r = await self.bot.http_client.post(c_url, data=data)
+        page = html.fromstring(r.text)
+
+        card_img = choice(page.xpath("//div[@id='cardlist']/ul/li/a/img/@src"))
+
+        await ctx.send(f"{url}{card_img}")
 
 
     @commands.command()
