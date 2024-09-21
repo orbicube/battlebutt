@@ -77,7 +77,7 @@ async def on_command_error(ctx, error):
     error_msg += "```"
 
     if not isinstance(error, commands.CommandOnCooldown):
-        await bot.get_channel(ERROR_CHANNEL).send(error_msg)
+        await bot.get_channel(ERROR_CHANNEL).send(error_msg[:1999])
         traceback.print_exception(
             type(error), error, error.__traceback__, file=sys.stderr)
 

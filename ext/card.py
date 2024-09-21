@@ -88,13 +88,25 @@ class Card(commands.Cog,
     async def digimon(self, ctx):
         """ Pulls a random Digimon card. """
 
-        url = ("https://digimoncard.io/api-public/"
-            "getAllCards.php?series=Digimon%20Card%20Game")
-        r = await self.bot.http_client.get(url)
-        card_list = r.json()
+        # Defer in case takes too long
+        await ctx.defer()
 
-        await ctx.send(("https://images.digimoncard.io/images/cards/"
-            f"{choice(card_list)['cardnumber']}.jpg"))
+        # Git tree for cardlist, updated 2024/09/22
+        tree = "db451cf944c8c03ce4079b946c9ce39614df0a71"
+        url = ("https://api.github.com/repos/TakaOtaku/"
+            f"Digimon-Card-App/git/trees/{tree}")
+        r = await self.bot.http_client.get(url)
+        cards = r.json()["tree"]
+
+        filters = ["-J.", "-j", "-Sample"]
+        cards = [card for card in cards if not any(f in card["path"] for f in filters)]
+        card = choice(cards)
+
+        r = await self.bot.http_client.get(card["url"])
+        img = b64decode(r.json()["content"])
+        await ctx.send(file=discord.File(
+            fp=BytesIO(img),
+            filename=card["path"]))
 
 
     @commands.command(aliases=['magic'])
@@ -247,8 +259,8 @@ class Card(commands.Cog,
     async def redemption(self, ctx):
         """ Pulls a random Redemption card """
 
-        # Git tree for cardlist, updated 2023/10/26
-        tree = "8e6cf3ed394a99d55c57a9d103fe11afe05dcf54"
+        # Git tree for cardlist, updated 2024/09/22
+        tree = "e5eb07664d9e9989687fb8f38acf78d5223e2267"
         url = ("https://api.github.com/repos/MattJBrinkman/"
             f"RedemptionLackeyCCG/git/trees/{tree}")
 
@@ -269,8 +281,8 @@ class Card(commands.Cog,
     async def vampire(self, ctx):
         """ Pulls a random Vampire: The Eternal Struggle card """
 
-        # Git tree for cardlist, updated 2023/10/26
-        tree = "ea24251f98006109fef961f2ab54cf605aa50cbf"
+        # Git tree for cardlist, updated 2024/09/22
+        tree = "8661079bd3f85ce9bf899c23e945d8fd0f2a1334"
         url = ("https://api.github.com/repos/lionel-panhaleux/"
             f"krcg-static/git/trees/{tree}")
 
