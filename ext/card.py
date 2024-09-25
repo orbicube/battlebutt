@@ -671,6 +671,25 @@ class Card(commands.Cog,
 
         await ctx.send(f"{url}{card_img}")
 
+    @commands.command()
+    async def wixoss(self, ctx):
+
+        # Defer in case multiple requests take too long
+        await ctx.defer()
+
+        url = "https://www.takaratomy.co.jp/products/en.wixoss/card/"
+        req_url = url + "itemsearch.php"
+        params = {
+            "p": 1
+        }
+        r = await self.bot.http_client.get(req_url, params=params)
+        max_pages = int(int(r.json()["count"]) / 20) + 1
+        params["p"] = randint(1, max_pages)
+
+        r = await self.bot.http_client.get(req_url, params=params)
+        card = choice(r.json()["items"])
+
+        await ctx.send(f"{url}thumb/{card['card_no']}.jpg")
 
     @commands.command()
     async def playingcard(self, ctx):
