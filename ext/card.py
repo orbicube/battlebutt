@@ -482,18 +482,30 @@ class Card(commands.Cog,
         await ctx.send(f"https://swudb.com{choice(image_url)}")
 
 
-    @commands.command(aliases=['bss'])
+    @commands.command(aliases=['bs'])
     async def battlespirits(self, ctx):
-        """ Pulls a random Battle Spirits Saga card """
+        """ Pulls a random Battle Spirits card """
 
-        url = "https://www.bssdb.dev/cards/bss/"
-        r = await self.bot.http_client.get(url)
+        url = "https://api.bandai-tcg-plus.com/api/user/card/list"
+        params = {
+            "game_title_id": 7,
+            "limit": 1,
+            "offset": 0
+        }
+        r = await self.bot.http_client.get(url, params=params)
 
-        page = html.fromstring(r.text)
-        image_url = page.xpath("//tr/td[2]/a/text()")
-        filtered_imgs = [i for i in image_url if ".png" in i and "TOKEN" not in i]
+        count = r.json()["success"]["total"]
+        params["offset"] = randint(0, int(count)-1)
 
-        await ctx.send(f"{url}{choice(filtered_imgs)}")
+        r = await self.bot.http_client.get(url, params=params)
+        card = r.json()["success"]["cards"][0]
+
+        if "backcard_image_url" in card:
+            await ctx.send(
+                choice([card["image_url"], card["backcard_image_url"]]))
+        else:
+            await ctx.send(card["image_url"])
+
 
 
     @commands.command()
