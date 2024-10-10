@@ -336,8 +336,7 @@ class Card(commands.Cog,
         set_name = card_set["name"]
         card_name = choice(card_set["variants"])["slug"].split("_", 1)[1]
         card_suffix = "_".join(card_name.rsplit("_", 2)[-2:])
-        
-        await ctx.send(card_suffix)
+
         if card_json["guardian"]["type"] == "Site":
             rotate = True
         else:
@@ -356,7 +355,6 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(list_url, params=list_params)
         folder_id = r.json()["files"][0]["id"]
 
-        await ctx.send(f"{card_name} / {folder_id}")
         # Find card id from its set's folder
         list_params["q"] = f"name = '{card_name}.png' and '{folder_id}' in parents"
         r = await self.bot.http_client.get(list_url, params=list_params)
