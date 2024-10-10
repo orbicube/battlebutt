@@ -328,12 +328,17 @@ class Card(commands.Cog,
         # Defer in case multiple requests take too long   
         await ctx.defer()
 
-        # Grab random card and its information
+        # Grab random card
         card_url = "https://api.sorcerytcg.com/api/cards"
         r = await self.bot.http_client.get(card_url)
         card_json = choice(r.json())
+
+        # Get random set printing of the card
         card_set = choice(card_json["sets"])
         set_name = card_set["name"]
+
+        # Get random variant, strip set affix and grab suffix
+        # Card slug format: set_cardname_location_variant
         card_name = choice(card_set["variants"])["slug"].split("_", 1)[1]
         card_suffix = "_".join(card_name.rsplit("_", 2)[-2:])
 
