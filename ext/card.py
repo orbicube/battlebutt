@@ -70,7 +70,7 @@ class Card(commands.Cog,
         await ctx.send(image_url)
 
 
-    @commands.command(aliases=['ygo'])
+    @commands.command(aliases=['ygo', 'yugi'])
     async def yugioh(self, ctx):
         """ Pulls a random Yu-Gi-Oh! card """
        
@@ -332,14 +332,18 @@ class Card(commands.Cog,
         card_url = "https://api.sorcerytcg.com/api/cards"
         r = await self.bot.http_client.get(card_url)
         card_json = choice(r.json())
-        card_name = card_json["slug"]
-        set_name = choice(card_json["sets"])["name"]
+        card_set = choice(card_json["sets"])
+        set_name = card_set["name"]
+        card_name = choice(card_set["variants"])["slug"].split("_", 1)[1]
+        card_suffix = "_".join(card_name.rsplit("_", 2)[-2:])
+        
+        await ctx.send(card_suffix)
         if card_json["guardian"]["type"] == "Site":
             rotate = True
         else:
             rotate = False
 
-        # Select proper Google Drive folder based on sets
+        # Get set folder from Google Drive
         list_url = "https://www.googleapis.com/drive/v3/files"
         list_params = {
             "q": f"name = '{set_name}' and '17IrJkRGmIU9fDSTU2JQEU9JlFzb5liLJ' in parents",
@@ -348,6 +352,11 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(list_url, params=list_params)
         folder_id = r.json()["files"][0]["id"]
 
+        list_params["q"] = f"name = '{card_suffix}' and '{folder_id}' in parents"
+        r = await self.bot.http_client.get(list_url, params=list_params)
+        folder_id = r.json()["files"][0]["id"]
+
+        await ctx.send(f"{card_name} / {folder_id}")
         # Find card id from its set's folder
         list_params["q"] = f"name = '{card_name}.png' and '{folder_id}' in parents"
         r = await self.bot.http_client.get(list_url, params=list_params)
@@ -702,6 +711,7 @@ class Card(commands.Cog,
         card = choice(r.json()["items"])
 
         await ctx.send(f"{url}thumb/{card['card_no']}.jpg")
+            
 
     @commands.command()
     async def playingcard(self, ctx):
