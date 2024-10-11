@@ -11,21 +11,25 @@ class ButtTranslator(app_commands.Translator):
         trans_dict = {
             "command_name": {
                 "color": {
+                    "en-US": "color",
                     "en-GB": "colour",
                 }
             },
             "command_description": {
                 "Change your role color": {
+                    "en-US": "Change your role color",
                     "en-GB": "Change your role colour",
                 }
             },
             "parameter_description": {
                 "Color hex code (e.g. #135ACF) or 'random'": {
+                    "en-US": "Color hex code (e.g. #135ACF) or 'random'"
                     "en-GB": "Colour hex code (e.g. #135ACF) or 'random'",
                 }
             },
             "other": {
                 "color": {
+                    "en-US": "color",
                     "en-GB": "colour",
                 }
             }
