@@ -23,7 +23,7 @@ class ButtTranslator(app_commands.Translator):
             },
             "parameter_description": {
                 "Color hex code (e.g. #135ACF) or 'random'": {
-                    "en-US": "Color hex code (e.g. #135ACF) or 'random'"
+                    "en-US": "Color hex code (e.g. #135ACF) or 'random'",
                     "en-GB": "Colour hex code (e.g. #135ACF) or 'random'",
                 }
             },
