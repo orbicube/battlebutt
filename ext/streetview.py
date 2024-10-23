@@ -74,6 +74,7 @@ class StreetView(commands.Cog):
 		("Lithuania",75000),
 		("Liechtenstein",2000),
 		("Luxembourg",10000),
+		("Macau",50),
 		("Malaysia",300000),
 		("Malta",2000),
 		("Martinique",500),
@@ -334,7 +335,12 @@ class StreetView(commands.Cog):
 			weights = [x[1] for x in self.gmaps_countries]
 			country = choices(countries, weights)[0]
 			radius = 499999
-		query = {"country": country}
+
+		if country == "Macau" or country == "Hong Kong":
+			query = {"country": "China",
+				"state": country}
+		else:			
+			query = {"country": country}
 
 		# Filter down some larger countries to bias towards coverage
 		if country in self.gmaps_regions:
