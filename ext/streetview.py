@@ -72,8 +72,8 @@ class StreetView(commands.Cog):
 		("Latvia",75000),
 		("Lesotho",30000),
 		("Lithuania",75000),
+		("Liechtenstein",2000),
 		("Luxembourg",10000),
-		("Macau",50),
 		("Malaysia",300000),
 		("Malta",2000),
 		("Martinique",500),
@@ -86,7 +86,6 @@ class StreetView(commands.Cog):
 		("Nigeria",500000),
 		("North Macedonia",20000),
 		("Norway",400000),
-		("Palestine",7000),
 		("Panama",50000),
 		("Peru",1000000),
 		("Philippines",300000),
@@ -129,6 +128,7 @@ class StreetView(commands.Cog):
 			("New Brunswick", 2),
 			("Newfoundland and Labrador",2),
 			("Nova Scotia",2),
+			("Nunavut",1),
 			("Ontario",10),
 			("Prince Edward Island",1),
 			("Quebec",10),
@@ -315,11 +315,6 @@ class StreetView(commands.Cog):
 			("Sao Paulo",30),
 			("Sergipe",5),
 			("Tocantins",10)
-		],
-		"Uganda": [
-			("Kampala",10),
-			("Wakiso",4),
-			("Nwoya",2)
 		]
 	}
 	@app_commands.command()
