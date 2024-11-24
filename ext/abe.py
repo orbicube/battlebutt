@@ -15,7 +15,7 @@ class Abe(commands.Cog):
     async def abes(self, interaction: discord.Interaction):
         """ List the amount of abes committed in this server """
         
-        abe_count = await self.bot.db.fetchrow("""SELECT sum(count) FROM abe_counts
+        abe_count = await self.bot.db.fetchrow("""SELECT sum(abes) FROM abe_counts
                 WHERE guild_id=?""", interaction.guild.id)
         if abe_count:
             await interaction.response.send_message(
@@ -98,21 +98,17 @@ class Abe(commands.Cog):
                     else:
                         users_format = users[0]
 
-                    first = datetime.strptime(prev_posts[0][1], 
-                        "%Y-%m-%d %H:%M:%S.%f%z")
-
                     await message.reply(
                         file=discord.File("ext/data/abe.jpg"),
                         content=(f"Already posted by "
                             f"{users_format}, first linked "
-                            f"{discord.utils.format_dt(first,'R')}."))
+                            f"{discord.utils.format_dt(prev_posts[0][1],'R')}."))
 
                     await self.bot.db.execute("""INSERT INTO abe_counts 
                         VALUES ($1, $2, $3)
-                        ON CONFLICT DO UPDATE
-                        SET count = count + 1
-                        WHERE user_id = $1 AND guild_id = $2""",
-                        message.author.id, message.guild.id, 0)
+                        ON CONFLICT (user_id, guild_id) DO UPDATE
+                        SET abes = abe_counts.abes + 1""",
+                        message.author.id, message.guild.id, 1)
 
             # Add URL to database
             await self.bot.db.execute("""INSERT INTO url_history 
@@ -124,8 +120,8 @@ class Abe(commands.Cog):
 async def setup(bot):
     await bot.db.execute("""CREATE TABLE IF NOT EXISTS url_history
         (url text, user_id bigint, guild_id bigint,
-        channel_id bigint, post_time timestamp)""")
+        channel_id bigint, post_time timestamp with time zone)""")
     await bot.db.execute("""CREATE TABLE IF NOT EXISTS abe_counts
-        (user_id bigint, guild_id bigint, count integer, 
+        (user_id bigint, guild_id bigint, abes integer, 
         UNIQUE(user_id, guild_id))""")
     await bot.add_cog(Abe(bot))

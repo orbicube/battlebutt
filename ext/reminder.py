@@ -50,10 +50,9 @@ class Reminder(commands.Cog):
             return
         time = time.replace(microsecond=0)
 
-        async with aiosqlite.connect("ext/data/reminder.db") as db:
-            await db.execute("INSERT INTO reminder VALUES (?, ?, ?, ?)",
-                (interaction.user.id, interaction.channel_id, time, memo))
-            await db.commit()
+        await self.bot.db.execute(
+            "INSERT INTO reminder VALUES ($1, $2, $3, $4)",
+            interaction.user.id, interaction.channel_id, time, memo)
 
         if self.reminder_task.is_running():
             self.reminder_task.restart()
@@ -68,27 +67,25 @@ class Reminder(commands.Cog):
     async def reminder_task(self):
         await self.bot.wait_until_ready()
 
-        async with aiosqlite.connect("ext/data/reminder.db") as db:
-            async with db.execute("""SELECT * FROM reminder
-                ORDER BY remind_time ASC""") as cursor:
-                reminder = await cursor.fetchone()
+        reminder = await self.bot.db.fetchrow(
+            """SELECT * FROM reminder ORDER BY remind_time ASC""")
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(str(reminder))
 
         if not reminder:
             self.reminder_task.stop()
             return
 
-        remind_time = datetime.strptime(reminder[2],
-            "%Y-%m-%d %H:%M:%S%z")
-        await discord.utils.sleep_until(remind_time)
+        await discord.utils.sleep_until(reminder[2])
 
         await self.bot.get_channel(reminder[1]).send(
             f"**Reminder** for <@{reminder[0]}>: {reminder[3]}")
 
-        async with aiosqlite.connect("ext/data/reminder.db") as db:
-            await db.execute("""DELETE FROM reminder WHERE
-                user_id=? and channel_id=? and
-                remind_time=? and remind_memo=?""", (reminder))
-            await db.commit()
+        await self.bot.db.execute("""DELETE FROM reminder WHERE
+                user_id=$1 and channel_id=$2 and
+                remind_time=$3 and remind_memo=$4""",
+                reminder[0], reminder[1], reminder[2], reminder[3])
+
 
     @reminder_task.error
     async def reminder_task_error(self, error):
@@ -107,11 +104,9 @@ class Reminder(commands.Cog):
 
 
 async def setup(bot):
-    async with aiosqlite.connect("ext/data/reminder.db") as db:
-        await db.execute("""CREATE TABLE IF NOT EXISTS reminder
-            (user_id integer, channel_id integer,
-            remind_time integer, remind_memo text)""")
-        await db.commit()
+    await bot.db.execute("""CREATE TABLE IF NOT EXISTS reminder
+            (user_id bigint, channel_id bigint,
+            remind_time timestamp with time zone, remind_memo text)""")
 
     await bot.add_cog(Reminder(bot))
 

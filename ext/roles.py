@@ -37,25 +37,24 @@ class Roles(commands.Cog):
                 return
 
         # Grab user's unique role from DB
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            async with db.execute("""SELECT role_id FROM role_map
-                WHERE user_id=? AND guild_id=?""",
-                (interaction.user.id, interaction.guild_id)) as cursor:
-                role_id = await cursor.fetchone()
+        role_id = await self.bot.db.fetchrow("""SELECT role_id FROM role_map
+            WHERE user_id=$1 AND guild_id=$2""",
+            interaction.user.id, interaction.guild_id)
 
-            # If they don't have a 1:1 role in the DB, make one for them
-            if not role_id:
-                role = await interaction.guild.create_role(
-                    name = interaction.user.name)
-                await interaction.user.add_roles(role)
-                role = await role.edit(
-                    position=int(len(interaction.guild.roles)/2))
+        # If they don't have a 1:1 role in the DB, make one for them
+        if not role_id:
+            role = await interaction.guild.create_role(
+                name = interaction.user.name)
+            await interaction.user.add_roles(role)
+            role = await role.edit(
+                position=int(len(interaction.guild.roles)/2))
 
-                await db.execute('INSERT INTO role_map VALUES (?, ?, ?)',
-                    (interaction.user.id, interaction.guild_id, role.id))
-                await db.commit()
-            else:
-                role = interaction.guild.get_role(role_id[0])
+            await self.bot.db.execute(
+                "INSERT INTO role_map VALUES ($1, $2, $3)",
+                interaction.user.id, interaction.guild_id, role.id)
+            await db.commit()
+        else:
+            role = interaction.guild.get_role(role_id[0])
 
         old_color = str(role.color).upper()
 
@@ -97,42 +96,39 @@ class Roles(commands.Cog):
         role: Optional[discord.Role]):
         """ Add, remove or list publicly available roles """
 
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            if action == "List":
-                # Grab all roles for given guild, list them all out
-                async with db.execute("""SELECT role_id FROM role_whitelist
-                    WHERE guild_id=?""",
-                    (interaction.guild.id,)) as cursor:
-                    roles = await cursor.fetchall()
+        if action == "List":
+            # Grab all roles for given guild, list them all out
+            await self.bot.db.fetch("""SELECT role_id FROM role_whitelist
+                WHERE guild_id=?""", interaction.guild.id)
 
-                if roles:
-                    roles = [interaction.guild.get_role(role[0]).mention for role in roles]
-                    await interaction.response.send_message(
-                        f"**Available roles**:\n\n{', '.join(roles)}",
-                        ephemeral=True)
-                    return
-                else:
-                    await interaction.response.send_message(
-                        "This server doesn't have any available roles.",
-                        ephemeral=True)
-                    return
+            if roles:
+                roles = [interaction.guild.get_role(role[0]).mention for role in roles]
+                await interaction.response.send_message(
+                    f"**Available roles**:\n\n{', '.join(roles)}",
+                    ephemeral=True)
+                return
             else:
-                # If Add/Remove, need to specify role argument
-                if not role:
-                    await interaction.response.send_message(
-                        "You need to specify a role.", ephemeral=True)
-                    return
+                await interaction.response.send_message(
+                    "This server doesn't have any available roles.",
+                    ephemeral=True)
+                return
+        else:
+            # If Add/Remove, need to specify role argument
+            if not role:
+                await interaction.response.send_message(
+                    "You need to specify a role.", ephemeral=True)
+                return
 
-            # Check if role is whitelisted to be freely added
-            async with db.execute("""SELECT role_id FROM role_whitelist
-                WHERE guild_id=? AND role_id=?""",
-                (interaction.guild.id, role.id)) as cursor:
-                role_in_db = await cursor.fetchone()
+        # Check if role is whitelisted to be freely added
+        role_in_db = await self.bot.db.fetchrow(
+            """SELECT role_id FROM role_whitelist
+            WHERE guild_id=$1 AND role_id=$2""",
+            interaction.guild.id, role.id)
 
-                if not role_in_db:
-                    await interaction.response.send_message(
-                        "That role isn't whitelisted.", ephemeral=True)
-                    return
+        if not role_in_db:
+            await interaction.response.send_message(
+                "That role isn't whitelisted.", ephemeral=True)
+            return
 
         if action == "Add":
             if role in interaction.user.roles:
@@ -160,49 +156,43 @@ class Roles(commands.Cog):
         with open('ext/data/rolemap.json') as f:
             data = json.load(f)
 
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            for user_id, role_id in data.items():
-                await db.execute('INSERT INTO role_map VALUES (?, ?, ?)',
-                    (int(user_id), ctx.guild.id, int(role_id)))
-            await db.commit()
+        for user_id, role_id in data.items():
+            await self.bot.db.execute(
+                "INSERT INTO role_map VALUES ($1, $2, $3)",
+                int(user_id), ctx.guild.id, int(role_id))
 
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def map_role(self, ctx, user: discord.User, role: discord.Role):
 
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute('INSERT INTO role_map VALUES (?, ?, ?)',
-                (user.id, ctx.guild.id, role.id))
-            await db.commit()
+        await db.execute("INSERT INTO role_map VALUES ($1, $2, $3)",
+            user.id, ctx.guild.id, role.id)
 
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def unmap_role(self, ctx, user: discord.User, role: discord.Role):
 
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            await db.execute("""DELETE FROM role_map
-                WHERE user_id=? AND guild_id=? AND role_id=?""",
-                (user.id, ctx.guild.id, role.id))
-            await db.commit()
+        await self.bot.db.execute("""DELETE FROM role_map
+            WHERE user_id=$1 AND guild_id=$2 AND role_id=$3""",
+            user.id, ctx.guild.id, role.id)
 
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def list_mapped_roles(self, ctx, user: discord.User):
 
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            async with db.execute("""SELECT role_id FROM role_map
-                WHERE user_id=? AND guild_id=?""",
-                (user.id, ctx.guild.id)) as cursor:
-                roles = await cursor.fetchall()
+        roles = await self.bot.db.execute("""SELECT role_id FROM role_map
+            WHERE user_id=$1 AND guild_id=$2""",
+            user.id, ctx.guild.id)
 
         if not roles:
             await ctx.send("No mapped roles for {user.name}.")
         else:
             for role in roles:
-                await ctx.send(f"{ctx.guild.get_role(role[0]).name} ({role[0]}")
+                await ctx.send(
+                    f"{ctx.guild.get_role(role[0]).name} ({role[0]}")
 
 
     @app_commands.default_permissions(administrator=True)
@@ -224,10 +214,9 @@ class Roles(commands.Cog):
                     ephemeral=True)
 
             try:
-                async with aiosqlite.connect("ext/data/roles.db") as db:
-                    await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
-                        (interaction.guild.id, role.id))
-                    await db.commit()
+                await self.bot.db.execute(
+                    "INSERT INTO role_whitelist VALUES ($1, $2)",
+                    interaction.guild.id, role.id)
             except:
                 await interaction.response.send_message(
                     f"That role has already been added.",
@@ -237,11 +226,9 @@ class Roles(commands.Cog):
                 f"Added {role.name} to the role whitelist.")
             
         else:
-            async with aiosqlite.connect("ext/data/roles.db") as db:
-                await db.execute("""DELETE FROM role_whitelist
-                    WHERE guild_id=? AND role_id=?""",
-                    (interaction.guild.id, role.id))
-                await db.commit()
+            await self.bot.db.execute("""DELETE FROM role_whitelist
+                WHERE guild_id=$1 AND role_id=$2""",
+                interaction.guild.id, role.id)
 
             await interaction.response.send_message(
                 f"Removed {role.name} from the whitelist.")
@@ -256,50 +243,43 @@ class Roles(commands.Cog):
                 if after.permissions.administrator:
                     return
 
-                async with aiosqlite.connect("ext/data/roles.db") as db:
-                    await db.execute('INSERT INTO role_whitelist VALUES (?, ?)',
-                        (after.guild.id, after.id))
-                    await db.commit()
+                await self.bot.db.execute(
+                    "INSERT INTO role_whitelist VALUES ($1, $2)",
+                    after.guild.id, after.id)
             else:
-                async with aiosqlite.connect("ext/data/roles.db") as db:
-                    await db.execute("""DELETE FROM role_whitelist
-                        WHERE guild_id=? AND role_id=?""",
-                        (after.guild.id, after.id))
-                    await db.commit()
+                await self.bot.db.execute("""DELETE FROM role_whitelist
+                    WHERE guild_id=$1 AND role_id=$2""",
+                    after.guild.id, after.id)
 
 
     @commands.Cog.listener("on_guild_role_delete")
     async def clean_list(self, deleted_role):
         """ If deleted role was mentionable, remove it from the list """
         if deleted_role.mentionable:
-            async with aiosqlite.connect("ext/data/roles.db") as db:
-                await db.execute("""DELETE FROM role_whitelist
-                    WHERE guild_id=? AND role_id=?""",
-                    (deleted_role.guild.id, deleted_role.id))
-                await db.commit()
+            await self.bot.db.execute("""DELETE FROM role_whitelist
+                WHERE guild_id=$1 AND role_id=$2""",
+                deleted_role.guild.id, deleted_role.id)
 
 
     @commands.command(hidden=True)
     @commands.is_owner()
     async def role_cleanup(self, ctx):
-        async with aiosqlite.connect("ext/data/roles.db") as db:
-            async with db.execute("""SELECT role_id FROM role_whitelist
-                WHERE guild_id=?""", (ctx.guild.id,)) as cursor:
-                roles = await cursor.fetchall()
+        roles = await self.bot.db.fetch("""SELECT role_id FROM role_whitelist
+            WHERE guild_id=$1""", ctx.guild.id)
 
-            for role in roles:
-                if not ctx.guild.get_role(role[0]):
-                    await db.execute("""DELETE FROM role_whitelist
-                        WHERE guild_id=? AND role_id=?""",
-                        (ctx.guild.id, role[0]))
-                    await db.commit()
-                    await ctx.send(f"Deleted {role[0]}")
+        for role in roles:
+            if not ctx.guild.get_role(role[0]):
+                await self.bot.db.execute("""DELETE FROM role_whitelist
+                    WHERE guild_id=$1 AND role_id=$2""", ctx.guild.id, role[0])
+                await ctx.send(f"Deleted {role[0]}")
 
 
 async def setup(bot):
     async with aiosqlite.connect("ext/data/roles.db") as db:
-        await db.execute('CREATE TABLE IF NOT EXISTS role_map (user_id integer, guild_id integer, role_id integer, UNIQUE(user_id, guild_id))')
-        await db.execute('CREATE TABLE IF NOT EXISTS role_whitelist (guild_id integer, role_id integer, UNIQUE(guild_id, role_id))')
-        await db.commit()
+        await bot.db.execute("""CREATE TABLE IF NOT EXISTS role_map
+            (user_id bigint, guild_id bigint, role_id bigint, 
+            UNIQUE(user_id, guild_id))""")
+        await bot.db.execute("""CREATE TABLE IF NOT EXISTS role_whitelist
+            (guild_id bigint, role_id bigint, UNIQUE(guild_id, role_id))""")
     await bot.add_cog(Roles(bot))
 
