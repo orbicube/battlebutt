@@ -96,7 +96,7 @@ async def main():
         replied_user=False)
 
     async with httpx.AsyncClient(http2=True) as http_client, asyncpg.create_pool(
-        user=POSTGRES_USER, password=POSTGRES_PASS, database="battlebutt") as pool:
+        user=POSTGRES_USER, password=POSTGRES_PASS, database=POSTGRES_USER) as pool:
 
         async with Battlebutt(
             command_prefix=commands.when_mentioned_or('/'),
