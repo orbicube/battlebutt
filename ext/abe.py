@@ -16,7 +16,7 @@ class Abe(commands.Cog):
         """ List the amount of abes committed in this server """
         
         abe_count = await self.bot.db.fetchrow("""SELECT sum(abes) FROM abe_counts
-                WHERE guild_id=?""", interaction.guild.id)
+                WHERE guild_id=$1""", interaction.guild.id)
         if abe_count:
             await interaction.response.send_message(
                 f"{abe_count[0]} total abes committed in this server.")
