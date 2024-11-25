@@ -40,28 +40,22 @@ class MFW(commands.Cog):
 
         imgs = glob("ext/data/mfw/*.jpg") + glob("ext/data/mfw/*.png")
 
-        async with aiosqlite.connect("ext/data/mfw.db") as db:
-            # Get existing image list and compare
-            async with db.execute('SELECT file FROM mfw_list') as cursor:
-                old_imgs = await cursor.fetchall()
-            new_imgs = list(set(imgs) - set([img[0] for img in old_imgs]))
+        # Get existing image list and compare
+        old_imgs = await self.bot.db.fetch("SELECT file FROM mfw_list")
+        new_imgs = list(set(imgs) - set([img[0] for img in old_imgs]))
 
-            # Put new image in db and announce
-            for img in new_imgs:
-                await db.execute('INSERT INTO mfw_list VALUES (?)', (img, ))
+        # Put new image in db and announce
+        for img in new_imgs:
+            await self.bot.db.execute("INSERT INTO mfw_list VALUES ($1)", img)
 
-                for c in self.post_channels:
-                    await self.bot.get_channel(c).send(
-                        "New MFW added!",
-                        file=discord.File(img))
-
-            await db.commit()
+            for c in self.post_channels:
+                await self.bot.get_channel(c).send(
+                    "New MFW added!",
+                    file=discord.File(img))
 
 
 async def setup(bot):
-    async with aiosqlite.connect("ext/data/mfw.db") as db:
-        await db.execute('CREATE TABLE IF NOT EXISTS mfw_list (file text)')
-        await db.commit()
+    await bot.db.execute('CREATE TABLE IF NOT EXISTS mfw_list (file text)')
     await bot.add_cog(MFW(bot))
 
 async def teardown(bot):

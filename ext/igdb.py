@@ -10,6 +10,7 @@ from random import randint, choice
 import traceback
 import sys
 
+from ext.util.twitchauth import twitch_auth
 from credentials import TWITCH_ID, TWITCH_SECRET, ERROR_CHANNEL
 
 class IGDB(commands.Cog):
@@ -120,8 +121,6 @@ class IGDB(commands.Cog):
                 except:
                     pass
 
-
-
         await interaction.response.send_message(embed=embed)
 
         # Insert URL into database as if the user posted it.
@@ -136,7 +135,7 @@ class IGDB(commands.Cog):
         await self.bot.wait_until_ready()
 
         # Setup Twitch API auth
-        headers = await self.twitch_auth()
+        headers = await twitch_auth(self.bot.db, self.bot.http_client)
         headers['Content-Type']: "text/plain"
 
         allowed_game = False
@@ -182,7 +181,7 @@ class IGDB(commands.Cog):
     @tasks.loop(minutes=60.0)
     async def update_game_count(self):
 
-        headers = await self.twitch_auth()
+        headers = await twitch_auth(self.bot.db, self.bot.http_client)
         headers["Content-Type"] = "text/plain"
 
         try:
@@ -212,44 +211,7 @@ class IGDB(commands.Cog):
             type(error), error, error.__traceback__, file=sys.stderr)
 
 
-    async def twitch_auth(self):
-
-        async with aiosqlite.connect("ext/data/twitch.db") as db:
-            async with db.execute("""SELECT token, expiry FROM twitch_auth 
-                ORDER BY expiry DESC""") as cursor:
-                try:
-                    token, expiry = await cursor.fetchone()
-                except:
-                    token, expiry = 0, 0
-
-        if not token or (int(time.time()) + 120) > expiry:
-            params = {
-                "client_id": TWITCH_ID,
-                "client_secret": TWITCH_SECRET,
-                "grant_type": "client_credentials"
-            }
-            r = await self.bot.http_client.post(
-                "https://id.twitch.tv/oauth2/token", params=params)
-            js = r.json()
-
-            async with aiosqlite.connect("ext/data/twitch.db") as db:
-                await db.execute("INSERT INTO twitch_auth VALUES (?, ?)",
-                    (js["access_token"], (int(time.time())+js["expires_in"])))
-                await db.commit()
-
-        headers = {
-            "client-id": TWITCH_ID,
-            "Authorization": f"Bearer {token}"
-        }
-
-        return headers
-
-
 async def setup(bot):
-    async with aiosqlite.connect("ext/data/twitch.db") as db:
-        await db.execute("""CREATE TABLE IF NOT EXISTS twitch_auth
-            (token text, expiry integer)""")
-        await db.commit()
     await bot.add_cog(IGDB(bot))
 
 async def teardown(bot):

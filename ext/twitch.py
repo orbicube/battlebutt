@@ -11,14 +11,15 @@ from typing import Optional
 import traceback
 import sys
 
+from ext.util.twitchauth import twitch_auth
 from credentials import TWITCH_ID, TWITCH_SECRET, ERROR_CHANNEL
 
 class Twitch(commands.Cog):
 
-    post_channels = [
-        143562235740946432,
-        484480133525274645
-    ]
+    post_channels = {
+        143562235740946432: 143562235740946432,
+        122087203760242692: 484480133525274645
+    }
 
     def __init__(self, bot):
         self.bot = bot
@@ -33,15 +34,13 @@ class Twitch(commands.Cog):
         await self.bot.wait_until_ready()
 
         # Setup Twitch API auth
-        headers = await self.twitch_auth()
+        headers = await twitch_auth(self.bot.db, self.bot.http_client)
 
         # Put all channels and their stored live status in a dict
         channels = {}
-        async with aiosqlite.connect("ext/data/twitch.db") as db:
-            async with db.execute("""SELECT channel, live 
-                FROM twitch_live""") as cursor:
-                async for row in cursor:
-                    channels[row[0]] = row[1]
+        rows = await self.bot.db.fetch("SELECT channel, live FROM twitch_live")
+        for row in rows:
+            channels[row[0]] = row[1]
         if not channels:
             return
 
@@ -61,11 +60,13 @@ class Twitch(commands.Cog):
         for stream in streams:
             # If we haven't stored it being live, time to post
             if not channels[stream["user_login"]]:
-
                 embed = await self.compose_embed(stream, headers)
 
-                for c in self.post_channels:
-                    chan = self.bot.get_channel(c)
+                servers = await self.bot.db.fetch(
+                    "SELECT guild_id FROM twitch_live WHERE channel=$1",
+                    stream["user_login"])
+                for serv in servers:
+                    chan = self.bot.get_channel(self.post_channels[serv[0]])
 
                     role = discord.utils.find(
                         lambda r: r.name.lower() == stream["user_login"],
@@ -77,20 +78,16 @@ class Twitch(commands.Cog):
 
                     await chan.send(msg, embed=embed)
 
-                async with aiosqlite.connect("ext/data/twitch.db") as db:
-                    await db.execute("""UPDATE twitch_live SET live = 1
-                        WHERE channel=?""", (stream["user_login"],))
-                    await db.commit()
+                await self.bot.db.execute("""UPDATE twitch_live SET live=1
+                    WHERE channel=$1""", stream["user_login"])
 
         # Get list of newly offline channels and set offline
         offline = [item for item in 
             [chan for (chan, live) in channels.items() if live]
             if item not in [stream["user_login"] for stream in streams]]
         for chan in offline:
-            async with aiosqlite.connect("ext/data/twitch.db") as db:
-                await db.execute("""UPDATE twitch_live SET live = 0
-                    WHERE channel=?""", (chan,))
-                await db.commit()
+            await self.bot.db.execute("""UPDATE twitch_live SET live=0
+                WHERE channel=$1""", chan)
 
     @check_twitch.error
     async def check_twitch_error(self, error):
@@ -118,7 +115,7 @@ class Twitch(commands.Cog):
             channel = url_match[1]
 
         # Setup Twitch API auth
-        headers = await self.twitch_auth()
+        headers = await twitch_auth(self.bot.db, self.bot.http_client)
         params = {
             "user_login": channel
         }
@@ -166,7 +163,7 @@ class Twitch(commands.Cog):
 
         await message.edit(suppress=True)
 
-        headers = await self.twitch_auth()
+        headers = await twitch_auth(self.bot.db, self.bot.http_client)
         params = {
             "user_login": twitch_urls
         }
@@ -185,6 +182,7 @@ class Twitch(commands.Cog):
 
         if embeds:
             await message.reply(embeds=embeds)
+
 
     async def compose_embed(self, stream, headers):
 
@@ -214,65 +212,25 @@ class Twitch(commands.Cog):
         return embed
 
 
-    async def twitch_auth(self):
-
-        async with aiosqlite.connect("ext/data/twitch.db") as db:
-            async with db.execute("""SELECT token, expiry FROM twitch_auth 
-                ORDER BY expiry DESC""") as cursor:
-                try:
-                    token, expiry = await cursor.fetchone()
-                except:
-                    token, expiry = 0, 0
-
-        if not token or (int(time.time()) + 120) > expiry:
-            params = {
-                "client_id": TWITCH_ID,
-                "client_secret": TWITCH_SECRET,
-                "grant_type": "client_credentials"
-            }
-            r = await self.bot.http_client.post(
-                "https://id.twitch.tv/oauth2/token", params=params)
-            js = r.json()
-
-            async with aiosqlite.connect("ext/data/twitch.db") as db:
-                await db.execute("INSERT INTO twitch_auth VALUES (?, ?)",
-                    (js["access_token"], (int(time.time())+js["expires_in"])))
-                await db.commit()
-
-        headers = {
-            "client-id": TWITCH_ID,
-            "Authorization": f"Bearer {token}"
-        }
-
-        return headers
-
-
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def add_twitch(self, ctx, channel):
 
-        async with aiosqlite.connect("ext/data/twitch.db") as db:
-            await db.execute("""INSERT INTO twitch_live
-                VALUES (?, ?)""", (channel, 0))
-            await db.commit()
+        await self.bot.db.execute("""INSERT INTO twitch_live
+            VALUES ($1, $2, $3)""", ctx.guild.id, channel, 0)
 
-
+    @commands.is_owner()
     @commands.command(hidden=True)
     async def remove_twitch(self, ctx, channel):
 
-        async with aiosqlite.connect("ext/data/twitch.db") as db:
-            await db.execute("""DELETE FROM twitch_live
-                WHERE channel=?""", (channel,))
-            await db.commit()
+        await self.bot.db.execute("""DELETE FROM twitch_live
+            WHERE guild_id=$1 AND channel=$2""", ctx.guild.id, channel)
 
 
 async def setup(bot):
-    async with aiosqlite.connect("ext/data/twitch.db") as db:
-        await db.execute("""CREATE TABLE IF NOT EXISTS twitch_live
-            (channel text, live integer, UNIQUE(channel))""")
-        await db.execute("""CREATE TABLE IF NOT EXISTS twitch_auth
-            (token text, expiry integer)""")
-        await db.commit()
-
+    await bot.db.execute("""CREATE TABLE IF NOT EXISTS twitch_live
+        (guild_id bigint, channel text, live integer, 
+        UNIQUE(guild_id, channel))""")
     await bot.add_cog(Twitch(bot))
 
 async def teardown(bot):
