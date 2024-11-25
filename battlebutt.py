@@ -10,7 +10,7 @@ import traceback
 import httpx
 import asyncpg
 
-from credentials import DISCORD_TOKEN, ERROR_CHANNEL, DEBUG_CHANNEL, POSTGRES_USER, POSTGRES_PASS
+from credentials import DISCORD_TOKEN, ERROR_CHANNEL, DEBUG_CHANNEL, POSTGRES_USER, POSTGRES_PASS, POSTGRES_DB
 from translator import ButtTranslator
 from typing import Optional
 
@@ -96,7 +96,7 @@ async def main():
         replied_user=False)
 
     async with httpx.AsyncClient(http2=True) as http_client, asyncpg.create_pool(
-        user=POSTGRES_USER, password=POSTGRES_PASS, database=POSTGRES_USER) as pool:
+        user=POSTGRES_USER, password=POSTGRES_PASS, database=POSTGRES_DB) as pool:
 
         async with Battlebutt(
             command_prefix=commands.when_mentioned_or('/'),
