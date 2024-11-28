@@ -156,8 +156,6 @@ class IGDB(commands.Cog):
 
         self.game = game
 
-        await self.bot.get_channel(ERROR_CHANNEL).send(str(self.game)[:1999])
-
         await self.bot.change_presence()
         await self.bot.change_presence(
             activity=discord.Game(name=self.game["name"]))
