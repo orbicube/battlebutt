@@ -19,7 +19,7 @@ class GotyShareButton(discord.ui.Button):
             style=discord.ButtonStyle.primary, label='Share')
 
     async def callback(self, interaction: discord.Interaction):
-        self.msg = f"{self.msg}\n-# Sent by {interaction.user.mention}"
+        self.msg = f"{self.msg}\n-# Requested by {interaction.user.mention}"
         await interaction.response.send_message(self.msg,
             allowed_mentions=discord.AllowedMentions(users=False))
 
