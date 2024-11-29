@@ -41,7 +41,8 @@ class ResultsYearDropdown(discord.ui.Select):
             WHERE year=$1 AND guild_id=$2 ORDER BY score DESC LIMIT 20""",
             year, interaction.guild_id)
 
-        msg = [f"## Game of the Year {disp_year.get(year, year)}"]
+        msg = [f"## Game of the {'Decade' if year < 1950 else 'Year'}"]
+        msg[0] += f" - {disp_year.get(year, year)}"
         prev_rank, prev_result = 0, 0
         ranks = []
         for index, game in enumerate(top_games, start=1):
@@ -97,7 +98,8 @@ class UserYearDropdown(discord.ui.Select):
             ORDER BY position ASC""",
             self.user.id, year, interaction.guild_id)
 
-        msg = [f"## {self.user.display_name}'s Top Games of {disp_year.get(year, year)}"]
+        msg = [f"## {self.user.display_name}'s Top Games of "]
+        msg[0] += f"{'the ' if year < 1950 else ''}{disp_year.get(year, year)}"
         for game in user_list:
             msg.append((
                 f"1. **{game[0]}**"))
