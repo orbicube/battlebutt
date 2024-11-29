@@ -11,30 +11,9 @@ from random import sample, shuffle
 from ext.util.twitchauth import twitch_auth
 from credentials import TWITCH_ID, TWITCH_SECRET, GOTY_KEY
 
-# Overriding the stored year for non-integer year lists
 disp_year = {
     1: "2010s"
 }
-
-def rank_list(games):
-    msg = []
-    prev_rank, prev_result = 0, 0
-    ranks = []
-    for index, game in enumerate(games, start=1):
-        if index == 1:
-            rank = index
-            prev_rank = index
-            prev_result = game[1]
-        else:
-            if game[1] == prev_result:
-                rank = prev_rank
-            else:
-                rank = index
-                prev_rank = index
-                prev_result = game[1]
-        msg.append((
-            f"{rank}\u200d. **{game[0]}** ({game[1]} points)"))
-    return msg
 
 class GotyShareButton(discord.ui.Button):
     def __init__(self, msg):
@@ -64,7 +43,22 @@ class ResultsYearDropdown(discord.ui.Select):
 
         msg = [f"## Game of the {'Decade' if year < 1950 else 'Year'}"]
         msg[0] += f" - {disp_year.get(year, year)}"
-        msg += rank_list(top_games)
+        prev_rank, prev_result = 0, 0
+        ranks = []
+        for index, game in enumerate(top_games, start=1):
+            if index == 1:
+                rank = index
+                prev_rank = index
+                prev_result = game[1]
+            else:
+                if game[1] == prev_result:
+                    rank = prev_rank
+                else:
+                    rank = index
+                    prev_rank = index
+                    prev_result = game[1]
+            msg.append((
+                f"{rank}\u200d. **{game[0]}** ({game[1]} points)"))
         msg = "\n".join(msg)
 
         # Check for existing button, replace if so otherwise make new
@@ -106,7 +100,9 @@ class UserYearDropdown(discord.ui.Select):
 
         msg = [f"## {self.user.display_name}'s Top Games of "]
         msg[0] += f"{'the ' if year < 1950 else ''}{disp_year.get(year, year)}"
-        msg += rank_list(user_list)
+        for game in user_list:
+            msg.append((
+                f"1. **{game[0]}**"))
         msg = "\n".join(msg)
 
         # Check for existing button, replace if so otherwise make new
