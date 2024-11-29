@@ -11,6 +11,18 @@ from random import sample, shuffle
 from ext.util.twitchauth import twitch_auth
 from credentials import TWITCH_ID, TWITCH_SECRET, GOTY_KEY
 
+class GotyShareButton(discord.ui.Button):
+    def __init__(self, msg):
+        self.msg = msg
+
+        super().__init__(
+            style=discord.ButtonStyle.primary, label='Share')
+
+    async def callback(self, interaction: discord.Interaction):
+        self.msg = f"{self.msg}\n-# Sent by {interaction.user.mention}"
+        await interaction.response.send_message(self.msg,
+            allowed_mentions=discord.AllowedMentions(users=False))
+
 class ResultsYearDropdown(discord.ui.Select):
     def __init__(self, db, options):
         self.db = db
@@ -22,7 +34,7 @@ class ResultsYearDropdown(discord.ui.Select):
         top_games= await self.db.fetch(
             """SELECT game, score FROM goty_results
             WHERE year=$1 AND guild_id=$2 ORDER BY score DESC LIMIT 20""",
-            int(self.values[0]), interaction.guild.id)
+            int(self.values[0]), interaction.guild_id)
 
         msg = [f"## Game of the Year {self.values[0]}"]
         prev_rank, prev_result = 0, 0
@@ -41,9 +53,19 @@ class ResultsYearDropdown(discord.ui.Select):
                     prev_result = game[1]
             msg.append((
                 f"{rank}\u200d. **{game[0]}** ({game[1]} points)"))
+        msg = "\n".join(msg)
+
+        view_button = next((
+            x for x in self.view.children
+            if x.__class__.__name__ == "GotyShareButton"),
+            None)
+        if view_button:
+            view_button.msg = msg
+        else:
+            self.view.add_item(GotyShareButton(msg))
 
         await interaction.response.edit_message(
-            content="\n".join(msg), view=self.view)
+            content=msg, view=self.view)
 
 class ResultsView(discord.ui.View):
     def __init__(self, db, options):
@@ -72,9 +94,18 @@ class UserYearDropdown(discord.ui.Select):
         for game in user_list:
             msg.append((
                 f"1. **{game[0]}**"))
+        msg = "\n".join(msg)
 
+        view_button = next((
+            x for x in self.view.children
+            if x.__class__.__name__ == "GotyShareButton"),
+            None)
+        if view_button:
+            view_button.msg = msg
+        else:
+            self.view.add_item(GotyShareButton(msg))
         await interaction.response.edit_message(
-            content="\n".join(msg), view=self.view)
+            content=msg, view=self.view)
 
 class UserYearView(discord.ui.View):
     def __init__(self, db, options, user):
@@ -245,7 +276,7 @@ class Goty(commands.GroupCog):
         years = await self.bot.db.fetch(
             """SELECT DISTINCT year FROM goty_results
             WHERE guild_id=$1 ORDER BY year DESC""",
-            interaction.guild.id)
+            interaction.guild_id)
 
         options = []
         for year in years:
@@ -268,7 +299,7 @@ class Goty(commands.GroupCog):
         years = await self.bot.db.fetch(
             """SELECT DISTINCt year FROM goty
             WHERE user_id=$1 AND guild_id=$2 ORDER BY year DESC""",
-            user.id, interaction.guild.id)
+            user.id, interaction.guild_id)
 
         options = []
         for year in years:
