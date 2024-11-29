@@ -11,6 +11,10 @@ from random import sample, shuffle
 from ext.util.twitchauth import twitch_auth
 from credentials import TWITCH_ID, TWITCH_SECRET, GOTY_KEY
 
+disp_year = {
+    1: "2010s"
+}
+
 class GotyShareButton(discord.ui.Button):
     def __init__(self, msg):
         self.msg = msg
@@ -19,7 +23,7 @@ class GotyShareButton(discord.ui.Button):
             style=discord.ButtonStyle.primary, label='Share')
 
     async def callback(self, interaction: discord.Interaction):
-        self.msg = f"{self.msg}\n-# Requested by {interaction.user.mention}"
+        self.msg = f"{self.msg}\n-# Shared by {interaction.user.mention}"
         await interaction.response.send_message(self.msg,
             allowed_mentions=discord.AllowedMentions(users=False))
 
@@ -31,12 +35,13 @@ class ResultsYearDropdown(discord.ui.Select):
             min_values=1, max_values=1, options=options)
 
     async def callback(self, interaction: discord.Interaction):
-        top_games= await self.db.fetch(
+        year = int(self.values[0])
+        top_games = await self.db.fetch(
             """SELECT game, score FROM goty_results
             WHERE year=$1 AND guild_id=$2 ORDER BY score DESC LIMIT 20""",
-            int(self.values[0]), interaction.guild_id)
+            year, interaction.guild_id)
 
-        msg = [f"## Game of the Year {self.values[0]}"]
+        msg = [f"## Game of the Year {disp_year.get(year, year)}"]
         prev_rank, prev_result = 0, 0
         ranks = []
         for index, game in enumerate(top_games, start=1):
@@ -55,6 +60,7 @@ class ResultsYearDropdown(discord.ui.Select):
                 f"{rank}\u200d. **{game[0]}** ({game[1]} points)"))
         msg = "\n".join(msg)
 
+        # Check for existing button, replace if so otherwise make new
         view_button = next((
             x for x in self.view.children
             if x.__class__.__name__ == "GotyShareButton"),
@@ -84,18 +90,20 @@ class UserYearDropdown(discord.ui.Select):
             min_values=1, max_values=1, options=options)
 
     async def callback(self, interaction:discord.Interaction):
+        year = int(self.values[0])
         user_list = await self.db.fetch(
             """SELECT game, position FROM goty
             WHERE user_id=$1 AND year=$2 AND guild_id=$3 AND game IS NOT NULL
             ORDER BY position ASC""",
-            self.user.id, int(self.values[0]), interaction.guild_id)
+            self.user.id, year), interaction.guild_id)
 
-        msg = [f"## {self.user.display_name}'s Top Games of {self.values[0]}"]
+        msg = [f"## {self.user.display_name}'s Top Games of {disp_year.get(year, year)}"]
         for game in user_list:
             msg.append((
                 f"1. **{game[0]}**"))
         msg = "\n".join(msg)
 
+        # Check for existing button, replace if so otherwise make new
         view_button = next((
             x for x in self.view.children
             if x.__class__.__name__ == "GotyShareButton"),
@@ -281,7 +289,8 @@ class Goty(commands.GroupCog):
         options = []
         for year in years:
             if year[0] != self.year or not self.voting_open():
-                options.append(discord.SelectOption(label=year[0]))
+                options.append(discord.SelectOption(
+                    label=disp_year.get(year[0], year[0]), value=year[0]))
 
         if not options:
             await interaction.response.send_message(
@@ -297,13 +306,14 @@ class Goty(commands.GroupCog):
     async def user_list(self, 
         interaction: discord.Interaction, user: discord.User):
         years = await self.bot.db.fetch(
-            """SELECT DISTINCt year FROM goty
+            """SELECT DISTINCT year FROM goty
             WHERE user_id=$1 AND guild_id=$2 ORDER BY year DESC""",
             user.id, interaction.guild_id)
 
         options = []
         for year in years:
-            options.append(discord.SelectOption(label=year[0]))
+            options.append(discord.SelectOption(
+                label=disp_year.get(year[0], year[0]), value=year[0]))
 
         if not options:
             await interaction.response.send_message(
