@@ -95,7 +95,7 @@ class UserYearDropdown(discord.ui.Select):
             """SELECT game, position FROM goty
             WHERE user_id=$1 AND year=$2 AND guild_id=$3 AND game IS NOT NULL
             ORDER BY position ASC""",
-            self.user.id, year), interaction.guild_id)
+            self.user.id, year, interaction.guild_id)
 
         msg = [f"## {self.user.display_name}'s Top Games of {disp_year.get(year, year)}"]
         for game in user_list:
