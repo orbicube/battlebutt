@@ -14,6 +14,8 @@ class Wolfram(commands.Cog):
     async def query(self, interaction: discord.Interaction, q: str):
         """ Send a query to Wolfram Alpha """
 
+        await interaction.response.defer()        
+
         params = {
             "appid": WOLFRAM_KEY,
             "i": q
@@ -22,7 +24,7 @@ class Wolfram(commands.Cog):
             "https://api.wolframalpha.com/v1/spoken",
             params=params)
 
-        await interaction.response.send_message(
+        await interaction.followup.send(
             f"{r.text}{'.' if r.text[-1] != '.' else ''}",
             ephemeral=(r.status_code == 501))
 
