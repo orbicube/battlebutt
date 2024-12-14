@@ -98,7 +98,7 @@ class Roles(commands.Cog):
 
         if action == "List":
             # Grab all roles for given guild, list them all out
-            await self.bot.db.fetch("""SELECT role_id FROM role_whitelist
+            roles = await self.bot.db.fetch("""SELECT role_id FROM role_whitelist
                 WHERE guild_id=$1""", interaction.guild.id)
 
             if roles:
