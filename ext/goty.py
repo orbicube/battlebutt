@@ -194,7 +194,7 @@ class Goty(commands.GroupCog):
             return
 
         if not submissions:
-            await interacton.response.send_message(
+            await interaction.response.send_message(
                 "You have to input at least one game.",
                 ephemeral=True)
             return
