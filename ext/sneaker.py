@@ -93,13 +93,45 @@ class Sneaker(commands.Cog,
             if "image_url" in shoe["data"]:
                 shoe_found = True
 
+                if shoe["value"].startswith(brand_name):
+                    shoe_name = shoe["value"].split(f"{brand_name} ")[2]
+                else:
+                    shoe_name = shoe["value"]
+
                 embed = discord.Embed(
-                    title=shoe["value"],
+                    title=shoe_name,
                     color=self.colours[shoe["data"]["color"]])
 
                 embed.set_author(name=brand_name)
-                embed.set_footer(text=year)
-                embed.set_image(url=shoe["data"]["image_url"])  
+                embed.set_image(url=shoe["data"]["image_url"])
+
+                release_date = datetime.strptime(
+                    shoe["data"]["release_date_time"],
+                    "%Y-%m-%d %H:%M:%S")
+                day = release_date.day
+                if 4 <= day <= 20 or 24 <= day <= 30:
+                    suffix = "th"
+                else:
+                    suffix = ["st", "nd", "rd"][day % 10 - 1]
+                release_value = "{} {}{}, {}".format(
+                    release_date.strftime("%B"),
+                    day, suffix,
+                    release_date.strftime("%Y"))
+                embed.add_field(
+                    name = "Release Date",
+                    value = release_value,
+                    inline = True)
+
+                shoe_price = ""
+                if "lowest_price_cents" in shoe["data"]:
+                    shoe_price = int(shoe["data"]["lowest_price_cents"] / 100)
+                elif "retail_price_cents" in shoe["data"]:
+                    shoe_price = int(shoe["data"]["retail_price_cents"] / 100)
+                if shoe_price:
+                    embed.add_field(
+                        name = "Value",
+                        value = f"${shoe_price}",
+                        inline = True)
                 
                 if reason and ctx.interaction:
                     await ctx.send(f"sneaker {reason}:", embed=embed)
