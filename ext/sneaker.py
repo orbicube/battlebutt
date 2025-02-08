@@ -94,7 +94,7 @@ class Sneaker(commands.Cog,
                 shoe_found = True
 
                 if shoe["value"].startswith(brand_name):
-                    shoe_name = shoe["value"].split(f"{brand_name} ")[2]
+                    shoe_name = shoe["value"].split(f"{brand_name} ")[1]
                 else:
                     shoe_name = shoe["value"]
 
