@@ -32,7 +32,7 @@ class Sneaker(commands.Cog,
         "brown": 0x8c663d,
         "silver": 0x999b9b,
         "gold": 0xb49b57,
-        "copper": 0xc47e5a
+        "copper": 0xc47e5a,
     }
 
     @commands.hybrid_command()
@@ -98,9 +98,15 @@ class Sneaker(commands.Cog,
                 else:
                     shoe_name = shoe["value"]
 
+                try:
+                    colour = self.colours[shoe["data"]["color"]]
+                except:
+                    colour = discord.Color.from_frb(
+                        randint(0,255), randint(0,255), randint(0,255))
+
                 embed = discord.Embed(
                     title=shoe_name,
-                    color=self.colours[shoe["data"]["color"]])
+                    color=colour)
 
                 embed.set_author(name=brand_name)
                 embed.set_image(url=shoe["data"]["image_url"])
