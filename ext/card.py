@@ -486,13 +486,22 @@ class Card(commands.Cog,
     async def starwars(self, ctx):
         """ Pulls a random Star Wars Unlimited card """
 
-        url = "https://swudb.com/random"
-        r = await self.bot.http_client.get(url, follow_redirects=True)
+        base_url = "https://swudb.com"
 
-        page = html.fromstring(r.text)
-        image_url = page.xpath("//img[@class='img-fluid']/@src")
-        await ctx.send(f"https://swudb.com{choice(image_url)}")
+        r = await self.bot.http_client.get(f"{base_url}/api/card/getRandomCard")
 
+        r = await self.bot.http_client.post(f"{base_url}/api/card/getVariantInfo",
+            json=r.json())
+
+        card = r.json()
+        if card["backImagePath"]:
+            card_path = choice([card["frontImagePath"], card["backImagePath"]])
+        else:
+            card_path = card["frontImagePath"]
+
+        await ctx.send(f"{base_url}/images{card_path[1:]}")
+
+            
 
     @commands.command(aliases=['bs'])
     async def battlespirits(self, ctx):
