@@ -78,11 +78,13 @@ class Reminder(commands.Cog):
 
         await discord.utils.sleep_until(reminder[2])
 
-        try:
-            await self.bot.get_channel(reminder[1]).send(
+        remind_channel = self.bot.get_channel(reminder[1])
+        if not remind_channel:
+            await self.bot.get_user(reminder[0]).send(
+                f"**Reminder**: {reminder[3]}")
+        else:
+            await remind_channel.send(
                 f"**Reminder** for <@{reminder[0]}>: {reminder[3]}")
-        except:
-            pass
 
         await self.bot.db.execute("""DELETE FROM reminder WHERE
                 user_id=$1 and channel_id=$2 and
