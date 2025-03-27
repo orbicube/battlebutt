@@ -388,7 +388,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wow(self, ctx):
-        """ Pull random World of Warcraft TCG card """
+        """ Pulls a random World of Warcraft TCG card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -428,7 +428,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def spellfire(self, ctx):
-        """ Pull random Spellfire card """
+        """ Pulls a random Spellfire card """
 
          # Defer in case multiple requests take too long
         await ctx.defer()
@@ -455,7 +455,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def shadowverse(self, ctx):
-        """ Pull random Shadowverse: Evolve card """
+        """ Pulls a random Shadowverse: Evolve card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()

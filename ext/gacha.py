@@ -157,7 +157,7 @@ class Gacha(commands.Cog,
         embed.set_image(url=choice(images))
         embed.set_footer(text="Fire Emblem Heroes")
 
-        if reason:
+        if reason and ctx.interaction:
             await ctx.send(f"fire emblem {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
@@ -179,7 +179,7 @@ class Gacha(commands.Cog,
             url=f"https://wotv-calc.com/assets/units/{character['image']}.webp")
         embed.set_footer(text="War of the Visions: Final Fantasy Brave Exvius")
 
-        if reason:
+        if reason and ctx.interaction:
             await ctx.send(f"war of the visions {reason}:")
         else:
             await ctx.send(embed=embed)
@@ -201,7 +201,7 @@ class Gacha(commands.Cog,
         embed.set_image(url=f"https://raw.githubusercontent.com/Aceship/Arknight-Images/refs/heads/main/characters/{skin_file}.png")
         embed.set_footer(text="Arknights")
 
-        if reason:
+        if reason and ctx.interaction:
             await ctx.send(f"arknights {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
@@ -230,7 +230,7 @@ class Gacha(commands.Cog,
         embed.set_image(url=f"https://dragalialost.wiki/{char_img}")
         embed.set_footer(text="Dragalia Lost")
 
-        if reason:
+        if reason and ctx.interaction:
             await ctx.send(f"dragalia lost {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
@@ -263,10 +263,11 @@ class Gacha(commands.Cog,
 
         embed.set_footer(text="Mario Kart Tour")
 
-        if reason:
+        if reason and ctx.interaction:
             await ctx.send(f"mario kart tour {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
 
     @commands.command()
     async def fortnite(self, ctx, reason: Optional[str] = None):
@@ -371,7 +372,7 @@ class Gacha(commands.Cog,
                     r'CrewPack.(\w+)(\d+)', str(skin["gameplayTags"]))[0]
                 embed.set_footer(text=f"{crewdate[0]} {crewdate[1]} Crew Pack")
 
-        if reason:
+        if reason and ctx.interaction:
             await ctx.send(f"fortnite {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
