@@ -34,7 +34,7 @@ class Gacha(commands.Cog,
         if not selected_comm:
             selected_comm = choice(commands)
         await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
-        await selected_comm.__call__(ctx)
+        await selected_comm.__call__(ctx, reason)
 
 
     @gacha.autocomplete('game')
@@ -114,7 +114,7 @@ class Gacha(commands.Cog,
 
 
     @commands.command(aliases=['feh'])
-    async def fireemblem(self, ctx):
+    async def fireemblem(self, ctx, reason: Optional[str] = None):
         """ Pulls a random Fire Emblem Heroes character """
         await ctx.defer()
 
@@ -151,17 +151,20 @@ class Gacha(commands.Cog,
             params=params, headers=self.headers)
 
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
-        images = page.xpath("//div[@class='fehwiki-tabber']/a[1]/@href")
+        images = page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/@href")
 
         embed = discord.Embed(title=selected_article)
         embed.set_image(url=choice(images))
         embed.set_footer(text="Fire Emblem Heroes")
 
-        await ctx.send(embed=embed)
+        if reason:
+            await ctx.send(f"fire emblem {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['wotv'])
-    async def warofthevisions(self, ctx):
+    async def warofthevisions(self, ctx, reason: Optional[str] = None):
         """ Pulls a random Final Fantasy War of the Visions character """
 
         url = "https://wotv-calc.com/api/gl/units?forBuilder=1"
@@ -176,11 +179,14 @@ class Gacha(commands.Cog,
             url=f"https://wotv-calc.com/assets/units/{character['image']}.webp")
         embed.set_footer(text="War of the Visions: Final Fantasy Brave Exvius")
 
-        await ctx.send(embed=embed)
+        if reason:
+            await ctx.send(f"war of the visions {reason}:")
+        else:
+            await ctx.send(embed=embed)
 
 
     @commands.command()
-    async def arknights(self, ctx):
+    async def arknights(self, ctx, reason: Optional[str] = None):
         """ Pulls a random Arknights character """
 
         url = "https://raw.githubusercontent.com/Aceship/AN-EN-Tags/refs/heads/master/json/gamedata/en_US/gamedata/excel/skin_table.json"
@@ -195,11 +201,14 @@ class Gacha(commands.Cog,
         embed.set_image(url=f"https://raw.githubusercontent.com/Aceship/Arknight-Images/refs/heads/main/characters/{skin_file}.png")
         embed.set_footer(text="Arknights")
 
-        await ctx.send(embed=embed)
+        if reason:
+            await ctx.send(f"arknights {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
     @commands.command()
-    async def dragalialost(self, ctx):
+    async def dragalialost(self, ctx, reason: Optional[str] = None):
         """ Pulls a random Dragalia Lost character """
 
         url = "https://dragalialost.wiki/api.php"
@@ -221,12 +230,17 @@ class Gacha(commands.Cog,
         embed.set_image(url=f"https://dragalialost.wiki/{char_img}")
         embed.set_footer(text="Dragalia Lost")
 
-        await ctx.send(embed=embed)
+        if reason:
+            await ctx.send(f"dragalia lost {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
     @commands.command()
-    async def mariokarttour(self, ctx):
+    async def mariokarttour(self, ctx, reason: Optional[str] = None):
         """ Pulls a random Mario Kart Tour character """
+
+        await ctx.defer()
 
         url = "https://www.mariowiki.com/api.php"
         params = {
@@ -249,7 +263,118 @@ class Gacha(commands.Cog,
 
         embed.set_footer(text="Mario Kart Tour")
 
-        await ctx.send(embed=embed)
+        if reason:
+            await ctx.send(f"mario kart tour {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+    @commands.command()
+    async def fortnite(self, ctx, reason: Optional[str] = None):
+        """ Posts a random Fortnite skin """
+        # Defer in case HTTP requests take too long
+        await ctx.defer()
+
+        rarities = {
+            "Common": "#B1B1B1",
+            "Uncommon": "#5BFD00",
+            "Rare": "#00FFF6",
+            "Epic": "#D505FF",
+            "Legendary": "#F68B20",
+            "CUBESeries": "#ff138e",
+            "DCUSeries": "#0031e0",
+            "FrozenSeries": "#afd7ff",
+            "CreatorCollabSeries": "#1be2e4",
+            "LavaSeries": "#f39d09",
+            "MarvelSeries": "#d70204",
+            "PlatformSeries": "#3730FF",
+            "ShadowSeries": "#515151",
+            "SlurpSeries": "#03f1ed",
+            "ColumbusSeries": "#ffaf00"
+        }
+
+        # Grab current list of items and pick random one
+        url = "https://fortniteapi.io/v2/items/list"
+        params = {
+            "type": "outfit",
+            "fields": "id,name"
+        }
+        headers = {
+            "Authorization": FNAPI_KEY
+        }
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
+        items = r.json()
+        skin = choice(items["items"])
+
+        while skin["name"] == "TBD" or not skin["name"] or "_" in skin["name"]:
+            skin = choice(items["items"])
+
+        url = "https://fortniteapi.io/v2/items/get"
+        params = {
+            "id": skin["id"]
+        }
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
+        skin = r.json()["item"]
+
+        # Start crafting embed with data present for all skins
+        embed = discord.Embed(
+            title=skin["name"],
+            description=skin["description"])
+
+        # used to be ass["primaryMode"] == "BattleRoyale", using ass["productTag"] == "Product.BR" temp
+        if skin["displayAssets"]:
+            br_assets = [ass for ass in skin["displayAssets"] if ass["productTag"] == "Product.BR"]
+            embed.set_image(url=choice(br_assets)["background"])
+        else:
+            embed.set_image(url=skin["images"]["background"])
+
+        # Discord embed colour based on rarity/series
+        if skin["series"]:
+            embed.colour = discord.Colour(value=0).from_str(
+                rarities[skin["series"]["id"]])
+        else:
+            embed.colour = discord.Colour(value=0).from_str(
+                rarities[skin["rarity"]["id"]])
+
+        # If it has a unique set name, put it into the description
+        if skin["set"]:
+            if skin["set"]["name"] != skin["name"]:
+                embed.description += f"\n\n{skin['set']['partOf']}"
+
+        # If Shop skin, display price and time since last appearance
+        if skin["price"]:
+            footer_text = f"{skin['price']} V-Bucks •"
+
+            days_ago = datetime.utcnow() - datetime.strptime(
+                skin["lastAppearance"], "%Y-%m-%d")
+            if days_ago.days == 0:
+                embed.set_footer(text=f"{footer_text} Currently in the shop")
+            else:
+                embed.set_footer(text=f"{footer_text} Last seen {days_ago.days} days ago")
+
+        # Format Battle Pass footer
+        elif skin["battlepass"]:
+            bp_format = re.findall(
+                r'Chapter (\d+) - Season (\d+)',
+                skin['battlepass']['displayText']['chapterSeason'])[0]
+            embed.set_footer(text=f"C{bp_format[0]}S{bp_format[1]} Battle Pass")
+            
+        # Extra conditionals
+        elif not skin["battlepass"]:
+            # Battle Pass challenges
+            #if "BattlePass.Paid" in skin["gameplayTags"]:
+            #    season = re.search(
+            #        r'.Season(\d+).BattlePass.Paid', str(skin["gameplayTags"]))
+            #    embed.set_footer(text=f"{calc_season_bp(season)} Battle Pass")
+            # Crew packs
+            if "CrewPack" in skin["gameplayTags"]:
+                crewdate = re.findall(
+                    r'CrewPack.(\w+)(\d+)', str(skin["gameplayTags"]))[0]
+                embed.set_footer(text=f"{crewdate[0]} {crewdate[1]} Crew Pack")
+
+        if reason:
+            await ctx.send(f"fortnite {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
     # @commands.command(aliases=['fgo'])
