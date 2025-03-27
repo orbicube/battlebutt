@@ -214,11 +214,8 @@ class Gacha(commands.Cog,
         images = page.xpath("//img[@data-file-width='1024']")
         character = choice(images)
 
-        await ctx.send(str(character))
-
         char_name = character.xpath("@alt")[0]
         char_img = character.xpath("@src")[0][:-3] + "1000"
-        await ctx.send(f"{char_name} / {char_img}")
 
         embed = discord.Embed(title=char_name)
         embed.set_image(url=f"https://dragalialost.wiki/{char_img}")
