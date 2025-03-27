@@ -9,6 +9,7 @@ from time import time
 from datetime import datetime, timedelta
 from random import choice, choices, randint, sample
 
+from urllib.parse import quote
 from lxml import html
 from credentials import DEBUG_CHANNEL, FNAPI_KEY
 
@@ -52,65 +53,69 @@ class Gacha(commands.Cog,
         return completes[:25] 
 
 
-    # @commands.command(aliases=['gbf'])
-    # async def granblue(self, ctx):
-    #     """ Pulls a random Granblue Fantasy character """
+    @commands.command(aliases=['gbf'])
+    async def granblue(self, ctx, reason: Optional[str] = None):
+        """ Pulls a random Granblue Fantasy character """
 
-    #     with open("ext/data/gbf.json") as f:
-    #         j = json.load(f)
-    #     last_up = datetime.utcfromtimestamp(j["updated"])
-    #     characters = j["characters"]
-    #     if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+        with open("ext/data/gbf.json") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        characters = j["characters"]
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
 
-    #         params = {
-    #             "action": "query",
-    #             "list": "cargoquery",
-    #             "table": "characters",
-    #             "fields": "name,title,art1,art2,art3",
-    #             "format": "json",
-    #             "limit": 500
-    #         }
-    #         url = "https://gbf.wiki/api.php"
+            params = {
+                "action": "cargoquery",
+                "tables": "characters",
+                "fields": "name,title,art1,art2,art3",
+                "format": "json",
+                "limit": 500
+            }
+            url = "https://gbf.wiki/api.php"
 
-    #         finished = False
-    #         offset = 0
-    #         characters = []
-    #         while not finished:
-    #             params["offset"] = offset
-    #             r = await self.bot.http_client.get(url,
-    #                 params=params, headers=self.headers)
-    #             results = r.json()["cargoquery"]
+            finished = False
+            offset = 0
+            characters = []
+            while not finished:
+                params["offset"] = offset
+                r = await self.bot.http_client.get(url,
+                    params=params, headers=self.headers)
+                results = r.json()["cargoquery"]
 
-    #             if len(results) < 500:
-    #                 finished = True
-    #             else:
-    #                 offset += 500
+                if len(results) < 500:
+                    finished = True
+                else:
+                    offset += 500
 
-    #             for c in results:
-    #                 c = c['title']
-    #                 char = {
-    #                     "name": f"{c['name'], c['title']}",
-    #                     "arts": [c['art1'], c['art2']]
-    #                 }
-    #                 if c['art3']:
-    #                     char['arts'].append(c['art3'])
+                for c in results:
+                    c = c['title']
+                    char = {
+                        "name": f"{c['name']}, {c['title']}".replace('&#039;','\''),
+                        "arts": [quote(c['art1']), quote(c['art2'])]
+                    }
+                    if c['art3']:
+                        char['arts'].append(quote(c['art3']))
 
-    #                 characters.append(char)
+                    characters.append(char)
 
-    #         data = {
-    #             "updated": datetime.utcnow().total_seconds(),
-    #             "characters": characters
-    #         }
-    #         with open("ext/data/gbf.json") as f:
-    #             json.dump(data, f)
+            data = {
+                "updated": int(datetime.utcnow().timestamp()),
+                "characters": characters
+            }
+            with open("ext/data/gbf.json", "w") as f:
+                json.dump(data, f)
 
-    #     char = choice(characters)
-    #     embed = discord.Embed(
-    #         title=char['name']
-    #     )
-    #     embed.set_image(
-    #         url=f"https://gbf.wiki/Special:FilePath/{choice(char['arts'])}")
-    #     embed.set_footer(text="Granblue Fantasy")
+        char = choice(characters)
+        embed = discord.Embed(
+            title=char['name']
+        )
+        embed.set_image(
+            url=f"https://gbf.wiki/Special:FilePath/{choice(char['arts'])}")
+        embed.set_footer(text="Granblue Fantasy")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"granblue {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
     @commands.command(aliases=['feh'])
