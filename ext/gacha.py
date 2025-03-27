@@ -236,7 +236,7 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['mkt'])
     async def mariokarttour(self, ctx, reason: Optional[str] = None):
         """ Pulls a random Mario Kart Tour character """
 
@@ -253,9 +253,16 @@ class Gacha(commands.Cog,
 
         characters = page.xpath(
             "//span[@id='In-game_portraits']/../following-sibling::ul[1]/li")
+        characters += page.xpath(
+            "//span[@id='Mii_Racing_Suits']/../following-sibling::ul[1]/li")
         character = choice(characters)
 
-        embed = discord.Embed(title=character.xpath(".//div/p/a/text()")[0])
+        # No link if character is Mii
+        name = character.xpath(".//div/p/text()")[0]
+        if len(name) < 2:
+            name = character.xpath(".//div/p/a/text()")[0]
+
+        embed = discord.Embed(title=name)
 
         img = character.xpath(
             ".//a[@class='image']/@href")[0].split("/File:")[1]
