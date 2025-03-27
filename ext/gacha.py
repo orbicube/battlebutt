@@ -95,6 +95,15 @@ class Gacha(commands.Cog,
                     if c['art3']:
                         char['arts'].append(quote(c['art3']))
 
+                    # Edge case with encoding of mu character 
+                    if '\u03bc' in char['name']:
+                        char['name'] = char['name'].split(',')[0]
+                        arts = []
+                        for art in char['arts']:
+                            new_art = f"%CE%BC%27s%20{art.split('%20')[1]}"
+                            arts.append(new_art)
+                        char['arts'] = arts
+
                     characters.append(char)
 
             data = {
