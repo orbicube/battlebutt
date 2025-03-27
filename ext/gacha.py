@@ -224,40 +224,68 @@ class Gacha(commands.Cog,
         await ctx.send(embed=embed)
 
 
-    @commands.command(aliases=['fgo'])
-    async def fategrandorder(self, ctx):
-        """ Pulls a random Fate Grand Order character """
+    @commands.command()
+    async def mariokarttour(self, ctx):
+        """ Pulls a random Mario Kart Tour character """
 
-        url = "https://fategrandorder.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Servant",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
-
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            article_list.extend(results["query"]["categorymembers"])
-
-        selected_article = choice(article_list)["title"]
+        url = "https://www.mariowiki.com/api.php"
         params = {
             "action": "parse",
-            "page": selected_article,
+            "page": "Gallery:Mario_Kart_Tour_sprites_and_models",
             "format": "json"
         }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
+        r = await self.bot.http_client.get(url, params=params)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        characters = page.xpath(
+            "//span[@id='In-game_portraits']/../following-sibling::ul[1]/li")
+        character = choice(characters)
+
+        embed = discord.Embed(title=character.xpath(".//div/p/a/text()")[0])
+
+        img = character.xpath(
+            ".//a[@class='image']/@href")[0].split("/File:")[1]
+        embed.set_image(url=f"https://www.mariowiki.com/Special:FilePath/{img}")
+
+        embed.set_footer(text="Mario Kart Tour")
+
+        await ctx.send(embed=embed)
+
+
+    # @commands.command(aliases=['fgo'])
+    # async def fategrandorder(self, ctx):
+    #     """ Pulls a random Fate Grand Order character """
+
+    #     url = "https://fategrandorder.fandom.com/api.php"
+    #     params = {
+    #         "action": "query",
+    #         "list": "categorymembers",
+    #         "cmtitle": "Category:Servant",
+    #         "cmlimit": "500",
+    #         "format": "json"
+    #     }
+    #     finished = False
+    #     article_list = []
+    #     while not finished:
+    #         r = await self.bot.http_client.get(url, 
+    #             params=params, headers=self.headers)
+    #         results = r.json()
+
+    #         if "continue" in results:
+    #             params["cmcontinue"] = results["continue"]["cmcontinue"]
+    #         else:
+    #             finished = True
+
+    #         article_list.extend(results["query"]["categorymembers"])
+
+    #     selected_article = choice(article_list)["title"]
+    #     params = {
+    #         "action": "parse",
+    #         "page": selected_article,
+    #         "format": "json"
+    #     }
+    #     r = await self.bot.http_client.get(url,
+    #         params=params, headers=self.headers)
 
         
 
