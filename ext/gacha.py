@@ -27,7 +27,7 @@ class Gacha(commands.Cog,
     @commands.hybrid_command()
     @app_commands.describe(game="Gacha you want to pull a character from")
     async def gacha(self, ctx, game: Optional[str] = None, reason: Optional[str] = None):
-        """ Pulls a random character from a gacha game """
+        """ Pulls a character from a gacha game """
 
         commands = self.get_commands()
         selected_comm = next((
@@ -55,7 +55,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['gbf'])
     async def granblue(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Granblue Fantasy character """
+        """ Pulls a Granblue Fantasy character """
 
         with open("ext/data/gbf.json") as f:
             j = json.load(f)
@@ -129,7 +129,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['feh'])
     async def fireemblem(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Fire Emblem Heroes character """
+        """ Pulls a Fire Emblem Heroes character """
         await ctx.defer()
 
         params = {
@@ -179,7 +179,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['wotv'])
     async def warofthevisions(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Final Fantasy War of the Visions character """
+        """ Pulls a Final Fantasy War of the Visions character """
 
         url = "https://wotv-calc.com/api/gl/units?forBuilder=1"
         headers = self.headers
@@ -201,7 +201,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def arknights(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Arknights character """
+        """ Pulls an Arknights character """
 
         url = "https://raw.githubusercontent.com/Aceship/AN-EN-Tags/refs/heads/master/json/gamedata/en_US/gamedata/excel/skin_table.json"
         r = await self.bot.http_client.get(url)
@@ -223,7 +223,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def dragalialost(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Dragalia Lost character """
+        """ Pulls a Dragalia Lost character """
 
         url = "https://dragalialost.wiki/api.php"
         params = {
@@ -252,7 +252,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['mkt'])
     async def mariokarttour(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Mario Kart Tour character """
+        """ Pulls a Mario Kart Tour character """
 
         await ctx.defer()
 
@@ -292,7 +292,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def fortnite(self, ctx, reason: Optional[str] = None):
-        """ Posts a random Fortnite skin """
+        """ Posts a Fortnite skin """
         # Defer in case HTTP requests take too long
         await ctx.defer()
 

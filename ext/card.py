@@ -25,7 +25,7 @@ class Card(commands.Cog,
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
     async def card(self, ctx, game: Optional[str] = None):
-        """ Pulls a random TCG card """
+        """ Pulls a TCG card """
         
         commands = self.get_commands()
         selected_comm = next((
@@ -57,7 +57,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['poke'])
     async def pokemon(self, ctx):
-        """ Pulls a random Pokemon TCG card """
+        """ Pulls a Pokemon TCG card """
 
         url = "https://pkmncards.com/?random"
         r = await self.bot.http_client.get(url, follow_redirects=True)
@@ -72,7 +72,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['ygo', 'yugi'])
     async def yugioh(self, ctx):
-        """ Pulls a random Yu-Gi-Oh! card """
+        """ Pulls a Yu-Gi-Oh! card """
        
         url = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
         params = {
@@ -86,7 +86,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def digimon(self, ctx):
-        """ Pulls a random Digimon card. """
+        """ Pulls a Digimon card. """
 
         # Defer in case takes too long
         await ctx.defer()
@@ -111,7 +111,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['magic'])
     async def mtg(self, ctx):
-        """ Pulls a random Magic the Gathering card """
+        """ Pulls a Magic the Gathering card """
 
         url = "https://api.scryfall.com/cards/random"
         r = await self.bot.http_client.get(url)
@@ -131,7 +131,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['fab'])
     async def fleshandblood(self, ctx):
-        """ Pulls a random Flesh and Blood card """
+        """ Pulls a Flesh and Blood card """
 
         url = "https://cards.fabtcg.com/api/search/v1/cards/"
         params = {
@@ -149,7 +149,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def gateruler(self, ctx):
-        """ Pulls a random Gate Ruler card """
+        """ Pulls a Gate Ruler card """
 
         # Defer in case edit takes too long
         await ctx.defer()
@@ -187,7 +187,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=["cfv", "vanguard", "cardfight"])
     async def cardfightvanguard(self, ctx):
-        """ Pulls a random Cardfight!! Vanguard card """
+        """ Pulls a Cardfight!! Vanguard card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -216,7 +216,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def grandarchive(self, ctx):
-        """ Pulls a random Grand Archive card """
+        """ Pulls a Grand Archive card """
 
         r = await self.bot.http_client.get(
             "https://api.gatcg.com/cards/random?amount=1")
@@ -228,7 +228,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def nostalgix(self, ctx):
-        """ Pulls a random Nostalgix card """
+        """ Pulls a Nostalgix card """
 
         url = "https://play-api.carde.io/v1/cards/63bc844c3e8d2f34e312bc77"
 
@@ -245,7 +245,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def lorcana(self, ctx):
-        """ Pulls a random Lorcana card """
+        """ Pulls a Lorcana card """
 
         await ctx.defer()
 
@@ -257,7 +257,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def redemption(self, ctx):
-        """ Pulls a random Redemption card """
+        """ Pulls a Redemption card """
 
         # Git tree for cardlist, updated 2024/09/22
         tree = "e5eb07664d9e9989687fb8f38acf78d5223e2267"
@@ -279,7 +279,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def vampire(self, ctx):
-        """ Pulls a random Vampire: The Eternal Struggle card """
+        """ Pulls a Vampire: The Eternal Struggle card """
 
         # Git tree for cardlist, updated 2024/09/22
         tree = "8661079bd3f85ce9bf899c23e945d8fd0f2a1334"
@@ -305,7 +305,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def neopets(self, ctx):
-        """ Pulls a random Neopets card """
+        """ Pulls a Neopets card """
         with open("ext/data/neopets.json") as f:
             card = choice(json.load(f))
 
@@ -323,7 +323,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def sorcery(self, ctx):
-        """ Pulls a random Sorcery card """
+        """ Pulls a Sorcery card """
 
         # Defer in case multiple requests take too long   
         await ctx.defer()
@@ -388,7 +388,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wow(self, ctx):
-        """ Pulls a random World of Warcraft TCG card """
+        """ Pulls a World of Warcraft TCG card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -398,7 +398,7 @@ class Card(commands.Cog,
             j = json.load(f)
         set_id = choices(j["sets"], j["weights"])[0]
 
-        # Get random card file from folder list
+        # Get card file from folder list
         list_url = "https://www.googleapis.com/drive/v3/files"
         list_params = {
             "q": f"'{set_id}' in parents",
@@ -428,7 +428,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def spellfire(self, ctx):
-        """ Pulls a random Spellfire card """
+        """ Pulls a Spellfire card """
 
          # Defer in case multiple requests take too long
         await ctx.defer()
@@ -455,7 +455,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def shadowverse(self, ctx):
-        """ Pulls a random Shadowverse: Evolve card """
+        """ Pulls a Shadowverse: Evolve card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -484,7 +484,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['swu'])
     async def starwars(self, ctx):
-        """ Pulls a random Star Wars Unlimited card """
+        """ Pulls a Star Wars Unlimited card """
 
         base_url = "https://swudb.com"
 
@@ -505,7 +505,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['bs'])
     async def battlespirits(self, ctx):
-        """ Pulls a random Battle Spirits card """
+        """ Pulls a Battle Spirits card """
 
         url = "https://api.bandai-tcg-plus.com/api/user/card/list"
         params = {
@@ -531,7 +531,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def alphaclash(self, ctx):
-        """ Pulls a random Alpha Clash card """
+        """ Pulls an Alpha Clash card """
 
         url = "https://play-api.carde.io/v1/cards/64483da67fc2aee28c8427bf"
         params = {
@@ -551,7 +551,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def altered(self, ctx):
-        """ Pulls a random Altered TCG card """
+        """ Pulls an Altered TCG card """
 
         url = "https://api.altered.gg/cards"
         params = {
@@ -571,7 +571,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def elestrals(self, ctx):
-        """ Pulls a random Elestrals card """
+        """ Pulls an Elestrals card """
 
         url = "https://play-api.carde.io/v1/cards/64a31866dd516a3cc4c8d45c"
         params = {
@@ -591,7 +591,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def fabledsagas(self, ctx):
-        """ Pulls a random Fabled Sagas card """
+        """ Pulls a Fabled Sagas card """
 
         url = "https://play-api.carde.io/v1/cards/64626b9a9d5830157996b180"
         params = {
@@ -611,7 +611,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def akora(self, ctx):
-        """ Pulls a random Akora card """
+        """ Pulls an Akora card """
 
         url = "https://play-api.carde.io/v1/cards/636855fc34369ca07c26f17d"
         params = {
@@ -631,7 +631,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def metazoo(self, ctx):
-        """ Pulls a random MetaZoo card """
+        """ Pulls a MetaZoo card """
 
         url = "https://play-api.carde.io/v1/cards/6362b23bafcb45c0e3070ddf"
         params = {
@@ -651,7 +651,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['fow'])
     async def forceofwill(self, ctx):
-        """ Pulls a random Force of Will card """
+        """ Pulls a Force of Will card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -679,7 +679,7 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['dm'])
     async def duelmasters(self, ctx):
-        """ Pulls a random Japanese Duel Masters card """
+        """ Pulls a Japanese Duel Masters card """
 
         # Defer in case multiple requests take too long
         await ctx.defer()
@@ -706,7 +706,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wixoss(self, ctx):
-
+        """ Pulls a Wixoss card """
         # Defer in case multiple requests take too long
         await ctx.defer()
 
@@ -725,9 +725,8 @@ class Card(commands.Cog,
         await ctx.send(f"{url}thumb/{card['card_no']}.jpg")
             
 
-    @commands.command()
+    @commands.command(hidden=True)
     async def playingcard(self, ctx):
-        """Pulls a random playing card """
 
         r = await self.bot.http_client.get(
             "https://www.deckofcardsapi.com/api/deck/new/draw/?count=1&jokers_enabled=True")
