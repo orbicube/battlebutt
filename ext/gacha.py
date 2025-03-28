@@ -414,7 +414,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['fgo'])
     async def fategrandorder(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Fate Grand Order character """
+        """ Pulls a Fate Grand Order character """
 
         url = "https://fategrandorder.fandom.com/api.php"
         params = {
@@ -460,6 +460,27 @@ class Gacha(commands.Cog,
             await ctx.send(f"fate/grand order {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['nier'])
+    async def nierreincarnation(self, ctx, reason: Optional[str] = None):
+        """ Pulls a NieR Re[in]carnation character """
+
+        with open("ext/data/nier.json") as f:
+            char = choice(json.load(f))
+
+        embed = discord.Embed(
+            title=char["name"],
+            colour=0x526c6c)
+        embed.set_image(
+            url=f"https://assets.nierrein.guide/ui/costume/{char['id']}/{char['id']}_full.png")
+        embed.set_footer(text="NieR Re[in]carnation")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"nier reincarnation {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
 
 
 async def setup(bot):
