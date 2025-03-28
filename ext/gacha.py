@@ -115,7 +115,8 @@ class Gacha(commands.Cog,
 
         char = choice(characters)
         embed = discord.Embed(
-            title=char['name']
+            title=char['name'],
+            color=0x1ca6ff
         )
         embed.set_image(
             url=f"https://gbf.wiki/Special:FilePath/{choice(char['arts'])}")
@@ -167,8 +168,13 @@ class Gacha(commands.Cog,
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
         images = page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/@href")
 
-        embed = discord.Embed(title=selected_article)
-        embed.set_image(url=choice(images))
+        embed = discord.Embed(
+            title=selected_article,
+            color=0xc3561f)
+        try:
+            embed.set_image(url=choice(images))
+        except:
+            await self.bot.get_channel(DEBUG_CHANNEL).send(f"feh: {selected_article}")
         embed.set_footer(text="Fire Emblem Heroes")
 
         if reason and ctx.interaction:
@@ -188,7 +194,9 @@ class Gacha(commands.Cog,
         r = await self.bot.http_client.get(url, headers=headers)
         character = choice(r.json())
 
-        embed = discord.Embed(title=character["names"]["en"])
+        embed = discord.Embed(
+            title=character["names"]["en"],
+            color=0x2c4584)
         embed.set_image(
             url=f"https://wotv-calc.com/assets/units/{character['image']}.webp")
         embed.set_footer(text="War of the Visions: Final Fantasy Brave Exvius")
@@ -211,7 +219,8 @@ class Gacha(commands.Cog,
         skin_file = skins[selected_skin]['portraitId'].replace('#','%23')
 
         embed = discord.Embed(
-            title=skins[selected_skin]["displaySkin"]["modelName"])
+            title=skins[selected_skin]["displaySkin"]["modelName"],
+            color=0xfcda16)
         embed.set_image(url=f"https://raw.githubusercontent.com/Aceship/Arknight-Images/refs/heads/main/characters/{skin_file}.png")
         embed.set_footer(text="Arknights")
 
@@ -240,7 +249,9 @@ class Gacha(commands.Cog,
         char_name = character.xpath("@alt")[0]
         char_img = character.xpath("@src")[0][:-3] + "1000"
 
-        embed = discord.Embed(title=char_name)
+        embed = discord.Embed(
+            title=char_name,
+            colour=0x3e91f1)
         embed.set_image(url=f"https://dragalialost.wiki/{char_img}")
         embed.set_footer(text="Dragalia Lost")
 
@@ -276,7 +287,9 @@ class Gacha(commands.Cog,
         if len(name) < 2:
             name = character.xpath(".//div/p/a/text()")[0]
 
-        embed = discord.Embed(title=name)
+        embed = discord.Embed(
+            title=name,
+            color=0xe60012)
 
         img = character.xpath(
             ".//a[@class='image']/@href")[0].split("/File:")[1]
@@ -399,42 +412,54 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-    # @commands.command(aliases=['fgo'])
-    # async def fategrandorder(self, ctx):
-    #     """ Pulls a random Fate Grand Order character """
+    @commands.command(aliases=['fgo'])
+    async def fategrandorder(self, ctx, reason: Optional[str] = None):
+        """ Pulls a random Fate Grand Order character """
 
-    #     url = "https://fategrandorder.fandom.com/api.php"
-    #     params = {
-    #         "action": "query",
-    #         "list": "categorymembers",
-    #         "cmtitle": "Category:Servant",
-    #         "cmlimit": "500",
-    #         "format": "json"
-    #     }
-    #     finished = False
-    #     article_list = []
-    #     while not finished:
-    #         r = await self.bot.http_client.get(url, 
-    #             params=params, headers=self.headers)
-    #         results = r.json()
+        url = "https://fategrandorder.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Servant",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
 
-    #         if "continue" in results:
-    #             params["cmcontinue"] = results["continue"]["cmcontinue"]
-    #         else:
-    #             finished = True
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
 
-    #         article_list.extend(results["query"]["categorymembers"])
+            article_list.extend(results["query"]["categorymembers"])
 
-    #     selected_article = choice(article_list)["title"]
-    #     params = {
-    #         "action": "parse",
-    #         "page": selected_article,
-    #         "format": "json"
-    #     }
-    #     r = await self.bot.http_client.get(url,
-    #         params=params, headers=self.headers)
+        selected_article = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
 
+        images = page.xpath("//div[@class='pi-image-collection wds-tabber']/div[@class='wds-tab__content']/figure/a/@href")
         
+        embed = discord.Embed(
+            title=selected_article,
+            color=0xece9d6)
+        embed.set_image(url=choice([i for i in images if 'Sprite' not in i]))
+        embed.set_footer(text="Fate/Grand Order")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"fate/grand order {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 async def setup(bot):
