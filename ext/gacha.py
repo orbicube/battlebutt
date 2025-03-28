@@ -482,6 +482,63 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command(aliases=['r1999'])
+    async def reverse1999(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Reverse 1999 character """
+
+        url = "https://www.prydwen.gg/page-data/re1999/characters/"
+
+        r = await self.bot.http_client.get(f"{url}page-data.json")
+        char = choice(
+            r.json()["result"]["data"]["allCharacters"]["nodes"])["slug"]
+
+        r = await self.bot.http_client.get(f"{url}{char}/page-data.json")
+        c_data = r.json()["result"]["data"]["currentUnit"]["nodes"][0]
+
+        skins = [(c_data["name"], c_data["imageFull"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"])]
+
+        if c_data["imageInsight"]:
+            skins.append((c_data["name"], c_data["imageInsight"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
+
+        if c_data["skins"]:
+            for sk in c_data["skins"]:
+                skins.append((f"{c_data['name']}, {sk['name']}", sk["imageFull"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
+
+        skin = choice(skins)
+        embed = discord.Embed(
+            title=skin[0],
+            color=0x53443c)
+        embed.set_image(url=f"https://www.prydwen.gg{skin[1]}")
+        embed.set_footer(text="Reverse 1999")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"reverse 1999 {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['atelier'])
+    async def atelieresleriana(self, ctx, reason: Optional[str] = None):
+        """ Pulls an Atelier Resleriana character """
+
+        # JSON Updated March 29, 2025
+        with open("ext/data/atelier.json") as f:
+            char = choice(json.load(f))
+
+        embed = discord.Embed(
+            title=char["name"],
+            color=0x845b51)
+        embed.set_image(
+            url=f"https://barrelwisdom.com/media/games/resleri/characters/full/{char['slug']}.webp")
+        embed.set_footer(
+            text="Atelier Reseleriana")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"atelier {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
