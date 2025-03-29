@@ -4,6 +4,7 @@ from discord import app_commands
 
 from typing import Optional
 import json
+import csv
 import re
 from time import time
 from datetime import datetime, timedelta
@@ -539,6 +540,28 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command()
+    async def sinoalice(self, ctx, reason: Optional[str] = None):
+        """ Pulls a SINoALICE character """
+
+        chars = []
+        with open("ext/data/sinoalice.csv", newline='', encoding='utf-8') as f:
+            reader = csv.reader(f, delimiter=';')
+            for row in reader:
+                chars.append(row)
+
+        char = choice(chars)
+
+        embed = discord.Embed(
+            title=f"{char[1]}/{char[2]}",
+            color=0xdc8f6a)
+        embed.set_image(url=f"https://sinoalice.game-db.tw/images/character_l/{char[0]}.png")
+        embed.set_footer(text="SINoALICE")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"sinoalice {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
