@@ -472,7 +472,7 @@ class Gacha(commands.Cog,
 
         embed = discord.Embed(
             title=char["name"],
-            colour=0x526c6c)
+            colour=0x3b70c7)
         embed.set_image(
             url=f"https://assets.nierrein.guide/ui/costume/{char['id']}/{char['id']}_full.png")
         embed.set_footer(text="NieR Re[in]carnation")
