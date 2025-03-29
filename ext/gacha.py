@@ -562,5 +562,51 @@ class Gacha(commands.Cog,
         else:
             await ctx.send(embed=embed)
 
+
+    @commands.command(aliases=['touhou'])
+    async def touhoulostword(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Touhou LostWord character """
+
+        with open("ext/data/touhou.json") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        characters = j["characters"]
+        if (datetime.utcnow() - last_up) / timedelta(weeks=2) > 1:
+            r = await self.bot.http_client.get(
+                "https://lostwordchronicle.com/characters/ajax")
+            results = r.json()["data"]
+
+            characters = []
+            for r in results:
+                char = {
+                    "name": f"{r['name']} ({r['universe']})",
+                    "id": r['character']
+                }
+                characters.append(char)
+
+            data = {
+                "updated": int(datetime.utcnow().timestamp()),
+                "characters": characters
+            }
+            with open("ext/data/touhou.json", "w") as f:
+                json.dump(data, f)
+
+
+        char = choice(characters)
+        embed = discord.Embed(
+            title=char["name"],
+            color=0xef5a68)
+        embed.set_image(
+            url=f"https://lostwordchronicle.com/resources/portraits/{char['id']}.webp")
+        embed.set_footer(
+            text="Touhou LostWord")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"touhou {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
