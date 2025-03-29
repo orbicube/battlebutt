@@ -554,7 +554,7 @@ class Gacha(commands.Cog,
 
         embed = discord.Embed(
             title=f"{char[1]}/{char[2]}",
-            color=0xdc8f6a)
+            color=0xfafafa)
         embed.set_image(url=f"https://sinoalice.game-db.tw/images/character_l/{char[0]}.png")
         embed.set_footer(text="SINoALICE")
 
