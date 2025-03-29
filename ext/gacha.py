@@ -35,7 +35,6 @@ class Gacha(commands.Cog,
             c for c in commands if c.name == game or game in c.aliases), None)
         if not selected_comm:
             selected_comm = choice(commands)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
         await selected_comm.__call__(ctx, reason)
 
 
@@ -164,7 +163,7 @@ class Gacha(commands.Cog,
             "format": "json"
         }
         r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
+            params=params, headers=self.headers, timeout=15)
 
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
         images = page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/@href")

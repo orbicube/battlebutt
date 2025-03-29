@@ -1,99 +1,99 @@
-1;Alice;Breaker
-2;Snow White;Breaker
-3;Red Riding Hood;Crusher
-4;Cinderella;Gunner
-5;Pinocchio;Crusher
-6;Briar Rose;Crusher
-7;Gretel;Breaker
-8;Kaguya;Paladin
-9;Alice;Paladin
-10;Snow White;Cleric
-11;Red Riding Hood;Cleric
-12;Cinderella;Sorcerer
-13;Pinocchio;Paladin
-14;Briar Rose;Sorcerer
-15;Gretel;Gunner
-16;Kaguya;Sorcerer
-17;Snow White;Crusher
-18;Briar Rose;Gunner
-19;Gretel;Minstrel
-20;Pinocchio;Sorcerer
-21;Cinderella;Breaker
-22;Alice;Cleric
-23;Red Riding Hood;Sorcerer
-24;Kaguya;Cleric
-25;Little Mermaid;Breaker
-26;Little Mermaid;Gunner
-27;Little Mermaid;Minstrel
-28;Kaguya;Breaker
-29;Alice;Original
-30;Pinocchio;Minstrel
-31;Red Riding Hood;Breaker
-32;Alice;Sorcerer
-33;Red Riding Hood;Minstrel
-34;Briar Rose;Paladin
-35;Cinderella;Crusher
-36;2B;Breaker
-37;9S;Paladin
-38;A2;Breaker
-39;Emil;Cleric
-40;2B;Crusher
-42;Gretel;Sorcerer
-43;Dorothy;Gunner
-44;Alice;Minstrel
-45;Dorothy;Sorcerer
-46;Snow White;Paladin
-47;Briar Rose;Breaker
-48;Alice;Half-Nightmare
-49;Gretel;Crusher
-50;Little Mermaid;Paladin
-51;Pinocchio;Gunner
-52;Red Riding Hood;Paladin
-53;Cinderella;Minstrel
-55;Gretel;Cleric
-56;Alice;Alternative
-57;Nutcracker;Breaker
-58;Kaguya;Crusher
-59;Snow White;Minstrel
-60;Red Riding Hood;Alternative
-61;Snow White;Tuna Cleric
-62;Pinocchio;Tuna Paladin
-63;Little Mermaid;Alternative
-64;Snow White;Half-Nightmare
-65;Alice;Kimono
-66;Red Riding Hood;Kimono
-67;Cinderella;Kimono
-68;Dorothy;Alternative
-69;Cinderella;Paladin
-70;Zero;Breaker
-71;Zero;Cleric
-72;One;Breaker
-73;Accord;Sorcerer
-74;Boy Mikhail;Paladin
-75;Three Little Piggies;Breaker
-76;Snow White;Sorcerer
-77;Alice;Gunner
-78;Gretel;Alternative
-79;Kaguya;Alternative
-80;Little Mermaid;Cleric
-81;Dorothy;Minstrel
-82;Snow White;Gunner
-83;Pinocchio;Breaker
-84;Dorothy;Cleric
-85;Briar Rose;Half-Nightmare
-86;Little Mermaid;Sorcerer
-88;Briar Rose;Alternative
-89;Cinderella;Cleric
-90;Cinderella;Alternative
-91;Briar Rose;Poacher
-92;Little Mermaid;Poacher
-93;Gretel;Half-Nightmare
-94;Kaguya;Minstrel
-95;Red Riding Hood;Gunner
-96;Three Little Piggies;Cleric
-97;Snow White;Mage
-98;Gretel;Gluttonous Tiger Sorcerer
-99;Alice;Proud Lion Half-Nightmare
+001;Alice;Breaker
+002;Snow White;Breaker
+003;Red Riding Hood;Crusher
+004;Cinderella;Gunner
+005;Pinocchio;Crusher
+006;Briar Rose;Crusher
+007;Gretel;Breaker
+008;Kaguya;Paladin
+009;Alice;Paladin
+010;Snow White;Cleric
+011;Red Riding Hood;Cleric
+012;Cinderella;Sorcerer
+013;Pinocchio;Paladin
+014;Briar Rose;Sorcerer
+015;Gretel;Gunner
+016;Kaguya;Sorcerer
+017;Snow White;Crusher
+018;Briar Rose;Gunner
+019;Gretel;Minstrel
+020;Pinocchio;Sorcerer
+021;Cinderella;Breaker
+022;Alice;Cleric
+023;Red Riding Hood;Sorcerer
+024;Kaguya;Cleric
+025;Little Mermaid;Breaker
+026;Little Mermaid;Gunner
+027;Little Mermaid;Minstrel
+028;Kaguya;Breaker
+029;Alice;Original
+030;Pinocchio;Minstrel
+031;Red Riding Hood;Breaker
+032;Alice;Sorcerer
+033;Red Riding Hood;Minstrel
+034;Briar Rose;Paladin
+035;Cinderella;Crusher
+036;2B;Breaker
+037;9S;Paladin
+038;A2;Breaker
+039;Emil;Cleric
+040;2B;Crusher
+042;Gretel;Sorcerer
+043;Dorothy;Gunner
+044;Alice;Minstrel
+045;Dorothy;Sorcerer
+046;Snow White;Paladin
+047;Briar Rose;Breaker
+048;Alice;Half-Nightmare
+049;Gretel;Crusher
+050;Little Mermaid;Paladin
+051;Pinocchio;Gunner
+052;Red Riding Hood;Paladin
+053;Cinderella;Minstrel
+055;Gretel;Cleric
+056;Alice;Alternative
+057;Nutcracker;Breaker
+058;Kaguya;Crusher
+059;Snow White;Minstrel
+060;Red Riding Hood;Alternative
+061;Snow White;Tuna Cleric
+062;Pinocchio;Tuna Paladin
+063;Little Mermaid;Alternative
+064;Snow White;Half-Nightmare
+065;Alice;Kimono
+066;Red Riding Hood;Kimono
+067;Cinderella;Kimono
+068;Dorothy;Alternative
+069;Cinderella;Paladin
+070;Zero;Breaker
+071;Zero;Cleric
+072;One;Breaker
+073;Accord;Sorcerer
+074;Boy Mikhail;Paladin
+075;Three Little Piggies;Breaker
+076;Snow White;Sorcerer
+077;Alice;Gunner
+078;Gretel;Alternative
+079;Kaguya;Alternative
+080;Little Mermaid;Cleric
+081;Dorothy;Minstrel
+082;Snow White;Gunner
+083;Pinocchio;Breaker
+084;Dorothy;Cleric
+085;Briar Rose;Half-Nightmare
+086;Little Mermaid;Sorcerer
+088;Briar Rose;Alternative
+089;Cinderella;Cleric
+090;Cinderella;Alternative
+091;Briar Rose;Poacher
+092;Little Mermaid;Poacher
+093;Gretel;Half-Nightmare
+094;Kaguya;Minstrel
+095;Red Riding Hood;Gunner
+096;Three Little Piggies;Cleric
+097;Snow White;Mage
+098;Gretel;Gluttonous Tiger Sorcerer
+099;Alice;Proud Lion Half-Nightmare
 100;Alice;Envious Serpent Gunner
 101;Dorothy;Breaker
 102;Little Mermaid;Crusher
