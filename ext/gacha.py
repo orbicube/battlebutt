@@ -593,11 +593,24 @@ class Gacha(commands.Cog,
 
 
         char = choice(characters)
+
+        r = await self.bot.http_client.get(
+            f"https://lostwordchronicle.com/lorepedia/characters/{char['id']}")
+        page = html.fromstring(r.text)
+
+        costumes = page.xpath("//div[@id='character-costume']/div/img/@src")
+        picked_costume = randint(0, len(costumes)-1)
+
+        costume_title = page.xpath(
+            f"//div[@id='costume-information']/p[@id='costume-title-{picked_costume}']/text()")[0]
+
+
         embed = discord.Embed(
             title=char["name"],
+            description=costume_title,
             color=0xef5a68)
         embed.set_image(
-            url=f"https://lostwordchronicle.com/resources/portraits/{char['id']}.webp")
+            url=f"https://lostwordchronicle.com{costumes[picked_costume]}")
         embed.set_footer(
             text="Touhou LostWord")
 
