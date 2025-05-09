@@ -500,9 +500,9 @@ class Gacha(commands.Cog,
         if c_data["imageInsight"]:
             skins.append((c_data["name"], c_data["imageInsight"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
 
-        if c_data["skins"]:
-            for sk in c_data["skins"]:
-                skins.append((f"{c_data['name']}, {sk['name']}", sk["imageFull"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
+        #if c_data["skins"]:
+        #    for sk in c_data["skins"]:
+        #        skins.append((f"{c_data['name']}, {sk['name']}", sk["imageFull"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
 
         skin = choice(skins)
         embed = discord.Embed(
@@ -603,7 +603,6 @@ class Gacha(commands.Cog,
 
         costume_title = page.xpath(
             f"//div[@id='costume-information']/p[@id='costume-title-{picked_costume}']/text()")[0]
-
 
         embed = discord.Embed(
             title=char["name"],
