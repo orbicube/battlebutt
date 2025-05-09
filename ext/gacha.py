@@ -631,7 +631,7 @@ class Gacha(commands.Cog,
         embed = discord.Embed(
             title=char["name"],
             description=char["title"],
-            color=0xfefaf6)
+            color=0xb2d8ee)
 
         embed.set_image(
             url=f"{url}{char['id']}/full_shot_{randint(0,1)}.png")
