@@ -1,1 +1,2422 @@
-[{"title": "[The Hell-Fire Dragon King]", "name": "Wagner", "id": "fire_dragon"}, {"title": "[The Pirate Captain Who Crosses the Stars]", "name": "Marina", "id": "pirates_girl"}, {"title": "[The Incomplete Alchemist]", "name": "Clarisse", "id": "clarisse"}, {"title": "[Dressy Maid]", "name": "Marianne (Christmas)", "id": "battle_maid_xm19"}, {"title": "[The Wandering Courtesan]", "name": "Kikuno", "id": "compliment_oiran"}, {"title": "[The Mouse Kingdom's Idol]", "name": "Noene (New Year)", "id": "heavenly_one"}, {"title": "[The Black Wolf Knight]", "name": "Rolf", "id": "black_wolf_knight"}, {"title": "[The Summertime Fired-up Treasure Hunting Tiger Girl]", "name": "Mia (Summer)", "id": "tiger_treasure_hunter_smr20"}, {"title": "[The Starry Firework Ninja]", "name": "Hanabi (Anniversary)", "id": "kunoichi_1anv"}, {"title": "[Glamorous Santa Claus]", "name": "Bianca (Christmas)", "id": "lady_summoner_xm20"}, {"title": "[Princess with Superhuman Strength]", "name": "Toria", "id": "halberd_princess"}, {"title": "[Animal-Eared Ship Doctor]", "name": "Liao", "id": "doctor_pirate"}, {"title": "[Onmyouji Filled With Longing] ", "name": "Suizen (White Day)", "id": "onmyoji_boy_wt21"}, {"title": "[The Smiling Hermit] ", "name": "Quare", "id": "magical_bayonetter"}, {"title": "[Crimson Piercing Light]", "name": "Zeta", "id": "zeta"}, {"title": "[Bullet of the Felder Clan]", "name": "Leticia", "id": "tsundere_bountyhunter"}, {"title": "[Passionate Platinum]", "name": "Ecrire / \u00c9crire (Summer)", "id": "bodysuit_trooper_smr21"}, {"title": "[Arrogant Hero]", "name": "Haruhi Suzumiya (The Melancholy of Haruhi Suzumiya)", "id": "suzumiya_haruhi"}, {"title": "[Avenger of the Magic Gun]", "name": "Ryunon", "id": "shadow_redhood"}, {"title": "[Captain of the Stars]", "name": "Marina (Anniversary)", "id": "pirates_girl_2anv"}, {"title": "[Professional Prankster]", "name": "Misogi", "id": "misogi"}, {"title": "[Valentine's Bullet]", "name": "Leticia (Valentine)", "id": "tsundere_bountyhunter_vt22"}, {"title": "[Bloodstained Wolf]", "name": "Waif", "id": "anger_investigator"}, {"title": "[Foreign Student Princess With Superhuman Strength]", "name": "Toria (Half Anniversary)", "id": "halberd_princess_2halfanv"}, {"title": "[Prancing Golden Wrecker Girl]", "name": "Gold Ship", "id": "gold_ship"}, {"title": "[Obsessed with Explosion Magic]", "name": "Megumin (KonoSuba)", "id": "megumin"}, {"title": "[The Summer Sea Monster Chef]", "name": "Parfait (Summer)", "id": "monster_cook_smr22"}, {"title": "[Lion of Anguish]", "name": "Magnos", "id": "lion_swordman_playable"}, {"title": "[Golem Club's President]", "name": "Daedalia", "id": "golemclub_captain"}, {"title": "[Treasure Santa]", "name": "Mia (Christmas)", "id": "tiger_treasure_hunter_xm22"}, {"title": "[I Bless You]", "name": "Stinel (Ballot)", "id": "still_obstinator_ballot23"}, {"title": "[Newbie Adventurer of Fire]", "name": "Runetta", "id": "flame_blessgirl"}, {"title": "[Pure and Lovely Kitten]", "name": "Penerone", "id": "catbaby_psychicer"}, {"title": "[Guardian of Flame]", "name": "Lilith (Meteor)", "id": "resistance_princess_3halfanv"}, {"title": "[One Who Opened the Gate of Summer]", "name": "Couette", "id": "summoner_little_smr23"}, {"title": "[Passionate Proposal Suit]", "name": "Wilfred", "id": "wirfled_playable"}, {"title": "[Flame Dragon King]", "name": "Wagner (Zenith)", "id": "fire_dragon_zenith"}, {"title": "[The Dancing Water's Splendor]", "name": "Sonya", "id": "brown_fighter"}, {"title": "[The Matchless Onmyouji]", "name": "Suizen", "id": "onmyoji_boy"}, {"title": "[The Bountiful Water Hagoita Girl]", "name": "Eliya (New Year)", "id": "lightbullet_wiz_ny20"}, {"title": "[The Ice Witch]", "name": "Cypher", "id": "ice_witch"}, {"title": "[The Iron Wolf]", "name": "Sirene", "id": "commander"}, {"title": "[The Dragon's Keeper]", "name": "Rimnis", "id": "lakeside_guardian"}, {"title": "[The Borderlands' Guide]", "name": "Laquisha / Lakisha", "id": "drawing_witch"}, {"title": "[The Wave-Riding Prince]", "name": "Lazeret (Summer)", "id": "prince_zero_smr20"}, {"title": "[Zombie 1]", "name": "Sakura Minamoto (Zombie Land Saga)", "id": "minamoto_sakura"}, {"title": "[Eyes of Freezing]", "name": "Raylas", "id": "freeze_eye"}, {"title": "[The Gentle-Hearted Half Elf]", "name": "Emilia (Re:Zero)", "id": "emilia"}, {"title": "[The All-Powerful Subordinate Maid and Younger Sister]", "name": "Rem (Re:Zero)", "id": "rem"}, {"title": "[The Monstrous Martial Arts Genius]", "name": "Sheyron / Shuilong", "id": "waterdragon_kunfu"}, {"title": "[The Kingdom's Great General] ", "name": "Halidal", "id": "desert_commander"}, {"title": "[The Charming Mermaid Pirate]", "name": "Amelia (Half Anniversary)", "id": "mermaid_1halfanv"}, {"title": "[Motherly Savior]", "name": "Mamnalia", "id": "holy_mother"}, {"title": "[Silent Alien]", "name": "Yuki Nagato (The Melancholy of Haruhi Suzumiya)", "id": "nagato_yuki"}, {"title": "[Beastly Warrior]", "name": "Sheyron / Shuilong (Beast)", "id": "waterdragon_kunfu_proud"}, {"title": "[Psychic of Boundaries]", "name": "Mishima Yuki", "id": "psychic_yuki"}, {"title": "[Indominable Warship]", "name": "Fraxis", "id": "navy_officer"}, {"title": "[Great Witch of Frost]", "name": "Cypher (Anniversary)", "id": "ice_witch_2anv"}, {"title": "[Saint of Snow]", "name": "Raylas (Christmas)", "id": "freeze_eye_xm21"}, {"title": "[CIPO Investigator]", "name": "Toraetty (New Year)", "id": "heavenly_three"}, {"title": "[Young Elf Honor Student]", "name": "Kyouka", "id": "kyouka"}, {"title": "[Frostfang Dragon Songstress of Freedom]", "name": "Anbach", "id": "ice_dragon"}, {"title": "[Enforcer of Wishes]", "name": "Justy", "id": "justice_lady"}, {"title": "[Metal Diva of the Deep]", "name": "Dia (Half Anniversary)", "id": "sing_android_2halfanv"}, {"title": "[Goddess of the Axis Order]", "name": "Aqua (KonoSuba)", "id": "aqua"}, {"title": "[Psychic at Sea] ", "name": "Luca", "id": "luca_playable"}, {"title": "[Raging Whale Pirate Captain]", "name": "Zelimir", "id": "pirates_of_fear"}, {"title": "[Youngest Daughter of the Royal House of Silva]", "name": "Noelle Silva (Black Clover)", "id": "noelle_silva"}, {"title": "[Lord of Thirdia]", "name": "Ciel", "id": "wind_spbro_3anv"}, {"title": "[Flower of Spring]", "name": "Mishima Yuki (New Year)", "id": "psychic_yuki_ny23"}, {"title": "[Golden Dawn]", "name": "Sotieth (Meteor)", "id": "ruin_lady_meteor23"}, {"title": "[Adventurer of Empathetic Horns]", "name": "Nisues", "id": "vesta_caster"}, {"title": "[Kowloon Gangster]", "name": "Ranmei", "id": "amulet_bosslady"}, {"title": "[Dragon Shadow On Summer Days]", "name": "Kageoka Ryuichi", "id": "psychic_projection_smr23"}, {"title": "[Bride of Possibilities]", "name": "Souvi", "id": "psycho_reaper_meteor23"}, {"title": "[Canopy Bearer]", "name": "Pu Lilie", "id": "guild_front_girl_playable"}, {"title": "[Spirit of Blessing]", "name": "Chalua (Halloween)", "id": "dryad_hw23"}, {"title": "[Heir of the Nine-tails]", "name": "Inaho", "id": "fox_oracle"}, {"title": "[The Founding Alchemist]", "name": "Cagliostro", "id": "cagliostro"}, {"title": "[Holy Night Samurai]", "name": "Soushiro (Christmas)", "id": "samurai_xm19"}, {"title": "[The Wild Merrymaking Thunder Bow User]", "name": "Metis", "id": "thunder_archer"}, {"title": "[The Thunderclap Boxing King]", "name": "Barak", "id": "mighty_striker"}, {"title": "[The Loyal Iron Striker]", "name": "Sera", "id": "machine_police_girl"}, {"title": "[The Efficient Fireworks Master]", "name": "Botan", "id": "big_gunner"}, {"title": "[The Midsummer Magician]", "name": "Illumi (Summer)", "id": "illusionist_smr20"}, {"title": "[The Abyss's Lady]", "name": "Bercetia (Summer)", "id": "dimension_witch_smr20"}, {"title": "[The White-Flowered Mecha]", "name": "Regis (Anniversary)", "id": "rec_android_1anv"}, {"title": "[The Ox Kingdom's Idol]", "name": "Beaucy (New Year)", "id": "heavenly_two"}, {"title": "[Monster and Young Girl]", "name": "Rhode", "id": "girl_and_mecha"}, {"title": "[Capable Manager Rocketing Forward]", "name": "Twink", "id": "general_toyakiren"}, {"title": "[The Ninja Samurai Arrives]", "name": "Zantetsu", "id": "samurai_robot"}, {"title": "[Thrill Lover]", "name": "Marquis", "id": "elder_guild_fighter"}, {"title": "[Summer Saver]", "name": "Sera (Summer)", "id": "machine_police_girl_smr21"}, {"title": "[King of Empathetic Horns]", "name": "Memram", "id": "horn_leader"}, {"title": "[Destroy Slugger]", "name": "Stryna", "id": "cyber_battergirl"}, {"title": "[White Guardian]", "name": "Helga (Beast)", "id": "dog_slasher_proud"}, {"title": "[Thunderclap Psychic]", "name": "Kazutake Tooru", "id": "psychic_tohru"}, {"title": "[Awakened Fang]", "name": "Shiro (Anniversary)", "id": "white_tiger_2anv"}, {"title": "[Moratorium Weapon]", "name": "Tect", "id": "super_robot"}, {"title": "[Moon Spider of Violet Electricity]", "name": "Mayuzuki", "id": "spider_ninja"}, {"title": "[Piercing Bullet of the Summer Sky]", "name": "Baretta (Summer)", "id": "combat_soldier_smr22"}, {"title": "[Idol\u2606Hero]", "name": "Laputina", "id": "nihilist_mechgirl"}, {"title": "[Vampire of the Lonely Night]", "name": "Rumylaka", "id": "little_vampire"}, {"title": "[Black Dress Knight]", "name": "Kira (Halloween)", "id": "palpebra_knight_lady_hw22"}, {"title": "[Capable Manager Full of New Year Spirit]", "name": "Twink (New Year)", "id": "general_toyakiren_ny23"}, {"title": "[Cage Liberator]", "name": "K\u00e4sivars", "id": "octcyborg_lady"}, {"title": "[Inverted White Girl]", "name": "Dine (Valentine)", "id": "dark_psygirl_vt23"}, {"title": "[The Haughty Gentleman Negotiator]", "name": "Liebraum (White Day)", "id": "blade_dancer_wt23"}, {"title": "[King Predator]", "name": "King Johnson", "id": "pbc_ceo_playable"}, {"title": "[Psychic of Cutting Edge]", "name": "Amou Nagiri", "id": "psychic_katana"}, {"title": "[Naked Lion]", "name": "Theo (Summer)", "id": "lion_boy_smr23"}, {"title": "[Powerful Winged Shooter]", "name": "Tajes", "id": "starbreak_hunter_meteor23"}, {"title": "[Codename: Shinigami]", "name": "Charlene", "id": "artificialeye_sniper"}, {"title": "[Guardian of Courage]", "name": "Light (4th Anniversary)", "id": "light_adventurer_4anv"}, {"title": "[The Cute and Loveable Sword Monster]", "name": "Silty", "id": "wind_spgirl"}, {"title": "[The Fated Battle Miko]", "name": "Philia", "id": "wind_oracle"}, {"title": "[The Spirit Katana's Resident Spirit]", "name": "Murakumo", "id": "katana_ghost"}, {"title": "[The Rumbling's Survivor]", "name": "Leon", "id": "mercenary"}, {"title": "[The Broad-wing Spirit User]", "name": "Shiue", "id": "bigwing_shaman"}, {"title": "[The Soaring Ambassador]", "name": "Miguel", "id": "gentle_barten"}, {"title": "[The Tiny Guide]", "name": "Kokkoro", "id": "kokkoro"}, {"title": "[Vortex Dragon of Destruction]", "name": "Shult ", "id": "wind_dragon"}, {"title": "[Zombie 2]", "name": "Saki Nikaido (Zombie Land Saga)", "id": "nikaido_saki"}, {"title": "[Child of Hope]", "name": "Esterielle", "id": "elf_princess"}, {"title": "[Young Female Knight of the Stars]", "name": "Silty (Anniversary)", "id": "wind_spgirl_1anv"}, {"title": "[Kunoichi in Her New Year's Best Clothes]", "name": "Suzuka (New Year)", "id": "timid_kunoichi_ny21"}, {"title": "[The Silent Subjugator] ", "name": "Fluffy", "id": "combat_animal"}, {"title": "[Dancing Wind's Splendor in the Empty Sky] ", "name": "Sonya (Limited)", "id": "brown_fighter_dst21"}, {"title": "[Seer of Time]", "name": "Nevia", "id": "beast_shaman"}, {"title": "[Destroyer of Eternity]", "name": "Esterielle (Half Anniversary)", "id": "elf_princess_1halfanv"}, {"title": "[Sprite Priestess Experiencing Love]", "name": "Shiue (Summer)", "id": "bigwing_shaman_smr21"}, {"title": "[Malevolent Tengu of the Tempest]", "name": "Gouran", "id": "tengu_master"}, {"title": "[Adventurer Cooling Off in the Summer Night]", "name": "Leon (Summer/Yukata)", "id": "mercenary_smr21"}, {"title": "[Christmas Eve Subjugator]", "name": "Fluffy (Christmas)", "id": "combat_animal_xm21"}, {"title": "[Kind Rabbit Girl]", "name": "Mimi", "id": "mimi"}, {"title": "[Marching Star]", "name": "Marchia", "id": "marching_conductor"}, {"title": "[Escort Dragon]", "name": "Shult (White Day)", "id": "wind_dragon_wt22"}, {"title": "[The Free Knight Girl]", "name": "Elmar", "id": "waste_armor"}, {"title": "[Silent Sprinter]", "name": "Silence Suzuka", "id": "silence_suzuka"}, {"title": "[Their Hero]", "name": "Inori Shouta (Summer)", "id": "psychic_shouta_smr22"}, {"title": "[The Spirit Mirror's Resident Spirit]", "name": "Manoka", "id": "ghost_nymph"}, {"title": "[Wind-wielding Genius Mage]", "name": "Yuno (Black Clover)", "id": "yuno"}, {"title": "[Princess Shrine Maiden of the Bird Tribe]", "name": "Zephyr", "id": "asymmetry_birdgirl"}, {"title": "[One-Man Circus Queen]", "name": "Cirqueharle (New Year)", "id": "heavenly_four"}, {"title": "[Off-Shot Gravure]", "name": "Beaucy (Valentine)", "id": "heavenly_two_vt23"}, {"title": "[Psychic of Freedom]", "name": "Asato Yae", "id": "psychic_gal"}, {"title": "[The Free Black Wolf Knight]", "name": "Rolf (White Day)", "id": "black_wolf_knight_wt23"}, {"title": "[Winds Spun for the Future]", "name": "Philia (Meteor)", "id": "wind_oracle_meteor23"}, {"title": "[The Man Who Knew the Afterwards]", "name": "Yuhino Taichi", "id": "psychic_taichi"}, {"title": "[Gravity Girlfriend]", "name": "Kuguri Yukariko (Summer)", "id": "psychic_yamikawa_smr23"}, {"title": "[Gale Fighter]", "name": "Fluffy", "id": "combat_animal_meteor23"}, {"title": "[Painting Enthusiast Crossing the Otherworldly]", "name": "Old Man Zigza", "id": "mob_jiguza_playable"}, {"title": "[Sword Saint of Stars]", "name": "Silty (Meteor)", "id": "wind_spgirl_4anv"}, {"title": "[The Awakened Ancient Weapon]", "name": "Nephteim", "id": "ruin_girl"}, {"title": "[The Wandering Prince]", "name": "Lazeret", "id": "prince_zero"}, {"title": "[The Seven-Colored Sword Splitter]", "name": "Ecrire / \u00c9crire", "id": "bodysuit_trooper"}, {"title": "[The Cute and Loveable Nine-tailed]", "name": "Inaho (Christmas)", "id": "fox_oracle_xm19"}, {"title": "[The Godly-speed Shooter]", "name": "Tajes", "id": "starbreak_hunter"}, {"title": "[The Free Bullet]", "name": "Baretta", "id": "combat_soldier"}, {"title": "[The Haughty Negotiator]", "name": "Liebraum", "id": "blade_dancer"}, {"title": "[The Festive and Beautiful Ancient Weapon-Girl]", "name": "Nephteim (Half Anniversary)", "id": "ruin_girl_halfanv"}, {"title": "[The Travelling Peckish Swordswoman]", "name": "Pecorine", "id": "pecorine"}, {"title": "[Neo-Violin Performer]", "name": "Lila", "id": "neoviolin_musician"}, {"title": "[Saintess of Fatoma]", "name": "Orvelle", "id": "high_priestess"}, {"title": "[Light's Guide]", "name": "Philamelia", "id": "lamp_guide"}, {"title": "[Zombie 6]", "name": "Lily Hoshikawa (Zombie Land Saga)", "id": "hoshikawa_ririi"}, {"title": "[Successor of Hope and Light]", "name": "Philia (Anniversary)", "id": "wind_oracle_1anv"}, {"title": "[Love's Klutzy Girl]", "name": "Eliya (Valentine)", "id": "lightbullet_wiz_vt21"}, {"title": "[The Crystal Travelling Swordsman]", "name": "Seriol", "id": "crystal_swordman"}, {"title": "[Spirit and Goblin Hunter]", "name": "Rengetsu", "id": "yokai_exterminator"}, {"title": "[Naked Princess]", "name": "Lilith (Summer)", "id": "resistance_princess_smr21"}, {"title": "[Fair Summer-Furred Nine-tailed Maiden]", "name": "Inaho (Summer)", "id": "fox_oracle_smr21"}, {"title": "[SOS Brigade Mascot]", "name": "Mikuru Asahina (The Melancholy of Haruhi Suzumiya)", "id": "asahina_mikuru"}, {"title": "[Beautiful Weapon Girl of Summer]", "name": "Nephteim (Summer/Yukata)", "id": "ruin_girl_smr21"}, {"title": "[Canopy Knight]", "name": "Zekhel", "id": "guildknight_leader"}, {"title": "[Music Loving Witch Girl]", "name": "Lila (Halloween)", "id": "neoviolin_musician_hw21"}, {"title": "[New Year Celebratory Saint]", "name": "Orvelle (New Year)", "id": "high_priestess_ny22"}, {"title": "[Stray Heart]", "name": "Nate (Valentine)", "id": "hero_girl_vt22"}, {"title": "[Pretending to be a God of Evil and Tyranny]", "name": "Stinel", "id": "still_obstinator"}, {"title": "[Top Trendsetter]", "name": "Quinvid", "id": "airship_captain"}, {"title": "[Pure and Innocent Hokkaido Girl]", "name": "Special Week", "id": "special_week"}, {"title": "[Masochistic Crusader]", "name": "Darkness (KonoSuba)", "id": "darkness"}, {"title": "[Waterside Ninja Samurai]", "name": "Zantetsu (Summer)", "id": "samurai_robot_smr22"}, {"title": "[Sacred Swordsman]", "name": "Irinoa", "id": "holysword_girl"}, {"title": "[Flying Swallow Free Knights' Commander]", "name": "Yuwel (Anniversary)", "id": "swallow_knight_3anv"}, {"title": "[Courtesan of the Holy Night Festival]", "name": "Kikuno (Christmas)", "id": "compliment_oiran_xm22"}, {"title": "[The Last Champion]", "name": "Light", "id": "light_ballot23"}, {"title": "[From Starview Village]", "name": "Stella", "id": "stella_ballot23"}, {"title": "[The Inheritor Dragon of Affection]", "name": "Rachmano", "id": "golden_dragon_jr"}, {"title": "[Sword of the Twin Stellas]", "name": "Arc (Meteor)", "id": "alk_3halfanv"}, {"title": "[New Adventurer]", "name": "Nagihara Nao (Ceremony)", "id": "psychic_nao_3halfanv"}, {"title": "[The Spirit Jewel's Resident Spirit]", "name": "Tamako", "id": "magatama_spirit"}, {"title": "[Traveler of A Kindred Journey]", "name": "Nova", "id": "nova_4anv"}, {"title": "[The Dimensional Witch]", "name": "Bercetia", "id": "dimension_witch"}, {"title": "[The Experienced Hunter]", "name": "Veron", "id": "veteran_hunter"}, {"title": "[The Wandering Magic Swordswoman]", "name": "Molmia", "id": "blade_witch"}, {"title": "[The Snake's Shadow and Smiling Girl]", "name": "Karla", "id": "cursed_girl"}, {"title": "[Fallen Angel]", "name": "Olivia", "id": "olivia"}, {"title": "[The Cat-Eared Sorceress]", "name": "Karyl", "id": "kyaru"}, {"title": "[Marine Nightmare]", "name": "Alice (Summer)", "id": "alice_smr20"}, {"title": "[Zombie 4]", "name": "Junko Konno (Zombie Land Saga)", "id": "konno_junko"}, {"title": "[The Steel Little Devil Diva]", "name": "Dia (Halloween)", "id": "sing_android_hw20"}, {"title": "[\u2020 Darkness Girl \u2020] ", "name": "Dine", "id": "dark_psygirl"}, {"title": "[Hope in the Dead of Night]", "name": "Educeus", "id": "devil_leader"}, {"title": "[The Snake-Decapitating Ninja]", "name": "Yakumo", "id": "silent_ninja"}, {"title": "[Devilish Girl Santa]", "name": "Alm (Christmas)", "id": "devil_princess_xm20"}, {"title": "[One Who Opened the Gate]", "name": "Couette", "id": "summoner_little"}, {"title": "[The Deep Sea's Lady] ", "name": "Maelviola", "id": "noble_sorceress"}, {"title": "[\u2021 Darkness Girl Zero \u2021] ", "name": "Dine (Limited)", "id": "dark_psygirl_dst21"}, {"title": "[The Immortal Ultramarine]", "name": "Beatrix", "id": "beatrix"}, {"title": "[Necktie-Slackening Gunner]", "name": "Sergil / Sergyl (Half Anniversary)", "id": "blindness_gunner_1halfanv"}, {"title": "[Chocolate Lily Witch]", "name": "Primula", "id": "blackflower_wiz"}, {"title": "[HW\u2605Night Girl]", "name": "Lav / Love (Halloween)", "id": "touyakiren_ceo_hw21"}, {"title": "[Psychic of Gravity]", "name": "Inori Shouta", "id": "psychic_shouta"}, {"title": "[Onmyoudo Apprentice]", "name": "Couette (Anniversary)", "id": "summoner_little_2anv"}, {"title": "[Witch of New Year Twilight]", "name": "Bercetia (New Year)", "id": "dimension_witch_ny22"}, {"title": "[Servant x Prince]", "name": "Murakumo (White Day)", "id": "katana_ghost_wt22"}, {"title": "[Guild Leader for Estate Affairs]", "name": "Hildegard", "id": "estateguild_leader"}, {"title": "[Witch Of The Mirror]", "name": "Louelise", "id": "mirror_witch"}, {"title": "[Seeker of Truth]", "name": "Liam (Half Anniversary)", "id": "warlock_2halfanv"}, {"title": "[Blooming Summer Witch]", "name": "Primula (Summer)", "id": "blackflower_wiz_smr22"}, {"title": "[Astral Projection Esper]", "name": "Kuguri Yukariko", "id": "psychic_yamikawa"}, {"title": "[Devilish Swordswoman Vampire in Love]", "name": "Silty (Halloween)", "id": "wind_spgirl_hw22"}, {"title": "[Mage Without Magic]", "name": "Asta (Black Clover)", "id": "asta"}, {"title": "[Healer of Empathetic Horns]", "name": "Elmore", "id": "horn_mypace"}, {"title": "[Warrior of Reconquest]", "name": "Veron (Anniversary)", "id": "veteran_hunter_3anv"}, {"title": "[Weaver of Shadows]", "name": "Nirjana", "id": "rector_sorcerer_playable"}, {"title": "[Master of Chaos]", "name": "Tanakiera", "id": "evilloli_master"}, {"title": "[False Priest of Midnight]", "name": "Iorez", "id": "impostor_priest"}, {"title": "[Beautiful New Weapon-Girl Student]", "name": "Nephteim (Meteor)", "id": "ruin_girl_3halfanv"}, {"title": "[Starless Light]", "name": "Marden", "id": "priest_prince_playable"}, {"title": "[Psychic of Teleportation]", "name": "Suminami Hibiki", "id": "psychic_teleport_playable"}, {"title": "[Talkactive Ex-Intelligence Agent]", "name": "Chatrina", "id": "blindfold_agent"}, {"title": "[Traveler Embracing Dreams]", "name": "Leve", "id": "stella_copy_4anv"}, {"title": "[The Star-Travelling Boy]", "name": "Arc", "id": "alk"}, {"title": "[The Dragon Hunter]", "name": "Azel", "id": "dragon_slayer"}, {"title": "[The Enchanting Summoner]", "name": "Bianca", "id": "lady_summoner"}, {"title": "[The Hidden Ninja]", "name": "Hanabi", "id": "kunoichi"}, {"title": "[The Fierce God's Bloodline]", "name": "Asukirimaru", "id": "half_oni_boy"}, {"title": "[The Strong Shield Swordsman]", "name": "Glide", "id": "master_knight"}, {"title": "[The Red-Haired Double Gunner]", "name": "Kanon", "id": "red_gunner"}, {"title": "[The First-time Evangelist Reporter]", "name": "Luluca (New Year)", "id": "reporter_ny20"}, {"title": "[The Overly Beautiful Adventurer]", "name": "Revy", "id": "shapely_soldier"}, {"title": "[The Crybaby Gun Girl]", "name": "Kiri", "id": "crybaby_shooter"}, {"title": "[The Reckless Bullet]", "name": "Haze", "id": "pirates_gunner"}, {"title": "[The Bashful Wushu Master]", "name": "Milmina", "id": "sanctuary_guard"}, {"title": "[Girl Entranced by the Magic Sword]", "name": "Nasir", "id": "magic_sword_girl"}, {"title": "[Righteous Flame]", "name": "Kuramaru", "id": "vigilante_boy"}, {"title": "[Zombie 5]", "name": "Yugiri (Zombie Land Saga)", "id": "yugiri"}, {"title": "[The Rumored Perfect Teacher]", "name": "Nikola", "id": "sorceress_teacher"}, {"title": "[The Kind Pathfinder]", "name": "Arc (Anniversary)", "id": "alk_1anv"}, {"title": "[Holy Night's Red Swordswoman]", "name": "Torene (Christmas)", "id": "cool_woman_soldier_xm20"}, {"title": "[Shrine Maiden of an Ancient Line]", "name": "Maihime", "id": "naginata_girl"}, {"title": "[Sworn Friend of Dragons]", "name": "Azel (Summer)", "id": "dragon_slayer_smr21"}, {"title": "[SOS Brigade Regular Human Representative]", "name": "Kyon (The Melancholy of Haruhi Suzumiya)", "id": "kyon"}, {"title": "[Psychic of Curses]", "name": "Hikawa Rinne", "id": "psychic_tomboygirl"}, {"title": "[Psychic of the Starry Sea]", "name": "Nagihara Nao", "id": "psychic_nao"}, {"title": "[Animal-Eared Nurse]", "name": "Pishika", "id": "nurse_pirate"}, {"title": "[Kimono-clad Swordsman of Crowning Beauty]", "name": "Revy (New Year)", "id": "shapely_soldier_ny22"}, {"title": "[Cowardly Ghost Exterminator]", "name": "Qianshi", "id": "jiangshi_girl"}, {"title": "[The Flying Swallow Free Knight]", "name": "Yuwel", "id": "swallow_knight"}, {"title": "[The Labyrinth's Angel]", "name": "Riesel", "id": "bishop_girl"}, {"title": "[Deep Sea Mermaid]", "name": "Amelia", "id": "mermaid"}, {"title": "[The Drifting Magic Girl]", "name": "Alice", "id": "alice"}, {"title": "[The Fighting Guild Member]", "name": "Sharon", "id": "battle_guild_staff"}, {"title": "[The Sea-spurring Officer]", "name": "Lanner", "id": "spry_sailor"}, {"title": "[The Deep-sea Humanoid]", "name": "Zaar", "id": "deepsea_mage"}, {"title": "[The Sandstorm Magic Item User]", "name": "Moldiaga", "id": "desert_wizard"}, {"title": "[The White Snake Onmyouji]", "name": "Mizuchi", "id": "onmyo_attendant"}, {"title": "[The Broken Spirit Doctor]", "name": "Souvi / Sauvi", "id": "psycho_reaper"}, {"title": "[Masked Knight of the Beach]", "name": "Jelal (Summer)", "id": "unicorn_lancer_smr20"}, {"title": "[Female Pirate of Eternal Summer]", "name": "Marina (Legacy of Ocean)", "id": "pirates_girl_smr20"}, {"title": "[Adventurer Who Loves Backs]", "name": "Vivi", "id": "shy_assassin"}, {"title": "[The Young Kimono-clad Swordswoman]", "name": "Trista (New Year)", "id": "urban_soldier_ny21"}, {"title": "[Ancient Weapon of the Dawn]", "name": "Sotieth (Oath to the Dawn)", "id": "ruin_lady"}, {"title": "[Blitz Blue]", "name": "Nate (HERO: BEGINNING)", "id": "hero_girl"}, {"title": "[Up-and-Coming Magician]", "name": "Facon", "id": "stylish_witch"}, {"title": "[Government-Approved Sniper]", "name": "Evelyn", "id": "dress_gunner"}, {"title": "[Glamorous Assistant]", "name": "Shirano (Summer)", "id": "fox_companion_smr21"}, {"title": "[Bewitching Cross-Dressing Maid]", "name": "Lanner (Halloween)", "id": "spry_sailor_hw21"}, {"title": "[Psychic of Recovery]", "name": "Takamori Seiji", "id": "psychic_seiji"}, {"title": "[Bunny Princess Of The Sea]", "name": "Faroro", "id": "innocent_glaiver"}, {"title": "[Magic Academy Student Council President]", "name": "Luciada (Binary Planet)", "id": "student_president"}, {"title": "[Summer of Smiles]", "name": "Pishika (Summer)", "id": "nurse_pirate_smr22"}, {"title": "[Bandit-Hunter Bandit]", "name": "Farah", "id": "sand_bandit"}, {"title": "[Dreaming Princess of Love]", "name": "Fini (Valentine)", "id": "sleep_puppy_vt23"}, {"title": "[The Mystical Thunder Dragon]", "name": "Rams", "id": "thunder_dragon"}, {"title": "[The Smiling Scientist]", "name": "Lunalu", "id": "fox_scientist"}, {"title": "[The Android Gentleman]", "name": "Regis", "id": "rec_android"}, {"title": "[The Star's Flames]", "name": "Eleanor", "id": "elf_soldier"}, {"title": "[The Perceptive Old Cat]", "name": "Jay", "id": "cat_shaman"}, {"title": "[The Outstanding Female Bullfighter]", "name": "Mino", "id": "minotaur_girl"}, {"title": "[The Holy Night Deliveryman]", "name": "Aureo (Christmas)", "id": "docking_beast_xm19"}, {"title": "[The Secret Sword Tactitian]", "name": "Adoni", "id": "black_hair_swordman"}, {"title": "[The Slumbering Android Woman]", "name": "Rudy", "id": "lady_android"}, {"title": "[The Created Puppet Princess]", "name": "Prica / Prika (The Princess of Figment)", "id": "fake_princess"}, {"title": "[The Sun's Gambler]", "name": "Neska (Summer)", "id": "casino_dealer_smr20"}, {"title": "[Dancing Girl of the Moment]", "name": "Roselia", "id": "hidden_blader"}, {"title": "[Zombie 3]", "name": "Ai Mizuno (Zombie Land Saga)", "id": "mizuno_ai"}, {"title": "[Twilight's Smiling Scientist]", "name": "Lunalu (Halloween)", "id": "fox_scientist_hw20"}, {"title": "[Holy Mass Tactician]", "name": "Adoni (Christmas)", "id": "black_hair_swordman_xm20"}, {"title": "[The Tiny Sorceress Teacher]", "name": "To Rereni", "id": "little_wizard"}, {"title": "[The Extreme, yet Popular Adventurer]", "name": "Editha", "id": "punk_warrior"}, {"title": "[The Flawless Shock Girl]", "name": "Telna", "id": "electro_girl"}, {"title": "[The Innocent Magical Tool Collector]", "name": "Giselle", "id": "secret_observer"}, {"title": "[Fortune-Inviting Girl]", "name": "Fuku", "id": "warashi"}, {"title": "[Lion's Descendent]", "name": "Theo (Crown of The Beast King)", "id": "lion_boy"}, {"title": "[New Year-Congratulating Black Panther]", "name": "Kuro (New Year)", "id": "outlaw_panther_ny22"}, {"title": "[Machine Repairer]", "name": "Elegia", "id": "spanner_girl"}, {"title": "[Unfinished Flapper]", "name": "Rinkarina", "id": "scissor_ratgirl"}, {"title": "[Elegant Pretty Boy]", "name": "Ornesto", "id": "long_hair_swordsman"}, {"title": "[Sunny Summer Smile]", "name": "Echo (Blue Sunny Smile)", "id": "rural_ladyship"}, {"title": "[Indomitable Young Lady]", "name": "Elmelissa", "id": "marching_rival"}, {"title": "[Hero Mechanic]", "name": "Invetra", "id": "hero_mechanic"}, {"title": "[The White Tiger Beast-man]", "name": "Shiro", "id": "white_tiger"}, {"title": "[The Tiger Girl That Does Her Best]", "name": "Mia", "id": "tiger_treasure_hunter"}, {"title": "[The Open Sky's Huntsman]", "name": "Orouru", "id": "birdman"}, {"title": "[The Cloud-splitting Samurai]", "name": "Soushiro", "id": "samurai"}, {"title": "[The Wind-paired Girl]", "name": "Mercel", "id": "elf_archer"}, {"title": "[The White Wolf Staff Master]", "name": "Helga", "id": "dog_slasher"}, {"title": "[Protector of the Forest]", "name": "Arisa", "id": "arisa"}, {"title": "[The Flustered Fortune-telling Miko]", "name": "Rebecca (New Year)", "id": "bearish_darkwitch_ny20"}, {"title": "[The Excited Adventuring Lad]", "name": "Ruu", "id": "beast_adventurer"}, {"title": "[The Reluctant Kunoichi]", "name": "Suzuka", "id": "timid_kunoichi"}, {"title": "[The Tengu's Loved Disciple]", "name": "Kohane", "id": "tengu_girl"}, {"title": "[Onmyou Painter]", "name": "Kugui (The Edited Day of Yo-kai Book)", "id": "ekaki_onmyoji"}, {"title": "[Boy with the Wind]", "name": "Hao", "id": "wild_boy"}, {"title": "[The Santa Reindeer White Tiger]", "name": "Shiro (Christmas)", "id": "white_tiger_xm20"}, {"title": "[The Awkward Sharp-Tongued Maid and Older Sister]", "name": "Ram (Re:Zero)", "id": "ram"}, {"title": "[Martial Arts Thoroughbred]", "name": "Ricardo", "id": "wind_striker"}, {"title": "[The Steel Whirlwind Athlete]", "name": "Middie", "id": "steel_lacrosse"}, {"title": "[The Resigned Small Witch]", "name": "Piamo", "id": "cool_witch_girl"}, {"title": "[Traveling Falconer]", "name": "Lemarque", "id": "bird_master"}, {"title": "[Warrior Monk Who Loves Training]", "name": "Makani", "id": "pilgrim_monk"}, {"title": "[Prank Loving Martial Artist]", "name": "Milmina (Halloween)", "id": "sanctuary_guard_hw21"}, {"title": "[Sheep Girl in Love]", "name": "Merienna (Pure Coward's Love Confession)", "id": "sheep_girl"}, {"title": "[Fledgling Yin-Yang Artist]", "name": "Ryouki", "id": "ekaki_girl_playable"}, {"title": "[Fist Fighter Pursuing Enemy]", "name": "Fuuran", "id": "kung_fu_girl"}, {"title": "[The Android Diva]", "name": "Dia", "id": "sing_android"}, {"title": "[The White Masked Knight]", "name": "Jelal", "id": "unicorn_lancer"}, {"title": "[The Light Bullet Magician]", "name": "Eliya", "id": "lightbullet_wiz"}, {"title": "[The One Who Protects Order and Peace]", "name": "Finn", "id": "palpebra_knight"}, {"title": "[The One Who Protects Smiles]", "name": "Kira", "id": "palpebra_knight_lady"}, {"title": "[The Monster Chef]", "name": "Parfait (Valentine Festival!)", "id": "monster_cook"}, {"title": "[The Dreamy Light Magician]", "name": "Illumi", "id": "illusionist"}, {"title": "[Trick Shooter]", "name": "Hopul", "id": "unleash_hunter"}, {"title": "[The Ecology Investigator Hunter]", "name": "Laia", "id": "unyielding_adventurer"}, {"title": "[The Reckless Mercenary Swordswoman]", "name": "Floretta", "id": "whitedog_beast"}, {"title": "[The Midsummer Savior]", "name": "Riesel (Summer)", "id": "bishop_girl_smr20"}, {"title": "[The All-Knowing Unlock Girl]", "name": "Kiana", "id": "keylock_girl"}, {"title": "[Successor of the Light]", "name": "Lilith", "id": "resistance_princess"}, {"title": "[The Indiscriminate Healer]", "name": "Mech", "id": "doctor_machine"}, {"title": "[Knight Protecting Hope]", "name": "Cecilia (Anniversary)", "id": "woman_knight_1anv"}, {"title": "[The Fisherwoman Fighter]", "name": "Dilette", "id": "sea_violent"}, {"title": "[Shy Girl of Thawing Snow]", "name": "Floretta (Valentine)", "id": "whitedog_beast_vt21"}, {"title": "[Girl Putting Others to Sleep]", "name": "Fini", "id": "sleep_puppy"}, {"title": "[Light of the Desert]", "name": "Sariha", "id": "desert_priest"}, {"title": "[Summertime Spirit Alchemist Doctor]", "name": "Souvi (Drifters in the Great \u2b50 Love)", "id": "psycho_reaper_smr21"}, {"title": "[Broken Goddess]", "name": "Stella (Forward, Dreamers of Darkness)", "id": "stella_2anv"}, {"title": "[The Midnight Santa]", "name": "False / Force (Christmas)", "id": "devil_clown_xm21"}, {"title": "[Security Commander]", "name": "Carabina", "id": "advanced_soldier"}, {"title": "[Luminous Cyan]", "name": "Clarte", "id": "pbc_operator"}, {"title": "[Postergirl of the Beach]", "name": "Yuna (Summer)", "id": "twin_blader_smr22"}, {"title": "[One Royal Road]", "name": "Veraine (The Long Way for King and Knights)", "id": "reformist_prince"}, {"title": "[The Pure Evil Shadow]", "name": "Alm", "id": "devil_princess"}, {"title": "[The Fighting Maid]", "name": "Marianne", "id": "battle_maid"}, {"title": "[The Coffin-Using Spirit Summoner]", "name": "Andy", "id": "undead_boy"}, {"title": "[Seeker of the Abyss]", "name": "Liam", "id": "warlock"}, {"title": "[The Food and Festival Coordinator]", "name": "Yuwel (New Year)", "id": "swallow_knight_ny20"}, {"title": "[The Black-Haired Beauty]", "name": "Quartzer (Multi Boss Pick-up)", "id": "sword_beauty"}, {"title": "[Great Mother of Unending Night]", "name": "Lav / Love (The Skyscraper)", "id": "touyakiren_ceo"}, {"title": "[The Eyepatch Gunner]", "name": "Sergil / Sergyl", "id": "blindness_gunner"}, {"title": "[The Young Necromancer]", "name": "Luna", "id": "luna"}, {"title": "[Rose of Evening Calm]", "name": "Marguerite (Summer)", "id": "lady_gunner_smr20"}, {"title": "[Adventurer Aiming for First in the World]", "name": "Greig", "id": "dinosaur_hunter"}, {"title": "[The Scoundrel Alchemist]", "name": "Bryce", "id": "crazy_doctor"}, {"title": "[Zombie 0]", "name": "Tae Yamada (Zombie Land Saga)", "id": "yamada_tae"}, {"title": "[The Cat-Eared-and-Tailed Keeper]", "name": "Falce (Halloween)", "id": "reaper_girl_hw20"}, {"title": "[Traitor of the Purple Smoke]", "name": "Zelma", "id": "illegal_herbalist"}, {"title": "[The White Demon Warrior]", "name": "Ari (Anniversary)", "id": "devil_woman_soldier_1anv"}, {"title": "[Boy Fighting Against Fate]", "name": "Subaru Natsuki (Re:Zero)", "id": "subaru"}, {"title": "[Revealer of Darkness]", "name": "Edward", "id": "mystery_agent"}, {"title": "[Philosophical Armor]", "name": "Lonsdale", "id": "walking_armor"}, {"title": "[The Peddlers' Young Leader]", "name": "Tawil", "id": "desert_caravans"}, {"title": "[Smiling Bard]", "name": "Itsuki Koizumi (The Melancholy of Haruhi Suzumiya)", "id": "koizumi_ituki"}, {"title": "[Sinister Female Detective]", "name": "Virgia", "id": "formercorrupt_detective"}, {"title": "[Shadow Manipulation Psychic]", "name": "Kageoka Ryuichi", "id": "psychic_projection"}, {"title": "[Cursed Informant]", "name": "Shion (Anniversary)", "id": "informant_2anv"}, {"title": "[Otherworldly Strategist]", "name": "Kazuma (KonoSuba)", "id": "kazuma"}, {"title": "[Guild Staff Apprentice]", "name": "Hikawa Rinne (Halloween)", "id": "psychic_tomboygirl_hw22"}, {"title": "[Santa Nurse Herbalist]", "name": "Heartleaf (Christmas)", "id": "herbalist_xm22"}, {"title": "[The Abyss Dragon of Connected Thoughts]", "name": "Armadeus", "id": "darkness_dragon"}, {"title": "[Explosion Alchemist]", "name": "Lirell", "id": "alchemist"}, {"title": "[Witch in Training]", "name": "Meimy", "id": "pretty_witch"}, {"title": "[Desert Gunner]", "name": "Iris", "id": "gunslinger"}, {"title": "[The Border Hunter]", "name": "Hash", "id": "monster_hunter"}, {"title": "[The All-Loving Outlaw]", "name": "Jin", "id": "black_doctor"}, {"title": "[The Red Cursed Swordswoman]", "name": "Torene", "id": "cool_woman_soldier"}, {"title": "[Mad Warrior]", "name": "Gilslad", "id": "berserker"}, {"title": "[The Fire Shrine Maiden]", "name": "Enni", "id": "fire_shaman"}, {"title": "[The Strict and Orderly Inspector]", "name": "Jake", "id": "disciplined_swordman"}, {"title": "[The Bird Tribe's Female Warrior]", "name": "Kran", "id": "birdwoman"}, {"title": "[Harmony's Healer]", "name": "Halisha", "id": "tradition_healer"}, {"title": "[The Tiger-Chasing Mouse]", "name": "Sven", "id": "brave_mouse"}, {"title": "[Tailor Bringing Happiness]", "name": "Lilian", "id": "sewing_girl"}, {"title": "[The Sweet Assassin]", "name": "Klaus (White Day)", "id": "wolf_assassin_wt21"}, {"title": "[The Forest's Hunter]", "name": "Keiros", "id": "sniper"}, {"title": "[The Young Blue Swordswoman]", "name": "Trista", "id": "urban_soldier"}, {"title": "[The Cowardly Heavy Warrior]", "name": "Walter", "id": "hard_face_soldier"}, {"title": "[The White-Coat Outlaw]", "name": "Erza", "id": "nurse"}, {"title": "[The Toothed Assassin]", "name": "Klaus", "id": "wolf_assassin"}, {"title": "[The Nine-Tails' Assistant]", "name": "Shirano", "id": "fox_companion"}, {"title": "[The Illusory Cup Master]", "name": "Kaiyu", "id": "depraved_monk"}, {"title": "[The Truth-Seeking Sailor Girl]", "name": "Ratty", "id": "sailor_girl"}, {"title": "[The Silly Baby Dragon]", "name": "Faf", "id": "cute_fafnir"}, {"title": "[The Miraculous Fountain's Elegant Assistant]", "name": "Riko", "id": "mens_attire_girl"}, {"title": "[The Holy Tree Spirit]", "name": "Charua (Christmas)", "id": "dryad_xm19"}, {"title": "[The Admiring Female Mercenary]", "name": "Clara", "id": "junior_yearngirl"}, {"title": "[Fanatic\u2605Shaman]", "name": "Samasa", "id": "little_shaman"}, {"title": "[The Mischievous Scout Girl]", "name": "Rita", "id": "scout_girl"}, {"title": "[The Dreaming Double-Sword User]", "name": "Yuna", "id": "twin_blader"}, {"title": "[Numbing Bee Girl]", "name": "Honey", "id": "bee_girl"}, {"title": "[The Thunder Strike Boxer]", "name": "Taiga", "id": "lightning_fighter"}, {"title": "[The Intelligent Black Panther]", "name": "Kuro", "id": "outlaw_panther"}, {"title": "[The Toothed Young Nobleman]", "name": "Albert", "id": "wolf_swordsman"}, {"title": "[Dancing Girl of Wind and Thunder]", "name": "Kadzuchi", "id": "oni_girl"}, {"title": "[Adventurer Relying on Alcohol]", "name": "Tatiana", "id": "sociable_mestizo"}, {"title": "[Thunder User Who Fell Into Ruin]", "name": "Colt", "id": "magic_boy"}, {"title": "[The Gun-Loving Student Engineer]", "name": "Sha Susu", "id": "student_gunsmith"}, {"title": "[The Far-Sighted Fortune Teller]", "name": "Foula", "id": "fortuneteller"}, {"title": "[Cat Girl With the New Year's Best Clothes]", "name": "Miu (New Year)", "id": "cat_fighter_ny20"}, {"title": "[The Solitary Iron Man]", "name": "Bargen", "id": "old_mercenary"}, {"title": "[Subgravity Girl]", "name": "Flana ", "id": "floating_girl"}, {"title": "[Rainy Skip]", "name": "Fi Nonoa", "id": "conjurer_girl"}, {"title": "[The Rumbling Adventurer]", "name": "Evan", "id": "highlander"}, {"title": "[Loved Daughter of the Forest]", "name": "Charua", "id": "dryad"}, {"title": "[The Gentle Undead King]", "name": "Lecitar", "id": "lich"}, {"title": "[The Spirit Gambler]", "name": "Neska", "id": "casino_dealer"}, {"title": "[The Cat-Eared Fighter]", "name": "Miu", "id": "cat_fighter"}, {"title": "[The Laughing Clown]", "name": "False / Force", "id": "devil_clown"}, {"title": "[The Spring Breeze Herbalist]", "name": "Heartleaf", "id": "herbalist"}, {"title": "[Skill Ray Lancer]", "name": "Connor", "id": "spearman"}, {"title": "[Trappist and Dairy Farmer]", "name": "Juster", "id": "trap_errand"}, {"title": "[The Fang-Beared Good Thief]", "name": "Kate", "id": "gang_girl"}, {"title": "[Seeker of Magical Theory]", "name": "Netty", "id": "lazy_genious"}, {"title": "[Beginner Adventurer]", "name": "Millet", "id": "rookie_adventurer"}, {"title": "[Priestess of Love]", "name": "Corina", "id": "priest"}, {"title": "[The Beautiful Gunner]", "name": "Marguerite", "id": "lady_gunner"}, {"title": "[The Female Knight of Protection]", "name": "Cecilia", "id": "woman_knight"}, {"title": "[The Beast-Riding Home Deliverer]", "name": "Aureo", "id": "docking_beast"}, {"title": "[The Desert Island Winery Master]", "name": "Raul", "id": "exorcist_oldman"}, {"title": "[The Immature Young Knight]", "name": "Miles", "id": "half_knight"}, {"title": "[The Newly-Employed Reporter Girl]", "name": "Luluca", "id": "reporter"}, {"title": "[The Stray Wolf Girl]", "name": "Caro", "id": "wild_wolfgirl"}, {"title": "[The Pure Moth Girl]", "name": "Mora", "id": "moth_girl"}, {"title": "[Mischievous Disciple]", "name": "Corina (Halloween)", "id": "priest_hw20"}, {"title": "[Novice Guard]", "name": "Ksyukha", "id": "junior_soldier"}, {"title": "[The Speeding Newboarder]", "name": "Axem", "id": "skateboard_boy"}, {"title": "[Dreaming of a Harem Life]", "name": "Ru Ruto", "id": "kids_gunner"}, {"title": "[Keeper of the Dead]", "name": "Falce", "id": "reaper_girl"}, {"title": "[The Quiet Job-Seeker]", "name": "Jalil", "id": "chakram_shooter"}, {"title": "[Traitor of the Demons]", "name": "Ari", "id": "devil_woman_soldier"}, {"title": "[The High-Hoped Information Broker]", "name": "Shion", "id": "informant"}, {"title": "[The Surviving Fighter]", "name": "Adil", "id": "arabic_swordman"}, {"title": "[The Ill-Tempered Maid]", "name": "Dorothea", "id": "dark_nursemaid"}, {"title": "[The Dreamy Magician]", "name": "Rebecca", "id": "bearish_darkwitch"}, {"title": "[The One Loved By Monsters]", "name": "Nocelle", "id": "monster_attract"}, {"title": "[Delusional Adventurer]", "name": "Meryl", "id": "delusion_girl"}, {"title": "[The Bewildered Delusional Santa]", "name": "Meryl (Christmas)", "id": "delusion_girl_xm20"}, {"title": "[The Strange Mummy Boy]", "name": "Talha", "id": "mummy_boy"}, {"title": "[Young Warrior of the Rabbit Tribe]", "name": "Cody", "id": "revenge_rabbit"}, {"title": "[Aspiring Young Detective]", "name": "Lucille", "id": "assistant_boy"}, {"title": "[Dusty Guardian]", "name": "Golem", "id": "guardian_golem"}, {"title": "[The Forest's Intellectual]", "name": "Pojito", "id": "owl"}, {"title": "[Wind Blade Spirit]", "name": "Kamaitachi", "id": "fox"}, {"title": "[Reckless Support's Gift]", "name": "CF Kiseki (Golden Head of Miracle)", "id": "towa_namakubi"}, {"title": "[The Strange Diva Transcending Space and Time]", "name": "Towa Kiseki (Golden Head of Miracle)", "id": "towa_vtuber"}, {"title": "[The Spore Spirit]", "name": "Kino", "id": "kinoko"}, {"title": "[Fire's Jiggle]", "name": "Red Pore", "id": "slango_red"}, {"title": "[Fire's Spirit]", "name": "Fire Spirit", "id": "spirit_fire"}, {"title": "[Water's Jiggle]", "name": "Blue Pore", "id": "slango_blue"}, {"title": "[Thunder's Jiggle]", "name": "Yellow Pore", "id": "slango_yellow"}, {"title": "[Electric Needle Mouse]", "name": "Pararat", "id": "paralysis_hedgehog"}, {"title": "[Wind's Jiggle]", "name": "Green Pore", "id": "slango_green"}]
+[
+    {
+        "title": "The Hell-Fire Dragon King",
+        "name": "Wagner",
+        "id": "fire_dragon"
+    },
+    {
+        "title": "The Pirate Captain Who Crosses the Stars",
+        "name": "Marina",
+        "id": "pirates_girl"
+    },
+    {
+        "title": "The Incomplete Alchemist",
+        "name": "Clarisse",
+        "id": "clarisse"
+    },
+    {
+        "title": "Dressy Maid",
+        "name": "Marianne (Christmas)",
+        "id": "battle_maid_xm19"
+    },
+    {
+        "title": "The Wandering Courtesan",
+        "name": "Kikuno",
+        "id": "compliment_oiran"
+    },
+    {
+        "title": "The Mouse Kingdom's Idol",
+        "name": "Noene (New Year)",
+        "id": "heavenly_one"
+    },
+    {
+        "title": "The Black Wolf Knight",
+        "name": "Rolf",
+        "id": "black_wolf_knight"
+    },
+    {
+        "title": "The Summertime Fired-up Treasure Hunting Tiger Girl",
+        "name": "Mia (Summer)",
+        "id": "tiger_treasure_hunter_smr20"
+    },
+    {
+        "title": "The Starry Firework Ninja",
+        "name": "Hanabi (Anniversary)",
+        "id": "kunoichi_1anv"
+    },
+    {
+        "title": "Glamorous Santa Claus",
+        "name": "Bianca (Christmas)",
+        "id": "lady_summoner_xm20"
+    },
+    {
+        "title": "Princess with Superhuman Strength",
+        "name": "Toria",
+        "id": "halberd_princess"
+    },
+    {
+        "title": "Animal-Eared Ship Doctor",
+        "name": "Liao",
+        "id": "doctor_pirate"
+    },
+    {
+        "title": "Onmyouji Filled With Longing] ",
+        "name": "Suizen (White Day)",
+        "id": "onmyoji_boy_wt21"
+    },
+    {
+        "title": "The Smiling Hermit] ",
+        "name": "Quare",
+        "id": "magical_bayonetter"
+    },
+    {
+        "title": "Crimson Piercing Light",
+        "name": "Zeta",
+        "id": "zeta"
+    },
+    {
+        "title": "Bullet of the Felder Clan",
+        "name": "Leticia",
+        "id": "tsundere_bountyhunter"
+    },
+    {
+        "title": "Passionate Platinum",
+        "name": "Ecrire / Écrire (Summer)",
+        "id": "bodysuit_trooper_smr21"
+    },
+    {
+        "title": "Arrogant Hero",
+        "name": "Haruhi Suzumiya (The Melancholy of Haruhi Suzumiya)",
+        "id": "suzumiya_haruhi"
+    },
+    {
+        "title": "Avenger of the Magic Gun",
+        "name": "Ryunon",
+        "id": "shadow_redhood"
+    },
+    {
+        "title": "Captain of the Stars",
+        "name": "Marina (Anniversary)",
+        "id": "pirates_girl_2anv"
+    },
+    {
+        "title": "Professional Prankster",
+        "name": "Misogi",
+        "id": "misogi"
+    },
+    {
+        "title": "Valentine's Bullet",
+        "name": "Leticia (Valentine)",
+        "id": "tsundere_bountyhunter_vt22"
+    },
+    {
+        "title": "Bloodstained Wolf",
+        "name": "Waif",
+        "id": "anger_investigator"
+    },
+    {
+        "title": "Foreign Student Princess With Superhuman Strength",
+        "name": "Toria (Half Anniversary)",
+        "id": "halberd_princess_2halfanv"
+    },
+    {
+        "title": "Prancing Golden Wrecker Girl",
+        "name": "Gold Ship",
+        "id": "gold_ship"
+    },
+    {
+        "title": "Obsessed with Explosion Magic",
+        "name": "Megumin (KonoSuba)",
+        "id": "megumin"
+    },
+    {
+        "title": "The Summer Sea Monster Chef",
+        "name": "Parfait (Summer)",
+        "id": "monster_cook_smr22"
+    },
+    {
+        "title": "Lion of Anguish",
+        "name": "Magnos",
+        "id": "lion_swordman_playable"
+    },
+    {
+        "title": "Golem Club's President",
+        "name": "Daedalia",
+        "id": "golemclub_captain"
+    },
+    {
+        "title": "Treasure Santa",
+        "name": "Mia (Christmas)",
+        "id": "tiger_treasure_hunter_xm22"
+    },
+    {
+        "title": "I Bless You",
+        "name": "Stinel (Ballot)",
+        "id": "still_obstinator_ballot23"
+    },
+    {
+        "title": "Newbie Adventurer of Fire",
+        "name": "Runetta",
+        "id": "flame_blessgirl"
+    },
+    {
+        "title": "Pure and Lovely Kitten",
+        "name": "Penerone",
+        "id": "catbaby_psychicer"
+    },
+    {
+        "title": "Guardian of Flame",
+        "name": "Lilith (Meteor)",
+        "id": "resistance_princess_3halfanv"
+    },
+    {
+        "title": "One Who Opened the Gate of Summer",
+        "name": "Couette",
+        "id": "summoner_little_smr23"
+    },
+    {
+        "title": "Passionate Proposal Suit",
+        "name": "Wilfred",
+        "id": "wirfled_playable"
+    },
+    {
+        "title": "Flame Dragon King",
+        "name": "Wagner (Zenith)",
+        "id": "fire_dragon_zenith"
+    },
+    {
+        "title": "The Dancing Water's Splendor",
+        "name": "Sonya",
+        "id": "brown_fighter"
+    },
+    {
+        "title": "The Matchless Onmyouji",
+        "name": "Suizen",
+        "id": "onmyoji_boy"
+    },
+    {
+        "title": "The Bountiful Water Hagoita Girl",
+        "name": "Eliya (New Year)",
+        "id": "lightbullet_wiz_ny20"
+    },
+    {
+        "title": "The Ice Witch",
+        "name": "Cypher",
+        "id": "ice_witch"
+    },
+    {
+        "title": "The Iron Wolf",
+        "name": "Sirene",
+        "id": "commander"
+    },
+    {
+        "title": "The Dragon's Keeper",
+        "name": "Rimnis",
+        "id": "lakeside_guardian"
+    },
+    {
+        "title": "The Borderlands' Guide",
+        "name": "Laquisha / Lakisha",
+        "id": "drawing_witch"
+    },
+    {
+        "title": "The Wave-Riding Prince",
+        "name": "Lazeret (Summer)",
+        "id": "prince_zero_smr20"
+    },
+    {
+        "title": "Zombie 1",
+        "name": "Sakura Minamoto (Zombie Land Saga)",
+        "id": "minamoto_sakura"
+    },
+    {
+        "title": "Eyes of Freezing",
+        "name": "Raylas",
+        "id": "freeze_eye"
+    },
+    {
+        "title": "The Gentle-Hearted Half Elf",
+        "name": "Emilia (Re:Zero)",
+        "id": "emilia"
+    },
+    {
+        "title": "The All-Powerful Subordinate Maid and Younger Sister",
+        "name": "Rem (Re:Zero)",
+        "id": "rem"
+    },
+    {
+        "title": "The Monstrous Martial Arts Genius",
+        "name": "Sheyron / Shuilong",
+        "id": "waterdragon_kunfu"
+    },
+    {
+        "title": "The Kingdom's Great General] ",
+        "name": "Halidal",
+        "id": "desert_commander"
+    },
+    {
+        "title": "The Charming Mermaid Pirate",
+        "name": "Amelia (Half Anniversary)",
+        "id": "mermaid_1halfanv"
+    },
+    {
+        "title": "Motherly Savior",
+        "name": "Mamnalia",
+        "id": "holy_mother"
+    },
+    {
+        "title": "Silent Alien",
+        "name": "Yuki Nagato (The Melancholy of Haruhi Suzumiya)",
+        "id": "nagato_yuki"
+    },
+    {
+        "title": "Beastly Warrior",
+        "name": "Sheyron / Shuilong (Beast)",
+        "id": "waterdragon_kunfu_proud"
+    },
+    {
+        "title": "Psychic of Boundaries",
+        "name": "Mishima Yuki",
+        "id": "psychic_yuki"
+    },
+    {
+        "title": "Indominable Warship",
+        "name": "Fraxis",
+        "id": "navy_officer"
+    },
+    {
+        "title": "Great Witch of Frost",
+        "name": "Cypher (Anniversary)",
+        "id": "ice_witch_2anv"
+    },
+    {
+        "title": "Saint of Snow",
+        "name": "Raylas (Christmas)",
+        "id": "freeze_eye_xm21"
+    },
+    {
+        "title": "CIPO Investigator",
+        "name": "Toraetty (New Year)",
+        "id": "heavenly_three"
+    },
+    {
+        "title": "Young Elf Honor Student",
+        "name": "Kyouka",
+        "id": "kyouka"
+    },
+    {
+        "title": "Frostfang Dragon Songstress of Freedom",
+        "name": "Anbach",
+        "id": "ice_dragon"
+    },
+    {
+        "title": "Enforcer of Wishes",
+        "name": "Justy",
+        "id": "justice_lady"
+    },
+    {
+        "title": "Metal Diva of the Deep",
+        "name": "Dia (Half Anniversary)",
+        "id": "sing_android_2halfanv"
+    },
+    {
+        "title": "Goddess of the Axis Order",
+        "name": "Aqua (KonoSuba)",
+        "id": "aqua"
+    },
+    {
+        "title": "Psychic at Sea] ",
+        "name": "Luca",
+        "id": "luca_playable"
+    },
+    {
+        "title": "Raging Whale Pirate Captain",
+        "name": "Zelimir",
+        "id": "pirates_of_fear"
+    },
+    {
+        "title": "Youngest Daughter of the Royal House of Silva",
+        "name": "Noelle Silva (Black Clover)",
+        "id": "noelle_silva"
+    },
+    {
+        "title": "Lord of Thirdia",
+        "name": "Ciel",
+        "id": "wind_spbro_3anv"
+    },
+    {
+        "title": "Flower of Spring",
+        "name": "Mishima Yuki (New Year)",
+        "id": "psychic_yuki_ny23"
+    },
+    {
+        "title": "Golden Dawn",
+        "name": "Sotieth (Meteor)",
+        "id": "ruin_lady_meteor23"
+    },
+    {
+        "title": "Adventurer of Empathetic Horns",
+        "name": "Nisues",
+        "id": "vesta_caster"
+    },
+    {
+        "title": "Kowloon Gangster",
+        "name": "Ranmei",
+        "id": "amulet_bosslady"
+    },
+    {
+        "title": "Dragon Shadow On Summer Days",
+        "name": "Kageoka Ryuichi",
+        "id": "psychic_projection_smr23"
+    },
+    {
+        "title": "Bride of Possibilities",
+        "name": "Souvi",
+        "id": "psycho_reaper_meteor23"
+    },
+    {
+        "title": "Canopy Bearer",
+        "name": "Pu Lilie",
+        "id": "guild_front_girl_playable"
+    },
+    {
+        "title": "Spirit of Blessing",
+        "name": "Chalua (Halloween)",
+        "id": "dryad_hw23"
+    },
+    {
+        "title": "Heir of the Nine-tails",
+        "name": "Inaho",
+        "id": "fox_oracle"
+    },
+    {
+        "title": "The Founding Alchemist",
+        "name": "Cagliostro",
+        "id": "cagliostro"
+    },
+    {
+        "title": "Holy Night Samurai",
+        "name": "Soushiro (Christmas)",
+        "id": "samurai_xm19"
+    },
+    {
+        "title": "The Wild Merrymaking Thunder Bow User",
+        "name": "Metis",
+        "id": "thunder_archer"
+    },
+    {
+        "title": "The Thunderclap Boxing King",
+        "name": "Barak",
+        "id": "mighty_striker"
+    },
+    {
+        "title": "The Loyal Iron Striker",
+        "name": "Sera",
+        "id": "machine_police_girl"
+    },
+    {
+        "title": "The Efficient Fireworks Master",
+        "name": "Botan",
+        "id": "big_gunner"
+    },
+    {
+        "title": "The Midsummer Magician",
+        "name": "Illumi (Summer)",
+        "id": "illusionist_smr20"
+    },
+    {
+        "title": "The Abyss's Lady",
+        "name": "Bercetia (Summer)",
+        "id": "dimension_witch_smr20"
+    },
+    {
+        "title": "The White-Flowered Mecha",
+        "name": "Regis (Anniversary)",
+        "id": "rec_android_1anv"
+    },
+    {
+        "title": "The Ox Kingdom's Idol",
+        "name": "Beaucy (New Year)",
+        "id": "heavenly_two"
+    },
+    {
+        "title": "Monster and Young Girl",
+        "name": "Rhode",
+        "id": "girl_and_mecha"
+    },
+    {
+        "title": "Capable Manager Rocketing Forward",
+        "name": "Twink",
+        "id": "general_toyakiren"
+    },
+    {
+        "title": "The Ninja Samurai Arrives",
+        "name": "Zantetsu",
+        "id": "samurai_robot"
+    },
+    {
+        "title": "Thrill Lover",
+        "name": "Marquis",
+        "id": "elder_guild_fighter"
+    },
+    {
+        "title": "Summer Saver",
+        "name": "Sera (Summer)",
+        "id": "machine_police_girl_smr21"
+    },
+    {
+        "title": "King of Empathetic Horns",
+        "name": "Memram",
+        "id": "horn_leader"
+    },
+    {
+        "title": "Destroy Slugger",
+        "name": "Stryna",
+        "id": "cyber_battergirl"
+    },
+    {
+        "title": "White Guardian",
+        "name": "Helga (Beast)",
+        "id": "dog_slasher_proud"
+    },
+    {
+        "title": "Thunderclap Psychic",
+        "name": "Kazutake Tooru",
+        "id": "psychic_tohru"
+    },
+    {
+        "title": "Awakened Fang",
+        "name": "Shiro (Anniversary)",
+        "id": "white_tiger_2anv"
+    },
+    {
+        "title": "Moratorium Weapon",
+        "name": "Tect",
+        "id": "super_robot"
+    },
+    {
+        "title": "Moon Spider of Violet Electricity",
+        "name": "Mayuzuki",
+        "id": "spider_ninja"
+    },
+    {
+        "title": "Piercing Bullet of the Summer Sky",
+        "name": "Baretta (Summer)",
+        "id": "combat_soldier_smr22"
+    },
+    {
+        "title": "Idol☆Hero",
+        "name": "Laputina",
+        "id": "nihilist_mechgirl"
+    },
+    {
+        "title": "Vampire of the Lonely Night",
+        "name": "Rumylaka",
+        "id": "little_vampire"
+    },
+    {
+        "title": "Black Dress Knight",
+        "name": "Kira (Halloween)",
+        "id": "palpebra_knight_lady_hw22"
+    },
+    {
+        "title": "Capable Manager Full of New Year Spirit",
+        "name": "Twink (New Year)",
+        "id": "general_toyakiren_ny23"
+    },
+    {
+        "title": "Cage Liberator",
+        "name": "Käsivars",
+        "id": "octcyborg_lady"
+    },
+    {
+        "title": "Inverted White Girl",
+        "name": "Dine (Valentine)",
+        "id": "dark_psygirl_vt23"
+    },
+    {
+        "title": "The Haughty Gentleman Negotiator",
+        "name": "Liebraum (White Day)",
+        "id": "blade_dancer_wt23"
+    },
+    {
+        "title": "King Predator",
+        "name": "King Johnson",
+        "id": "pbc_ceo_playable"
+    },
+    {
+        "title": "Psychic of Cutting Edge",
+        "name": "Amou Nagiri",
+        "id": "psychic_katana"
+    },
+    {
+        "title": "Naked Lion",
+        "name": "Theo (Summer)",
+        "id": "lion_boy_smr23"
+    },
+    {
+        "title": "Powerful Winged Shooter",
+        "name": "Tajes",
+        "id": "starbreak_hunter_meteor23"
+    },
+    {
+        "title": "Codename: Shinigami",
+        "name": "Charlene",
+        "id": "artificialeye_sniper"
+    },
+    {
+        "title": "Guardian of Courage",
+        "name": "Light (4th Anniversary)",
+        "id": "light_adventurer_4anv"
+    },
+    {
+        "title": "The Cute and Loveable Sword Monster",
+        "name": "Silty",
+        "id": "wind_spgirl"
+    },
+    {
+        "title": "The Fated Battle Miko",
+        "name": "Philia",
+        "id": "wind_oracle"
+    },
+    {
+        "title": "The Spirit Katana's Resident Spirit",
+        "name": "Murakumo",
+        "id": "katana_ghost"
+    },
+    {
+        "title": "The Rumbling's Survivor",
+        "name": "Leon",
+        "id": "mercenary"
+    },
+    {
+        "title": "The Broad-wing Spirit User",
+        "name": "Shiue",
+        "id": "bigwing_shaman"
+    },
+    {
+        "title": "The Soaring Ambassador",
+        "name": "Miguel",
+        "id": "gentle_barten"
+    },
+    {
+        "title": "The Tiny Guide",
+        "name": "Kokkoro",
+        "id": "kokkoro"
+    },
+    {
+        "title": "Vortex Dragon of Destruction",
+        "name": "Shult ",
+        "id": "wind_dragon"
+    },
+    {
+        "title": "Zombie 2",
+        "name": "Saki Nikaido (Zombie Land Saga)",
+        "id": "nikaido_saki"
+    },
+    {
+        "title": "Child of Hope",
+        "name": "Esterielle",
+        "id": "elf_princess"
+    },
+    {
+        "title": "Young Female Knight of the Stars",
+        "name": "Silty (Anniversary)",
+        "id": "wind_spgirl_1anv"
+    },
+    {
+        "title": "Kunoichi in Her New Year's Best Clothes",
+        "name": "Suzuka (New Year)",
+        "id": "timid_kunoichi_ny21"
+    },
+    {
+        "title": "The Silent Subjugator] ",
+        "name": "Fluffy",
+        "id": "combat_animal"
+    },
+    {
+        "title": "Dancing Wind's Splendor in the Empty Sky] ",
+        "name": "Sonya (Limited)",
+        "id": "brown_fighter_dst21"
+    },
+    {
+        "title": "Seer of Time",
+        "name": "Nevia",
+        "id": "beast_shaman"
+    },
+    {
+        "title": "Destroyer of Eternity",
+        "name": "Esterielle (Half Anniversary)",
+        "id": "elf_princess_1halfanv"
+    },
+    {
+        "title": "Sprite Priestess Experiencing Love",
+        "name": "Shiue (Summer)",
+        "id": "bigwing_shaman_smr21"
+    },
+    {
+        "title": "Malevolent Tengu of the Tempest",
+        "name": "Gouran",
+        "id": "tengu_master"
+    },
+    {
+        "title": "Adventurer Cooling Off in the Summer Night",
+        "name": "Leon (Summer/Yukata)",
+        "id": "mercenary_smr21"
+    },
+    {
+        "title": "Christmas Eve Subjugator",
+        "name": "Fluffy (Christmas)",
+        "id": "combat_animal_xm21"
+    },
+    {
+        "title": "Kind Rabbit Girl",
+        "name": "Mimi",
+        "id": "mimi"
+    },
+    {
+        "title": "Marching Star",
+        "name": "Marchia",
+        "id": "marching_conductor"
+    },
+    {
+        "title": "Escort Dragon",
+        "name": "Shult (White Day)",
+        "id": "wind_dragon_wt22"
+    },
+    {
+        "title": "The Free Knight Girl",
+        "name": "Elmar",
+        "id": "waste_armor"
+    },
+    {
+        "title": "Silent Sprinter",
+        "name": "Silence Suzuka",
+        "id": "silence_suzuka"
+    },
+    {
+        "title": "Their Hero",
+        "name": "Inori Shouta (Summer)",
+        "id": "psychic_shouta_smr22"
+    },
+    {
+        "title": "The Spirit Mirror's Resident Spirit",
+        "name": "Manoka",
+        "id": "ghost_nymph"
+    },
+    {
+        "title": "Wind-wielding Genius Mage",
+        "name": "Yuno (Black Clover)",
+        "id": "yuno"
+    },
+    {
+        "title": "Princess Shrine Maiden of the Bird Tribe",
+        "name": "Zephyr",
+        "id": "asymmetry_birdgirl"
+    },
+    {
+        "title": "One-Man Circus Queen",
+        "name": "Cirqueharle (New Year)",
+        "id": "heavenly_four"
+    },
+    {
+        "title": "Off-Shot Gravure",
+        "name": "Beaucy (Valentine)",
+        "id": "heavenly_two_vt23"
+    },
+    {
+        "title": "Psychic of Freedom",
+        "name": "Asato Yae",
+        "id": "psychic_gal"
+    },
+    {
+        "title": "The Free Black Wolf Knight",
+        "name": "Rolf (White Day)",
+        "id": "black_wolf_knight_wt23"
+    },
+    {
+        "title": "Winds Spun for the Future",
+        "name": "Philia (Meteor)",
+        "id": "wind_oracle_meteor23"
+    },
+    {
+        "title": "The Man Who Knew the Afterwards",
+        "name": "Yuhino Taichi",
+        "id": "psychic_taichi"
+    },
+    {
+        "title": "Gravity Girlfriend",
+        "name": "Kuguri Yukariko (Summer)",
+        "id": "psychic_yamikawa_smr23"
+    },
+    {
+        "title": "Gale Fighter",
+        "name": "Fluffy",
+        "id": "combat_animal_meteor23"
+    },
+    {
+        "title": "Painting Enthusiast Crossing the Otherworldly",
+        "name": "Old Man Zigza",
+        "id": "mob_jiguza_playable"
+    },
+    {
+        "title": "Sword Saint of Stars",
+        "name": "Silty (Meteor)",
+        "id": "wind_spgirl_4anv"
+    },
+    {
+        "title": "The Awakened Ancient Weapon",
+        "name": "Nephteim",
+        "id": "ruin_girl"
+    },
+    {
+        "title": "The Wandering Prince",
+        "name": "Lazeret",
+        "id": "prince_zero"
+    },
+    {
+        "title": "The Seven-Colored Sword Splitter",
+        "name": "Ecrire / Écrire",
+        "id": "bodysuit_trooper"
+    },
+    {
+        "title": "The Cute and Loveable Nine-tailed",
+        "name": "Inaho (Christmas)",
+        "id": "fox_oracle_xm19"
+    },
+    {
+        "title": "The Godly-speed Shooter",
+        "name": "Tajes",
+        "id": "starbreak_hunter"
+    },
+    {
+        "title": "The Free Bullet",
+        "name": "Baretta",
+        "id": "combat_soldier"
+    },
+    {
+        "title": "The Haughty Negotiator",
+        "name": "Liebraum",
+        "id": "blade_dancer"
+    },
+    {
+        "title": "The Festive and Beautiful Ancient Weapon-Girl",
+        "name": "Nephteim (Half Anniversary)",
+        "id": "ruin_girl_halfanv"
+    },
+    {
+        "title": "The Travelling Peckish Swordswoman",
+        "name": "Pecorine",
+        "id": "pecorine"
+    },
+    {
+        "title": "Neo-Violin Performer",
+        "name": "Lila",
+        "id": "neoviolin_musician"
+    },
+    {
+        "title": "Saintess of Fatoma",
+        "name": "Orvelle",
+        "id": "high_priestess"
+    },
+    {
+        "title": "Light's Guide",
+        "name": "Philamelia",
+        "id": "lamp_guide"
+    },
+    {
+        "title": "Zombie 6",
+        "name": "Lily Hoshikawa (Zombie Land Saga)",
+        "id": "hoshikawa_ririi"
+    },
+    {
+        "title": "Successor of Hope and Light",
+        "name": "Philia (Anniversary)",
+        "id": "wind_oracle_1anv"
+    },
+    {
+        "title": "Love's Klutzy Girl",
+        "name": "Eliya (Valentine)",
+        "id": "lightbullet_wiz_vt21"
+    },
+    {
+        "title": "The Crystal Travelling Swordsman",
+        "name": "Seriol",
+        "id": "crystal_swordman"
+    },
+    {
+        "title": "Spirit and Goblin Hunter",
+        "name": "Rengetsu",
+        "id": "yokai_exterminator"
+    },
+    {
+        "title": "Naked Princess",
+        "name": "Lilith (Summer)",
+        "id": "resistance_princess_smr21"
+    },
+    {
+        "title": "Fair Summer-Furred Nine-tailed Maiden",
+        "name": "Inaho (Summer)",
+        "id": "fox_oracle_smr21"
+    },
+    {
+        "title": "SOS Brigade Mascot",
+        "name": "Mikuru Asahina (The Melancholy of Haruhi Suzumiya)",
+        "id": "asahina_mikuru"
+    },
+    {
+        "title": "Beautiful Weapon Girl of Summer",
+        "name": "Nephteim (Summer/Yukata)",
+        "id": "ruin_girl_smr21"
+    },
+    {
+        "title": "Canopy Knight",
+        "name": "Zekhel",
+        "id": "guildknight_leader"
+    },
+    {
+        "title": "Music Loving Witch Girl",
+        "name": "Lila (Halloween)",
+        "id": "neoviolin_musician_hw21"
+    },
+    {
+        "title": "New Year Celebratory Saint",
+        "name": "Orvelle (New Year)",
+        "id": "high_priestess_ny22"
+    },
+    {
+        "title": "Stray Heart",
+        "name": "Nate (Valentine)",
+        "id": "hero_girl_vt22"
+    },
+    {
+        "title": "Pretending to be a God of Evil and Tyranny",
+        "name": "Stinel",
+        "id": "still_obstinator"
+    },
+    {
+        "title": "Top Trendsetter",
+        "name": "Quinvid",
+        "id": "airship_captain"
+    },
+    {
+        "title": "Pure and Innocent Hokkaido Girl",
+        "name": "Special Week",
+        "id": "special_week"
+    },
+    {
+        "title": "Masochistic Crusader",
+        "name": "Darkness (KonoSuba)",
+        "id": "darkness"
+    },
+    {
+        "title": "Waterside Ninja Samurai",
+        "name": "Zantetsu (Summer)",
+        "id": "samurai_robot_smr22"
+    },
+    {
+        "title": "Sacred Swordsman",
+        "name": "Irinoa",
+        "id": "holysword_girl"
+    },
+    {
+        "title": "Flying Swallow Free Knights' Commander",
+        "name": "Yuwel (Anniversary)",
+        "id": "swallow_knight_3anv"
+    },
+    {
+        "title": "Courtesan of the Holy Night Festival",
+        "name": "Kikuno (Christmas)",
+        "id": "compliment_oiran_xm22"
+    },
+    {
+        "title": "The Last Champion",
+        "name": "Light",
+        "id": "light_ballot23"
+    },
+    {
+        "title": "From Starview Village",
+        "name": "Stella",
+        "id": "stella_ballot23"
+    },
+    {
+        "title": "The Inheritor Dragon of Affection",
+        "name": "Rachmano",
+        "id": "golden_dragon_jr"
+    },
+    {
+        "title": "Sword of the Twin Stellas",
+        "name": "Arc (Meteor)",
+        "id": "alk_3halfanv"
+    },
+    {
+        "title": "New Adventurer",
+        "name": "Nagihara Nao (Ceremony)",
+        "id": "psychic_nao_3halfanv"
+    },
+    {
+        "title": "The Spirit Jewel's Resident Spirit",
+        "name": "Tamako",
+        "id": "magatama_spirit"
+    },
+    {
+        "title": "Traveler of A Kindred Journey",
+        "name": "Nova",
+        "id": "nova_4anv"
+    },
+    {
+        "title": "The Dimensional Witch",
+        "name": "Bercetia",
+        "id": "dimension_witch"
+    },
+    {
+        "title": "The Experienced Hunter",
+        "name": "Veron",
+        "id": "veteran_hunter"
+    },
+    {
+        "title": "The Wandering Magic Swordswoman",
+        "name": "Molmia",
+        "id": "blade_witch"
+    },
+    {
+        "title": "The Snake's Shadow and Smiling Girl",
+        "name": "Karla",
+        "id": "cursed_girl"
+    },
+    {
+        "title": "Fallen Angel",
+        "name": "Olivia",
+        "id": "olivia"
+    },
+    {
+        "title": "The Cat-Eared Sorceress",
+        "name": "Karyl",
+        "id": "kyaru"
+    },
+    {
+        "title": "Marine Nightmare",
+        "name": "Alice (Summer)",
+        "id": "alice_smr20"
+    },
+    {
+        "title": "Zombie 4",
+        "name": "Junko Konno (Zombie Land Saga)",
+        "id": "konno_junko"
+    },
+    {
+        "title": "The Steel Little Devil Diva",
+        "name": "Dia (Halloween)",
+        "id": "sing_android_hw20"
+    },
+    {
+        "title": "† Darkness Girl †] ",
+        "name": "Dine",
+        "id": "dark_psygirl"
+    },
+    {
+        "title": "Hope in the Dead of Night",
+        "name": "Educeus",
+        "id": "devil_leader"
+    },
+    {
+        "title": "The Snake-Decapitating Ninja",
+        "name": "Yakumo",
+        "id": "silent_ninja"
+    },
+    {
+        "title": "Devilish Girl Santa",
+        "name": "Alm (Christmas)",
+        "id": "devil_princess_xm20"
+    },
+    {
+        "title": "One Who Opened the Gate",
+        "name": "Couette",
+        "id": "summoner_little"
+    },
+    {
+        "title": "The Deep Sea's Lady] ",
+        "name": "Maelviola",
+        "id": "noble_sorceress"
+    },
+    {
+        "title": "‡ Darkness Girl Zero ‡] ",
+        "name": "Dine (Limited)",
+        "id": "dark_psygirl_dst21"
+    },
+    {
+        "title": "The Immortal Ultramarine",
+        "name": "Beatrix",
+        "id": "beatrix"
+    },
+    {
+        "title": "Necktie-Slackening Gunner",
+        "name": "Sergil / Sergyl (Half Anniversary)",
+        "id": "blindness_gunner_1halfanv"
+    },
+    {
+        "title": "Chocolate Lily Witch",
+        "name": "Primula",
+        "id": "blackflower_wiz"
+    },
+    {
+        "title": "HW★Night Girl",
+        "name": "Lav / Love (Halloween)",
+        "id": "touyakiren_ceo_hw21"
+    },
+    {
+        "title": "Psychic of Gravity",
+        "name": "Inori Shouta",
+        "id": "psychic_shouta"
+    },
+    {
+        "title": "Onmyoudo Apprentice",
+        "name": "Couette (Anniversary)",
+        "id": "summoner_little_2anv"
+    },
+    {
+        "title": "Witch of New Year Twilight",
+        "name": "Bercetia (New Year)",
+        "id": "dimension_witch_ny22"
+    },
+    {
+        "title": "Servant x Prince",
+        "name": "Murakumo (White Day)",
+        "id": "katana_ghost_wt22"
+    },
+    {
+        "title": "Guild Leader for Estate Affairs",
+        "name": "Hildegard",
+        "id": "estateguild_leader"
+    },
+    {
+        "title": "Witch Of The Mirror",
+        "name": "Louelise",
+        "id": "mirror_witch"
+    },
+    {
+        "title": "Seeker of Truth",
+        "name": "Liam (Half Anniversary)",
+        "id": "warlock_2halfanv"
+    },
+    {
+        "title": "Blooming Summer Witch",
+        "name": "Primula (Summer)",
+        "id": "blackflower_wiz_smr22"
+    },
+    {
+        "title": "Astral Projection Esper",
+        "name": "Kuguri Yukariko",
+        "id": "psychic_yamikawa"
+    },
+    {
+        "title": "Devilish Swordswoman Vampire in Love",
+        "name": "Silty (Halloween)",
+        "id": "wind_spgirl_hw22"
+    },
+    {
+        "title": "Mage Without Magic",
+        "name": "Asta (Black Clover)",
+        "id": "asta"
+    },
+    {
+        "title": "Healer of Empathetic Horns",
+        "name": "Elmore",
+        "id": "horn_mypace"
+    },
+    {
+        "title": "Warrior of Reconquest",
+        "name": "Veron (Anniversary)",
+        "id": "veteran_hunter_3anv"
+    },
+    {
+        "title": "Weaver of Shadows",
+        "name": "Nirjana",
+        "id": "rector_sorcerer_playable"
+    },
+    {
+        "title": "Master of Chaos",
+        "name": "Tanakiera",
+        "id": "evilloli_master"
+    },
+    {
+        "title": "False Priest of Midnight",
+        "name": "Iorez",
+        "id": "impostor_priest"
+    },
+    {
+        "title": "Beautiful New Weapon-Girl Student",
+        "name": "Nephteim (Meteor)",
+        "id": "ruin_girl_3halfanv"
+    },
+    {
+        "title": "Starless Light",
+        "name": "Marden",
+        "id": "priest_prince_playable"
+    },
+    {
+        "title": "Psychic of Teleportation",
+        "name": "Suminami Hibiki",
+        "id": "psychic_teleport_playable"
+    },
+    {
+        "title": "Talkactive Ex-Intelligence Agent",
+        "name": "Chatrina",
+        "id": "blindfold_agent"
+    },
+    {
+        "title": "Traveler Embracing Dreams",
+        "name": "Leve",
+        "id": "stella_copy_4anv"
+    },
+    {
+        "title": "The Star-Travelling Boy",
+        "name": "Arc",
+        "id": "alk"
+    },
+    {
+        "title": "The Dragon Hunter",
+        "name": "Azel",
+        "id": "dragon_slayer"
+    },
+    {
+        "title": "The Enchanting Summoner",
+        "name": "Bianca",
+        "id": "lady_summoner"
+    },
+    {
+        "title": "The Hidden Ninja",
+        "name": "Hanabi",
+        "id": "kunoichi"
+    },
+    {
+        "title": "The Fierce God's Bloodline",
+        "name": "Asukirimaru",
+        "id": "half_oni_boy"
+    },
+    {
+        "title": "The Strong Shield Swordsman",
+        "name": "Glide",
+        "id": "master_knight"
+    },
+    {
+        "title": "The Red-Haired Double Gunner",
+        "name": "Kanon",
+        "id": "red_gunner"
+    },
+    {
+        "title": "The First-time Evangelist Reporter",
+        "name": "Luluca (New Year)",
+        "id": "reporter_ny20"
+    },
+    {
+        "title": "The Overly Beautiful Adventurer",
+        "name": "Revy",
+        "id": "shapely_soldier"
+    },
+    {
+        "title": "The Crybaby Gun Girl",
+        "name": "Kiri",
+        "id": "crybaby_shooter"
+    },
+    {
+        "title": "The Reckless Bullet",
+        "name": "Haze",
+        "id": "pirates_gunner"
+    },
+    {
+        "title": "The Bashful Wushu Master",
+        "name": "Milmina",
+        "id": "sanctuary_guard"
+    },
+    {
+        "title": "Girl Entranced by the Magic Sword",
+        "name": "Nasir",
+        "id": "magic_sword_girl"
+    },
+    {
+        "title": "Righteous Flame",
+        "name": "Kuramaru",
+        "id": "vigilante_boy"
+    },
+    {
+        "title": "Zombie 5",
+        "name": "Yugiri (Zombie Land Saga)",
+        "id": "yugiri"
+    },
+    {
+        "title": "The Rumored Perfect Teacher",
+        "name": "Nikola",
+        "id": "sorceress_teacher"
+    },
+    {
+        "title": "The Kind Pathfinder",
+        "name": "Arc (Anniversary)",
+        "id": "alk_1anv"
+    },
+    {
+        "title": "Holy Night's Red Swordswoman",
+        "name": "Torene (Christmas)",
+        "id": "cool_woman_soldier_xm20"
+    },
+    {
+        "title": "Shrine Maiden of an Ancient Line",
+        "name": "Maihime",
+        "id": "naginata_girl"
+    },
+    {
+        "title": "Sworn Friend of Dragons",
+        "name": "Azel (Summer)",
+        "id": "dragon_slayer_smr21"
+    },
+    {
+        "title": "SOS Brigade Regular Human Representative",
+        "name": "Kyon (The Melancholy of Haruhi Suzumiya)",
+        "id": "kyon"
+    },
+    {
+        "title": "Psychic of Curses",
+        "name": "Hikawa Rinne",
+        "id": "psychic_tomboygirl"
+    },
+    {
+        "title": "Psychic of the Starry Sea",
+        "name": "Nagihara Nao",
+        "id": "psychic_nao"
+    },
+    {
+        "title": "Animal-Eared Nurse",
+        "name": "Pishika",
+        "id": "nurse_pirate"
+    },
+    {
+        "title": "Kimono-clad Swordsman of Crowning Beauty",
+        "name": "Revy (New Year)",
+        "id": "shapely_soldier_ny22"
+    },
+    {
+        "title": "Cowardly Ghost Exterminator",
+        "name": "Qianshi",
+        "id": "jiangshi_girl"
+    },
+    {
+        "title": "The Flying Swallow Free Knight",
+        "name": "Yuwel",
+        "id": "swallow_knight"
+    },
+    {
+        "title": "The Labyrinth's Angel",
+        "name": "Riesel",
+        "id": "bishop_girl"
+    },
+    {
+        "title": "Deep Sea Mermaid",
+        "name": "Amelia",
+        "id": "mermaid"
+    },
+    {
+        "title": "The Drifting Magic Girl",
+        "name": "Alice",
+        "id": "alice"
+    },
+    {
+        "title": "The Fighting Guild Member",
+        "name": "Sharon",
+        "id": "battle_guild_staff"
+    },
+    {
+        "title": "The Sea-spurring Officer",
+        "name": "Lanner",
+        "id": "spry_sailor"
+    },
+    {
+        "title": "The Deep-sea Humanoid",
+        "name": "Zaar",
+        "id": "deepsea_mage"
+    },
+    {
+        "title": "The Sandstorm Magic Item User",
+        "name": "Moldiaga",
+        "id": "desert_wizard"
+    },
+    {
+        "title": "The White Snake Onmyouji",
+        "name": "Mizuchi",
+        "id": "onmyo_attendant"
+    },
+    {
+        "title": "The Broken Spirit Doctor",
+        "name": "Souvi / Sauvi",
+        "id": "psycho_reaper"
+    },
+    {
+        "title": "Masked Knight of the Beach",
+        "name": "Jelal (Summer)",
+        "id": "unicorn_lancer_smr20"
+    },
+    {
+        "title": "Female Pirate of Eternal Summer",
+        "name": "Marina (Legacy of Ocean)",
+        "id": "pirates_girl_smr20"
+    },
+    {
+        "title": "Adventurer Who Loves Backs",
+        "name": "Vivi",
+        "id": "shy_assassin"
+    },
+    {
+        "title": "The Young Kimono-clad Swordswoman",
+        "name": "Trista (New Year)",
+        "id": "urban_soldier_ny21"
+    },
+    {
+        "title": "Ancient Weapon of the Dawn",
+        "name": "Sotieth (Oath to the Dawn)",
+        "id": "ruin_lady"
+    },
+    {
+        "title": "Blitz Blue",
+        "name": "Nate (HERO: BEGINNING)",
+        "id": "hero_girl"
+    },
+    {
+        "title": "Up-and-Coming Magician",
+        "name": "Facon",
+        "id": "stylish_witch"
+    },
+    {
+        "title": "Government-Approved Sniper",
+        "name": "Evelyn",
+        "id": "dress_gunner"
+    },
+    {
+        "title": "Glamorous Assistant",
+        "name": "Shirano (Summer)",
+        "id": "fox_companion_smr21"
+    },
+    {
+        "title": "Bewitching Cross-Dressing Maid",
+        "name": "Lanner (Halloween)",
+        "id": "spry_sailor_hw21"
+    },
+    {
+        "title": "Psychic of Recovery",
+        "name": "Takamori Seiji",
+        "id": "psychic_seiji"
+    },
+    {
+        "title": "Bunny Princess Of The Sea",
+        "name": "Faroro",
+        "id": "innocent_glaiver"
+    },
+    {
+        "title": "Magic Academy Student Council President",
+        "name": "Luciada (Binary Planet)",
+        "id": "student_president"
+    },
+    {
+        "title": "Summer of Smiles",
+        "name": "Pishika (Summer)",
+        "id": "nurse_pirate_smr22"
+    },
+    {
+        "title": "Bandit-Hunter Bandit",
+        "name": "Farah",
+        "id": "sand_bandit"
+    },
+    {
+        "title": "Dreaming Princess of Love",
+        "name": "Fini (Valentine)",
+        "id": "sleep_puppy_vt23"
+    },
+    {
+        "title": "The Mystical Thunder Dragon",
+        "name": "Rams",
+        "id": "thunder_dragon"
+    },
+    {
+        "title": "The Smiling Scientist",
+        "name": "Lunalu",
+        "id": "fox_scientist"
+    },
+    {
+        "title": "The Android Gentleman",
+        "name": "Regis",
+        "id": "rec_android"
+    },
+    {
+        "title": "The Star's Flames",
+        "name": "Eleanor",
+        "id": "elf_soldier"
+    },
+    {
+        "title": "The Perceptive Old Cat",
+        "name": "Jay",
+        "id": "cat_shaman"
+    },
+    {
+        "title": "The Outstanding Female Bullfighter",
+        "name": "Mino",
+        "id": "minotaur_girl"
+    },
+    {
+        "title": "The Holy Night Deliveryman",
+        "name": "Aureo (Christmas)",
+        "id": "docking_beast_xm19"
+    },
+    {
+        "title": "The Secret Sword Tactitian",
+        "name": "Adoni",
+        "id": "black_hair_swordman"
+    },
+    {
+        "title": "The Slumbering Android Woman",
+        "name": "Rudy",
+        "id": "lady_android"
+    },
+    {
+        "title": "The Created Puppet Princess",
+        "name": "Prica / Prika (The Princess of Figment)",
+        "id": "fake_princess"
+    },
+    {
+        "title": "The Sun's Gambler",
+        "name": "Neska (Summer)",
+        "id": "casino_dealer_smr20"
+    },
+    {
+        "title": "Dancing Girl of the Moment",
+        "name": "Roselia",
+        "id": "hidden_blader"
+    },
+    {
+        "title": "Zombie 3",
+        "name": "Ai Mizuno (Zombie Land Saga)",
+        "id": "mizuno_ai"
+    },
+    {
+        "title": "Twilight's Smiling Scientist",
+        "name": "Lunalu (Halloween)",
+        "id": "fox_scientist_hw20"
+    },
+    {
+        "title": "Holy Mass Tactician",
+        "name": "Adoni (Christmas)",
+        "id": "black_hair_swordman_xm20"
+    },
+    {
+        "title": "The Tiny Sorceress Teacher",
+        "name": "To Rereni",
+        "id": "little_wizard"
+    },
+    {
+        "title": "The Extreme, yet Popular Adventurer",
+        "name": "Editha",
+        "id": "punk_warrior"
+    },
+    {
+        "title": "The Flawless Shock Girl",
+        "name": "Telna",
+        "id": "electro_girl"
+    },
+    {
+        "title": "The Innocent Magical Tool Collector",
+        "name": "Giselle",
+        "id": "secret_observer"
+    },
+    {
+        "title": "Fortune-Inviting Girl",
+        "name": "Fuku",
+        "id": "warashi"
+    },
+    {
+        "title": "Lion's Descendent",
+        "name": "Theo (Crown of The Beast King)",
+        "id": "lion_boy"
+    },
+    {
+        "title": "New Year-Congratulating Black Panther",
+        "name": "Kuro (New Year)",
+        "id": "outlaw_panther_ny22"
+    },
+    {
+        "title": "Machine Repairer",
+        "name": "Elegia",
+        "id": "spanner_girl"
+    },
+    {
+        "title": "Unfinished Flapper",
+        "name": "Rinkarina",
+        "id": "scissor_ratgirl"
+    },
+    {
+        "title": "Elegant Pretty Boy",
+        "name": "Ornesto",
+        "id": "long_hair_swordsman"
+    },
+    {
+        "title": "Sunny Summer Smile",
+        "name": "Echo (Blue Sunny Smile)",
+        "id": "rural_ladyship"
+    },
+    {
+        "title": "Indomitable Young Lady",
+        "name": "Elmelissa",
+        "id": "marching_rival"
+    },
+    {
+        "title": "Hero Mechanic",
+        "name": "Invetra",
+        "id": "hero_mechanic"
+    },
+    {
+        "title": "The White Tiger Beast-man",
+        "name": "Shiro",
+        "id": "white_tiger"
+    },
+    {
+        "title": "The Tiger Girl That Does Her Best",
+        "name": "Mia",
+        "id": "tiger_treasure_hunter"
+    },
+    {
+        "title": "The Open Sky's Huntsman",
+        "name": "Orouru",
+        "id": "birdman"
+    },
+    {
+        "title": "The Cloud-splitting Samurai",
+        "name": "Soushiro",
+        "id": "samurai"
+    },
+    {
+        "title": "The Wind-paired Girl",
+        "name": "Mercel",
+        "id": "elf_archer"
+    },
+    {
+        "title": "The White Wolf Staff Master",
+        "name": "Helga",
+        "id": "dog_slasher"
+    },
+    {
+        "title": "Protector of the Forest",
+        "name": "Arisa",
+        "id": "arisa"
+    },
+    {
+        "title": "The Flustered Fortune-telling Miko",
+        "name": "Rebecca (New Year)",
+        "id": "bearish_darkwitch_ny20"
+    },
+    {
+        "title": "The Excited Adventuring Lad",
+        "name": "Ruu",
+        "id": "beast_adventurer"
+    },
+    {
+        "title": "The Reluctant Kunoichi",
+        "name": "Suzuka",
+        "id": "timid_kunoichi"
+    },
+    {
+        "title": "The Tengu's Loved Disciple",
+        "name": "Kohane",
+        "id": "tengu_girl"
+    },
+    {
+        "title": "Onmyou Painter",
+        "name": "Kugui (The Edited Day of Yo-kai Book)",
+        "id": "ekaki_onmyoji"
+    },
+    {
+        "title": "Boy with the Wind",
+        "name": "Hao",
+        "id": "wild_boy"
+    },
+    {
+        "title": "The Santa Reindeer White Tiger",
+        "name": "Shiro (Christmas)",
+        "id": "white_tiger_xm20"
+    },
+    {
+        "title": "The Awkward Sharp-Tongued Maid and Older Sister",
+        "name": "Ram (Re:Zero)",
+        "id": "ram"
+    },
+    {
+        "title": "Martial Arts Thoroughbred",
+        "name": "Ricardo",
+        "id": "wind_striker"
+    },
+    {
+        "title": "The Steel Whirlwind Athlete",
+        "name": "Middie",
+        "id": "steel_lacrosse"
+    },
+    {
+        "title": "The Resigned Small Witch",
+        "name": "Piamo",
+        "id": "cool_witch_girl"
+    },
+    {
+        "title": "Traveling Falconer",
+        "name": "Lemarque",
+        "id": "bird_master"
+    },
+    {
+        "title": "Warrior Monk Who Loves Training",
+        "name": "Makani",
+        "id": "pilgrim_monk"
+    },
+    {
+        "title": "Prank Loving Martial Artist",
+        "name": "Milmina (Halloween)",
+        "id": "sanctuary_guard_hw21"
+    },
+    {
+        "title": "Sheep Girl in Love",
+        "name": "Merienna (Pure Coward's Love Confession)",
+        "id": "sheep_girl"
+    },
+    {
+        "title": "Fledgling Yin-Yang Artist",
+        "name": "Ryouki",
+        "id": "ekaki_girl_playable"
+    },
+    {
+        "title": "Fist Fighter Pursuing Enemy",
+        "name": "Fuuran",
+        "id": "kung_fu_girl"
+    },
+    {
+        "title": "The Android Diva",
+        "name": "Dia",
+        "id": "sing_android"
+    },
+    {
+        "title": "The White Masked Knight",
+        "name": "Jelal",
+        "id": "unicorn_lancer"
+    },
+    {
+        "title": "The Light Bullet Magician",
+        "name": "Eliya",
+        "id": "lightbullet_wiz"
+    },
+    {
+        "title": "The One Who Protects Order and Peace",
+        "name": "Finn",
+        "id": "palpebra_knight"
+    },
+    {
+        "title": "The One Who Protects Smiles",
+        "name": "Kira",
+        "id": "palpebra_knight_lady"
+    },
+    {
+        "title": "The Monster Chef",
+        "name": "Parfait (Valentine Festival!)",
+        "id": "monster_cook"
+    },
+    {
+        "title": "The Dreamy Light Magician",
+        "name": "Illumi",
+        "id": "illusionist"
+    },
+    {
+        "title": "Trick Shooter",
+        "name": "Hopul",
+        "id": "unleash_hunter"
+    },
+    {
+        "title": "The Ecology Investigator Hunter",
+        "name": "Laia",
+        "id": "unyielding_adventurer"
+    },
+    {
+        "title": "The Reckless Mercenary Swordswoman",
+        "name": "Floretta",
+        "id": "whitedog_beast"
+    },
+    {
+        "title": "The Midsummer Savior",
+        "name": "Riesel (Summer)",
+        "id": "bishop_girl_smr20"
+    },
+    {
+        "title": "The All-Knowing Unlock Girl",
+        "name": "Kiana",
+        "id": "keylock_girl"
+    },
+    {
+        "title": "Successor of the Light",
+        "name": "Lilith",
+        "id": "resistance_princess"
+    },
+    {
+        "title": "The Indiscriminate Healer",
+        "name": "Mech",
+        "id": "doctor_machine"
+    },
+    {
+        "title": "Knight Protecting Hope",
+        "name": "Cecilia (Anniversary)",
+        "id": "woman_knight_1anv"
+    },
+    {
+        "title": "The Fisherwoman Fighter",
+        "name": "Dilette",
+        "id": "sea_violent"
+    },
+    {
+        "title": "Shy Girl of Thawing Snow",
+        "name": "Floretta (Valentine)",
+        "id": "whitedog_beast_vt21"
+    },
+    {
+        "title": "Girl Putting Others to Sleep",
+        "name": "Fini",
+        "id": "sleep_puppy"
+    },
+    {
+        "title": "Light of the Desert",
+        "name": "Sariha",
+        "id": "desert_priest"
+    },
+    {
+        "title": "Summertime Spirit Alchemist Doctor",
+        "name": "Souvi (Drifters in the Great ⭐ Love)",
+        "id": "psycho_reaper_smr21"
+    },
+    {
+        "title": "Broken Goddess",
+        "name": "Stella (Forward, Dreamers of Darkness)",
+        "id": "stella_2anv"
+    },
+    {
+        "title": "The Midnight Santa",
+        "name": "False / Force (Christmas)",
+        "id": "devil_clown_xm21"
+    },
+    {
+        "title": "Security Commander",
+        "name": "Carabina",
+        "id": "advanced_soldier"
+    },
+    {
+        "title": "Luminous Cyan",
+        "name": "Clarte",
+        "id": "pbc_operator"
+    },
+    {
+        "title": "Postergirl of the Beach",
+        "name": "Yuna (Summer)",
+        "id": "twin_blader_smr22"
+    },
+    {
+        "title": "One Royal Road",
+        "name": "Veraine (The Long Way for King and Knights)",
+        "id": "reformist_prince"
+    },
+    {
+        "title": "The Pure Evil Shadow",
+        "name": "Alm",
+        "id": "devil_princess"
+    },
+    {
+        "title": "The Fighting Maid",
+        "name": "Marianne",
+        "id": "battle_maid"
+    },
+    {
+        "title": "The Coffin-Using Spirit Summoner",
+        "name": "Andy",
+        "id": "undead_boy"
+    },
+    {
+        "title": "Seeker of the Abyss",
+        "name": "Liam",
+        "id": "warlock"
+    },
+    {
+        "title": "The Food and Festival Coordinator",
+        "name": "Yuwel (New Year)",
+        "id": "swallow_knight_ny20"
+    },
+    {
+        "title": "The Black-Haired Beauty",
+        "name": "Quartzer (Multi Boss Pick-up)",
+        "id": "sword_beauty"
+    },
+    {
+        "title": "Great Mother of Unending Night",
+        "name": "Lav / Love (The Skyscraper)",
+        "id": "touyakiren_ceo"
+    },
+    {
+        "title": "The Eyepatch Gunner",
+        "name": "Sergil / Sergyl",
+        "id": "blindness_gunner"
+    },
+    {
+        "title": "The Young Necromancer",
+        "name": "Luna",
+        "id": "luna"
+    },
+    {
+        "title": "Rose of Evening Calm",
+        "name": "Marguerite (Summer)",
+        "id": "lady_gunner_smr20"
+    },
+    {
+        "title": "Adventurer Aiming for First in the World",
+        "name": "Greig",
+        "id": "dinosaur_hunter"
+    },
+    {
+        "title": "The Scoundrel Alchemist",
+        "name": "Bryce",
+        "id": "crazy_doctor"
+    },
+    {
+        "title": "Zombie 0",
+        "name": "Tae Yamada (Zombie Land Saga)",
+        "id": "yamada_tae"
+    },
+    {
+        "title": "The Cat-Eared-and-Tailed Keeper",
+        "name": "Falce (Halloween)",
+        "id": "reaper_girl_hw20"
+    },
+    {
+        "title": "Traitor of the Purple Smoke",
+        "name": "Zelma",
+        "id": "illegal_herbalist"
+    },
+    {
+        "title": "The White Demon Warrior",
+        "name": "Ari (Anniversary)",
+        "id": "devil_woman_soldier_1anv"
+    },
+    {
+        "title": "Boy Fighting Against Fate",
+        "name": "Subaru Natsuki (Re:Zero)",
+        "id": "subaru"
+    },
+    {
+        "title": "Revealer of Darkness",
+        "name": "Edward",
+        "id": "mystery_agent"
+    },
+    {
+        "title": "Philosophical Armor",
+        "name": "Lonsdale",
+        "id": "walking_armor"
+    },
+    {
+        "title": "The Peddlers' Young Leader",
+        "name": "Tawil",
+        "id": "desert_caravans"
+    },
+    {
+        "title": "Smiling Bard",
+        "name": "Itsuki Koizumi (The Melancholy of Haruhi Suzumiya)",
+        "id": "koizumi_ituki"
+    },
+    {
+        "title": "Sinister Female Detective",
+        "name": "Virgia",
+        "id": "formercorrupt_detective"
+    },
+    {
+        "title": "Shadow Manipulation Psychic",
+        "name": "Kageoka Ryuichi",
+        "id": "psychic_projection"
+    },
+    {
+        "title": "Cursed Informant",
+        "name": "Shion (Anniversary)",
+        "id": "informant_2anv"
+    },
+    {
+        "title": "Otherworldly Strategist",
+        "name": "Kazuma (KonoSuba)",
+        "id": "kazuma"
+    },
+    {
+        "title": "Guild Staff Apprentice",
+        "name": "Hikawa Rinne (Halloween)",
+        "id": "psychic_tomboygirl_hw22"
+    },
+    {
+        "title": "Santa Nurse Herbalist",
+        "name": "Heartleaf (Christmas)",
+        "id": "herbalist_xm22"
+    },
+    {
+        "title": "The Abyss Dragon of Connected Thoughts",
+        "name": "Armadeus",
+        "id": "darkness_dragon"
+    },
+    {
+        "title": "Explosion Alchemist",
+        "name": "Lirell",
+        "id": "alchemist"
+    },
+    {
+        "title": "Witch in Training",
+        "name": "Meimy",
+        "id": "pretty_witch"
+    },
+    {
+        "title": "Desert Gunner",
+        "name": "Iris",
+        "id": "gunslinger"
+    },
+    {
+        "title": "The Border Hunter",
+        "name": "Hash",
+        "id": "monster_hunter"
+    },
+    {
+        "title": "The All-Loving Outlaw",
+        "name": "Jin",
+        "id": "black_doctor"
+    },
+    {
+        "title": "The Red Cursed Swordswoman",
+        "name": "Torene",
+        "id": "cool_woman_soldier"
+    },
+    {
+        "title": "Mad Warrior",
+        "name": "Gilslad",
+        "id": "berserker"
+    },
+    {
+        "title": "The Fire Shrine Maiden",
+        "name": "Enni",
+        "id": "fire_shaman"
+    },
+    {
+        "title": "The Strict and Orderly Inspector",
+        "name": "Jake",
+        "id": "disciplined_swordman"
+    },
+    {
+        "title": "The Bird Tribe's Female Warrior",
+        "name": "Kran",
+        "id": "birdwoman"
+    },
+    {
+        "title": "Harmony's Healer",
+        "name": "Halisha",
+        "id": "tradition_healer"
+    },
+    {
+        "title": "The Tiger-Chasing Mouse",
+        "name": "Sven",
+        "id": "brave_mouse"
+    },
+    {
+        "title": "Tailor Bringing Happiness",
+        "name": "Lilian",
+        "id": "sewing_girl"
+    },
+    {
+        "title": "The Sweet Assassin",
+        "name": "Klaus (White Day)",
+        "id": "wolf_assassin_wt21"
+    },
+    {
+        "title": "The Forest's Hunter",
+        "name": "Keiros",
+        "id": "sniper"
+    },
+    {
+        "title": "The Young Blue Swordswoman",
+        "name": "Trista",
+        "id": "urban_soldier"
+    },
+    {
+        "title": "The Cowardly Heavy Warrior",
+        "name": "Walter",
+        "id": "hard_face_soldier"
+    },
+    {
+        "title": "The White-Coat Outlaw",
+        "name": "Erza",
+        "id": "nurse"
+    },
+    {
+        "title": "The Toothed Assassin",
+        "name": "Klaus",
+        "id": "wolf_assassin"
+    },
+    {
+        "title": "The Nine-Tails' Assistant",
+        "name": "Shirano",
+        "id": "fox_companion"
+    },
+    {
+        "title": "The Illusory Cup Master",
+        "name": "Kaiyu",
+        "id": "depraved_monk"
+    },
+    {
+        "title": "The Truth-Seeking Sailor Girl",
+        "name": "Ratty",
+        "id": "sailor_girl"
+    },
+    {
+        "title": "The Silly Baby Dragon",
+        "name": "Faf",
+        "id": "cute_fafnir"
+    },
+    {
+        "title": "The Miraculous Fountain's Elegant Assistant",
+        "name": "Riko",
+        "id": "mens_attire_girl"
+    },
+    {
+        "title": "The Holy Tree Spirit",
+        "name": "Charua (Christmas)",
+        "id": "dryad_xm19"
+    },
+    {
+        "title": "The Admiring Female Mercenary",
+        "name": "Clara",
+        "id": "junior_yearngirl"
+    },
+    {
+        "title": "Fanatic★Shaman",
+        "name": "Samasa",
+        "id": "little_shaman"
+    },
+    {
+        "title": "The Mischievous Scout Girl",
+        "name": "Rita",
+        "id": "scout_girl"
+    },
+    {
+        "title": "The Dreaming Double-Sword User",
+        "name": "Yuna",
+        "id": "twin_blader"
+    },
+    {
+        "title": "Numbing Bee Girl",
+        "name": "Honey",
+        "id": "bee_girl"
+    },
+    {
+        "title": "The Thunder Strike Boxer",
+        "name": "Taiga",
+        "id": "lightning_fighter"
+    },
+    {
+        "title": "The Intelligent Black Panther",
+        "name": "Kuro",
+        "id": "outlaw_panther"
+    },
+    {
+        "title": "The Toothed Young Nobleman",
+        "name": "Albert",
+        "id": "wolf_swordsman"
+    },
+    {
+        "title": "Dancing Girl of Wind and Thunder",
+        "name": "Kadzuchi",
+        "id": "oni_girl"
+    },
+    {
+        "title": "Adventurer Relying on Alcohol",
+        "name": "Tatiana",
+        "id": "sociable_mestizo"
+    },
+    {
+        "title": "Thunder User Who Fell Into Ruin",
+        "name": "Colt",
+        "id": "magic_boy"
+    },
+    {
+        "title": "The Gun-Loving Student Engineer",
+        "name": "Sha Susu",
+        "id": "student_gunsmith"
+    },
+    {
+        "title": "The Far-Sighted Fortune Teller",
+        "name": "Foula",
+        "id": "fortuneteller"
+    },
+    {
+        "title": "Cat Girl With the New Year's Best Clothes",
+        "name": "Miu (New Year)",
+        "id": "cat_fighter_ny20"
+    },
+    {
+        "title": "The Solitary Iron Man",
+        "name": "Bargen",
+        "id": "old_mercenary"
+    },
+    {
+        "title": "Subgravity Girl",
+        "name": "Flana ",
+        "id": "floating_girl"
+    },
+    {
+        "title": "Rainy Skip",
+        "name": "Fi Nonoa",
+        "id": "conjurer_girl"
+    },
+    {
+        "title": "The Rumbling Adventurer",
+        "name": "Evan",
+        "id": "highlander"
+    },
+    {
+        "title": "Loved Daughter of the Forest",
+        "name": "Charua",
+        "id": "dryad"
+    },
+    {
+        "title": "The Gentle Undead King",
+        "name": "Lecitar",
+        "id": "lich"
+    },
+    {
+        "title": "The Spirit Gambler",
+        "name": "Neska",
+        "id": "casino_dealer"
+    },
+    {
+        "title": "The Cat-Eared Fighter",
+        "name": "Miu",
+        "id": "cat_fighter"
+    },
+    {
+        "title": "The Laughing Clown",
+        "name": "False / Force",
+        "id": "devil_clown"
+    },
+    {
+        "title": "The Spring Breeze Herbalist",
+        "name": "Heartleaf",
+        "id": "herbalist"
+    },
+    {
+        "title": "Skill Ray Lancer",
+        "name": "Connor",
+        "id": "spearman"
+    },
+    {
+        "title": "Trappist and Dairy Farmer",
+        "name": "Juster",
+        "id": "trap_errand"
+    },
+    {
+        "title": "The Fang-Beared Good Thief",
+        "name": "Kate",
+        "id": "gang_girl"
+    },
+    {
+        "title": "Seeker of Magical Theory",
+        "name": "Netty",
+        "id": "lazy_genious"
+    },
+    {
+        "title": "Beginner Adventurer",
+        "name": "Millet",
+        "id": "rookie_adventurer"
+    },
+    {
+        "title": "Priestess of Love",
+        "name": "Corina",
+        "id": "priest"
+    },
+    {
+        "title": "The Beautiful Gunner",
+        "name": "Marguerite",
+        "id": "lady_gunner"
+    },
+    {
+        "title": "The Female Knight of Protection",
+        "name": "Cecilia",
+        "id": "woman_knight"
+    },
+    {
+        "title": "The Beast-Riding Home Deliverer",
+        "name": "Aureo",
+        "id": "docking_beast"
+    },
+    {
+        "title": "The Desert Island Winery Master",
+        "name": "Raul",
+        "id": "exorcist_oldman"
+    },
+    {
+        "title": "The Immature Young Knight",
+        "name": "Miles",
+        "id": "half_knight"
+    },
+    {
+        "title": "The Newly-Employed Reporter Girl",
+        "name": "Luluca",
+        "id": "reporter"
+    },
+    {
+        "title": "The Stray Wolf Girl",
+        "name": "Caro",
+        "id": "wild_wolfgirl"
+    },
+    {
+        "title": "The Pure Moth Girl",
+        "name": "Mora",
+        "id": "moth_girl"
+    },
+    {
+        "title": "Mischievous Disciple",
+        "name": "Corina (Halloween)",
+        "id": "priest_hw20"
+    },
+    {
+        "title": "Novice Guard",
+        "name": "Ksyukha",
+        "id": "junior_soldier"
+    },
+    {
+        "title": "The Speeding Newboarder",
+        "name": "Axem",
+        "id": "skateboard_boy"
+    },
+    {
+        "title": "Dreaming of a Harem Life",
+        "name": "Ru Ruto",
+        "id": "kids_gunner"
+    },
+    {
+        "title": "Keeper of the Dead",
+        "name": "Falce",
+        "id": "reaper_girl"
+    },
+    {
+        "title": "The Quiet Job-Seeker",
+        "name": "Jalil",
+        "id": "chakram_shooter"
+    },
+    {
+        "title": "Traitor of the Demons",
+        "name": "Ari",
+        "id": "devil_woman_soldier"
+    },
+    {
+        "title": "The High-Hoped Information Broker",
+        "name": "Shion",
+        "id": "informant"
+    },
+    {
+        "title": "The Surviving Fighter",
+        "name": "Adil",
+        "id": "arabic_swordman"
+    },
+    {
+        "title": "The Ill-Tempered Maid",
+        "name": "Dorothea",
+        "id": "dark_nursemaid"
+    },
+    {
+        "title": "The Dreamy Magician",
+        "name": "Rebecca",
+        "id": "bearish_darkwitch"
+    },
+    {
+        "title": "The One Loved By Monsters",
+        "name": "Nocelle",
+        "id": "monster_attract"
+    },
+    {
+        "title": "Delusional Adventurer",
+        "name": "Meryl",
+        "id": "delusion_girl"
+    },
+    {
+        "title": "The Bewildered Delusional Santa",
+        "name": "Meryl (Christmas)",
+        "id": "delusion_girl_xm20"
+    },
+    {
+        "title": "The Strange Mummy Boy",
+        "name": "Talha",
+        "id": "mummy_boy"
+    },
+    {
+        "title": "Young Warrior of the Rabbit Tribe",
+        "name": "Cody",
+        "id": "revenge_rabbit"
+    },
+    {
+        "title": "Aspiring Young Detective",
+        "name": "Lucille",
+        "id": "assistant_boy"
+    },
+    {
+        "title": "Dusty Guardian",
+        "name": "Golem",
+        "id": "guardian_golem"
+    },
+    {
+        "title": "The Forest's Intellectual",
+        "name": "Pojito",
+        "id": "owl"
+    },
+    {
+        "title": "Wind Blade Spirit",
+        "name": "Kamaitachi",
+        "id": "fox"
+    },
+    {
+        "title": "Reckless Support's Gift",
+        "name": "CF Kiseki (Golden Head of Miracle)",
+        "id": "towa_namakubi"
+    },
+    {
+        "title": "The Strange Diva Transcending Space and Time",
+        "name": "Towa Kiseki (Golden Head of Miracle)",
+        "id": "towa_vtuber"
+    },
+    {
+        "title": "The Spore Spirit",
+        "name": "Kino",
+        "id": "kinoko"
+    },
+    {
+        "title": "Fire's Jiggle",
+        "name": "Red Pore",
+        "id": "slango_red"
+    },
+    {
+        "title": "Fire's Spirit",
+        "name": "Fire Spirit",
+        "id": "spirit_fire"
+    },
+    {
+        "title": "Water's Jiggle",
+        "name": "Blue Pore",
+        "id": "slango_blue"
+    },
+    {
+        "title": "Thunder's Jiggle",
+        "name": "Yellow Pore",
+        "id": "slango_yellow"
+    },
+    {
+        "title": "Electric Needle Mouse",
+        "name": "Pararat",
+        "id": "paralysis_hedgehog"
+    },
+    {
+        "title": "Wind's Jiggle",
+        "name": "Green Pore",
+        "id": "slango_green"
+    }
+]
