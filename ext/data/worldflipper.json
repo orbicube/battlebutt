@@ -81,7 +81,7 @@
     },
     {
         "title": "Passionate Platinum",
-        "name": "Ecrire / Écrire (Summer)",
+        "name": "Écrire (Summer)",
         "id": "bodysuit_trooper_smr21"
     },
     {
@@ -216,7 +216,7 @@
     },
     {
         "title": "The Borderlands' Guide",
-        "name": "Laquisha / Lakisha",
+        "name": "Lakisha",
         "id": "drawing_witch"
     },
     {
@@ -246,7 +246,7 @@
     },
     {
         "title": "The Monstrous Martial Arts Genius",
-        "name": "Sheyron / Shuilong",
+        "name": "Shuilong",
         "id": "waterdragon_kunfu"
     },
     {
@@ -271,7 +271,7 @@
     },
     {
         "title": "Beastly Warrior",
-        "name": "Sheyron / Shuilong (Beast)",
+        "name": "Shuilong (Beast)",
         "id": "waterdragon_kunfu_proud"
     },
     {
@@ -776,7 +776,7 @@
     },
     {
         "title": "The Seven-Colored Sword Splitter",
-        "name": "Ecrire / Écrire",
+        "name": "Écrire",
         "id": "bodysuit_trooper"
     },
     {
@@ -1051,7 +1051,7 @@
     },
     {
         "title": "Necktie-Slackening Gunner",
-        "name": "Sergil / Sergyl (Half Anniversary)",
+        "name": "Sergyl (Half Anniversary)",
         "id": "blindness_gunner_1halfanv"
     },
     {
@@ -1061,7 +1061,7 @@
     },
     {
         "title": "HW★Night Girl",
-        "name": "Lav / Love (Halloween)",
+        "name": "Love (Halloween)",
         "id": "touyakiren_ceo_hw21"
     },
     {
@@ -1346,7 +1346,7 @@
     },
     {
         "title": "The Broken Spirit Doctor",
-        "name": "Souvi / Sauvi",
+        "name": "Sauvi",
         "id": "psycho_reaper"
     },
     {
@@ -1476,7 +1476,7 @@
     },
     {
         "title": "The Created Puppet Princess",
-        "name": "Prica / Prika (The Princess of Figment)",
+        "name": "Prika (The Princess of Figment)",
         "id": "fake_princess"
     },
     {
@@ -1796,7 +1796,7 @@
     },
     {
         "title": "The Midnight Santa",
-        "name": "False / Force (Christmas)",
+        "name": "Force (Christmas)",
         "id": "devil_clown_xm21"
     },
     {
@@ -1851,12 +1851,12 @@
     },
     {
         "title": "Great Mother of Unending Night",
-        "name": "Lav / Love (The Skyscraper)",
+        "name": "Love (The Skyscraper)",
         "id": "touyakiren_ceo"
     },
     {
         "title": "The Eyepatch Gunner",
-        "name": "Sergil / Sergyl",
+        "name": "Sergyl",
         "id": "blindness_gunner"
     },
     {
@@ -2196,7 +2196,7 @@
     },
     {
         "title": "The Laughing Clown",
-        "name": "False / Force",
+        "name": "Force",
         "id": "devil_clown"
     },
     {
