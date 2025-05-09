@@ -619,6 +619,32 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command()
+    async def worldflipper(self, ctx, reason: Optional[str] = None):
+
+        with open("ext/data/worldflipper.json", encoding="utf-8") as f:
+            characters = json.load(f)
+
+        url = "https://eliya-bot.herokuapp.com/img/assets/chars/"
+
+        char = choice(characters)
+        embed = discord.Embed(
+            title=char["name"],
+            description=char["title"],
+            color=0xfefaf6)
+
+        embed.set_image(
+            url=f"{url}{char['id']}/full_shot_{randint(0,1)}.png")
+        embed.set_footer(
+            text= "World Flipper")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"world flipper {reasonm}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
