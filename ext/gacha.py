@@ -89,7 +89,8 @@ class Gacha(commands.Cog,
                 for c in results:
                     c = c['title']
                     char = {
-                        "name": f"{c['name']}, {c['title']}".replace('&#039;','\''),
+                        "name": c['name'].replace('&#039;','\''),
+                        "title": c['title'].replace('&#039;','\''),
                         "arts": [quote(c['art1']), quote(c['art2'])]
                     }
                     if c['art3']:
@@ -116,6 +117,7 @@ class Gacha(commands.Cog,
         char = choice(characters)
         embed = discord.Embed(
             title=char['name'],
+            description=char['title'],
             color=0x1ca6ff
         )
         embed.set_image(
@@ -169,7 +171,8 @@ class Gacha(commands.Cog,
         images = page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/@href")
 
         embed = discord.Embed(
-            title=selected_article,
+            title=selected_article.split(":")[0],
+            description=selected_article.split(": ")[1],
             color=0xc3561f)
         try:
             embed.set_image(url=choice(images))
@@ -471,6 +474,7 @@ class Gacha(commands.Cog,
 
         embed = discord.Embed(
             title=char["name"],
+            description=char["title"],
             colour=0x3b70c7)
         embed.set_image(
             url=f"https://assets.nierrein.guide/ui/costume/{char['id']}/{char['id']}_full.png")
@@ -563,6 +567,7 @@ class Gacha(commands.Cog,
 
         embed = discord.Embed(
             title=char["name"],
+            description=char["title"],
             color=0x845b51)
         embed.set_image(
             url=f"https://barrelwisdom.com/media/games/resleri/characters/full/{char['slug']}.webp")
@@ -588,7 +593,8 @@ class Gacha(commands.Cog,
         char = choice(chars)
 
         embed = discord.Embed(
-            title=f"{char[1]}/{char[2]}",
+            title=f"{char[1]}",
+            description=f"{char[2]}",
             color=0xfafafa)
         embed.set_image(url=f"https://sinoalice.game-db.tw/images/character_l/{char[0]}.png")
         embed.set_footer(text="SINoALICE")

@@ -1,1 +1,1402 @@
-[{"id": "ch048003", "name": "10H, Abstract Savior"}, {"id": "ch022012", "name": "Saryu, Festive Witch"}, {"id": "ch008019", "name": "Rion, Festive Exile"}, {"id": "ch015021", "name": "Akeha, Festive Assassin"}, {"id": "ch025011", "name": "Yurie, Festive Ruler"}, {"id": "ch006007", "name": "Argo, Frozen-Heart Adventurer"}, {"id": "ch012006", "name": "F66x, Frozen-Heart Inmate"}, {"id": "ch048001", "name": "10H, Sentinel Savior"}, {"id": "ch048004", "name": "10H, Reborn Warden"}, {"id": "ch024009", "name": "Marie, Abyssal Songstress"}, {"id": "ch019019", "name": "Fio, Divine Girl"}, {"id": "ch014017", "name": "Griff, New Year's Captain"}, {"id": "ch027009", "name": "Yudil, New Year's Boor"}, {"id": "ch026008", "name": "Sarafa, New Year's Belle"}, {"id": "ch007016", "name": "Dimos, New Year's Gunman"}, {"id": "ch014006", "name": "Griff, Frozen-Heart Has-Been"}, {"id": "ch025010", "name": "Yurie, Yuletide Ruler"}, {"id": "ch024011", "name": "Marie, Yuletide Songstress"}, {"id": "ch013012", "name": "Lars, Yuletide Soldier"}, {"id": "ch011015", "name": "063y, Yuletide Prisoner"}, {"id": "ch010019", "name": "Noelle, Yuletide Weapon"}, {"id": "ch023008", "name": "Priyet, Abyssal Werebeast"}, {"id": "ch015008", "name": "Akeha, F-H Swordmaster"}, {"id": "ch020006", "name": "Hina, Abyssal Pupil"}, {"id": "ch026007", "name": "Sarafa, Shadowbound Belle"}, {"id": "ch020007", "name": "Hina, Guardian Pupil"}, {"id": "ch027008", "name": "Yudil, Divine Boor"}, {"id": "ch021006", "name": "Yuzuki, Abyssal Student"}, {"id": "ch026009", "name": "Sarafa, Oathbound Belle"}, {"id": "ch008018", "name": "Rion, Oathbound Exile"}, {"id": "ch011006", "name": "063y, Frozen-Heart Convict"}, {"id": "ch024010", "name": "Marie, Oathbound Songstress"}, {"id": "ch021007", "name": "Yuzuki, Guardian Student"}, {"id": "ch025009", "name": "Yurie, Divine Ruler"}, {"id": "ch022011", "name": "Saryu, Abyssal Witch"}, {"id": "ch010018", "name": "Noelle, Mechanical Weapon"}, {"id": "ch009016", "name": "Gayle, Mechanical Hunter"}, {"id": "ch014016", "name": "Griff, Mechanical Captain"}, {"id": "ch021005", "name": "Yuzuki, Abstract Student"}, {"id": "ch005013", "name": "Levania, Festive Monster"}, {"id": "ch010017", "name": "Noelle, Festive Weapon"}, {"id": "ch014015", "name": "Griff, Festive Captain"}, {"id": "ch009015", "name": "Gayle, Festive Hunter"}, {"id": "ch019018", "name": "Fio, Festive Girl"}, {"id": "ch010006", "name": "Noelle, F-H Warlady"}, {"id": "ch011014", "name": "063y, Divine Prisoner"}, {"id": "ch027007", "name": "Yudil, Abyssal Boor"}, {"id": "ch010016", "name": "Noelle, Summer Weapon"}, {"id": "ch007015", "name": "Dimos, Summer Gunman"}, {"id": "ch025008", "name": "Yurie, Summer Ruler"}, {"id": "ch024008", "name": "Marie, Summer Songstress"}, {"id": "ch013006", "name": "Lars, Frozen-Heart Truant"}, {"id": "ch026006", "name": "Sarafa, Abyssal Belle"}, {"id": "ch022010", "name": "Saryu, Phantasmal Witch"}, {"id": "ch013014", "name": "Lars, Phantasmal Soldier"}, {"id": "ch027006", "name": "Yudil, Phantasmal Boor"}, {"id": "ch014014", "name": "Griff, False Guardian Captain"}, {"id": "ch023007", "name": "Priyet, Shadowbound Werebeast"}, {"id": "ch025007", "name": "Yurie, Abyssal Ruler"}, {"id": "ch020004", "name": "Hina, Abstract Pupil"}, {"id": "ch027005", "name": "Yudil, Guardian Boor"}, {"id": "ch015020", "name": "Akeha, Divine Assassin"}, {"id": "ch020005", "name": "Hina, Mechanical Pupil"}, {"id": "ch005004", "name": "Levania, Frozen-Heart Beast"}, {"id": "ch021004", "name": "Yuzuki, Mechanical Student"}, {"id": "ch026005", "name": "Sarafa, Abstract Belle"}, {"id": "ch024007", "name": "Marie, Guardian Songstress"}, {"id": "ch016003", "name": "The World-Ender, Alternate Lad"}, {"id": "ch001005", "name": "2B, Alternate Battler"}, {"id": "ch014013", "name": "Griff, Abyssal Captain"}, {"id": "ch049001", "name": "Hina, Reborn Prodigy"}, {"id": "ch021002", "name": "Yuzuki, Reborn Reject"}, {"id": "ch009008", "name": "Gayle, F-H Contractor"}, {"id": "ch024006", "name": "Marie, Fractured Songstress"}, {"id": "ch021003", "name": "Yuzuki, Celebratory Student"}, {"id": "ch026004", "name": "Sarafa, Guardian Belle"}, {"id": "ch012012", "name": "F66x, Celebratory Captive"}, {"id": "ch020003", "name": "Hina, Celebratory Pupil"}, {"id": "ch011012", "name": "063y, Celebratory Prisoner"}, {"id": "ch001004", "name": "2B, Shattered Battler"}, {"id": "ch005011", "name": "Levania, Celebratory Monster"}, {"id": "ch026003", "name": "Sarafa, Celebratory Belle"}, {"id": "ch027004", "name": "Yudil, Celebratory Boor"}, {"id": "ch007013", "name": "Dimos, Bloodless Gunman"}, {"id": "ch023006", "name": "Priyet, Guardian Werebeast"}, {"id": "ch009012", "name": "Gayle, Abyssal Hunter"}, {"id": "ch026001", "name": "Sarafa, Chained Belle"}, {"id": "ch026002", "name": "Sarafa, Reborn Monopolist"}, {"id": "ch021001", "name": "Yuzuki, Devoted Husk"}, {"id": "ch020001", "name": "Hina, Dedicated Husk"}, {"id": "ch027002", "name": "Yudil, Reborn Usurper"}, {"id": "ch006014", "name": "Argo, Shadowbound Traveler"}, {"id": "ch015018", "name": "Akeha, New Year's Assassin"}, {"id": "ch019011", "name": "Fio, New Year's Girl"}, {"id": "ch024005", "name": "Marie, New Year's Songstress"}, {"id": "ch025006", "name": "Yurie, New Year's Ruler"}, {"id": "ch012009", "name": "F66x, Abyssal Captive"}, {"id": "ch014011", "name": "Griff, Yuletide Captain"}, {"id": "ch007007", "name": "Dimos, F-H Automaton"}, {"id": "ch009013", "name": "Gayle, Yuletide Hunter"}, {"id": "ch023005", "name": "Priyet, Yuletide Werebeast"}, {"id": "ch022009", "name": "Saryu, Yuletide Witch"}, {"id": "ch006013", "name": "Argo, Yuletide Traveler"}, {"id": "ch013011", "name": "Lars, Abyssal Soldier"}, {"id": "ch022008", "name": "Saryu, Fabled Witch"}, {"id": "ch015017", "name": "Akeha, Fabled Assassin"}, {"id": "ch010014", "name": "Noelle, Fabled Weapon"}, {"id": "ch027003", "name": "Yudil, Abstract Boor"}, {"id": "ch025005", "name": "Yurie, Guardian Ruler"}, {"id": "ch008008", "name": "Rion, F-H Revolutionary"}, {"id": "ch010013", "name": "Noelle, Abyssal Weapon"}, {"id": "ch011011", "name": "063y, Abyssal Prisoner"}, {"id": "ch027001", "name": "Yudil, Pilfering Boor"}, {"id": "ch008014", "name": "Rion, Shadowbound Exile"}, {"id": "ch022007", "name": "Saryu, Guardian Witch"}, {"id": "ch025004", "name": "Yurie, Abstract Ruler"}, {"id": "ch015016", "name": "Akeha, Abyssal Assassin"}, {"id": "ch047001", "name": "Crow, Scheming Justice"}, {"id": "ch044001", "name": "Joker, Caged Rebel"}, {"id": "ch045001", "name": "Queen, Virtuous Priestess"}, {"id": "ch046001", "name": "Fox, Insightful Emperor"}, {"id": "ch005010", "name": "Levania, Lacrima Monster"}, {"id": "ch008007", "name": "Rion, Abyssal Exile"}, {"id": "ch023004", "name": "Priyet, Celebratory Werebeast"}, {"id": "ch025003", "name": "Yurie, Celebratory Ruler"}, {"id": "ch024004", "name": "Marie, Celebratory Songstress"}, {"id": "ch015015", "name": "Akeha, Celebratory Assassin"}, {"id": "ch019009", "name": "Fio, Frozen-Heart Princess"}, {"id": "ch014010", "name": "Griff, Bloody Captain"}, {"id": "ch013008", "name": "Lars, Guardian Soldier"}, {"id": "ch005009", "name": "Levania, Abyssal Monster"}, {"id": "ch024002", "name": "Marie, Reborn Pillar"}, {"id": "ch025002", "name": "Yurie, Reborn Leader"}, {"id": "ch025001", "name": "Yurie, Obsessed Ruler"}, {"id": "ch022006", "name": "Saryu, Summer Witch"}, {"id": "ch011007", "name": "063y, Summer Prisoner"}, {"id": "ch012008", "name": "F66x, Summer Captive"}, {"id": "ch009011", "name": "Gayle, Summer Hunter"}, {"id": "ch019008", "name": "Fio, Abyssal Girl"}, {"id": "ch013010", "name": "Lars, Bloody Soldier"}, {"id": "ch005007", "name": "Levania, Guardian Monster"}, {"id": "ch006012", "name": "Argo, Bloody Traveler"}, {"id": "ch010012", "name": "Noelle, Fractured Weapon"}, {"id": "ch015013", "name": "Akeha, F. Guardian Assassin"}, {"id": "ch014005", "name": "Griff, Guardian Captain"}, {"id": "ch007012", "name": "Dimos, Abyssal Gunman"}, {"id": "ch015014", "name": "Akeha, Fractured Assassin"}, {"id": "ch024001", "name": "Marie, Praying Songstress"}, {"id": "ch024003", "name": "Marie, Abstract Songstress"}, {"id": "ch007005", "name": "Dimos, Guardian Gunman"}, {"id": "ch010008", "name": "Noelle, Phantasmal Weapon"}, {"id": "ch011008", "name": "063y, Phantasmal Prisoner"}, {"id": "ch008011", "name": "Rion, Phantasmal Exile"}, {"id": "ch022005", "name": "Saryu, Bloody Witch"}, {"id": "ch012011", "name": "F66x, Bloodless Captive"}, {"id": "ch014009", "name": "Griff, Fractured Captain"}, {"id": "ch009010", "name": "Gayle, Fractured Hunter"}, {"id": "ch019016", "name": "Fio, Lacrima Girl"}, {"id": "ch007009", "name": "Dimos, False Guardian Gunman"}, {"id": "ch010011", "name": "Noelle, Bloody Weapon"}, {"id": "ch011009", "name": "063y, Guardian Prisoner"}, {"id": "ch015010", "name": "Akeha, Bloodless Assassin"}, {"id": "ch005008", "name": "Levania, Bloody Monster"}, {"id": "ch019006", "name": "Fio, Guardian Girl"}, {"id": "ch013007", "name": "Lars, Lacrima Soldier"}, {"id": "ch023002", "name": "Priyet, Reborn Fiend"}, {"id": "ch023001", "name": "Priyet, Verboten Werebeast"}, {"id": "ch023003", "name": "Priyet, Abstract Werebeast"}, {"id": "ch022002", "name": "Saryu, Reborn Sorceress"}, {"id": "ch006010", "name": "Argo, Fractured Traveler"}, {"id": "ch008013", "name": "Rion, Celebratory Exile"}, {"id": "ch022004", "name": "Saryu, Celebratory Witch"}, {"id": "ch007010", "name": "Dimos, Celebratory Gunman"}, {"id": "ch013009", "name": "Lars, Celebratory Soldier"}, {"id": "ch005005", "name": "Levania, Bloodless Monster"}, {"id": "ch007008", "name": "Dimos, Fractured Gunman"}, {"id": "ch012010", "name": "F66x, Bloody Captive"}, {"id": "ch010009", "name": "Noelle, Bloodless Weapon"}, {"id": "ch014008", "name": "Griff, Lacrima Captain"}, {"id": "ch008006", "name": "Rion, New Year's Exile"}, {"id": "ch010010", "name": "Noelle, New Year's Weapon"}, {"id": "ch009007", "name": "Gayle, New Year's Hunter"}, {"id": "ch011010", "name": "063y, New Year's Prisoner"}, {"id": "ch015007", "name": "Akeha, Yuletide Assassin"}, {"id": "ch022003", "name": "Saryu, Abstract Witch"}, {"id": "ch022001", "name": "Saryu, Avowed Witch"}, {"id": "ch015005", "name": "Akeha, Bloody Assassin"}, {"id": "ch008012", "name": "Rion, Yuletide Exile"}, {"id": "ch019015", "name": "Fio, Yuletide Girl"}, {"id": "ch005006", "name": "Levania, Yuletide Monster"}, {"id": "ch012005", "name": "F66x, Lacrima Captive"}, {"id": "ch007006", "name": "Dimos, Bloody Gunman"}, {"id": "ch010005", "name": "Noelle, Guardian Weapon"}, {"id": "ch015011", "name": "Akeha, Guardian Assassin"}, {"id": "ch013005", "name": "Lars, Fractured Soldier"}, {"id": "ch005002", "name": "Levania, Abstract Monster"}, {"id": "ch005001", "name": "Levania, Dark Monster"}, {"id": "ch019002", "name": "Fio, Reborn Princess"}, {"id": "ch005003", "name": "Levania, Reborn Beast"}, {"id": "ch019001", "name": "Fio, The Girl of Light"}, {"id": "ch019007", "name": "Fio, Intoner Girl"}, {"id": "ch031001", "name": "Zero, Progenitor Sister"}, {"id": "ch015006", "name": "Akeha, Intoner Assassin"}, {"id": "ch031002", "name": "Zero, Divergent Sister"}, {"id": "ch010002", "name": "Noelle, Abstract Weapon"}, {"id": "ch008010", "name": "Rion, Guardian Exile"}, {"id": "ch010003", "name": "Noelle, Dissenting Weapon"}, {"id": "ch006002", "name": "Argo, Patriotic Traveler"}, {"id": "ch009006", "name": "Gayle, Bloody Hunter"}, {"id": "ch018001", "name": "Kain\u00e9, The Aerie Warrior"}, {"id": "ch017002", "name": "Emil, Divergent Oddity"}, {"id": "ch017001", "name": "Emil, Puzzling Oddity"}, {"id": "ch016001", "name": "The World-Ender, Soulful Lad"}, {"id": "ch018002", "name": "Kain\u00e9, Divergent Warrior"}, {"id": "ch016002", "name": "The World-Ender, Divergent Lad"}, {"id": "ch011005", "name": "063y, Fractured Prisoner"}, {"id": "ch012007", "name": "F66x, Guardian Captive"}, {"id": "ch014003", "name": "Griff, Dissenting Captain"}, {"id": "ch014004", "name": "Griff, Abstract Captain"}, {"id": "ch014007", "name": "Griff, Celebratory Captain"}, {"id": "ch019012", "name": "Fio, Celebratory Girl"}, {"id": "ch010001", "name": "Noelle, Hidden Weapon"}, {"id": "ch010004", "name": "Noelle, Reborn Warlady"}, {"id": "ch009009", "name": "Gayle, Celebratory Hunter"}, {"id": "ch006009", "name": "Argo, Celebratory Traveler"}, {"id": "ch010007", "name": "Noelle, Celebratory Weapon"}, {"id": "ch014001", "name": "Griff, Harmonious Captain"}, {"id": "ch014002", "name": "Griff, Reborn Has-Been"}, {"id": "ch015009", "name": "Akeha, Summer Assassin"}, {"id": "ch006008", "name": "Argo, Summer Traveler"}, {"id": "ch019010", "name": "Fio, Summer Girl"}, {"id": "ch008009", "name": "Rion, Summer Exile"}, {"id": "ch019005", "name": "Fio, Abstract Girl"}, {"id": "ch015002", "name": "Akeha, Abstract Assassin"}, {"id": "ch008001", "name": "Rion, Sickly Exile"}, {"id": "ch003002", "name": "A2, Divergent Attacker"}, {"id": "ch002001", "name": "9S, Isolated Scanner"}, {"id": "ch009005", "name": "Gayle, Guardian Hunter"}, {"id": "ch015004", "name": "Akeha, Reborn Swordmaster"}, {"id": "ch013002", "name": "Lars, Reborn Truant"}, {"id": "ch011003", "name": "063y, Dissenting Prisoner"}, {"id": "ch003001", "name": "A2, Vengeful Attacker"}, {"id": "ch006004", "name": "Argo, Reborn Adventurer"}, {"id": "ch001001", "name": "2B, Praying Battler"}, {"id": "ch012003", "name": "F66x, Dissenting Captive"}, {"id": "ch009004", "name": "Gayle, Reborn Contractor"}, {"id": "ch008003", "name": "Rion, Dissenting Exile"}, {"id": "ch019004", "name": "Fio, Dissenting Girl"}, {"id": "ch008004", "name": "Rion, Reborn Revolutionary"}, {"id": "ch012004", "name": "F66x, Reborn Inmate"}, {"id": "ch007003", "name": "Dimos, Dissenting Gunman"}, {"id": "ch013003", "name": "Lars, Dissenting Soldier"}, {"id": "ch009003", "name": "Gayle, Dissenting Hunter"}, {"id": "ch007004", "name": "Dimos, Reborn Automaton"}, {"id": "ch011004", "name": "063y, Reborn Convict"}, {"id": "ch006005", "name": "Argo, Guardian Traveler"}, {"id": "ch006003", "name": "Argo, Dissenting Traveler"}, {"id": "ch015003", "name": "Akeha, Dissenting Assassin"}, {"id": "ch013001", "name": "Lars, Spiteful Soldier"}, {"id": "ch012001", "name": "F66x, Distressed Captive"}, {"id": "ch011001", "name": "063y, Stalwart Prisoner"}, {"id": "ch004001", "name": "Levania, Human Monster"}, {"id": "ch006001", "name": "Argo, Apex Traveler"}, {"id": "ch015001", "name": "Akeha, Twilight Assassin"}, {"id": "ch007001", "name": "Dimos, Departed Gunman"}, {"id": "ch009001", "name": "Gayle, Wounded Hunter"}, {"id": "ch011002", "name": "063y, Abstract Prisoner"}, {"id": "ch008002", "name": "Rion, Mechanical Exile"}, {"id": "ch007002", "name": "Dimos, Abstract Gunman"}, {"id": "ch001002", "name": "2B, Divergent Battler"}, {"id": "ch015012", "name": "Akeha, Mechanical Assassin"}, {"id": "ch019013", "name": "Fio, Simulacrum Girl"}, {"id": "ch001003", "name": "2P, Mock Machine"}, {"id": "ch006006", "name": "Argo, Abstract Traveler"}, {"id": "ch008005", "name": "Rion, Abstract Exile"}, {"id": "ch012002", "name": "F66x, Abstract Captive"}, {"id": "ch019003", "name": "Fio, Mechanical Girl"}, {"id": "ch002002", "name": "9S, Divergent Scanner"}, {"id": "ch013004", "name": "Lars, Abstract Soldier"}, {"id": "ch009002", "name": "Gayle, Abstract Hunter"}]
+[
+    {
+        "id": "ch048003",
+        "name": "10H",
+        "title": "Abstract Savior"
+    },
+    {
+        "id": "ch022012",
+        "name": "Saryu",
+        "title": "Festive Witch"
+    },
+    {
+        "id": "ch008019",
+        "name": "Rion",
+        "title": "Festive Exile"
+    },
+    {
+        "id": "ch015021",
+        "name": "Akeha",
+        "title": "Festive Assassin"
+    },
+    {
+        "id": "ch025011",
+        "name": "Yurie",
+        "title": "Festive Ruler"
+    },
+    {
+        "id": "ch006007",
+        "name": "Argo",
+        "title": "Frozen-Heart Adventurer"
+    },
+    {
+        "id": "ch012006",
+        "name": "F66x",
+        "title": "Frozen-Heart Inmate"
+    },
+    {
+        "id": "ch048001",
+        "name": "10H",
+        "title": "Sentinel Savior"
+    },
+    {
+        "id": "ch048004",
+        "name": "10H",
+        "title": "Reborn Warden"
+    },
+    {
+        "id": "ch024009",
+        "name": "Marie",
+        "title": "Abyssal Songstress"
+    },
+    {
+        "id": "ch019019",
+        "name": "Fio",
+        "title": "Divine Girl"
+    },
+    {
+        "id": "ch014017",
+        "name": "Griff",
+        "title": "New Year's Captain"
+    },
+    {
+        "id": "ch027009",
+        "name": "Yudil",
+        "title": "New Year's Boor"
+    },
+    {
+        "id": "ch026008",
+        "name": "Sarafa",
+        "title": "New Year's Belle"
+    },
+    {
+        "id": "ch007016",
+        "name": "Dimos",
+        "title": "New Year's Gunman"
+    },
+    {
+        "id": "ch014006",
+        "name": "Griff",
+        "title": "Frozen-Heart Has-Been"
+    },
+    {
+        "id": "ch025010",
+        "name": "Yurie",
+        "title": "Yuletide Ruler"
+    },
+    {
+        "id": "ch024011",
+        "name": "Marie",
+        "title": "Yuletide Songstress"
+    },
+    {
+        "id": "ch013012",
+        "name": "Lars",
+        "title": "Yuletide Soldier"
+    },
+    {
+        "id": "ch011015",
+        "name": "063y",
+        "title": "Yuletide Prisoner"
+    },
+    {
+        "id": "ch010019",
+        "name": "Noelle",
+        "title": "Yuletide Weapon"
+    },
+    {
+        "id": "ch023008",
+        "name": "Priyet",
+        "title": "Abyssal Werebeast"
+    },
+    {
+        "id": "ch015008",
+        "name": "Akeha",
+        "title": "F-H Swordmaster"
+    },
+    {
+        "id": "ch020006",
+        "name": "Hina",
+        "title": "Abyssal Pupil"
+    },
+    {
+        "id": "ch026007",
+        "name": "Sarafa",
+        "title": "Shadowbound Belle"
+    },
+    {
+        "id": "ch020007",
+        "name": "Hina",
+        "title": "Guardian Pupil"
+    },
+    {
+        "id": "ch027008",
+        "name": "Yudil",
+        "title": "Divine Boor"
+    },
+    {
+        "id": "ch021006",
+        "name": "Yuzuki",
+        "title": "Abyssal Student"
+    },
+    {
+        "id": "ch026009",
+        "name": "Sarafa",
+        "title": "Oathbound Belle"
+    },
+    {
+        "id": "ch008018",
+        "name": "Rion",
+        "title": "Oathbound Exile"
+    },
+    {
+        "id": "ch011006",
+        "name": "063y",
+        "title": "Frozen-Heart Convict"
+    },
+    {
+        "id": "ch024010",
+        "name": "Marie",
+        "title": "Oathbound Songstress"
+    },
+    {
+        "id": "ch021007",
+        "name": "Yuzuki",
+        "title": "Guardian Student"
+    },
+    {
+        "id": "ch025009",
+        "name": "Yurie",
+        "title": "Divine Ruler"
+    },
+    {
+        "id": "ch022011",
+        "name": "Saryu",
+        "title": "Abyssal Witch"
+    },
+    {
+        "id": "ch010018",
+        "name": "Noelle",
+        "title": "Mechanical Weapon"
+    },
+    {
+        "id": "ch009016",
+        "name": "Gayle",
+        "title": "Mechanical Hunter"
+    },
+    {
+        "id": "ch014016",
+        "name": "Griff",
+        "title": "Mechanical Captain"
+    },
+    {
+        "id": "ch021005",
+        "name": "Yuzuki",
+        "title": "Abstract Student"
+    },
+    {
+        "id": "ch005013",
+        "name": "Levania",
+        "title": "Festive Monster"
+    },
+    {
+        "id": "ch010017",
+        "name": "Noelle",
+        "title": "Festive Weapon"
+    },
+    {
+        "id": "ch014015",
+        "name": "Griff",
+        "title": "Festive Captain"
+    },
+    {
+        "id": "ch009015",
+        "name": "Gayle",
+        "title": "Festive Hunter"
+    },
+    {
+        "id": "ch019018",
+        "name": "Fio",
+        "title": "Festive Girl"
+    },
+    {
+        "id": "ch010006",
+        "name": "Noelle",
+        "title": "F-H Warlady"
+    },
+    {
+        "id": "ch011014",
+        "name": "063y",
+        "title": "Divine Prisoner"
+    },
+    {
+        "id": "ch027007",
+        "name": "Yudil",
+        "title": "Abyssal Boor"
+    },
+    {
+        "id": "ch010016",
+        "name": "Noelle",
+        "title": "Summer Weapon"
+    },
+    {
+        "id": "ch007015",
+        "name": "Dimos",
+        "title": "Summer Gunman"
+    },
+    {
+        "id": "ch025008",
+        "name": "Yurie",
+        "title": "Summer Ruler"
+    },
+    {
+        "id": "ch024008",
+        "name": "Marie",
+        "title": "Summer Songstress"
+    },
+    {
+        "id": "ch013006",
+        "name": "Lars",
+        "title": "Frozen-Heart Truant"
+    },
+    {
+        "id": "ch026006",
+        "name": "Sarafa",
+        "title": "Abyssal Belle"
+    },
+    {
+        "id": "ch022010",
+        "name": "Saryu",
+        "title": "Phantasmal Witch"
+    },
+    {
+        "id": "ch013014",
+        "name": "Lars",
+        "title": "Phantasmal Soldier"
+    },
+    {
+        "id": "ch027006",
+        "name": "Yudil",
+        "title": "Phantasmal Boor"
+    },
+    {
+        "id": "ch014014",
+        "name": "Griff",
+        "title": "False Guardian Captain"
+    },
+    {
+        "id": "ch023007",
+        "name": "Priyet",
+        "title": "Shadowbound Werebeast"
+    },
+    {
+        "id": "ch025007",
+        "name": "Yurie",
+        "title": "Abyssal Ruler"
+    },
+    {
+        "id": "ch020004",
+        "name": "Hina",
+        "title": "Abstract Pupil"
+    },
+    {
+        "id": "ch027005",
+        "name": "Yudil",
+        "title": "Guardian Boor"
+    },
+    {
+        "id": "ch015020",
+        "name": "Akeha",
+        "title": "Divine Assassin"
+    },
+    {
+        "id": "ch020005",
+        "name": "Hina",
+        "title": "Mechanical Pupil"
+    },
+    {
+        "id": "ch005004",
+        "name": "Levania",
+        "title": "Frozen-Heart Beast"
+    },
+    {
+        "id": "ch021004",
+        "name": "Yuzuki",
+        "title": "Mechanical Student"
+    },
+    {
+        "id": "ch026005",
+        "name": "Sarafa",
+        "title": "Abstract Belle"
+    },
+    {
+        "id": "ch024007",
+        "name": "Marie",
+        "title": "Guardian Songstress"
+    },
+    {
+        "id": "ch016003",
+        "name": "The World-Ender",
+        "title": "Alternate Lad"
+    },
+    {
+        "id": "ch001005",
+        "name": "2B",
+        "title": "Alternate Battler"
+    },
+    {
+        "id": "ch014013",
+        "name": "Griff",
+        "title": "Abyssal Captain"
+    },
+    {
+        "id": "ch049001",
+        "name": "Hina",
+        "title": "Reborn Prodigy"
+    },
+    {
+        "id": "ch021002",
+        "name": "Yuzuki",
+        "title": "Reborn Reject"
+    },
+    {
+        "id": "ch009008",
+        "name": "Gayle",
+        "title": "F-H Contractor"
+    },
+    {
+        "id": "ch024006",
+        "name": "Marie",
+        "title": "Fractured Songstress"
+    },
+    {
+        "id": "ch021003",
+        "name": "Yuzuki",
+        "title": "Celebratory Student"
+    },
+    {
+        "id": "ch026004",
+        "name": "Sarafa",
+        "title": "Guardian Belle"
+    },
+    {
+        "id": "ch012012",
+        "name": "F66x",
+        "title": "Celebratory Captive"
+    },
+    {
+        "id": "ch020003",
+        "name": "Hina",
+        "title": "Celebratory Pupil"
+    },
+    {
+        "id": "ch011012",
+        "name": "063y",
+        "title": "Celebratory Prisoner"
+    },
+    {
+        "id": "ch001004",
+        "name": "2B",
+        "title": "Shattered Battler"
+    },
+    {
+        "id": "ch005011",
+        "name": "Levania",
+        "title": "Celebratory Monster"
+    },
+    {
+        "id": "ch026003",
+        "name": "Sarafa",
+        "title": "Celebratory Belle"
+    },
+    {
+        "id": "ch027004",
+        "name": "Yudil",
+        "title": "Celebratory Boor"
+    },
+    {
+        "id": "ch007013",
+        "name": "Dimos",
+        "title": "Bloodless Gunman"
+    },
+    {
+        "id": "ch023006",
+        "name": "Priyet",
+        "title": "Guardian Werebeast"
+    },
+    {
+        "id": "ch009012",
+        "name": "Gayle",
+        "title": "Abyssal Hunter"
+    },
+    {
+        "id": "ch026001",
+        "name": "Sarafa",
+        "title": "Chained Belle"
+    },
+    {
+        "id": "ch026002",
+        "name": "Sarafa",
+        "title": "Reborn Monopolist"
+    },
+    {
+        "id": "ch021001",
+        "name": "Yuzuki",
+        "title": "Devoted Husk"
+    },
+    {
+        "id": "ch020001",
+        "name": "Hina",
+        "title": "Dedicated Husk"
+    },
+    {
+        "id": "ch027002",
+        "name": "Yudil",
+        "title": "Reborn Usurper"
+    },
+    {
+        "id": "ch006014",
+        "name": "Argo",
+        "title": "Shadowbound Traveler"
+    },
+    {
+        "id": "ch015018",
+        "name": "Akeha",
+        "title": "New Year's Assassin"
+    },
+    {
+        "id": "ch019011",
+        "name": "Fio",
+        "title": "New Year's Girl"
+    },
+    {
+        "id": "ch024005",
+        "name": "Marie",
+        "title": "New Year's Songstress"
+    },
+    {
+        "id": "ch025006",
+        "name": "Yurie",
+        "title": "New Year's Ruler"
+    },
+    {
+        "id": "ch012009",
+        "name": "F66x",
+        "title": "Abyssal Captive"
+    },
+    {
+        "id": "ch014011",
+        "name": "Griff",
+        "title": "Yuletide Captain"
+    },
+    {
+        "id": "ch007007",
+        "name": "Dimos",
+        "title": "F-H Automaton"
+    },
+    {
+        "id": "ch009013",
+        "name": "Gayle",
+        "title": "Yuletide Hunter"
+    },
+    {
+        "id": "ch023005",
+        "name": "Priyet",
+        "title": "Yuletide Werebeast"
+    },
+    {
+        "id": "ch022009",
+        "name": "Saryu",
+        "title": "Yuletide Witch"
+    },
+    {
+        "id": "ch006013",
+        "name": "Argo",
+        "title": "Yuletide Traveler"
+    },
+    {
+        "id": "ch013011",
+        "name": "Lars",
+        "title": "Abyssal Soldier"
+    },
+    {
+        "id": "ch022008",
+        "name": "Saryu",
+        "title": "Fabled Witch"
+    },
+    {
+        "id": "ch015017",
+        "name": "Akeha",
+        "title": "Fabled Assassin"
+    },
+    {
+        "id": "ch010014",
+        "name": "Noelle",
+        "title": "Fabled Weapon"
+    },
+    {
+        "id": "ch027003",
+        "name": "Yudil",
+        "title": "Abstract Boor"
+    },
+    {
+        "id": "ch025005",
+        "name": "Yurie",
+        "title": "Guardian Ruler"
+    },
+    {
+        "id": "ch008008",
+        "name": "Rion",
+        "title": "F-H Revolutionary"
+    },
+    {
+        "id": "ch010013",
+        "name": "Noelle",
+        "title": "Abyssal Weapon"
+    },
+    {
+        "id": "ch011011",
+        "name": "063y",
+        "title": "Abyssal Prisoner"
+    },
+    {
+        "id": "ch027001",
+        "name": "Yudil",
+        "title": "Pilfering Boor"
+    },
+    {
+        "id": "ch008014",
+        "name": "Rion",
+        "title": "Shadowbound Exile"
+    },
+    {
+        "id": "ch022007",
+        "name": "Saryu",
+        "title": "Guardian Witch"
+    },
+    {
+        "id": "ch025004",
+        "name": "Yurie",
+        "title": "Abstract Ruler"
+    },
+    {
+        "id": "ch015016",
+        "name": "Akeha",
+        "title": "Abyssal Assassin"
+    },
+    {
+        "id": "ch047001",
+        "name": "Crow",
+        "title": "Scheming Justice"
+    },
+    {
+        "id": "ch044001",
+        "name": "Joker",
+        "title": "Caged Rebel"
+    },
+    {
+        "id": "ch045001",
+        "name": "Queen",
+        "title": "Virtuous Priestess"
+    },
+    {
+        "id": "ch046001",
+        "name": "Fox",
+        "title": "Insightful Emperor"
+    },
+    {
+        "id": "ch005010",
+        "name": "Levania",
+        "title": "Lacrima Monster"
+    },
+    {
+        "id": "ch008007",
+        "name": "Rion",
+        "title": "Abyssal Exile"
+    },
+    {
+        "id": "ch023004",
+        "name": "Priyet",
+        "title": "Celebratory Werebeast"
+    },
+    {
+        "id": "ch025003",
+        "name": "Yurie",
+        "title": "Celebratory Ruler"
+    },
+    {
+        "id": "ch024004",
+        "name": "Marie",
+        "title": "Celebratory Songstress"
+    },
+    {
+        "id": "ch015015",
+        "name": "Akeha",
+        "title": "Celebratory Assassin"
+    },
+    {
+        "id": "ch019009",
+        "name": "Fio",
+        "title": "Frozen-Heart Princess"
+    },
+    {
+        "id": "ch014010",
+        "name": "Griff",
+        "title": "Bloody Captain"
+    },
+    {
+        "id": "ch013008",
+        "name": "Lars",
+        "title": "Guardian Soldier"
+    },
+    {
+        "id": "ch005009",
+        "name": "Levania",
+        "title": "Abyssal Monster"
+    },
+    {
+        "id": "ch024002",
+        "name": "Marie",
+        "title": "Reborn Pillar"
+    },
+    {
+        "id": "ch025002",
+        "name": "Yurie",
+        "title": "Reborn Leader"
+    },
+    {
+        "id": "ch025001",
+        "name": "Yurie",
+        "title": "Obsessed Ruler"
+    },
+    {
+        "id": "ch022006",
+        "name": "Saryu",
+        "title": "Summer Witch"
+    },
+    {
+        "id": "ch011007",
+        "name": "063y",
+        "title": "Summer Prisoner"
+    },
+    {
+        "id": "ch012008",
+        "name": "F66x",
+        "title": "Summer Captive"
+    },
+    {
+        "id": "ch009011",
+        "name": "Gayle",
+        "title": "Summer Hunter"
+    },
+    {
+        "id": "ch019008",
+        "name": "Fio",
+        "title": "Abyssal Girl"
+    },
+    {
+        "id": "ch013010",
+        "name": "Lars",
+        "title": "Bloody Soldier"
+    },
+    {
+        "id": "ch005007",
+        "name": "Levania",
+        "title": "Guardian Monster"
+    },
+    {
+        "id": "ch006012",
+        "name": "Argo",
+        "title": "Bloody Traveler"
+    },
+    {
+        "id": "ch010012",
+        "name": "Noelle",
+        "title": "Fractured Weapon"
+    },
+    {
+        "id": "ch015013",
+        "name": "Akeha",
+        "title": "F. Guardian Assassin"
+    },
+    {
+        "id": "ch014005",
+        "name": "Griff",
+        "title": "Guardian Captain"
+    },
+    {
+        "id": "ch007012",
+        "name": "Dimos",
+        "title": "Abyssal Gunman"
+    },
+    {
+        "id": "ch015014",
+        "name": "Akeha",
+        "title": "Fractured Assassin"
+    },
+    {
+        "id": "ch024001",
+        "name": "Marie",
+        "title": "Praying Songstress"
+    },
+    {
+        "id": "ch024003",
+        "name": "Marie",
+        "title": "Abstract Songstress"
+    },
+    {
+        "id": "ch007005",
+        "name": "Dimos",
+        "title": "Guardian Gunman"
+    },
+    {
+        "id": "ch010008",
+        "name": "Noelle",
+        "title": "Phantasmal Weapon"
+    },
+    {
+        "id": "ch011008",
+        "name": "063y",
+        "title": "Phantasmal Prisoner"
+    },
+    {
+        "id": "ch008011",
+        "name": "Rion",
+        "title": "Phantasmal Exile"
+    },
+    {
+        "id": "ch022005",
+        "name": "Saryu",
+        "title": "Bloody Witch"
+    },
+    {
+        "id": "ch012011",
+        "name": "F66x",
+        "title": "Bloodless Captive"
+    },
+    {
+        "id": "ch014009",
+        "name": "Griff",
+        "title": "Fractured Captain"
+    },
+    {
+        "id": "ch009010",
+        "name": "Gayle",
+        "title": "Fractured Hunter"
+    },
+    {
+        "id": "ch019016",
+        "name": "Fio",
+        "title": "Lacrima Girl"
+    },
+    {
+        "id": "ch007009",
+        "name": "Dimos",
+        "title": "False Guardian Gunman"
+    },
+    {
+        "id": "ch010011",
+        "name": "Noelle",
+        "title": "Bloody Weapon"
+    },
+    {
+        "id": "ch011009",
+        "name": "063y",
+        "title": "Guardian Prisoner"
+    },
+    {
+        "id": "ch015010",
+        "name": "Akeha",
+        "title": "Bloodless Assassin"
+    },
+    {
+        "id": "ch005008",
+        "name": "Levania",
+        "title": "Bloody Monster"
+    },
+    {
+        "id": "ch019006",
+        "name": "Fio",
+        "title": "Guardian Girl"
+    },
+    {
+        "id": "ch013007",
+        "name": "Lars",
+        "title": "Lacrima Soldier"
+    },
+    {
+        "id": "ch023002",
+        "name": "Priyet",
+        "title": "Reborn Fiend"
+    },
+    {
+        "id": "ch023001",
+        "name": "Priyet",
+        "title": "Verboten Werebeast"
+    },
+    {
+        "id": "ch023003",
+        "name": "Priyet",
+        "title": "Abstract Werebeast"
+    },
+    {
+        "id": "ch022002",
+        "name": "Saryu",
+        "title": "Reborn Sorceress"
+    },
+    {
+        "id": "ch006010",
+        "name": "Argo",
+        "title": "Fractured Traveler"
+    },
+    {
+        "id": "ch008013",
+        "name": "Rion",
+        "title": "Celebratory Exile"
+    },
+    {
+        "id": "ch022004",
+        "name": "Saryu",
+        "title": "Celebratory Witch"
+    },
+    {
+        "id": "ch007010",
+        "name": "Dimos",
+        "title": "Celebratory Gunman"
+    },
+    {
+        "id": "ch013009",
+        "name": "Lars",
+        "title": "Celebratory Soldier"
+    },
+    {
+        "id": "ch005005",
+        "name": "Levania",
+        "title": "Bloodless Monster"
+    },
+    {
+        "id": "ch007008",
+        "name": "Dimos",
+        "title": "Fractured Gunman"
+    },
+    {
+        "id": "ch012010",
+        "name": "F66x",
+        "title": "Bloody Captive"
+    },
+    {
+        "id": "ch010009",
+        "name": "Noelle",
+        "title": "Bloodless Weapon"
+    },
+    {
+        "id": "ch014008",
+        "name": "Griff",
+        "title": "Lacrima Captain"
+    },
+    {
+        "id": "ch008006",
+        "name": "Rion",
+        "title": "New Year's Exile"
+    },
+    {
+        "id": "ch010010",
+        "name": "Noelle",
+        "title": "New Year's Weapon"
+    },
+    {
+        "id": "ch009007",
+        "name": "Gayle",
+        "title": "New Year's Hunter"
+    },
+    {
+        "id": "ch011010",
+        "name": "063y",
+        "title": "New Year's Prisoner"
+    },
+    {
+        "id": "ch015007",
+        "name": "Akeha",
+        "title": "Yuletide Assassin"
+    },
+    {
+        "id": "ch022003",
+        "name": "Saryu",
+        "title": "Abstract Witch"
+    },
+    {
+        "id": "ch022001",
+        "name": "Saryu",
+        "title": "Avowed Witch"
+    },
+    {
+        "id": "ch015005",
+        "name": "Akeha",
+        "title": "Bloody Assassin"
+    },
+    {
+        "id": "ch008012",
+        "name": "Rion",
+        "title": "Yuletide Exile"
+    },
+    {
+        "id": "ch019015",
+        "name": "Fio",
+        "title": "Yuletide Girl"
+    },
+    {
+        "id": "ch005006",
+        "name": "Levania",
+        "title": "Yuletide Monster"
+    },
+    {
+        "id": "ch012005",
+        "name": "F66x",
+        "title": "Lacrima Captive"
+    },
+    {
+        "id": "ch007006",
+        "name": "Dimos",
+        "title": "Bloody Gunman"
+    },
+    {
+        "id": "ch010005",
+        "name": "Noelle",
+        "title": "Guardian Weapon"
+    },
+    {
+        "id": "ch015011",
+        "name": "Akeha",
+        "title": "Guardian Assassin"
+    },
+    {
+        "id": "ch013005",
+        "name": "Lars",
+        "title": "Fractured Soldier"
+    },
+    {
+        "id": "ch005002",
+        "name": "Levania",
+        "title": "Abstract Monster"
+    },
+    {
+        "id": "ch005001",
+        "name": "Levania",
+        "title": "Dark Monster"
+    },
+    {
+        "id": "ch019002",
+        "name": "Fio",
+        "title": "Reborn Princess"
+    },
+    {
+        "id": "ch005003",
+        "name": "Levania",
+        "title": "Reborn Beast"
+    },
+    {
+        "id": "ch019001",
+        "name": "Fio",
+        "title": "The Girl of Light"
+    },
+    {
+        "id": "ch019007",
+        "name": "Fio",
+        "title": "Intoner Girl"
+    },
+    {
+        "id": "ch031001",
+        "name": "Zero",
+        "title": "Progenitor Sister"
+    },
+    {
+        "id": "ch015006",
+        "name": "Akeha",
+        "title": "Intoner Assassin"
+    },
+    {
+        "id": "ch031002",
+        "name": "Zero",
+        "title": "Divergent Sister"
+    },
+    {
+        "id": "ch010002",
+        "name": "Noelle",
+        "title": "Abstract Weapon"
+    },
+    {
+        "id": "ch008010",
+        "name": "Rion",
+        "title": "Guardian Exile"
+    },
+    {
+        "id": "ch010003",
+        "name": "Noelle",
+        "title": "Dissenting Weapon"
+    },
+    {
+        "id": "ch006002",
+        "name": "Argo",
+        "title": "Patriotic Traveler"
+    },
+    {
+        "id": "ch009006",
+        "name": "Gayle",
+        "title": "Bloody Hunter"
+    },
+    {
+        "id": "ch018001",
+        "name": "Kainé",
+        "title": "The Aerie Warrior"
+    },
+    {
+        "id": "ch017002",
+        "name": "Emil",
+        "title": "Divergent Oddity"
+    },
+    {
+        "id": "ch017001",
+        "name": "Emil",
+        "title": "Puzzling Oddity"
+    },
+    {
+        "id": "ch016001",
+        "name": "The World-Ender",
+        "title": "Soulful Lad"
+    },
+    {
+        "id": "ch018002",
+        "name": "Kainé",
+        "title": "Divergent Warrior"
+    },
+    {
+        "id": "ch016002",
+        "name": "The World-Ender",
+        "title": "Divergent Lad"
+    },
+    {
+        "id": "ch011005",
+        "name": "063y",
+        "title": "Fractured Prisoner"
+    },
+    {
+        "id": "ch012007",
+        "name": "F66x",
+        "title": "Guardian Captive"
+    },
+    {
+        "id": "ch014003",
+        "name": "Griff",
+        "title": "Dissenting Captain"
+    },
+    {
+        "id": "ch014004",
+        "name": "Griff",
+        "title": "Abstract Captain"
+    },
+    {
+        "id": "ch014007",
+        "name": "Griff",
+        "title": "Celebratory Captain"
+    },
+    {
+        "id": "ch019012",
+        "name": "Fio",
+        "title": "Celebratory Girl"
+    },
+    {
+        "id": "ch010001",
+        "name": "Noelle",
+        "title": "Hidden Weapon"
+    },
+    {
+        "id": "ch010004",
+        "name": "Noelle",
+        "title": "Reborn Warlady"
+    },
+    {
+        "id": "ch009009",
+        "name": "Gayle",
+        "title": "Celebratory Hunter"
+    },
+    {
+        "id": "ch006009",
+        "name": "Argo",
+        "title": "Celebratory Traveler"
+    },
+    {
+        "id": "ch010007",
+        "name": "Noelle",
+        "title": "Celebratory Weapon"
+    },
+    {
+        "id": "ch014001",
+        "name": "Griff",
+        "title": "Harmonious Captain"
+    },
+    {
+        "id": "ch014002",
+        "name": "Griff",
+        "title": "Reborn Has-Been"
+    },
+    {
+        "id": "ch015009",
+        "name": "Akeha",
+        "title": "Summer Assassin"
+    },
+    {
+        "id": "ch006008",
+        "name": "Argo",
+        "title": "Summer Traveler"
+    },
+    {
+        "id": "ch019010",
+        "name": "Fio",
+        "title": "Summer Girl"
+    },
+    {
+        "id": "ch008009",
+        "name": "Rion",
+        "title": "Summer Exile"
+    },
+    {
+        "id": "ch019005",
+        "name": "Fio",
+        "title": "Abstract Girl"
+    },
+    {
+        "id": "ch015002",
+        "name": "Akeha",
+        "title": "Abstract Assassin"
+    },
+    {
+        "id": "ch008001",
+        "name": "Rion",
+        "title": "Sickly Exile"
+    },
+    {
+        "id": "ch003002",
+        "name": "A2",
+        "title": "Divergent Attacker"
+    },
+    {
+        "id": "ch002001",
+        "name": "9S",
+        "title": "Isolated Scanner"
+    },
+    {
+        "id": "ch009005",
+        "name": "Gayle",
+        "title": "Guardian Hunter"
+    },
+    {
+        "id": "ch015004",
+        "name": "Akeha",
+        "title": "Reborn Swordmaster"
+    },
+    {
+        "id": "ch013002",
+        "name": "Lars",
+        "title": "Reborn Truant"
+    },
+    {
+        "id": "ch011003",
+        "name": "063y",
+        "title": "Dissenting Prisoner"
+    },
+    {
+        "id": "ch003001",
+        "name": "A2",
+        "title": "Vengeful Attacker"
+    },
+    {
+        "id": "ch006004",
+        "name": "Argo",
+        "title": "Reborn Adventurer"
+    },
+    {
+        "id": "ch001001",
+        "name": "2B",
+        "title": "Praying Battler"
+    },
+    {
+        "id": "ch012003",
+        "name": "F66x",
+        "title": "Dissenting Captive"
+    },
+    {
+        "id": "ch009004",
+        "name": "Gayle",
+        "title": "Reborn Contractor"
+    },
+    {
+        "id": "ch008003",
+        "name": "Rion",
+        "title": "Dissenting Exile"
+    },
+    {
+        "id": "ch019004",
+        "name": "Fio",
+        "title": "Dissenting Girl"
+    },
+    {
+        "id": "ch008004",
+        "name": "Rion",
+        "title": "Reborn Revolutionary"
+    },
+    {
+        "id": "ch012004",
+        "name": "F66x",
+        "title": "Reborn Inmate"
+    },
+    {
+        "id": "ch007003",
+        "name": "Dimos",
+        "title": "Dissenting Gunman"
+    },
+    {
+        "id": "ch013003",
+        "name": "Lars",
+        "title": "Dissenting Soldier"
+    },
+    {
+        "id": "ch009003",
+        "name": "Gayle",
+        "title": "Dissenting Hunter"
+    },
+    {
+        "id": "ch007004",
+        "name": "Dimos",
+        "title": "Reborn Automaton"
+    },
+    {
+        "id": "ch011004",
+        "name": "063y",
+        "title": "Reborn Convict"
+    },
+    {
+        "id": "ch006005",
+        "name": "Argo",
+        "title": "Guardian Traveler"
+    },
+    {
+        "id": "ch006003",
+        "name": "Argo",
+        "title": "Dissenting Traveler"
+    },
+    {
+        "id": "ch015003",
+        "name": "Akeha",
+        "title": "Dissenting Assassin"
+    },
+    {
+        "id": "ch013001",
+        "name": "Lars",
+        "title": "Spiteful Soldier"
+    },
+    {
+        "id": "ch012001",
+        "name": "F66x",
+        "title": "Distressed Captive"
+    },
+    {
+        "id": "ch011001",
+        "name": "063y",
+        "title": "Stalwart Prisoner"
+    },
+    {
+        "id": "ch004001",
+        "name": "Levania",
+        "title": "Human Monster"
+    },
+    {
+        "id": "ch006001",
+        "name": "Argo",
+        "title": "Apex Traveler"
+    },
+    {
+        "id": "ch015001",
+        "name": "Akeha",
+        "title": "Twilight Assassin"
+    },
+    {
+        "id": "ch007001",
+        "name": "Dimos",
+        "title": "Departed Gunman"
+    },
+    {
+        "id": "ch009001",
+        "name": "Gayle",
+        "title": "Wounded Hunter"
+    },
+    {
+        "id": "ch011002",
+        "name": "063y",
+        "title": "Abstract Prisoner"
+    },
+    {
+        "id": "ch008002",
+        "name": "Rion",
+        "title": "Mechanical Exile"
+    },
+    {
+        "id": "ch007002",
+        "name": "Dimos",
+        "title": "Abstract Gunman"
+    },
+    {
+        "id": "ch001002",
+        "name": "2B",
+        "title": "Divergent Battler"
+    },
+    {
+        "id": "ch015012",
+        "name": "Akeha",
+        "title": "Mechanical Assassin"
+    },
+    {
+        "id": "ch019013",
+        "name": "Fio",
+        "title": "Simulacrum Girl"
+    },
+    {
+        "id": "ch001003",
+        "name": "2P",
+        "title": "Mock Machine"
+    },
+    {
+        "id": "ch006006",
+        "name": "Argo",
+        "title": "Abstract Traveler"
+    },
+    {
+        "id": "ch008005",
+        "name": "Rion",
+        "title": "Abstract Exile"
+    },
+    {
+        "id": "ch012002",
+        "name": "F66x",
+        "title": "Abstract Captive"
+    },
+    {
+        "id": "ch019003",
+        "name": "Fio",
+        "title": "Mechanical Girl"
+    },
+    {
+        "id": "ch002002",
+        "name": "9S",
+        "title": "Divergent Scanner"
+    },
+    {
+        "id": "ch013004",
+        "name": "Lars",
+        "title": "Abstract Soldier"
+    },
+    {
+        "id": "ch009002",
+        "name": "Gayle",
+        "title": "Abstract Hunter"
+    }
+]
