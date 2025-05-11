@@ -485,31 +485,67 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['r1999'])
     async def reverse1999(self, ctx, reason: Optional[str] = None):
         """ Pulls a Reverse 1999 character """
+        await ctx.defer()
 
-        url = "https://www.prydwen.gg/page-data/re1999/characters/"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Garments",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        url = "https://reverse1999.fandom.com/api.php"
 
-        r = await self.bot.http_client.get(f"{url}page-data.json")
-        char = choice(
-            r.json()["result"]["data"]["allCharacters"]["nodes"])["slug"]
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
 
-        r = await self.bot.http_client.get(f"{url}{char}/page-data.json")
-        c_data = r.json()["result"]["data"]["currentUnit"]["nodes"][0]
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
 
-        skins = [(c_data["name"], c_data["imageFull"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"])]
+            for c in results["query"]["categorymembers"]:
+                if c["ns"] == 0:
+                    article_list.append(c["title"])
 
-        if c_data["imageInsight"]:
-            skins.append((c_data["name"], c_data["imageInsight"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
+        valid_article = False
+        while not valid_article:
+            selected_article = choice(article_list)
+            params = {
+                "action": "parse",
+                "page": selected_article,
+                "format": "json"
+            }
+            r = await self.bot.http_client.get(url,
+                params=params, headers=self.headers, timeout=15)
 
-        #if c_data["skins"]:
-        #    for sk in c_data["skins"]:
-        #        skins.append((f"{c_data['name']}, {sk['name']}", sk["imageFull"]["localFile"]["childImageSharp"]["gatsbyImageData"]["images"]["fallback"]["src"]))
+            page = html.fromstring(
+                r.json()["parse"]["text"]["*"].replace('\"','"'))
+            
+            try:
+                unreleased_test = page.xpath(
+                    "//div[@class='wds-tabs__tab-label']/a/text()")[1]
+                if "TBA" not in unreleased_test:
+                    valid_article = True
+            except:
+                valid_article = True
 
-        skin = choice(skins)
+        skin = choice(page.xpath("//div[@class='psychube']"))
+
+        name = skin.xpath(".//div[@class='lcs-container']/div/div[2]/text()")[0]
+        title = skin.xpath(".//div/div/p/text()")[0][2:]
+        img = skin.xpath(".//figure/a/img/@data-image-key")[0]
+
         embed = discord.Embed(
-            title=skin[0],
+            title=name,
+            description=title,
             color=0x53443c)
-        embed.set_image(url=f"https://www.prydwen.gg{skin[1]}")
-        embed.set_footer(text="Reverse 1999")
+        embed.set_image(url=f"https://reverse1999.fandom.com/wiki/Special:FilePath/{img}")
+        embed.set_footer(text="Reverse: 1999")
 
         if reason and ctx.interaction:
             await ctx.send(f"reverse 1999 {reason}:", embed=embed)
