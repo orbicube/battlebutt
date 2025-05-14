@@ -52,7 +52,7 @@ class Roles(commands.Cog):
             await self.bot.db.execute(
                 "INSERT INTO role_map VALUES ($1, $2, $3)",
                 interaction.user.id, interaction.guild_id, role.id)
-            await db.commit()
+            await self.bot.db.commit()
         else:
             role = interaction.guild.get_role(role_id[0])
 
