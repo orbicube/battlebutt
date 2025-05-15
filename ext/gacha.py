@@ -9,10 +9,12 @@ import re
 from time import time
 from datetime import datetime, timedelta
 from random import choice, choices, randint, sample
+from base64 import b64decode
+from io import BytesIO
 
 from urllib.parse import quote
 from lxml import html
-from credentials import DEBUG_CHANNEL, FNAPI_KEY
+from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY
 
 class Gacha(commands.Cog,
     command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
@@ -663,6 +665,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def worldflipper(self, ctx, reason: Optional[str] = None):
+        """ Pulls a World FLipper character """
 
         with open("ext/data/worldflipper.json", encoding="utf-8") as f:
             characters = json.load(f)
@@ -686,6 +689,43 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command(aliases=['kof'])
+    async def kofallstar(self, ctx, reason: Optional[str] = None):
+        """ Pulls a KoF Allstar character """
+        
+        url = ("https://api.github.com/repos/orbicube/kofchars/git/trees/"
+            "dad49f27c6cc4a766cfbb96c077bac925c146ee1")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
+
+        name, game = char["path"][:-4].split("#")
+        if game[0] == "'" or game[0] == "2" or game[0] == "X":
+            game = f"The King of Fighters {game}"
+        else:
+            game_map = {
+                "VF5FS": "Virtua Fighter 5 Final Showdown",
+                "Samurai Shodown IV": "Samurai Shodown IV: Amakusa's Revenge",
+                "SDS": "The Seven Deadly Sins", "AS": "",
+                "GGXrd": "Guilty Gear Xrd REV 2", "SCVI": "Soulcalibur VI", 
+                "WWE": "WWE", "TEKKEN 7": "TEKKEN 7", "Gintama": "Gintama",
+                "SF6": "Street Fighter 6", "SFV": "Street Fighter V",
+                "SevenKnights": "Seven Knights", "DoA6": "Dead or Alive 6"
+            }
+            game = game_map[game]
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="kofas.png")
+
+        embed = discord.Embed(
+            title=name,
+            description=game,
+            colour=0xfc9a4c)
+        embed.set_image(url="attachment://kofas.png")
+        embed.set_footer(text="The King of Fighters ALLSTAR")
+
+        await ctx.send(embed=embed, file=file)
 
 
 async def setup(bot):
