@@ -548,7 +548,7 @@ class Gacha(commands.Cog,
 
         embed = discord.Embed(
             title=name,
-            description=title if title == "Default" else "",
+            description=title if title != "Default" else "",
             color=0x53443c)
         embed.set_image(url=f"https://reverse1999.fandom.com/wiki/Special:FilePath/{img}")
         embed.set_footer(text="Reverse: 1999")
