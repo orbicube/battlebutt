@@ -729,5 +729,35 @@ class Gacha(commands.Cog,
         await ctx.send(embed=embed, file=file)
 
 
+    @commands.command(aliases=['404gamereset', '404'])
+    async def errorgamereset(self, ctx, reason: Optional[str] = None):
+        """ Pulls a 404 GAME RE:SET character """
+
+        url = ("https://api.github.com/repos/orbicube/404chars/git/trees/"
+            "58b9eb8f0c5e4ea34ec74b103d458458e788482e")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
+
+        try:
+            name, type = char["path"][:-4].split("#")
+        except:
+            name = char["path"][:-4]
+            type = ""
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="404gamereset.png")
+
+        embed = discord.Embed(
+            title=name,
+            description=type,
+            colour=0x7f7f80)
+        embed.set_image(url="attachment://404gamereset.png")
+        embed.set_footer(text="404 GAME RE:SET")
+
+        await ctx.send(embed=embed, file=file)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
