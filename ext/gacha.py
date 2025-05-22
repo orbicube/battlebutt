@@ -759,5 +759,38 @@ class Gacha(commands.Cog,
         await ctx.send(embed=embed, file=file)
 
 
+    @commands.command()
+    async def bravefrontier(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Brave Frontier character """
+
+        with open("ext/data/bfunits.txt", encoding="utf-8") as f:
+            title = choice([line.rstrip() for line in f])
+
+        url = "https://bravefrontierglobal.fandom.com/api.php"
+        params = {
+            "action": "parse",
+            "page": title,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        img = page.xpath("//div[@class='tabber wds-tabber']/div/div/center/span/a/@href")[0]
+
+        embed = discord.Embed(
+            title=title,
+            colour=0xbfb135)
+        embed.set_image(url=img)
+        embed.set_footer(text="Brave Frontier")
+
+        await ctx.send(embed=embed)
+
+
+
+
+
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
