@@ -35,8 +35,10 @@ class Gacha(commands.Cog,
         commands = self.get_commands()
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
+        ctx.interaction.extras = {"rando": False}
         if not selected_comm:
             selected_comm = choice(commands)
+            ctx.interaction.extras["rando"] = True
         await selected_comm.__call__(ctx, reason)
 
 
@@ -127,7 +129,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Granblue Fantasy")
 
         if reason and ctx.interaction:
-            await ctx.send(f"granblue {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'granblue'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -161,6 +163,7 @@ class Gacha(commands.Cog,
             article_list.extend(results["query"]["categorymembers"])
 
         selected_article = choice(article_list)["title"]
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"feh {selected_article}")
         params = {
             "action": "parse",
             "page": selected_article,
@@ -176,14 +179,11 @@ class Gacha(commands.Cog,
             title=selected_article.split(":")[0],
             description=selected_article.split(": ")[1],
             color=0xc3561f)
-        try:
-            embed.set_image(url=choice(images))
-        except:
-            await self.bot.get_channel(DEBUG_CHANNEL).send(f"feh: {selected_article}")
+        embed.set_image(url=choice(images))
         embed.set_footer(text="Fire Emblem Heroes")
 
         if reason and ctx.interaction:
-            await ctx.send(f"fire emblem {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fire emblem'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -207,7 +207,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="War of the Visions: Final Fantasy Brave Exvius")
 
         if reason and ctx.interaction:
-            await ctx.send(f"war of the visions {reason}:")
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'war of the visions'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -230,7 +230,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Arknights")
 
         if reason and ctx.interaction:
-            await ctx.send(f"arknights {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'arknights'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -261,7 +261,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Dragalia Lost")
 
         if reason and ctx.interaction:
-            await ctx.send(f"dragalia lost {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'dragalia lost'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -303,7 +303,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Mario Kart Tour")
 
         if reason and ctx.interaction:
-            await ctx.send(f"mario kart tour {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'mario kart tour'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -412,7 +412,7 @@ class Gacha(commands.Cog,
                 embed.set_footer(text=f"{crewdate[0]} {crewdate[1]} Crew Pack")
 
         if reason and ctx.interaction:
-            await ctx.send(f"fortnite {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fortnite'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -462,7 +462,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Fate/Grand Order")
 
         if reason and ctx.interaction:
-            await ctx.send(f"fate/grand order {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fate/grand order'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -555,7 +555,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Reverse: 1999")
 
         if reason and ctx.interaction:
-            await ctx.send(f"reverse 1999 {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'reverse1999'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -578,7 +578,7 @@ class Gacha(commands.Cog,
             text="Atelier Reseleriana")
 
         if reason and ctx.interaction:
-            await ctx.send(f"atelier {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'atelier'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -603,7 +603,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="SINoALICE")
 
         if reason and ctx.interaction:
-            await ctx.send(f"sinoalice {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'sinoalice'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -659,7 +659,7 @@ class Gacha(commands.Cog,
             text="Touhou LostWord")
 
         if reason and ctx.interaction:
-            await ctx.send(f"touhou {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'touhou'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -685,7 +685,7 @@ class Gacha(commands.Cog,
             text= "World Flipper")
 
         if reason and ctx.interaction:
-            await ctx.send(f"world flipper {reasonm}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'world flipper'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -726,7 +726,10 @@ class Gacha(commands.Cog,
         embed.set_image(url="attachment://kofas.png")
         embed.set_footer(text="The King of Fighters ALLSTAR")
 
-        await ctx.send(embed=embed, file=file)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'kof'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['404gamereset', '404'])
@@ -756,7 +759,10 @@ class Gacha(commands.Cog,
         embed.set_image(url="attachment://404gamereset.png")
         embed.set_footer(text="404 GAME RE:SET")
 
-        await ctx.send(embed=embed, file=file)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else '404 game reset'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command()
@@ -785,7 +791,10 @@ class Gacha(commands.Cog,
         embed.set_image(url=img)
         embed.set_footer(text="Brave Frontier")
 
-        await ctx.send(embed=embed)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'brave frontier'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 
@@ -855,7 +864,10 @@ class Gacha(commands.Cog,
         embed.set_image(url=skin)
         embed.set_footer(text="Langrisser")
 
-        await ctx.send(embed=embed)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'langrisser'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 
