@@ -776,7 +776,8 @@ class Gacha(commands.Cog,
             params=params, headers=self.headers)
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
 
-        img = page.xpath("//div[@class='tabber wds-tabber']/div/div/center/span/a/@href")[0]
+        img = page.xpath(
+            "//div[@class='tabber wds-tabber']/div/div/center/span/a/@href")[0]
 
         embed = discord.Embed(
             title=title,
@@ -788,7 +789,73 @@ class Gacha(commands.Cog,
 
 
 
+    @commands.command()
+    async def langrisser(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Langrisser character """
+        await ctx.defer()
+        
+        url = "https://wiki.biligame.com/langrisser/api.php"
 
+        with open("ext/data/langrisser.json", encoding="utf-8") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        characters = j["characters"]
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+            params = {
+                "action": "query",
+                "list": "categorymembers",
+                "cmtitle": "分类:英雄",
+                "cmlimit": "500",
+                "format": "json"
+            }
+
+            finished = False
+            characters = []
+            while not finished:
+                r = await self.bot.http_client.get(url, 
+                    params=params, headers=self.headers, timeout=15)
+                results = r.json()
+
+                if "continue" in results:
+                    params["cmcontinue"] = results["continue"]["cmcontinue"]
+                else:
+                    finished = True
+
+                for c in results["query"]["categorymembers"]:
+                    if c["ns"] != 8:
+                        characters.append(c["title"])
+
+            data = {
+                "updated": int(datetime.utcnow().timestamp()),
+                "characters": characters
+            }
+            with open("ext/data/langrisser.json", "w", encoding="utf-8") as f:
+                json.dump(data, f)                
+
+        selected_article = choice(characters)
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers, timeout=15)
+
+        page = html.fromstring(
+            r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        name = page.xpath("//div[@class='HeroInfo_Name_EN']/text()")[0]
+        skin = choice(
+            page.xpath("//div[@class='HeroInfo_Skin_Img']/img/@src"))
+        skin = skin.rsplit("/", 1)[0].replace("/thumb", "")
+
+        embed = discord.Embed(
+            title=name,
+            color=0xde181d)
+        embed.set_image(url=skin)
+        embed.set_footer(text="Langrisser")
+
+        await ctx.send(embed=embed)
 
 
 
