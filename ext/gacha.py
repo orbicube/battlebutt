@@ -636,7 +636,6 @@ class Gacha(commands.Cog,
             with open("ext/data/touhou.json", "w") as f:
                 json.dump(data, f)
 
-
         char = choice(characters)
 
         r = await self.bot.http_client.get(
@@ -797,7 +796,6 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-
     @commands.command()
     async def langrisser(self, ctx, reason: Optional[str] = None):
         """ Pulls a Langrisser character """
@@ -870,6 +868,54 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command()
+    async def cookierun(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Cookie Run Kingdom character """
+
+        url = "https://cookierunkingdom.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Playable_Cookies",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            article_list.extend(results["query"]["categorymembers"])
+
+        selected_article = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        img = page.xpath("//div[@class='pi-image-collection wds-tabber']/div/figure/a/@href")[0]
+
+        embed = discord.Embed(
+            title=selected_article,
+            color=0xc0ab76)
+        embed.set_image(url=img)
+        embed.set_footer(text="Cookie Run: Kingdom")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'cookie run'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
