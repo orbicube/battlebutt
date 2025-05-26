@@ -917,5 +917,56 @@ class Gacha(commands.Cog,
         else:
             await ctx.send(embed=embed)
 
+
+    @commands.command()
+    async def megamanxdive(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Mega Man X DiVE character """
+
+        url = "https://rockman-x-dive.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Characters/Playable",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            article_list.extend(results["query"]["categorymembers"])
+
+        selected_article = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        img = page.xpath("//figure[@class='pi-item pi-image']/a/@href")[0]
+
+        embed = discord.Embed(
+            title=selected_article,
+            color=0x1a7acb)
+        embed.set_image(url=img)
+        embed.set_footer(text="Mega Man X DiVE")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'mega man x dive'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
