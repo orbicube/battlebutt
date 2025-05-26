@@ -918,7 +918,7 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-    @commands.command()
+    @commands.command(aliases=['mmxd'])
     async def megamanxdive(self, ctx, reason: Optional[str] = None):
         """ Pulls a Mega Man X DiVE character """
 
@@ -966,6 +966,28 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'mega man x dive'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
+
+
+    @commands.command(aliases=['romancingsaga'])
+    async def romancingsagareuniverse(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Romancing SaGa re;univerSe character """
+
+        with open("ext/data/romancingsaga.json") as f:
+            char = choice(json.load(f))
+
+        embed = discord.Embed(
+            title=char["name"],
+            description=char["title"],
+            color=0x8f0000)
+        embed.set_image(url=f"https://rsrs.xyz/assets/gl/texture/style/{char['id']}/style_{char['id']}.png")
+        embed.set_footer(text="Romancing SaGa re;univerSe")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'romancing saga re;universe'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
 
 
 async def setup(bot):
