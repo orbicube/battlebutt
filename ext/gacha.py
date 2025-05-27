@@ -164,9 +164,11 @@ class Gacha(commands.Cog,
             else:
                 finished = True
 
-            article_list.extend(results["query"]["categorymembers"])
+            for article in results["query"]["categorymembers"]:
+                if article["ns"] == 0:
+                    article_list.append(article["title"])
 
-        selected_article = choice(article_list)["title"]
+        selected_article = choice(article_list)
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"feh {selected_article}")
         params = {
             "action": "parse",
