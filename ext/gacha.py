@@ -36,10 +36,12 @@ class Gacha(commands.Cog,
         commands = self.get_commands()
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
-        ctx.interaction.extras = {"rando": False}
+        if ctx.interaction:
+            ctx.interaction.extras = {"rando": False}
         if not selected_comm:
             selected_comm = choice(commands)
-            ctx.interaction.extras["rando"] = True
+            if ctx.interaction:
+                ctx.interaction.extras["rando"] = True
         await selected_comm.__call__(ctx, reason)
 
 
