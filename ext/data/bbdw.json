@@ -1,0 +1,519 @@
+[
+	{
+		"name": "Acht",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/f/fd/BlazBlue_Alternative_Dark_War_Acht_Main.png",
+			"https://blazblue.wiki/images/f/fe/BlazBlue_Alternative_Dark_War_Acht_Profile_4.png"]
+	},
+	{	"name": "Akane Teruhiko",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/d/d8/BlazBlue_Alternative_Dark_War_Akane_Main.png",
+			"https://blazblue.wiki/images/e/e3/BlazBlue_Alternative_Dark_War_Akane_Teruhiko_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Another Dark Kagura",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/a/a5/BlazBlue_Alternative_Dark_War_Another_Dark_Kagura_Main.png",
+			"https://blazblue.wiki/images/e/ee/BlazBlue_Alternative_Dark_War_Another_Dark_Kagura_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Another Dark Mai",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/5/5e/BlazBlue_Alternative_AD_Mai_Profile_Art_3.png",
+			"https://blazblue.wiki/images/6/6a/BlazBlue_Alternative_AD_Mai_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Arakune",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/8e/BlazBlue_Alternative_Dark_War_Arakune_Main.png",
+			"https://blazblue.wiki/images/b/ba/BlazBlue_Alternative_Dark_War_Arakune_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Avenge",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/f/f0/BlazBlue_Alternative_Dark_War_Avenge_Full_Profile_Art_2.png",
+			"https://blazblue.wiki/images/2/2f/BlazBlue_Alternative_Dark_War_Avenge_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Bang Shishigami",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/9/91/BlazBlue_Alternative_Dark_War_Bang_Main.png",
+			"https://blazblue.wiki/images/e/eb/BlazBlue_Alternative_Dark_War_Bang_Shishigami_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Bullet",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/cb/BlazBlue_Alternative_Dark_War_Bullet_Main.png",
+			"https://blazblue.wiki/images/a/a0/BlazBlue_Alternative_Dark_War_Bullet_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Celica A. Mercury",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/1/1f/BlazBlue_Alternative_Dark_War_Celica_A._Mercury_Profile_Art_3.png",
+			"https://blazblue.wiki/images/3/3b/BlazBlue_Alternative_Dark_War_Celica_A._Mercury_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Chachakaka",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/f/f3/BlazBlue_Alternative_Dark_Chachakaka_Profile_Art_2.png",
+			"https://blazblue.wiki/images/b/bb/BlazBlue_Alternative_Dark_War_Chachakaka_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Ciel Sulfur",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/c2/BlazBlue_Alternative_Dark_War_Ciel_Main.png"
+		]
+	},
+	{
+		"name": "Djeeta",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/4/4e/BlazBlue_Alternative_Dark_War_Djeeta_Full_Profile_Art_1.png",
+			"https://blazblue.wiki/images/6/6c/BlazBlue_Alternative_Dark_War_Djeeta_Full_Profile_Art_2.png"	
+		]
+	},
+	{
+		"name": "Drei",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/3/3b/BlazBlue_Alternative_Dark_War_Drei_Main.png",
+			"https://blazblue.wiki/images/f/f5/BlazBlue_Alternative_Dark_War_Drei_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Es",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/0/0a/BlazBlue_Alternative_Dark_War_Es_Main.png",
+			"https://blazblue.wiki/images/9/94/BlazBlue_Alternative_Dark_War_Es_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Fuzzy",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/2/2e/BlazBlue_Alternative_Dark_War_Fuzzy_Profile_Art_1.png",
+			"https://blazblue.wiki/images/6/63/BlazBlue_Alternative_Dark_Fuzzy_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Hakumen",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/b/b5/BlazBlue_Alternative_Dark_War_Hakumen_Profile_Art_1.png",
+			"https://blazblue.wiki/images/a/ae/BlazBlue_Alternative_Dark_War_Hakumen_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Hazama",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/80/BlazBlue_Alternative_Dark_War_Hazama_Profile_Art_1.png",
+			"https://blazblue.wiki/images/f/f5/BlazBlue_Alternative_Dark_War_Hazama_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Hibiki Kohaku",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/cc/BlazBlue_Alternative_Dark_War_Hibiki_Kohaku_Main.png",
+			"https://blazblue.wiki/images/6/6d/BlazBlue_Alternative_Dark_War_Hibiki_Kohaku_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Homura Amanohokosaka",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/d/da/BlazBlue_Alternative_Dark_War_Homura_Amanohokosaka_Main.png",
+			"https://blazblue.wiki/images/f/ff/BlazBlue_Alternative_Dark_War_Homura_Amanohokosaka_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Iron Tager",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/4/4e/BlazBlue_Alternative_Dark_War_Tager_Main.png",
+			"https://blazblue.wiki/images/1/1e/BlazBlue_Alternative_Dark_War_Iron_Tager_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Izayoi",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/6/6e/BlazBlue_Alternative_Dark_War_Izayoi_Profile_Art_2.png",
+			"https://blazblue.wiki/images/b/ba/BlazBlue_Alternative_Dark_War_Izayoi_Profile_Art_4.png"	
+		]
+	},
+	{
+		"name": "Jin Kisaragi",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/7/74/BlazBlue_Alternative_Dark_War_Jin_Kisaragi_Main.png",
+			"https://blazblue.wiki/images/5/52/BlazBlue_Alternative_Dark_War_Jin_Kisaragi_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Jubei",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/4/44/BlazBlue_Alternative_Dark_War_Jubei_Full_Profile_Art_1.png",
+			"https://blazblue.wiki/images/9/98/BlazBlue_Alternative_Dark_War_Jubei_Full_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Juusan",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/e/e7/BlazBlue_Alternative_Dark_War_Juusan_Profile_Art_1.png",
+			"https://blazblue.wiki/images/a/a3/BlazBlue_Alternative_Dark_War_Juusan_Profile_Art_3.png"
+		]
+	},
+	{
+		"name": "Kaguri Mutsuki",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/c3/BlazBlue_Alternative_Dark_War_Kagura_Mutsuki_Profile_Art_2.png",
+			"https://blazblue.wiki/images/5/5b/BlazBlue_Alternative_Dark_War_Kagura_Mutsuki_Profile_Art_3.png"
+		]
+	},
+	{
+		"name": "Kajun Faycott",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/e/ee/BlazBlue_Alternative_Dark_War_Kajun_Profile_Main.png",
+			"https://blazblue.wiki/images/a/a0/BlazBlue_Alternative_Dark_War_Kajun_Profile_4.png"
+		]
+	},
+	{
+		"name": "Kazuma Kval",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/7/74/BlazBlue_Alternative_Dark_War_Kazuma_Main.png",
+			"https://blazblue.wiki/images/5/52/BlazBlue_Alternative_Dark_War_Kazuma_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Kiiro Hikagami",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/9/91/BlazBlue_Alternative_Dark_War_Kiiro_Main.png",
+			"https://blazblue.wiki/images/6/69/BlazBlue_Alternative_Dark_War_Kiiro_Profile_Art_4.png"	
+		]
+	},
+	{
+		"name": "Kokonoe",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/6/61/BlazBlue_Alternative_Dark_War_Kokonoe_Profile_Art_3.png",
+			"https://blazblue.wiki/images/a/a3/BlazBlue_Alternative_Dark_War_Kokonoe_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Kuon Glamred Stroheim",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/1/13/BlazBlue_Alternative_Dark_War_Kuon_Glamred_Stroheim_Main.png",
+			"https://blazblue.wiki/images/9/90/BlazBlue_Alternative_Dark_War_Kuon_Glamred_Stroheim_Profile_Art_4.png"
+		]
+	},
+	{	
+		"name": "Kuon Glamred Stroheim",
+		"title": "Scorching Beach Attacker",
+		"art": [
+			"https://blazblue.wiki/images/4/42/BlazBlue_Alternative_Dark_War_Kuon_%28Scorching_Beach_Attacker%29_Profile_Art_1.png",
+			"https://blazblue.wiki/images/7/70/BlazBlue_Alternative_Dark_War_Kuon_%28Scorching_Beach_Attacker%29_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Linhua",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/82/BlazBlue_Alternative_Dark_War_Linhua_Profile_Art_4.png",
+			"https://blazblue.wiki/images/c/c7/BlazBlue_Alternative_Dark_War_Linhua_Main.png"		
+		]
+	},
+	{
+		"name": "Litchi Faye-Ling",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/f/fa/BlazBlue_Alternative_Dark_War_Litchi_Main.png",
+			"https://blazblue.wiki/images/e/e5/BlazBlue_Alternative_Dark_War_Litchi_Faye-Ling_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Mai Natsume",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/2/23/BlazBlue_Alternative_Dark_War_Mai_Natsume_Main.png",
+			"https://blazblue.wiki/images/0/0a/BlazBlue_Alternative_Dark_War_Jin_Mai_Natsume_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Mai Natsume",
+		"title": "Midsummer Fairy",
+		"art": [
+			"https://blazblue.wiki/images/4/47/BlazBlue_Alternative_Dark_War_Mai_%28Midsummer_Fairy%29_Profile_Art_1.png",
+			"https://blazblue.wiki/images/a/ad/BlazBlue_Alternative_Dark_War_Mai_%28Midsummer_Fairy%29_Profile_Art_2.png"
+		]
+	},	
+	{
+		"name": "Makoto Nanaya",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/cb/BlazBlue_Alternative_Dark_War_Makoto_Main.png",
+			"https://blazblue.wiki/images/6/62/BlazBlue_Alternative_Dark_War_Makoto_Nanaya_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Mei Amanohokosaka",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/84/BlazBlue_Alternative_Dark_War_Mei_Amanohokosaka_Profile_Art_1.png",
+			"https://blazblue.wiki/images/4/41/BlazBlue_Alternative_Dark_War_Mei_Amanohokosaka_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Meifang Lapislazuli",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/5/53/BlazBlue_Alternative_Dark_War_Meifang_Lapislazuli_Profile_Art_1.png",
+			"https://blazblue.wiki/images/a/ae/BlazBlue_Alternative_Dark_War_Meifang_Lapislazuli_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Naoto Kurogane",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/a/ab/BlazBlue_Alternative_Dark_War_Naoto_Kurogane_Main.png",
+			"https://blazblue.wiki/images/a/aa/BlazBlue_Alternative_Dark_War_Naoto_Kurogane_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Narmaya",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/5/51/BlazBlue_Alternative_Dark_War_Narmaya_Full_Profile_Art_1.png",
+			"https://blazblue.wiki/images/b/ba/BlazBlue_Alternative_Dark_War_Narmaya_Full_Profile_Art_2.png"	
+		]
+	},
+	{
+		"name": "Nine",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/b/b6/BlazBlue_Alternative_Dark_War_Nine_Profile_Art_1.png",
+			"https://blazblue.wiki/images/8/8e/BlazBlue_Alternative_Dark_War_Nine_Profile_Art_4.png"	
+		]
+	},
+	{
+		"name": "Noel Vermillion",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/a/ae/BlazBlue_Alternative_Dark_War_Noel_Vermillion_Main.png",
+			"https://blazblue.wiki/images/a/a2/BlazBlue_Alternative_Dark_War_Noel_Vermillion_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Noel Vermillion",
+		"title": "Holynight Guardian",
+		"art": [
+			"https://blazblue.wiki/images/2/2f/BlazBlue_Alternative_Dark_War_Noel_Holynight_Guardian_Profile_Art_1.png",
+			"https://blazblue.wiki/images/a/a4/BlazBlue_Alternative_Dark_War_Noel_Holynight_Guardian_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Noel Vermillion",
+		"title": "Academy",
+		"art": [
+			"https://blazblue.wiki/images/7/7a/BlazBlue_Alternative_Dark_War_Noel_Vermillion_%28Academy%29_Main.png",
+			"https://blazblue.wiki/images/4/48/BlazBlue_Alternative_Noel_Vermillion_%28Academy%29_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Platinum the Trinity",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/c8/BlazBlue_Alternative_Dark_War_Platinum_Main.png",
+			"https://blazblue.wiki/images/a/a3/BlazBlue_Alternative_Dark_War_Platinum_Profile_4.png"
+		]
+	},
+	{
+		"name": "Platinum the Trinity",
+		"title": "Beachside Magical Girl",
+		"art": [
+			"https://blazblue.wiki/images/b/b5/BlazBlue_Alternative_Dark_War_Platinum_%28Beachside_Magical_Girl%29_Art_1.png",
+			"https://blazblue.wiki/images/1/18/BlazBlue_Alternative_Dark_War_Platinum_%28Beachside_Magical_Girl%29_Art_3.png"
+		]
+	},
+	{
+		"name": "Rachel Alucard",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/7/7d/BlazBlue_Alternative_Dark_War_Rachel_Alucard_Main.png",
+			"https://blazblue.wiki/images/3/3d/BlazBlue_Alternative_Dark_War_Rachel_Alucard_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Raquel Alucard",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/a/a4/BlazBlue_Alternative_Dark_War_Raquel_Alucard_Main.png",
+			"https://blazblue.wiki/images/6/63/BlazBlue_Alternative_Dark_War_Raquel_Alucard_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Relius Clover",
+		"title": "Bloodedge Experience",
+		"art": [
+			"https://blazblue.wiki/images/b/bb/BlazBlue_Alternative_Dark_War_Relius_Clover_%28BE%29_Main.png",
+			"https://blazblue.wiki/images/8/84/BlazBlue_Alternative_Dark_War_Relius_Clover_%28BE%29_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Ripper",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/ce/BlazBlue_Alternative_Dark_War_Ripper_Main.png",
+			"https://blazblue.wiki/images/d/d9/BlazBlue_Alternative_Dark_War_Ripper_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Saya Terumi",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/0/0a/BlazBlue_Alternative_Dark_War_Saya_Terumi_Main1.png",
+			"https://blazblue.wiki/images/3/39/BlazBlue_Alternative_Dark_War_Saya_Terumi_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Sechs",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/e/e7/BlazBlue_Alternative_Dark_War_Sechs_Full_Profile_Art_3.png",
+			"https://blazblue.wiki/images/e/e0/BlazBlue_Alternative_Dark_War_Sechs_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Shiori Kirihito",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/9/96/BlazBlue_Alternative_Dark_War_Shiori_Kirihito_Profile_Art_2.png",
+			"https://blazblue.wiki/images/2/23/BlazBlue_Alternative_Dark_War_Shiori_Kirihito_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Taokaka",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/c/c8/BlazBlue_Alternative_Dark_War_Taokaka_Main.png",
+			"https://blazblue.wiki/images/4/4a/BlazBlue_Alternative_Dark_War_Taokaka_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Spirit Body Terumi",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/0/08/BlazBlue_Alternative_Dark_War_Seishintai_Terumi_Main.png",
+			"https://blazblue.wiki/images/2/25/BlazBlue_Alternative_Dark_War_Seishintai_Terumi_Main_Profile_Art_4.png"	
+		]
+	},
+	{
+		"name": "Taro Sasaga'e",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/4/41/BlazBlue_Alternative_Dark_War_Taro_Sasaga%27e_Full_Profile_Art_2.png",
+			"https://blazblue.wiki/images/8/84/BlazBlue_Alternative_Dark_War_Taro_Sasaga%27e_Full_Profile_Art_3.png"
+		]
+	},
+	{
+		"name": "Tenjo Amanohokosaka",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/5/59/BlazBlue_Alternative_Dark_War_Tenjo_Amanohokosaka_Profile_Art_1.png",
+			"https://blazblue.wiki/images/9/9d/BlazBlue_Alternative_Dark_War_Tenjo_Amanohokosaka_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Trinity Glassfille",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/4/41/BlazBlue_Alternative_Dark_War_Trinity_Glassfille_Main.png",
+			"https://blazblue.wiki/images/4/4e/BlazBlue_Alternative_Dark_War_Trinity_Glassfille_Profile_4.png"
+		]
+	},
+	{
+		"name": "Tsubaki Yayoi",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/e/eb/BlazBlue_Alternative_Dark_War_Tsubaki_Yayoi_Main.png",
+			"https://blazblue.wiki/images/0/05/BlazBlue_Alternative_Dark_War_Tsubaki_Yayoi_Profile_Art_4.png"	
+		]
+	},
+	{
+		"name": "Tweyen",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/e/e5/BlazBlue_Alternative_Dark_War_Tweyen_Full_Profile_Art_1.png",
+			"https://blazblue.wiki/images/b/b2/BlazBlue_Alternative_Dark_War_Tweyen_Full_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Valkenhayn R. Hellsing",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/82/BlazBlue_Alternative_Dark_War_Valkenhayn_R_Hellsing_Main.png",
+			"https://blazblue.wiki/images/f/f9/BlazBlue_Alternative_Dark_War_Valkenhayn_R._Hellsing_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "Valkenhayn Hellsing",
+		"title": "Bloodedge Experience",
+		"art": [
+			"https://blazblue.wiki/images/5/5d/BlazBlue_Alternative_Dark_War_Valkenhayn_%28BE%29_Main.png",
+			"https://blazblue.wiki/images/d/d3/BlazBlue_Alternative_Dark_War_Valkenhayn_Hellsing_%28BE%29_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "White Justice",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/87/BlazBlue_Alternative_Dark_War_White_Justice_Profile_Art_1.png",
+			"https://blazblue.wiki/images/8/83/BlazBlue_Alternative_Dark_War_White_Justice_Profile_Art_2.png"
+		]
+	},
+	{
+		"name": "Zwei",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/8/8b/BlazBlue_Alternative_Dark_War_Zwei_Main.png",
+			"https://blazblue.wiki/images/1/1d/BlazBlue_Alternative_Dark_War_Zwei_Profile_Art_4.png"
+		]
+	},
+	{
+		"name": "λ-No.11-",
+		"title": "",
+		"art": [
+			"https://blazblue.wiki/images/6/6e/BlazBlue_Alternative_Dark_War_Lambda-11_Profile_Art_2.png",
+			"https://blazblue.wiki/images/3/3c/BlazBlue_Alternative_Dark_War_Lambda-11_Profile_Art_3.png"
+		]
+	}
+]

@@ -1066,6 +1066,27 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command(aliases=['bbdw'])
+    async def blazblue(self, ctx, reason: Optional[str] = None):
+        """ Pulls a BlazBlue Alternative: Dark War character """
+
+        with open("ext/data/bbdw.json", encoding="utf-8") as f:
+            char = choice(json.load(f))
+
+        embed = discord.Embed(
+            title=char["name"],
+            color=0x4986c1)
+
+        if char["title"]:
+            embed.description = char["title"]
+
+        embed.set_image(url=choice(char["art"]))
+        embed.set_footer(text="BlazBlue Alternative: Dark War")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'blazblue dark war'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
