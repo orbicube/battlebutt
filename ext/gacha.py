@@ -1035,13 +1035,15 @@ class Gacha(commands.Cog,
 
         variant = choice(page.xpath("//table[@class='wikitable unit ibox']"))
         name = variant.xpath(".//tr[1]/th/text()")[0]
-        img_url = variant.xpath(".//tr[2]/td/span/span/img/@src")[0]
+        img_url = variant.xpath(".//tr[2]/td/span/span/img/@data-image-key")[0]
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"exvius {selected_article}")
-
-        r = await self.bot.http_client.get(img_url)
+        r = await self.bot.http_client.get(
+            f"https://exvius.fandom.com/wiki/Special:FilePath/{img_url}",
+            follow_redirects=True)
         char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.resize((char_img.width*3, char_img.height*3))
+        char_img = char_img.resize(
+            (char_img.width*3, char_img.height*3),
+            resample=0)
 
         with BytesIO() as img_binary:
             char_img.save(img_binary, 'PNG')
