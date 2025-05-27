@@ -11,9 +11,10 @@ from datetime import datetime, timedelta
 from random import choice, choices, randint, sample
 from base64 import b64decode
 from io import BytesIO
-
+from PIL import Image
 from urllib.parse import quote
 from lxml import html
+
 from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY
 
 class Gacha(commands.Cog,
@@ -60,6 +61,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['gbf'])
     async def granblue(self, ctx, reason: Optional[str] = None):
         """ Pulls a Granblue Fantasy character """
+        await ctx.defer()
 
         with open("ext/data/gbf.json") as f:
             j = json.load(f)
@@ -238,6 +240,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def dragalialost(self, ctx, reason: Optional[str] = None):
         """ Pulls a Dragalia Lost character """
+        await ctx.defer()
 
         url = "https://dragalialost.wiki/api.php"
         params = {
@@ -269,7 +272,6 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['mkt'])
     async def mariokarttour(self, ctx, reason: Optional[str] = None):
         """ Pulls a Mario Kart Tour character """
-
         await ctx.defer()
 
         url = "https://www.mariowiki.com/api.php"
@@ -420,6 +422,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['fgo'])
     async def fategrandorder(self, ctx, reason: Optional[str] = None):
         """ Pulls a Fate Grand Order character """
+        await ctx.defer()
 
         url = "https://fategrandorder.fandom.com/api.php"
         params = {
@@ -611,6 +614,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['touhou'])
     async def touhoulostword(self, ctx, reason: Optional[str] = None):
         """ Pulls a Touhou LostWord character """
+        await ctx.defer()
 
         with open("ext/data/touhou.json") as f:
             j = json.load(f)
@@ -767,6 +771,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def bravefrontier(self, ctx, reason: Optional[str] = None):
         """ Pulls a Brave Frontier character """
+        await ctx.defer()
 
         with open("ext/data/bfunits.txt", encoding="utf-8") as f:
             title = choice([line.rstrip() for line in f])
@@ -871,6 +876,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def cookierun(self, ctx, reason: Optional[str] = None):
         """ Pulls a Cookie Run Kingdom character """
+        await ctx.defer()
 
         url = "https://cookierunkingdom.fandom.com/api.php"
         params = {
@@ -921,6 +927,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['mmxd'])
     async def megamanxdive(self, ctx, reason: Optional[str] = None):
         """ Pulls a Mega Man X DiVE character """
+        await ctx.defer()
 
         url = "https://rockman-x-dive.fandom.com/api.php"
         params = {
@@ -969,8 +976,8 @@ class Gacha(commands.Cog,
 
 
 
-    @commands.command(aliases=['romancingsaga'])
-    async def romancingsagareuniverse(self, ctx, reason: Optional[str] = None):
+    @commands.command(aliases=['saga'])
+    async def romancingsaga(self, ctx, reason: Optional[str] = None):
         """ Pulls a Romancing SaGa re;univerSe character """
 
         with open("ext/data/romancingsaga.json") as f:
@@ -987,6 +994,70 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'romancing saga re;universe'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['ffbe', 'exvius'])
+    async def braveexvius(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Final Fantasy Brave Exvius character """
+        await ctx.defer()
+
+        url = "https://exvius.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Units",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            article_list.extend(results["query"]["categorymembers"])
+
+        selected_article = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        variant = choice(page.xpath("//table[@class='wikitable unit ibox']"))
+        name = variant.xpath(".//tr[1]/th/text()")[0]
+        img_url = variant.xpath(".//tr[2]/td/span/span/img/@src")[0]
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"exvius {selected_article}")
+
+        r = await self.bot.http_client.get(img_url)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.resize((char_img.width*3, char_img.height*3))
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="braveexvius.png")
+
+        embed = discord.Embed(
+            title=name,
+            color=0x9adafe)
+        embed.set_image(url="attachment://braveexvius.png")
+        embed.set_footer(text="Final Fantasy Brave Exvius")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'brave exvius'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
 
 
 
