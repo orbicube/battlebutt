@@ -161,3 +161,4 @@ ext/data/2018lists.json
 ext/dbmigrate.py
 ext/data/gbf.json
 ext/data/langrisser.json
+ext/data/touhou.json
