@@ -46,8 +46,7 @@ class Gacha(commands.Cog,
 
 
     @gacha.autocomplete('game')
-    async def gacha_autocomplete(self, 
-        interaction: discord.Interaction,
+    async def gacha_autocomplete(self, interaction: discord.Interaction,
         current: str,) -> list[app_commands.Choice[str]]:
 
         games = [c.name for c in self.get_commands() if not c.name == "gacha"]
@@ -979,7 +978,6 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-
     @commands.command(aliases=['saga'])
     async def romancingsaga(self, ctx, reason: Optional[str] = None):
         """ Pulls a Romancing SaGa re;univerSe character """
@@ -1087,6 +1085,43 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'blazblue dark war'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
+
+    @commands.command()
+    async def umamusume(self, ctx, reason: Optional[str] = None):
+        """ Pulls a random Uma Musume character """
+        await ctx.defer()
+
+        url = "https://umapyoi.net/api/v1/character"
+        r = await self.bot.http_client.get(f"{url}/list")
+        char = choice([c for c in r.json() if c["category_label_en"] != "Related parties"])
+
+        r = await self.bot.http_client.get(f"{url}/images/{char['id']}")
+        outfit = choice([o for o in r.json() if o["label_en"] == "Racing Outfit"])
+
+        r = await self.bot.http_client.get(outfit["images"][0]["image"])
+        card_img = Image.open(BytesIO(r.content))
+        card_img = card_img.crop(card_img.getbbox())
+
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="umamusume.png")
+
+        embed = discord.Embed(
+            title = char["name_en"],
+            color=0xd88da4)
+        embed.set_image(url="attachment://umamusume.png")
+        embed.set_footer(text="Umamusume: Pretty Derby")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'umamusume'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
+
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
