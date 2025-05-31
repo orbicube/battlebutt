@@ -1120,7 +1120,56 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command()
+    async def afkarena(self, ctx, reason: Optional[str] = None):
+        """ Pulls a random AFK Arena character """
+        await ctx.defer()
 
+        url = "https://afkarena.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "generator": "categorymembers",
+            "prop": "vignetteimages",
+            "gcmtitle": "Category:Heroes",
+            "gcmnamespace": 0,
+            "gcmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        char_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["gcmcontinue"] = results["continue"]["gcmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = [85, 341, 966, 1971, 5566, 5568]
+            for article in results["query"]["pages"].values():
+                if article["pageid"] not in bad_pages and "pageimage" in article:
+                    char_list.append(article)
+
+        char = choice(char_list)
+
+        embed = discord.Embed(
+            color=0xd5a749)
+        if " - " in char["title"]:
+            name, title = char["title"].split(" - ")
+            embed.description = title
+        else:
+            name = char["title"]
+        embed.title = name
+
+        embed.set_image(url=f"https://afkarena.fandom.com/wiki/Special:FilePath/{char['pageimage']}")
+        embed.set_footer(text="AFK Arena")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'afk arena'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 async def setup(bot):
