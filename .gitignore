@@ -162,3 +162,5 @@ ext/dbmigrate.py
 ext/data/gbf.json
 ext/data/langrisser.json
 ext/data/touhou.json
+
+.bash_history
