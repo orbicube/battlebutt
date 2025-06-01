@@ -14,6 +14,7 @@ from io import BytesIO
 from PIL import Image
 from urllib.parse import quote
 from lxml import html
+from zipfile import ZipFile
 
 from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY
 
@@ -1168,6 +1169,50 @@ class Gacha(commands.Cog,
 
         if reason and ctx.interaction:
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'afk arena'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['octopath', 'cotc'])
+    async def octopathtraveler(self, ctx, reason: Optional[str] = None):
+        """ Pulls a random Octopath Traveler: Champions of the Continent character"""
+
+        url = "https://docs.google.com/spreadsheets/d/1q_erxNGausa_O0a1Y0eKtR3r2rKN9-Tnnb6L5kLzbTk/export?format=zip"
+        r = await self.bot.http_client.get(url, follow_redirects=True)
+
+        with ZipFile(BytesIO(r.content)) as zipfile:
+            with zipfile.open('Gallery.html') as html_page:
+                page = html.fromstring(html_page.read())
+
+        chars = []
+        rows = page.xpath("//tbody/tr")[2:]
+        for row in rows:
+            columns = row.xpath(".//td")[2:]
+
+            three_name = columns[0].xpath(".//text()")
+            if three_name:
+                img = columns[2].xpath(".//div/img/@src")[0].split("=")[0]
+                chars.append({"name": three_name[0], "img": img})
+
+            four_name = columns[3].xpath(".//text()")
+            if four_name:
+                img = columns[5].xpath(".//div/img/@src")[0].split("=")[0]
+                chars.append({"name": four_name[0], "img": img})
+
+            chars.append({
+                "name": columns[6].xpath(".//text()")[0],
+                "img": columns[8].xpath(".//div/img/@src")[0].split("=")[0]
+            })
+        char = choice(chars)
+
+        embed = discord.Embed(
+            title=char["name"],
+            color=0xcabf9e)
+        embed.set_image(url=char["img"])
+        embed.set_footer(text="Octopath Traveler: Champions of the Continent")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'octopath traveler'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
