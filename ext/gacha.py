@@ -1101,11 +1101,11 @@ class Gacha(commands.Cog,
         outfit = choice([o for o in r.json() if o["label_en"] == "Racing Outfit"])
 
         r = await self.bot.http_client.get(outfit["images"][0]["image"])
-        card_img = Image.open(BytesIO(r.content))
-        card_img = card_img.crop(card_img.getbbox())
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
 
         with BytesIO() as img_binary:
-            card_img.save(img_binary, 'PNG')
+            char_img.save(img_binary, 'PNG')
             img_binary.seek(0)
             file = discord.File(fp=img_binary, filename="umamusume.png")
 
@@ -1215,6 +1215,46 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'octopath traveler'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
+
+    @commands.command()
+    async def bravelydefault(self, ctx, reason: Optional[str] = None):
+        """ Pulls a random Bravely Default: Brilliant Lights character """
+
+        url = ("https://api.github.com/repos/orbicube/bravelydefault/git/trees/"
+            "5352a20a1f42bd3e80573201163ea212b65f8ebc")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+
+        char = choice(r.json()["tree"])
+        name, title = char["path"][:-4].split("#")
+        try:
+            title_map = {"1star": "★", "3star": "★★★", "5star": "★★★★★"}
+            name += f" {title_map[title]}"
+            title = ""
+        except:
+            pass
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="bravelydefault.png")
+
+        embed = discord.Embed(
+            title = name,
+            description=title,
+            color=0xb0c0b3)
+        embed.set_image(url="attachment://bravelydefault.png")
+        embed.set_footer(text="Bravely Default: Brilliant Lights")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'bravely default'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
 
 
 async def setup(bot):
