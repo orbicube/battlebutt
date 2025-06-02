@@ -1090,7 +1090,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def umamusume(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Uma Musume character """
+        """ Pulls an Uma Musume character """
         await ctx.defer()
 
         url = "https://umapyoi.net/api/v1/character"
@@ -1123,7 +1123,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def afkarena(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random AFK Arena character """
+        """ Pulls an AFK Arena character """
         await ctx.defer()
 
         url = "https://afkarena.fandom.com/api.php"
@@ -1175,7 +1175,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['octopath', 'cotc'])
     async def octopathtraveler(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Octopath Traveler: Champions of the Continent character"""
+        """ Pulls an Octopath Traveler: Champions of the Continent character"""
 
         url = "https://docs.google.com/spreadsheets/d/1q_erxNGausa_O0a1Y0eKtR3r2rKN9-Tnnb6L5kLzbTk/export?format=zip"
         r = await self.bot.http_client.get(url, follow_redirects=True)
@@ -1219,7 +1219,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def bravelydefault(self, ctx, reason: Optional[str] = None):
-        """ Pulls a random Bravely Default: Brilliant Lights character """
+        """ Pulls a Bravely Default: Brilliant Lights character """
 
         url = ("https://api.github.com/repos/orbicube/bravelydefault/git/trees/"
             "5352a20a1f42bd3e80573201163ea212b65f8ebc")
@@ -1255,6 +1255,29 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'bravely default'} {reason}:", embed=embed, file=file)
         else:
             await ctx.send(embed=embed, file=file)
+
+
+    @commands.command()
+    async def echoesofmana(self, ctx, reason: Optional[str] = None):
+        """ Pulls an Echoes of Mana character"""
+
+        with open("ext/data/echoesofmana.json") as f:
+            char = choice(json.load(f))
+        variant = choice(char["variants"])
+
+        embed = discord.Embed(
+            title=char["name"],
+            description=variant["title"],
+            color=0xa6bbad)
+        embed.set_image(
+            url=f"https://wikiofmana.com/wiki/Special:FilePath/{variant['img']}")
+        embed.set_footer(text="Echoes of Mana")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'echoes of mana'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
 
 
 async def setup(bot):

@@ -1,0 +1,349 @@
+[
+	{
+		"name": "Amanda",
+		"variants": [
+			{"title": "", "img": "Amanda_full_2_EOM_artwork.png"},
+			{"title": "For Affection's Sake", "img": "Amanda_full_3_EOM_artwork.png"},
+			{"title": "Venturing the Endless Ocean", "img": "Amanda_3_Water_Knife_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Angela",
+		"variants": [
+			{"title": "Magic Power in Bloom", "img": "Angela full EOM artwork.png"},
+			{"title": "Rebelling Against Fate", "img": "Angela_full_2_EOM_artwork.png"},
+			{"title": "Shining Magic Power", "img": "Angela_full_4_EOM_artwork.png"},
+			{"title": "Winter Wishes", "img": "Angela_4_Earth_Staff_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Aria",
+		"variants": [
+			{"title": "Fallen Angel", "img": "Aria_4_Light_Bow_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Ben",
+		"variants": [
+			{"title": "", "img": "Ben_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Bil",
+		"variants": [
+			{"title": "", "img": "Bil_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Blainchet",
+		"variants": [
+			{"title": "", "img": "Blainchet_full_EOM_artwork.png"},
+			{"title": "Warmhearted Lone Wolf", "img": "Blainchet_4_Water_Bow_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Charlotte",
+		"variants": [
+			{"title": "Fifteen in the Flush of Youth", "img": "Charlotte_full_EOM_artwork.png"},
+			{"title": "Whiz & Beauty", "img": "Charlotte_full_3_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Crimson Wizard",
+		"variants": [
+			{"title": "Flaming Dark Magic", "img": "Crimson_Wizard_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Dark Lord",
+		"variants": [
+			{"title": "", "img": "Dark_Lord_full_2_EOM_artwork.png"},
+			{"title": "Knight in Brutal Armor", "img": "Dark_Lord_full_EOM_artwork.png"},
+			{"title": "Ruler of the Realm", "img": "Dark_Lord_4_Dark_Sword_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Duffle",
+		"variants": [
+			{"title": "", "img": "Duffle_full_EOM_artwork.png"},
+			{"title": "Full Dream Ahead", "img": "Duffle_4_Wind_Lance_Full_EOM_artwork.png"},
+			{"title": "Ruff 'N Tumble", "img": "Duffle_4_Moon_Axe_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Duran",
+		"variants": [
+			{"title": "Thrilling Blade Flash", "img": "Duran_full_EOM_artwork.png"},
+			{"title": "Trusted Shield", "img": "Duran_4_Wind_Sword_full_EOM_artwork.png"},
+			{"title": "Valiant Dawnbringer", "img": "Duran_4_Wood_Sword_full_EOM_artwork.png"},
+			{"title": "Young Soldier of Valsena", "img": "Duran_full_2_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Ebon Knight",
+		"variants": [
+			{"title": "Phantom Slayer", "img": "Ebon_Knight_4_Dark_Sword_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Elazul",
+		"variants": [
+			{"title": "Significant Pursuit", "img": "Elazul_4_Wood_Sword_full_EOM_artwork.png"},
+			{"title": "Young Jumi Knight", "img": "Elazul_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Elle",
+		"variants": [
+			{"title": "Efflorescent Wings", "img": "Elle_3_Wood_Staff_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Escad",
+		"variants": [
+			{"title": "Beholder of Justice", "img": "Escad_4_Wind_Sword_Full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Fanha",
+		"variants": [
+			{"title": "Real Snake Charmer", "img": "Fanha_5_Earth_Staff_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Ferrik",
+		"variants": [
+			{"title": "", "img": "Ferrik_full_2_EOM_artwork.png"},
+			{"title": "Beyond the Great Calamity", "img": "Ferrik_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Fuji",
+		"variants": [
+			{"title": "Undertaking Fate", "img": "Fuji_4_Light_Staff_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Goremand",
+		"variants": [
+			{"title": "Tragic Jester", "img": "Goremand_5_Dark_Axe_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Hawkeye",
+		"variants": [
+			{"title": "Pride of Thieves", "img": "Hawkeye_full_3_EOM_artwork.png"},
+			{"title": "Sentiments for a Friend", "img": "Hawkeye_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Honeycomb",
+		"variants": [
+			{"title": "", "img": "Honeycomb_full_EOM_artwork.png"},
+			{"title": "Knightly Aspirations", "img": "Honeycomb_4_Fire_Staff_full_EOM_artwork.png"},
+			{"title": "Shyest Santa", "img": "Honeycomb_4_Water_Staff_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Isabella",
+		"variants": [
+			{"title": "The Belladonna", "img": "Isabella_5_Dark_Whip_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Julius",
+		"variants": [
+			{"title": "", "img": "Julius_full_2_EOM_artwork.png"},
+			{"title": "Hidden Ambitions", "img": "Julius_full_EOM_artwork.png"},
+			{"title": "Tactical Mage of Manipulation", "img": "Julius_full_4_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Keldric",
+		"variants": [
+			{"title": "Guided by the Great Tree", "img": "Keldric_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Kevin",
+		"variants": [
+			{"title": "Fangs of Fury", "img": "Kevin_4_Light_Glove_full_EOM_artwork.png"},
+			{"title": "The Beast Within", "img": "Kevin_full_3_EOM_artwork.png"},
+			{"title": "To Save a Friend", "img": "Kevin_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Lady Blackpearl",
+		"variants": [
+			{"title": "Darkcore Shatter", "img": "Lady_Blackpearl_4_Wood_Axe_full_EOM_artwork.png"},
+			{"title": "Jumi's Finest", "img": "Blackpearl_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Larc",
+		"variants": [
+			{"title": "The Conqueror", "img": "Larc_4_Water_Axe_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Lekius",
+		"variants": [
+			{"title": "Guardian's Resolve", "img": "Lekius_full_EOM_artwork.png"},
+			{"title": "Unwavering Friendship", "img": "Lekius_full_3_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Ludgar",
+		"variants": [
+			{"title": "", "img": "Ludgar_full_2_EOM_artwork.png"},
+			{"title": "Body of Practical Study", "img": "Ludgar_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Marcy",
+		"variants": [
+			{"title": "MRC Unit", "img": "Marcy_4_Light_Bow_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Mousseline",
+		"variants": [
+			{"title": "", "img": "Mousseline_full_EOM_artwork.png"},
+			{"title": "Que Sera Sera", "img": "Mousseline_full_3_EOM_artwork.png"},
+			{"title": "Vampire Trickster", "img": "Mousseline_4_Moon_Lance_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Niccolo",
+		"variants": [
+			{"title": "Smile for Mew!", "img": "Niccolo_full_EOM_artwork.png"}
+		]	
+	},
+	{
+		"name": "Popoi",
+		"variants": [
+			{"title": "Bringer of Blessings", "img": "Popoi_4_Earth_Bow_full_EOM_artwork.png"},
+			{"title": "Headed for the Home Village", "img": "Popoi_full_3_EOM_artwork.png"},
+			{"title": "I'm the Boss!", "img": "Popoi_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Primm",
+		"variants": [
+			{"title": "Lovely Rowdy Lass", "img": "Primm_full_2_EOM_artwork.png"},
+			{"title": "New Year Maiden", "img": "Primm_4_Wood_Sword_full_EOM_artwork.png"},
+			{"title": "Strong and Sweet", "img": "Primm_full_3_EOM_artwork.png"},
+			{"title": "Taking Charge", "img": "Primm_4_Earth_Lance_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Quilto",
+		"variants": [
+			{"title": "", "img": "Quilto_full_EOM_artwork.png"},
+			{"title": "Harvester of Echoes", "img": "Quilto_4_Wood_Sword_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Quilta",
+		"variants": [
+			{"title": "", "img": "Quilta_full_EOM_artwork.png"},
+			{"title": "Harvester of Echoes", "img": "Quilta_4_Wood_Sword_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Randi",
+		"variants": [
+			{"title": "Fate by Fluke", "img": "Randi_full_EOM_sprite.png"},
+			{"title": "Friendly Force", "img": "Randi_4_Light_Whip_full_EOM_artwork.png"},
+			{"title": "In Fervor and Fearlessness", "img": "Randi_full_3_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Raxa",
+		"variants": [
+			{"title": "", "img": "Raxa_full_EOM_artwork.png"},
+			{"title": "Swashbuckler Supreme", "img": "Raxa_4_Water_Glove_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Riesz",
+		"variants": [
+			{"title": "Pride of Amazon", "img": "Riesz_full_EOM_artwork.png"},
+			{"title": "Pride on the High Seas", "img": "Riesz_4_Water_Lance_full_EOM_artwork.png"},
+			{"title": "Search for a Brother", "img": "Riesz_full_2_EOM_artwork.png"},
+			{"title": "True Steel", "img": "Riesz_4_Dark_Lance_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Sandra",
+		"variants": [
+			{"title": "Jewel Hunter", "img": "Sandra_4_Water_Glove_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Serafina",
+		"variants": [
+			{"title": "A Sprouting Encounter", "img": "Serafina_full_2_EOM_artwork.png"},
+			{"title": "A World of Encounters", "img": "Serafina_full_4_EOM_artwork.png"},
+			{"title": "Distant Dawn Dreamer", "img": "Serafina_4_Fire_Bow_full_EOM_artwork.png"},
+			{"title": "Guided by Calling Dreams", "img": "Serafina_full_3_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Sheex",
+		"variants": [
+			{"title": "Fight for All Domination", "img": "Sheex_5_Water_Sword_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Shiloh",
+		"variants": [
+			{"title": "Afloat with Hope", "img": "Shiloh_4_Water_Glove_full_EOM_artwork.png"},
+			{"title": "Encounter Sprung from a Seed", "img": "Shiloh_full_3_EOM_artwork.png"},
+			{"title": "Weaver of Fantasies", "img": "Shiloh_full_2_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Sierra",
+		"variants": [
+			{"title": "", "img": "Sierra_full_2_EOM_artwork.png"},
+			{"title": "Proud Dragoon", "img": "Sierra_full_EOM_artwork.png"},
+			{"title": "Unyielding Loyalty", "img": "Sierra_4_Water_Knife_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Sumo",
+		"variants": [
+			{"title": "Overcoming Myriad Farewells", "img": "Sumo_full_EOM_artwork.png"},
+			{"title": "Resolve Renewed", "img": "Sumo_3_Wind_Axe_full_EOM_artwork.png"},
+			{"title": "Swordsman Starting Out", "img": "Sumo_full_2_EOM_artwork.png"},
+			{"title": "Tomorrow Danws Anew", "img": "Sumo_4_Fire_Sword_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Tamber",
+		"variants": [
+			{"title": "Darling Dancer", "img": "Tamber_4_Earth_Bow_full_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Thanatos",
+		"variants": [
+			{"title": "", "img": "Thanatos_full_2_EOM_artwork.png"},
+			{"title": "Stealthy Shadow", "img": "Thanatos_full_EOM_sprite.png"}
+		]
+	},
+	{
+		"name": "Van",
+		"variants": [
+			{"title": "Fallen Demon", "img": "Van_4_Dark_Polearm_EOM_artwork.png"}
+		]
+	},
+	{
+		"name": "Wanderer",
+		"variants": [
+			{"title": "The Niccolo Vagabond", "img": "Wanderer_full_EOM_artwork.png"},
+			{"title": "Winding My Way Home", "img": "Wanderer_full_3_EOM_artwork.png"}
+		]
+	}
+]
