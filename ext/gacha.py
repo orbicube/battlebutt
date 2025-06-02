@@ -1279,8 +1279,8 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-    @commands.command(aliases=['starocean', 'soa'])
-    async def staroceananamnesis(self, ctx, reason: Optional[str] = None):
+    @commands.command(aliases=['soa'])
+    async def starocean(self, ctx, reason: Optional[str] = None):
         """ Pulls a Star Ocean: Anamnesis character"""
 
         with open("ext/data/starocean.json") as f:
