@@ -1279,6 +1279,27 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command(aliases=['starocean', 'soa'])
+    async def staroceananamnesis(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Star Ocean: Anamnesis character"""
+
+        with open("ext/data/starocean.json") as f:
+            char = choice(json.load(f))
+        variant = choice(char["variants"])
+
+        embed = discord.Embed(
+            title=char["name"],
+            description=variant["title"],
+            color=0x127799)
+        embed.set_image(
+            url=f"https://starocean.fandom.com/wiki/Special:FilePath/{variant['img']}")
+        embed.set_footer(text="Star Ocean: Anamnesis")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'star ocean'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
