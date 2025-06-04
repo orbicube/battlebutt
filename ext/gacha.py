@@ -302,9 +302,8 @@ class Gacha(commands.Cog,
             title=name,
             color=0xe60012)
 
-        img = character.xpath(
-            ".//a[@class='image']/@href")[0].split("/File:")[1]
-        embed.set_image(url=f"https://www.mariowiki.com/Special:FilePath/{img}")
+        img = character.xpath(".//a[@class='image']/img/@src")[0].rsplit("/", 1)[0].replace('/thumb', '')
+        embed.set_image(url=img)
 
         embed.set_footer(text="Mario Kart Tour")
 
