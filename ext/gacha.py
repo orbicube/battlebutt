@@ -1301,5 +1301,70 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command()
+    async def nikke(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Goddess of Victory: Nikke character"""
+
+        url = "https://nikke-goddess-of-victory-international.fandom.com/"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Playable_characters",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(f"{url}api.php", 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            article_list.extend(results["query"]["categorymembers"])
+
+        char = choice(article_list)["title"]
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"nikke {char}")
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        titles = page.xpath("//div[@class='pi-image-collection wds-tabber']/div/ul/li/span/text()")
+        if titles:
+            selected = randint(0, len(titles)-1)
+        else:
+            selected = 0
+        title = ""
+        if ": " in char:
+            char, title = char.split(": ")
+            if selected > 0:
+                title = f"{title} ({titles[selected]})"
+        elif selected > 0:
+            title = titles[selected]
+
+        img = page.xpath("//figure[@class='pi-item pi-image']/a/img/@data-image-key")[selected].replace('MI.p', 'FB.p').replace(' ', '_')
+
+        embed = discord.Embed(
+            title=char,
+            description=title,
+            color=0xb4b3bb)
+        embed.set_image(url=f"{url}wiki/Special:FilePath/{img}")
+        embed.set_footer(text="Goddess of Victory: Nikke")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nikke'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
