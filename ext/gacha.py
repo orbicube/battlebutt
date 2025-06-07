@@ -476,6 +476,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['nier'])
     async def nierreincarnation(self, ctx, reason: Optional[str] = None):
         """ Pulls a NieR Re[in]carnation character """
+        await ctx.defer()
 
         with open("ext/data/nier.json") as f:
             char = choice(json.load(f))
@@ -569,6 +570,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['atelier'])
     async def atelieresleriana(self, ctx, reason: Optional[str] = None):
         """ Pulls an Atelier Resleriana character """
+        await ctx.defer()
 
         # JSON Updated March 29, 2025
         with open("ext/data/atelier.json") as f:
@@ -592,6 +594,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def sinoalice(self, ctx, reason: Optional[str] = None):
         """ Pulls a SINoALICE character """
+        await ctx.defer()
 
         chars = []
         with open("ext/data/sinoalice.csv", newline='', encoding='utf-8') as f:
@@ -673,6 +676,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def worldflipper(self, ctx, reason: Optional[str] = None):
         """ Pulls a World FLipper character """
+        await ctx.defer()
 
         with open("ext/data/worldflipper.json", encoding="utf-8") as f:
             characters = json.load(f)
@@ -699,7 +703,8 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['kof'])
     async def kofallstar(self, ctx, reason: Optional[str] = None):
         """ Pulls a KoF Allstar character """
-        
+        await ctx.defer()
+   
         url = ("https://api.github.com/repos/orbicube/kofchars/git/trees/"
             "dad49f27c6cc4a766cfbb96c077bac925c146ee1")
         headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
@@ -741,6 +746,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['404gamereset', '404'])
     async def errorgamereset(self, ctx, reason: Optional[str] = None):
         """ Pulls a 404 GAME RE:SET character """
+        await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/404chars/git/trees/"
             "58b9eb8f0c5e4ea34ec74b103d458458e788482e")
@@ -981,6 +987,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['saga'])
     async def romancingsaga(self, ctx, reason: Optional[str] = None):
         """ Pulls a Romancing SaGa re;univerSe character """
+        await ctx.defer()
 
         with open("ext/data/romancingsaga.json") as f:
             char = choice(json.load(f))
@@ -1067,6 +1074,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['bbdw'])
     async def blazblue(self, ctx, reason: Optional[str] = None):
         """ Pulls a BlazBlue Alternative: Dark War character """
+        await ctx.defer()
 
         with open("ext/data/bbdw.json", encoding="utf-8") as f:
             char = choice(json.load(f))
@@ -1175,6 +1183,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['octopath', 'cotc'])
     async def octopathtraveler(self, ctx, reason: Optional[str] = None):
         """ Pulls an Octopath Traveler: Champions of the Continent character"""
+        await ctx.defer()
 
         url = "https://docs.google.com/spreadsheets/d/1q_erxNGausa_O0a1Y0eKtR3r2rKN9-Tnnb6L5kLzbTk/export?format=zip"
         r = await self.bot.http_client.get(url, follow_redirects=True)
@@ -1219,6 +1228,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def bravelydefault(self, ctx, reason: Optional[str] = None):
         """ Pulls a Bravely Default: Brilliant Lights character """
+        await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/bravelydefault/git/trees/"
             "5352a20a1f42bd3e80573201163ea212b65f8ebc")
@@ -1259,6 +1269,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def echoesofmana(self, ctx, reason: Optional[str] = None):
         """ Pulls an Echoes of Mana character"""
+        await ctx.defer()
 
         with open("ext/data/echoesofmana.json") as f:
             char = choice(json.load(f))
@@ -1281,6 +1292,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['soa'])
     async def starocean(self, ctx, reason: Optional[str] = None):
         """ Pulls a Star Ocean: Anamnesis character"""
+        await ctx.defer()
 
         with open("ext/data/starocean.json") as f:
             char = choice(json.load(f))
@@ -1303,6 +1315,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def nikke(self, ctx, reason: Optional[str] = None):
         """ Pulls a Goddess of Victory: Nikke character"""
+        await ctx.defer()
 
         url = "https://nikke-goddess-of-victory-international.fandom.com/"
         params = {
