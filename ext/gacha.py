@@ -41,6 +41,7 @@ class Gacha(commands.Cog,
             ctx.interaction.extras = {"rando": False}
         if not selected_comm:
             selected_comm = choice(commands)
+            await self.bot.get_channel(DEBUG_CHANNEL).send(f"{selected_comm.name}")
             if ctx.interaction:
                 ctx.interaction.extras["rando"] = True
         await selected_comm.__call__(ctx, reason)
