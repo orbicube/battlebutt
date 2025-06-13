@@ -1379,8 +1379,8 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
-    @commands.command(aliases=['metalslug', 'msa'])
-    async def metalslugattack(self, ctx, reason: Optional[str] = None):
+    @commands.command(aliases=['msa'])
+    async def metalslug(self, ctx, reason: Optional[str] = None):
         """ Pulls a Metal SLug Attack character"""
         
         url = ("https://api.github.com/repos/orbicube/msa/git/trees/"
@@ -1412,7 +1412,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="Metal Slug Attack")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'metal slug attack'} {reason}:", embed=embed, file=file)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'metal slug'} {reason}:", embed=embed, file=file)
         else:
             await ctx.send(embed=embed, file=file)
 
