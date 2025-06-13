@@ -491,7 +491,7 @@ class Gacha(commands.Cog,
         embed.set_footer(text="NieR Re[in]carnation")
 
         if reason and ctx.interaction:
-            await ctx.send(f"nier reincarnation {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nier reincarnation'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
 
@@ -1378,6 +1378,43 @@ class Gacha(commands.Cog,
         else:
             await ctx.send(embed=embed)
 
+
+    @commands.command(aliases=['metalslug', 'msa'])
+    async def metalslugattack(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Metal SLug Attack character"""
+        
+        url = ("https://api.github.com/repos/orbicube/msa/git/trees/"
+            "3dca6069518ed7ba82bc9e85e2547063689ba155")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+
+        char = choice(r.json()["tree"])
+        try:
+            name, title = char["path"][:-4].split("#")
+        except:
+            name = char["path"][:-4]
+            title = ""
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="metalslug.png")
+
+        embed = discord.Embed(
+            title = name,
+            description=title,
+            color=0xde8a39)
+        embed.set_image(url="attachment://metalslug.png")
+        embed.set_footer(text="Metal Slug Attack")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'metal slug attack'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
