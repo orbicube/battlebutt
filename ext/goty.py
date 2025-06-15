@@ -213,12 +213,9 @@ class Goty(commands.GroupCog):
 
         await self.tabulate(interaction.guild_id, self.year)
 
-        # If modern list, send to website
-        curr_year = discord.utils.utcnow().year
-        if self.year == curr_year or (self.year+1) == curr_year:
-            await self.bot.http_client.get(
-                f"https://goty.orb.party/{self.year}/discimport/",
-                params=url_params)
+        await self.bot.http_client.get(
+            f"https://goty.orb.party/{self.year}/discimport/",
+            params=url_params)
 
         await interaction.response.send_message(
             "List submitted!", ephemeral=True)
