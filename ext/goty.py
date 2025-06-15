@@ -131,8 +131,8 @@ class Goty(commands.GroupCog):
         "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
         "sixth": 6, "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10 
     }
-    year = 2024
-    closing_date = datetime(2025, 1, 1, 8, 0, 0, tzinfo=timezone.utc)
+    year = 2015
+    closing_date = datetime(2025, 8, 1, 8, 0, 0, tzinfo=timezone.utc)
 
     def __init__(self, bot):
         self.bot = bot
@@ -239,13 +239,19 @@ class Goty(commands.GroupCog):
 
         completes = []
         if current:
+            # Format query based on whether current or retro GotY
+            q_str = f'where name ~ *"{current}"*'
+            if self.year < self.closing_date.year-1:
+                q_str = f'{q_str} & release_dates.y = {self.year}'
+            q_str += ';'
+
             # Search IGDB for parameter input
             headers = await twitch_auth(self.bot.db, self.bot.http_client)
             headers["Content-Type"] = "text/plain"
             r = await self.bot.http_client.post(
                 "https://api.igdb.com/v4/games/",
                 headers=headers,
-                data=f'where name ~ *"{current}"*; {self.igdb_params}')
+                data=f'{q_str} {self.igdb_params}')
             games = r.json()
 
             completes = [app_commands.Choice(
