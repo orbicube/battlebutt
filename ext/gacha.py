@@ -1416,5 +1416,42 @@ class Gacha(commands.Cog,
         else:
             await ctx.send(embed=embed, file=file)
 
+
+    @commands.command()
+    async def anothereden(self, ctx, reason: Optional[str] = None):
+        """ Pulls an Another Eden character """
+
+        url = "https://anothereden.wiki"
+        params = {
+            "action": "parse",
+            "page": "Collection_Tracker",
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}/api.php", params=params)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        char = choice(page.xpath("//div[@class='tracker-item tracker-character']"))
+        name = char.xpath(".//@data-name")[0]
+        if " (" in name:
+            name, title = name.split(" (")
+            title = title[:-1]
+        else:
+            title = ""
+        img = char.xpath(".//a/img/@src")[0][13:-9].replace("command", "base")
+
+        embed = discord.Embed(
+            title=name,
+            description=title,
+            color=0x5e76af)
+        embed.set_image(
+            url=f"https://anothereden.wiki/w/Special:FilePath/{img}")
+        embed.set_footer(text="Another Eden")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'another eden'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
