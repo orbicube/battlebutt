@@ -1453,5 +1453,31 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command()
+    async def terrabattle(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Terra Battle character """
+
+        with open("ext/data/terrabattle.json") as f:
+            chars = json.load(f)
+            char = choice(list(chars.keys()))
+        variant = choice(chars[char])
+
+        embed = discord.Embed(
+            title=char,
+            description=variant["title"],
+            color=0x648ba5)
+
+        url = "https://terrabattle.fandom.com"
+        if "Guardian_" in variant['img']:
+            url = url.replace("e.f", "e2.f")
+        embed.set_image(url=f"{url}/wiki/Special:FilePath/{variant['img']}")
+        embed.set_footer(text=f"Terra Battle{' 2' if '2' in url else ' '}")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'terra battle'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
