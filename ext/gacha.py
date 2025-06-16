@@ -728,8 +728,13 @@ class Gacha(commands.Cog,
             game = game_map[game]
 
         r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="kofas.png")
+        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="kofas.png")
 
         embed = discord.Embed(
             title=name,
