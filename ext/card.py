@@ -150,7 +150,6 @@ class Card(commands.Cog,
     @commands.command()
     async def gateruler(self, ctx):
         """ Pulls a Gate Ruler card """
-
         # Defer in case edit takes too long
         await ctx.defer()
 
@@ -584,9 +583,21 @@ class Card(commands.Cog,
         params["page"] = selected_page
 
         r = await self.bot.http_client.get(url, params=params)
-        card_img = r.json()["data"][0]["imageUrl"]
+        card_url = r.json()["data"][0]["imageUrl"]
 
-        await ctx.send(card_img)
+        r = await self.bot.http_client.get(card_url)
+
+        # Crop borders of card
+        card_img = Image.open(BytesIO(r.content))
+        card_img = card_img.crop(card_img.getbbox())
+
+        # Send to Discord
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            await ctx.send(file=discord.File(
+                fp=img_binary,
+                filename=card_url.rsplit('/', 1)[1]))
 
 
     @commands.command()

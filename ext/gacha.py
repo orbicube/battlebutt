@@ -1056,6 +1056,7 @@ class Gacha(commands.Cog,
             f"https://exvius.fandom.com/wiki/Special:FilePath/{img_url}",
             follow_redirects=True)
         char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
         char_img = char_img.resize(
             (char_img.width*3, char_img.height*3),
             resample=0)
