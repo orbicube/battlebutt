@@ -571,6 +571,7 @@ class Card(commands.Cog,
     @commands.command()
     async def elestrals(self, ctx):
         """ Pulls an Elestrals card """
+        await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/64a31866dd516a3cc4c8d45c"
         params = {
