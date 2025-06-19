@@ -124,19 +124,36 @@ class Gacha(commands.Cog,
                 json.dump(data, f)
 
         char = choice(characters)
+        img = choice(char['arts'])
+
+        r = await self.bot.http_client.get(
+            f"https://gbf.wiki/Special:FilePath/{img}",
+            follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        img_path = str(r.url).rsplit('/', 1)[1]
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{img_path}")
+
+        await ctx.send(img)
+
         embed = discord.Embed(
             title=char['name'],
             description=char['title'],
             color=0x1ca6ff
         )
         embed.set_image(
-            url=f"https://gbf.wiki/Special:FilePath/{choice(char['arts'])}")
+            url=f"attachment://{img_path}")
         embed.set_footer(text="Granblue Fantasy")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'granblue'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'granblue'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['feh'])
@@ -180,19 +197,30 @@ class Gacha(commands.Cog,
             params=params, headers=self.headers, timeout=15)
 
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
-        images = page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/@href")
+        img = choice(page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/img/@data-image-key"))
+
+        r = await self.bot.http_client.get(
+            f"https://feheroes.fandom.com/wiki/Special:FilePath/{img}",
+            follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'WEBP')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img)
 
         embed = discord.Embed(
             title=selected_article.split(":")[0],
             description=selected_article.split(": ")[1],
             color=0xc3561f)
-        embed.set_image(url=choice(images))
+        embed.set_image(url=f"attachment://{img}")
         embed.set_footer(text="Fire Emblem Heroes")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fire emblem'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fire emblem'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['wotv'])
@@ -260,18 +288,29 @@ class Gacha(commands.Cog,
         character = choice(images)
 
         char_name = character.xpath("@alt")[0]
-        char_img = character.xpath("@src")[0][:-3] + "1000"
+        img = character.xpath("@src")[13:-10]
+
+        r = await self.bot.http_client.get(
+            f"https://dragalialost.wiki/w/Special:FilePath/{img}",
+            follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img)
 
         embed = discord.Embed(
             title=char_name,
             colour=0x3e91f1)
-        embed.set_image(url=f"https://dragalialost.wiki/{char_img}")
+        embed.set_image(url=f"attachment://{img}")
         embed.set_footer(text="Dragalia Lost")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'dragalia lost'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'dragalia lost'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['mkt'])
@@ -290,14 +329,9 @@ class Gacha(commands.Cog,
 
         characters = page.xpath(
             "//span[@id='In-game_portraits']/../following-sibling::ul[1]/li")
-        characters += page.xpath(
-            "//span[@id='Mii_Racing_Suits']/../following-sibling::ul[1]/li")
         character = choice(characters)
 
-        # No link if character is Mii
-        name = character.xpath(".//div/p/text()")[0]
-        if len(name) < 2:
-            name = character.xpath(".//div/p/a/text()")[0]
+        name = character.xpath(".//div/p/a/text()")[0]
 
         embed = discord.Embed(
             title=name,
