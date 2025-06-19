@@ -139,8 +139,6 @@ class Gacha(commands.Cog,
             img_binary.seek(0)
             file = discord.File(fp=img_binary, filename=f"{img_path}")
 
-        await ctx.send(img)
-
         embed = discord.Embed(
             title=char['name'],
             description=char['title'],
