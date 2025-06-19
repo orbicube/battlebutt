@@ -553,6 +553,7 @@ class Gacha(commands.Cog,
         name = skin.xpath(".//div[@class='lcs-container']/div/div[2]/text()")[0]
         title = skin.xpath(".//div/div/p/text()")[0][2:]
         img = skin.xpath(".//figure/a/img/@data-image-key")[0]
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"r1999 {img}")
 
         embed = discord.Embed(
             title=name,
