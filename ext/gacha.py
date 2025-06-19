@@ -1190,13 +1190,26 @@ class Gacha(commands.Cog,
             name = char["title"]
         embed.title = name
 
-        embed.set_image(url=f"https://afkarena.fandom.com/wiki/Special:FilePath/{char['pageimage']}")
+        r = await self.bot.http_client.get(
+            f"https://afkarena.fandom.com/wiki/Special:FilePath/{char['pageimage']}",
+            follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{char['pageimage']}")
+
+        embed.set_image(
+            url=f"attachment://{char['pageimage']}")
         embed.set_footer(text="AFK Arena")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'afk arena'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'afk arena'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['octopath', 'cotc'])
@@ -1456,19 +1469,30 @@ class Gacha(commands.Cog,
         else:
             title = ""
         img = char.xpath(".//a/img/@src")[0][13:-9].replace("command", "base")
+        r = await self.bot.http_client.get(
+            f"https://anothereden.wiki/w/Special:FilePath/{img}",
+            follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{img}")
 
         embed = discord.Embed(
             title=name,
             description=title,
             color=0x5e76af)
         embed.set_image(
-            url=f"https://anothereden.wiki/w/Special:FilePath/{img}")
+            url=f"attachment://{img}")
         embed.set_footer(text="Another Eden")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'another eden'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'another eden'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command()
