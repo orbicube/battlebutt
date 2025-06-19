@@ -555,18 +555,29 @@ class Gacha(commands.Cog,
         img = skin.xpath(".//figure/a/img/@data-image-key")[0]
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"r1999 {img}")
 
+        r = await self.bot.http_client.get(
+            f"https://reverse1999.fandom.com/wiki/Special:FilePath/{img}",
+            follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img)
+
         embed = discord.Embed(
             title=name,
             color=0x53443c)
         if "Default" not in title:
             embed.description = title
-        embed.set_image(url=f"https://reverse1999.fandom.com/wiki/Special:FilePath/{img}")
+        embed.set_image(url=f"attachment://{img}")
         embed.set_footer(text="Reverse: 1999")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'reverse1999'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'reverse1999'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['atelier'])
