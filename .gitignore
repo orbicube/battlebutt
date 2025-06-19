@@ -164,3 +164,4 @@ ext/data/langrisser.json
 ext/data/touhou.json
 
 .bash_history
+/.ssh
