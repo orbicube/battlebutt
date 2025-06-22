@@ -253,14 +253,14 @@
 	{
 		"name": "Reddick Farrence",
 		"variants": [
-			{"title": "", "img": "RoddickFarrence.png"},
+			{"title": "Star Ocean", "img": "RoddickFarrence.png"},
 			{"title": "Summer", "img": "RoddickFarrence02.png"}
 		]
 	},
 	{
 		"name": "Millie Chliette",
 		"variants": [
-			{"title": "", "img": "MillieChliette.png"},
+			{"title": "Star Ocean", "img": "MillieChliette.png"},
 			{"title": "Were-Millie", "img": "MillieChliette02.png"},
 			{"title": "Summer", "img": "MillieChliette03.png"},
 			{"title": "Sweet", "img": "MillieChliette04.png"}
@@ -269,44 +269,44 @@
 	{
 		"name": "Ronyx J. Kenny",
 		"varints": [
-			{"title": "", "img": "RonyxJKenny.png"}
+			{"title": "Star Ocean", "img": "RonyxJKenny.png"}
 		]
 	},
 	{
 		"name": "Ilia Silvestri",
 		"variants": [
-			{"title": "", "img": "IliaSilvestri.png"}
+			{"title": "Star Ocean", "img": "IliaSilvestri.png"}
 		]
 	},
 	{
 		"name": "Cyuss Warren",
 		"variants": [
-			{"title": "", "img": "CyussWarren.png"}
+			{"title": "Star Ocean", "img": "CyussWarren.png"}
 		]	
 	},
 	{
 		"name": "Phia Melle",
 		"variants": [
-			{"title": "", "img": "PhiaMelle.png"},
+			{"title": "Star Ocean", "img": "PhiaMelle.png"},
 			{"title": "Crimson", "img": "PhiaMelle02.png"}
 		]
 	},
 	{
 		"name": "Ioshua Jerand",
 		"variants": [
-			{"title": "", "img": "IoshuaJerand.png"}
+			{"title": "Star Ocean", "img": "IoshuaJerand.png"}
 		]
 	},
 	{
 		"name": "Mavelle Froesson",
 		"variants": [
-			{"title": "", "img": "MavelleFroesson.png"}
+			{"title": "Star Ocean", "img": "MavelleFroesson.png"}
 		]
 	},
 	{
 		"name": "Pericci",
 		"variants": [
-			{"title": "", "img": "Pericci.png"},
+			{"title": "Star Ocean", "img": "Pericci.png"},
 			{"title": "Naive", "img": "Pericci02.png"},
 			{"title": "Winter", "img": "Pericci03.png"}
 		]
@@ -314,32 +314,32 @@
 	{
 		"name": "Erys Jerand",
 		"variants": [
-			{"title": "", "img": "ErysJerand.png"},
+			{"title": "Star Ocean", "img": "ErysJerand.png"},
 			{"title": "Heavenly", "img": "ErysJerand02.png"}
 		]
 	},
 	{
 		"name": "T'nique Arcana",
 		"variants": [
-			{"title": "", "img": "TniqueArcana.png"}
+			{"title": "Star Ocean", "img": "TniqueArcana.png"}
 		]
 	},
 	{
 		"name": "Ashlay Bernbeldt",
 		"variants": [
-			{"title": "", "img": "AshlayBernbeldt.png"}
+			{"title": "Star Ocean", "img": "AshlayBernbeldt.png"}
 		]
 	},
 	{
 		"name": "Dorne Murtough",
 		"variants": [
-			{"title": "", "img": "DorneMurtough.png"}
+			{"title": "Star Ocean", "img": "DorneMurtough.png"}
 		]
 	},
 	{
 		"name": "Claude C. Kenny",
 		"variants": [
-			{"title": "", "img": "ClaudeCKenny.png"},
+			{"title": "Star Ocean 2", "img": "ClaudeCKenny.png"},
 			{"title": "Uniform", "img": "ClaudeCKenny02.png"},
 			{"title": "Blue Sphere", "img": "ClaudeCKenny03.png"}
 		]
@@ -347,7 +347,7 @@
 	{
 		"name": "Rena Lanford",
 		"variants": [
-			{"title": "", "img": "RenaLanford.png"},
+			{"title": "Star Ocean 2", "img": "RenaLanford.png"},
 			{"title": "Bride", "img": "RenaLanford02.png"},
 			{"title": "Cat", "img": "RenaLanford03.png"},
 			{"title": "Summer", "img": "RenaLanford04.png"},
@@ -362,14 +362,14 @@
 	{
 		"name": "Celine Jules",
 		"variants": [
-			{"title": "", "img": "Celine_jules.png"},
+			{"title": "Star Ocean 2", "img": "Celine_jules.png"},
 			{"title": "Hunter", "img": "CelineJules02.png"}
 		]
 	},
 	{
 		"name": "Ashton Anchors",
 		"variants": [
-			{"title": "", "img": "AshtonAnchors.png"},
+			{"title": "Star Ocean 2", "img": "AshtonAnchors.png"},
 			{"title": "Blazing", "img": "AshtonAnchors_02.png"},
 			{"title": "Winter", "img": "AshtonAnchors_03.png"},
 			{"title": "Divine", "img": "AshtonAnchors04.png"}
@@ -378,7 +378,7 @@
 	{
 		"name": "Precis F. Neumann",
 		"variants": [
-			{"title": "", "img": "PrecisFNewman.png"},
+			{"title": "Star Ocean 2", "img": "PrecisFNewman.png"},
 			{"title": "Holiday", "img": "PrecisFNewman02.png"},
 			{"title": "Bride", "img": "PrecisFNewman03.png"},
 			{"title": "Operator", "img": "PrecisFNewman04.png"},
@@ -389,20 +389,20 @@
 	{
 		"name": "Bowman Jeane",
 		"variants": [
-			{"title": "", "img": "BowmanJeane.png"}
+			{"title": "Star Ocean 2", "img": "BowmanJeane.png"}
 		]
 	},
 	{
 		"name": "Dias Flac",
 		"variants": [
-			{"title": "", "img": "DiasFlac.png"},
+			{"title": "Star Ocean 2", "img": "DiasFlac.png"},
 			{"title": "Blossom", "img": "DiasFlac02.png"}
 		]
 	},
 	{
 		"name": "Leon D.S. Gehste",
 		"variants": [
-			{"title": "", "img": "LeonDSGeeste.png"},
+			{"title": "Star Ocean 2", "img": "LeonDSGeeste.png"},
 			{"title": "Butler", "img": "LeonDSGeeste02.png"},
 			{"title": "Blue Sphere", "img": "LeonDSGeeste03.png"}
 		]
@@ -410,51 +410,51 @@
 	{
 		"name": "Opera Vectra",
 		"variants": [
-			{"title": "", "img": "OperaVectra.png"},
+			{"title": "Star Ocean 2", "img": "OperaVectra.png"},
 			{"title": "Crimson", "img": "OperaVectra02.png"}
 		]
 	},
 	{
 		"name": "Ernest Raviede",
 		"variants": [
-			{"title": "", "img": "ErnestRaviede.png"}
+			{"title": "Star Ocean 2", "img": "ErnestRaviede.png"}
 		]
 	},
 	{
 		"name": "Noel Chandler",
 		"variants": [
-			{"title": "", "img": "NoelChandler.png"}
+			{"title": "Star Ocean 2", "img": "NoelChandler.png"}
 		]
 	},
 	{
 		"name": "Chisato Madison",
 		"variants": [
-			{"title": "", "img": "ChisatoMadison.png"},
+			{"title": "Star Ocean 2", "img": "ChisatoMadison.png"},
 			{"title": "Blue Sphere", "img": "ChisatoMadison02.png"}
 		]
 	},
 	{
 		"name": "Michael",
 		"variants": [
-			{"title": "", "img": "Michael_Decus.png"}
+			{"title": "Star Ocean 2", "img": "Michael_Decus.png"}
 		]
 	},
 	{
 		"name": "Lucifer",
 		"variants": [
-			{"title": "", "img": "Lucifer1.png"}
+			{"title": "Star Ocean 2", "img": "Lucifer1.png"}
 		]
 	},
 	{
 		"name": "Gabriel",
 		"variants": [
-			{"title": "", "img": "Gabriel.png"}
+			{"title": "Star Ocean 2", "img": "Gabriel.png"}
 		]
 	},
 	{
 		"name": "Fayt Leingod",
 		"variants": [
-			{"title": "", "img": "FaytLeingod.png"},
+			{"title": "Till the End of Time", "img": "FaytLeingod.png"},
 			{"title": "Groom", "img": "FaytLeingod02.png"},
 			{"title": "SRF", "img": "FaytLeingod03.png"},
 			{"title": "Divine", "img": "FaytLeingod04.png"},
@@ -464,7 +464,7 @@
 	{
 		"name": "Sophia Esteed",
 		"variants": [
-			{"title": "", "img": "SophiaEsteed.png"},
+			{"title": "Till the End of Time", "img": "SophiaEsteed.png"},
 			{"title": "Summer", "img": "SophiaEsteed02.png"},
 			{"title": "Youth", "img": "SophiaEsteed03.png"},
 			{"title": "Maid", "img": "SophiaEsteed04.png"},
@@ -476,7 +476,7 @@
 	{
 		"name": "Maria Traydor",
 		"variants": [
-			{"title": "", "img": "MariaTraydor.png"},
+			{"title": "Till the End of Time", "img": "MariaTraydor.png"},
 			{"title": "Bride", "img": "MariaTraydor02.png"},
 			{"title": "Blossom", "img": "MariaTraydor03.png"},
 			{"title": "Summmer", "img": "MariaTraydor04.png"},
@@ -489,14 +489,14 @@
 	{
 		"name": "Cliff Fittir",
 		"variants": [
-			{"title": "", "img": "CliffFittir.png"},
+			{"title": "Till the End of Time", "img": "CliffFittir.png"},
 			{"title": "Groom", "img": "CliffFittir02.png"}
 		]
 	},
 	{
 		"name": "Nel Zelpher",
 		"variants": [
-			{"title": "", "img": "NelZepher.png"},
+			{"title": "Till the End of Time", "img": "NelZepher.png"},
 			{"title": "Oracle", "img": "NelZepher02.png"},
 			{"title": "Bride", "img": "NelZepher03.png"},
 			{"title": "Maid", "img": "NelZepher04.png"},
@@ -510,7 +510,7 @@
 	{
 		"name": "Albel Nox",
 		"variants": [
-			{"title": "", "img": "AlbelNox.png"},
+			{"title": "Till the End of Time", "img": "AlbelNox.png"},
 			{"title": "Dark", "img": "AlbelNox02.png"},
 			{"title": "Were-Albel", "img": "AlbelNox03.png"},
 			{"title": "Demon", "img": "AlbelNox04.png"}
@@ -519,26 +519,26 @@
 	{
 		"name": "Peppita Rossetti",
 		"variants": [
-			{"title": "", "img": "PeppitaRossetti.png"},
+			{"title": "Till the End of Time", "img": "PeppitaRossetti.png"},
 			{"title": "Magician", "img": "PeppitaRossetti02.png"}
 		]
 	},
 	{
 		"name": "Roger S. Huxley",
 		"variants": [
-			{"title": "", "img": "RogerHuxley.png"}
+			{"title": "Till the End of Time", "img": "RogerHuxley.png"}
 		]
 	},
 	{
 		"name": "Adray Lasbard",
 		"variants": [
-			{"title": "", "img": "AdrayLasbard.png"}
+			{"title": "Till the End of Time", "img": "AdrayLasbard.png"}
 		]
 	},
 	{
 		"name": "Mirage Koas",
 		"variants": [
-			{"title": "", "img": "MirageKoas.png"},
+			{"title": "Till the End of Time", "img": "MirageKoas.png"},
 			{"title": "Bunny", "img": "MirageKoas02.png"},
 			{"title": "Bride", "img": "MirageKoas03.png"}
 		]
@@ -546,7 +546,7 @@
 	{
 		"name": "Clair Lasbard",
 		"variants": [
-			{"title": "", "img": "ClairLasbard.png"},
+			{"title": "Till the End of Time", "img": "ClairLasbard.png"},
 			{"title": "Girly", "img": "ClairLasbard02.png"},
 			{"title": "Devil", "img": "ClairLasbard03.png"},
 			{"title": "Maid", "img": "ClairLasbard04.png"},
@@ -559,25 +559,25 @@
 	{
 		"name": "Tynave",
 		"variants": [
-			{"title": "", "img": "Tynave.png"}
+			{"title": "Till the End of Time", "img": "Tynave.png"}
 		]
 	},
 	{
 		"name": "Farleen",
 		"variants": [
-			{"title": "", "img": "Farleen.png"}
+			{"title": "Till the End of Time", "img": "Farleen.png"}
 		]
 	},
 	{
 		"name": "Luther Lansfeld",
 		"variants": [
-			{"title": "", "img": "LutherLansfeld.png"}
+			{"title": "Till the End of Time", "img": "LutherLansfeld.png"}
 		]
 	},
 	{
 		"name": "Edge Maverick",
 		"variants": [
-			{"title": "", "img": "EdgeMaverick.png"},
+			{"title": "The Last Hope", "img": "EdgeMaverick.png"},
 			{"title": "Official", "img": "EdgeMaverick02.png"},
 			{"title": "Summer", "img": "EdgeMaverick03.png"}
 		]
@@ -585,7 +585,7 @@
 	{
 		"name": "Reimi Saionji",
 		"variants": [
-			{"title": "", "img": "ReimiSaionji.png"},
+			{"title": "The Last Hope", "img": "ReimiSaionji.png"},
 			{"title": "Summer", "img": "ReimiSaionji02.png"},
 			{"title": "Official", "img": "ReimiSaionji03.png"},
 			{"title": "Bride", "img": "ReimiSaionji04.png"},
@@ -598,14 +598,14 @@
 	{
 		"name": "Faize Sheifa Beleth",
 		"variants": [
-			{"title": "", "img": "FaizeSheifaBeleth.png"},
+			{"title": "The Last Hope", "img": "FaizeSheifaBeleth.png"},
 			{"title": "Exorcist", "img": "FaizeSheifaBeleth02.png"}
 		]
 	},
 	{
 		"name": "Lymle Lemuri Phi",
 		"variants": [
-			{"title": "", "img": "LymleLemuriPhi.png"},
+			{"title": "The Last Hope", "img": "LymleLemuriPhi.png"},
 			{"title": "Official", "img": "LymleLemuriPhi02.png"},
 			{"title": "Flower", "img": "LymleLemuriPhi03.png"}
 		]
@@ -613,26 +613,26 @@
 	{
 		"name": "Bacchus D-79",
 		"variants": [
-			{"title": "", "img": "Bacchus.png"}
+			{"title": "The Last Hope", "img": "Bacchus.png"}
 		]
 	},
 	{
 		"name": "Meracle Chamlotte",
 		"variants": [
-			{"title": "", "img": "MeracleChamlotte.png"},
+			{"title": "The Last Hope", "img": "MeracleChamlotte.png"},
 			{"title": "Youth", "img": "MeracleChamlotte02.png"}
 		]
 	},
 	{
 		"name": "Sarah Jerand",
 		"variants": [
-			{"title": "", "img": "SarahJerand.png"}
+			{"title": "The Last Hope", "img": "SarahJerand.png"}
 		]
 	},
 	{
 		"name": "Myuria Tionysus",
 		"variants": [
-			{"title": "", "img": "MyuriaTionysus.png"},
+			{"title": "The Last Hope", "img": "MyuriaTionysus.png"},
 			{"title": "Summer", "img": "MyuriaTionysus02.png"},
 			{"title": "Courtesan", "img": "MyuriaTionysus03.png"}
 		]		
@@ -640,51 +640,51 @@
 	{
 		"name": "Arumat P. Thanatos",
 		"variants": [
-			{"title": "", "img": "ArumatPThanatos.png"},
+			{"title": "The Last Hope", "img": "ArumatPThanatos.png"},
 			{"title": "Butler", "img": "ArumatPThanatos02.png"}
 		]
 	},
 	{
 		"name": "Eleyna Farrence",
 		"variants": [
-			{"title": "", "img": "Eleyna_farrence.png"}
+			{"title": "The Last Hope", "img": "Eleyna_farrence.png"}
 		]
 	},
 	{
 		"name": "Crowe F. Almedio",
 		"variants": [
-			{"title": "", "img": "CroweFAlmedio.png"}
+			{"title": "The Last Hope", "img": "CroweFAlmedio.png"}
 		]
 	},
 	{
 		"name": "Stephen D. Kenney",
 		"variants": [
-			{"title": "", "img": "Stephen_d_kenny.png"}
+			{"title": "The Last Hope", "img": "Stephen_d_kenny.png"}
 		]
 	},
 	{
 		"name": "Milla Bachtein",
 		"variants": [
-			{"title": "", "img": "Milla_bachtein.png"}
+			{"title": "The Last Hope", "img": "Milla_bachtein.png"}
 		]
 	},
 	{
 		"name": "Amina",
 		"variants": [
-			{"title": "", "img": "Amina.png"}
+			{"title": "The Last Hope", "img": "Amina.png"}
 		]
 	},
 	{
 		"name": "Fidel Camuze",
 		"variants": [
-			{"title": "", "img": "FidelCamuze.png"},
+			{"title": "Integrity and Faithlessness", "img": "FidelCamuze.png"},
 			{"title": "Winter", "img": "FidelCamuze02.png"}
 		]
 	},
 	{
 		"name": "Miki Sauvester",
 		"variants": [
-			{"title": "", "img": "MikiSauvester.png"},
+			{"title": "Integrity and Faithlessness", "img": "MikiSauvester.png"},
 			{"title": "Princess", "img": "MikiSauvester02.png"},
 			{"title": "Summer", "img": "MikiSauvester03.png"},
 			{"title": "Idol", "img": "MikiSauvester04.png"},
@@ -694,14 +694,14 @@
 	{
 		"name": "Victor Oakville",
 		"variants": [
-			{"title": "", "img": "VictorOakville.png"},
+			{"title": "Integrity and Faithlessness", "img": "VictorOakville.png"},
 			{"title": "Vampire", "img": "VictorOakville02.png"}
 		]
 	},
 	{
 		"name": "Fiore Brunelli",
 		"variants": [
-			{"title": "", "img": "FioreBrunelli.png"},
+			{"title": "Integrity and Faithlessness", "img": "FioreBrunelli.png"},
 			{"title": "Nurse", "img": "FioreBrunelli02.png"},
 			{"title": "Bandage", "img": "FioreBrunelli03.png"},
 			{"title": "Maid", "img": "FioreBrunelli04.png"}
@@ -710,63 +710,63 @@
 	{
 		"name": "Emerson T. Kenny",
 		"variants": [
-			{"title": "", "img": "EmmersonTKenny.png"}
+			{"title": "Integrity and Faithlessness", "img": "EmmersonTKenny.png"}
 		]
 	},
 	{
 		"name": "Anne Patriceani",
 		"variants": [
-			{"title": "", "img": "AnnePatriceani.png"},
+			{"title": "Integrity and Faithlessness", "img": "AnnePatriceani.png"},
 			{"title": "Official", "img": "AnnePatriceani02.png"}
 		]
 	},
 	{
 		"name": "Relia",
 		"variants": [
-			{"title": "", "img": "Relia.png"},
+			{"title": "Integrity and Faithlessness", "img": "Relia.png"},
 			{"title": "Pumpkin", "img": "Relia02.png"}
 		]
 	},
 	{
 		"name": "Darli Camuze",
 		"variants": [
-			{"title": "", "img": "DarilCamuze.png"}
+			{"title": "Integrity and Faithlessness", "img": "DarilCamuze.png"}
 		]
 	},
 	{
 		"name": "Pavine",
 		"variants": [
-			{"title": "", "img": "Pavine.png"}
+			{"title": "Integrity and Faithlessness", "img": "Pavine.png"}
 		]
 	},
 	{
 		"name": "Ted",
 		"variants": [
-			{"title": "", "img": "Ted.png"}
+			{"title": "Integrity and Faithlessness", "img": "Ted.png"}
 		]
 	},
 	{
 		"name": "Gunter",
 		"variants": [
-			{"title": "", "img": "Gunter.png"}
+			{"title": "Integrity and Faithlessness", "img": "Gunter.png"}
 		]
 	},
 	{
 		"name": "Hana",
 		"variants": [
-			{"title": "", "img": "Hana.png"}
+			{"title": "Integrity and Faithlessness", "img": "Hana.png"}
 		]
 	},
 	{
 		"name": "Tiffan Delacroix",
 		"variants": [
-			{"title": "", "img": "Tiffan_delacroix.png"}
+			{"title": "Integrity and Faithlessness", "img": "Tiffan_delacroix.png"}
 		]
 	},
 	{
 		"name": "Raffine",
 		"variants": [
-			{"title": "", "img": "Raffine.png"}
+			{"title": "Integrity and Faithlessness", "img": "Raffine.png"}
 		]
 	},
 	{
