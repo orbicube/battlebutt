@@ -330,9 +330,14 @@ class Gacha(commands.Cog,
         character = choice(characters)
 
         name = character.xpath(".//div/p/a/text()")[0]
+        title = ""
+        if " (" in name:
+            name, title = name.rsplit(" (", 1)
+            title = title[:-1] 
 
         embed = discord.Embed(
             title=name,
+            description=title,
             color=0xe60012)
 
         img = character.xpath(".//a[@class='image']/img/@src")[0].rsplit("/", 1)[0].replace('/thumb', '')

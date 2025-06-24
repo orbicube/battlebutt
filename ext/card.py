@@ -91,8 +91,8 @@ class Card(commands.Cog,
         # Defer in case takes too long
         await ctx.defer()
 
-        # Git tree for cardlist, updated 2024/09/22
-        tree = "db451cf944c8c03ce4079b946c9ce39614df0a71"
+        # Git tree for cardlist, updated 2025/06/24
+        tree = "c9134433051e001e86a4a2a677227a4d2e55739c"
         url = ("https://api.github.com/repos/TakaOtaku/"
             f"Digimon-Card-App/git/trees/{tree}")
         r = await self.bot.http_client.get(url)
@@ -258,8 +258,8 @@ class Card(commands.Cog,
     async def redemption(self, ctx):
         """ Pulls a Redemption card """
 
-        # Git tree for cardlist, updated 2024/09/22
-        tree = "e5eb07664d9e9989687fb8f38acf78d5223e2267"
+        # Git tree for cardlist, updated 2025/06/24
+        tree = "bb007936c69375fdb5631becceafa62e4975e886"
         url = ("https://api.github.com/repos/MattJBrinkman/"
             f"RedemptionLackeyCCG/git/trees/{tree}")
 
