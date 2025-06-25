@@ -282,11 +282,12 @@ class Gacha(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
 
-        images = page.xpath("//img[@data-file-width='1024']")
-        character = choice(images)
+        char = choice(
+            page.xpath("//div[@class='character-grid-entry grid-entry']"))
 
-        char_name = character.xpath("@alt")[0]
-        img = character.xpath("@src")[0][13:-10]
+        char_name = char.xpath(".//div[1]/a/text()")[0]
+        char_title = char.xpath(".//div[2]/text()")[0]
+        img = char.xpath(".//div[4]/a/img/@src")[0][13:-10]
 
         r = await self.bot.http_client.get(
             f"https://dragalialost.wiki/w/Special:FilePath/{img}",
@@ -301,6 +302,7 @@ class Gacha(commands.Cog,
 
         embed = discord.Embed(
             title=char_name,
+            description=char_title,
             colour=0x3e91f1)
         embed.set_image(url=f"attachment://{img}")
         embed.set_footer(text="Dragalia Lost")
