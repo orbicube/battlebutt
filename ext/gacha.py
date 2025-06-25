@@ -288,8 +288,6 @@ class Gacha(commands.Cog,
         char_name = character.xpath("@alt")[0]
         img = character.xpath("@src")[0][13:-10]
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"dl {img}")
-
         r = await self.bot.http_client.get(
             f"https://dragalialost.wiki/w/Special:FilePath/{img}",
             follow_redirects=True)
