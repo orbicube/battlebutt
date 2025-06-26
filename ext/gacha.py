@@ -1560,5 +1560,83 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed)
 
 
+    @commands.command(aliases=['ptn'])
+    async def pathtonowhere(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Path to Nowhere character """
+        url = f"https://s1n.gg"
+
+        with open("ext/data/ptn.json") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        chars = j["chars"]
+
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 2:
+            r = await self.bot.http_client.get(url)
+            page = html.fromstring(r.text)
+            js_url = page.xpath("//script[@type='module']/@src")[0]
+
+            r = await self.bot.http_client.get(f"{url}{js_url}")
+            apikey = re.findall(r'base.co",XX="([^"]+)"', r.text)[0]
+            char_list = re.findall(r'{id:"(\w+)",name:"([^"]+)",imgAv', r.text)
+                
+            chars = {}
+            for char in char_list:
+                chars[char[1]] = {"id": char[0], "outfits": []}
+
+            at_url = f"https://qcropwcwnvrflrzlsucj.supabase.co/rest/v1/attires"
+            r = await self.bot.http_client.get(at_url,
+                params={"select": "img,name,sinner"},
+                headers={"apikey": apikey})
+
+            for outfit in r.json():
+                if "!Chief" not in outfit["sinner"]:
+                    chars[outfit["sinner"]]["outfits"].append({
+                        "title": outfit["name"],
+                        "url": outfit["img"]})
+
+            data = {
+                "updated": int(datetime.utcnow().timestamp()),
+                "chars": chars
+            }
+            with open("ext/data/ptn.json", "w") as f:
+                json.dump(data, f)
+                
+        char = choice(list(chars.keys()))
+
+        r = await self.bot.http_client.get(f"{url}/data/sinners/{chars[char]['id']}.json")
+        char_data = r.json()
+
+        char_outfits = chars[char]["outfits"]
+        char_outfits.append({
+            "title": "",
+            "url": char_data["imgBase"]})
+        char_outfits.append({
+            "title": "",
+            "url": char_data["imgPhaseup"]})
+
+        variant = choice(char_outfits)
+        embed = discord.Embed(
+            title=char,
+            description=variant["title"],
+            color=0xa21f23)
+
+        r = await self.bot.http_client.get(variant["url"], headers=self.headers)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{chars[char]['id']}.png")
+
+        embed.set_image(url=f"attachment://{chars[char]['id']}.png")
+        embed.set_footer(text="Path to Nowhere")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'path to nowhere'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
