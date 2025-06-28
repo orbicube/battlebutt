@@ -1090,6 +1090,9 @@ class Gacha(commands.Cog,
             article_list.extend(results["query"]["categorymembers"])
 
         selected_article = choice(article_list)["title"]
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"ffbe {char}")
+
         params = {
             "action": "parse",
             "page": selected_article,
