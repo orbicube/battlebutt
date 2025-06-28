@@ -1091,7 +1091,8 @@ class Gacha(commands.Cog,
 
         selected_article = choice(article_list)["title"]
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"ffbe {char}")
+        await self.bot.get_channel(DEBUG_CHANNEL).send(
+            f"ffbe {selected_article}")
 
         params = {
             "action": "parse",
