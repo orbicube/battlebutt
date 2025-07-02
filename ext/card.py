@@ -876,6 +876,56 @@ class Card(commands.Cog,
             await ctx.send(card_img)
 
 
+    @commands.command()
+    async def tombraider(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Tomb Raider card """
+
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Cards",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        url = "https://www.wikiraider.tombraidergirl.net/api.php"
+
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            for c in results["query"]["categorymembers"]:
+                if c["ns"] == 0 and c["pageid"] != 4052:
+                    article_list.append(c["title"])
+
+        selected_article = choice(article_list)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"tombraider {selected_article}")
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, timeout=15)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        card_path = page.xpath("//tr/td/a[@class='image']/@href")[0].replace(
+            'File:', 'Special:FilePath/')
+        card_img = f"{url.rsplit('/', 1)[0]}{card_path}"
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'tomb raider'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
 
