@@ -926,6 +926,40 @@ class Card(commands.Cog,
             await ctx.send(card_img)
 
 
+    @commands.command()
+    async def ageofsigmar(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Warhammer Age of Sigmar card """
+
+        url = "https://mp-search-api.tcgplayer.com/v1/search/request"
+        data = {
+            "filters": {
+                "term" : {
+                    "productLineName": ["warhammer-age-of-sigmar-champions-tcg"],
+                    "productTypeName": ["Cards"]
+                }
+            },
+            "size": 1,
+            "sort": {
+                "field": "product-sorting-name",
+                "order": "asc"
+            }
+        }
+        r = await self.bot.http_client.post(url, json=data)
+        card_count = r.json()["results"][0]["totalResults"]
+        data["from"] = randint(0, card_count-1)
+
+        r = await self.bot.http_client.post(url, json=data)
+        card = r.json()["results"][0]["results"][0]
+
+        card_id = int(card["productId"])
+        card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
+        
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'age of sigmar'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
 
