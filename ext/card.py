@@ -24,19 +24,20 @@ class Card(commands.Cog,
 
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
-    async def card(self, ctx, game: Optional[str] = None):
+    async def card(self, ctx, game: Optional[str] = None, reason: Optional[str] = None):
         """ Pulls a TCG card """
         
         commands = self.get_commands()
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
-        if selected_comm and selected_comm.name != "playingcard":
-            await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
-            await selected_comm.__call__(ctx)
-        else:
+        if ctx.interaction:
+            ctx.interaction.extras = {"rando": False}
+        if not selected_comm:
             selected_comm = choice(commands)
             await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
-            await selected_comm.__call__(ctx)
+            if ctx.interaction:
+                ctx.interaction.extras["rando"] = True
+        await selected_comm.__call__(ctx, reason)
 
 
     @card.autocomplete('game')
@@ -56,8 +57,9 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['poke'])
-    async def pokemon(self, ctx):
+    async def pokemon(self, ctx, reason: Optional[str] = None):
         """ Pulls a Pokemon TCG card """
+        await ctx.defer()
 
         url = "https://pkmncards.com/?random"
         r = await self.bot.http_client.get(url, follow_redirects=True)
@@ -67,13 +69,17 @@ class Card(commands.Cog,
         image_url = page.xpath("//meta[@property='og:image']/@content")[0]
         image_url = image_url.split('?')[0]
 
-        await ctx.send(image_url)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'pokemon'} {reason}: [⠀]({image_url})")
+        else:
+            await ctx.send(image_url)
 
 
     @commands.command(aliases=['ygo', 'yugi'])
-    async def yugioh(self, ctx):
+    async def yugioh(self, ctx, reason: Optional[str] = None):
         """ Pulls a Yu-Gi-Oh! card """
-       
+        await ctx.defer()
+
         url = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
         params = {
             "num": 1, "offset": 0, "sort": "random", "cachebust": 1
@@ -81,14 +87,15 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card = r.json()["data"][0]
 
-        await ctx.send(card['card_images'][0]['image_url'])
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'pokemon'} {reason}: [⠀]({card['card_images'][0]['image_url']})")
+        else:
+            await ctx.send(card['card_images'][0]['image_url'])
 
 
     @commands.command()
-    async def digimon(self, ctx):
+    async def digimon(self, ctx, reason: Optional[str] = None):
         """ Pulls a Digimon card. """
-
-        # Defer in case takes too long
         await ctx.defer()
 
         # Git tree for cardlist, updated 2025/06/24
@@ -104,14 +111,21 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(card["url"])
         img = b64decode(r.json()["content"])
-        await ctx.send(file=discord.File(
+        file = discord.File(
             fp=BytesIO(img),
-            filename=card["path"]))
+            filename=card["path"])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'digimon'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+
 
 
     @commands.command(aliases=['magic'])
-    async def mtg(self, ctx):
+    async def mtg(self, ctx, reason: Optional[str] = None):
         """ Pulls a Magic the Gathering card """
+        await ctx.defer()
 
         url = "https://api.scryfall.com/cards/random"
         r = await self.bot.http_client.get(url)
@@ -126,12 +140,16 @@ class Card(commands.Cog,
             if not "image_uris" in card and "card_faces" in card:
                 card['image_uris'] = card['card_faces'][randint(0,1)]['image_uris']
             
-            await ctx.send(card['image_uris']['border_crop'])
+            if reason and ctx.interaction:
+                await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'magic'} {reason}: [⠀]({card['image_uris']['border_crop']})")
+            else:
+                await ctx.send(card['image_uris']['border_crop'])
 
 
     @commands.command(aliases=['fab'])
-    async def fleshandblood(self, ctx):
+    async def fleshandblood(self, ctx, reason: Optional[str] = None):
         """ Pulls a Flesh and Blood card """
+        await ctx.defer()
 
         url = "https://cards.fabtcg.com/api/search/v1/cards/"
         params = {
@@ -144,13 +162,15 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card = r.json()["results"][0]
 
-        await ctx.send(card["image"]["large"])
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'flesh and blood'} {reason}: [⠀]({card['image']['large']})")
+        else:
+            await ctx.send(card["image"]["large"])
 
 
     @commands.command()
-    async def gateruler(self, ctx):
+    async def gateruler(self, ctx, reason: Optional[str] = None):
         """ Pulls a Gate Ruler card """
-        # Defer in case edit takes too long
         await ctx.defer()
 
         # Get max page number
@@ -179,16 +199,20 @@ class Card(commands.Cog,
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.send(file=discord.File(
+            file = discord.File(
                 fp=img_binary,
-                filename=card_url.rsplit('/', 1)[1]))
+                filename=card_url.rsplit('/', 1)[1])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'gate ruler'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+  
 
 
     @commands.command(aliases=["cfv", "vanguard", "cardfight"])
-    async def cardfightvanguard(self, ctx):
+    async def cardfightvanguard(self, ctx, reason: Optional[str] = None):
         """ Pulls a Cardfight!! Vanguard card """
-
-        # Defer in case multiple requests take too long
         await ctx.defer()
 
         # Get first page to figure out max page
@@ -210,24 +234,33 @@ class Card(commands.Cog,
         # Pick card
         card = "https://en.cf-vanguard.com{}".format(
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
-        await ctx.send(card)
 
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'cardfight vanguard'} {reason}: [⠀]({card})")
+        else:
+            await ctx.send(card)
 
     @commands.command()
-    async def grandarchive(self, ctx):
+    async def grandarchive(self, ctx, reason: Optional[str] = None):
         """ Pulls a Grand Archive card """
+        await ctx.defer()
 
         r = await self.bot.http_client.get(
             "https://api.gatcg.com/cards/random?amount=1")
         card = r.json()[0]
         card_slug = choice(card["editions"])["slug"]
-
-        await ctx.send(f"https://ga-index-public.s3.us-west-2.amazonaws.com/cards/{card_slug}.jpg")
+        card_url = f"https://ga-index-public.s3.us-west-2.amazonaws.com/cards/{card_slug}.jpg"
+        
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'grand archive'} {reason}: [⠀]({card_url})")
+        else:
+            await ctx.send(card_url)
 
 
     @commands.command()
-    async def nostalgix(self, ctx):
+    async def nostalgix(self, ctx, reason: Optional[str] = None):
         """ Pulls a Nostalgix card """
+        await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/63bc844c3e8d2f34e312bc77"
 
@@ -238,25 +271,33 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(url, params=params)
         cards = r.json()["data"]
+        card_img = choice(cards)["imageUrl"]
 
-        await ctx.send(choice(cards)["imageUrl"])
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'nostalgix'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
     @commands.command()
-    async def lorcana(self, ctx):
+    async def lorcana(self, ctx, reason: Optional[str] = None):
         """ Pulls a Lorcana card """
-
         await ctx.defer()
 
         r = await self.bot.http_client.get("https://api.lorcana-api.com/bulk/cards")
         cards = r.json()
+        card_img = choice(cards)["Image"]
 
-        await ctx.send(choice(cards)["Image"])
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'lorcana'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
     @commands.command()
-    async def redemption(self, ctx):
+    async def redemption(self, ctx, reason: Optional[str] = None):
         """ Pulls a Redemption card """
+        await ctx.defer()
 
         # Git tree for cardlist, updated 2025/06/24
         tree = "bb007936c69375fdb5631becceafa62e4975e886"
@@ -271,14 +312,20 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(card["url"])
         img = b64decode(r.json()["content"])
-        await ctx.send(file=discord.File(
+        file = discord.File(
             fp=BytesIO(img),
-            filename=card["path"]))
+            filename=card["path"])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'redemption'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
 
 
     @commands.command()
-    async def vampire(self, ctx):
+    async def vampire(self, ctx, reason: Optional[str] = None):
         """ Pulls a Vampire: The Eternal Struggle card """
+        await ctx.defer()
 
         # Git tree for cardlist, updated 2024/09/22
         tree = "8661079bd3f85ce9bf899c23e945d8fd0f2a1334"
@@ -297,14 +344,21 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(card["url"])
         img = b64decode(r.json()["content"])
-        await ctx.send(file=discord.File(
+        file = discord.File(
             fp=BytesIO(img),
-            filename=card["path"]))
+            filename=card["path"])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'vampire'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
 
 
     @commands.command()
-    async def neopets(self, ctx):
+    async def neopets(self, ctx, reason: Optional[str] = None):
         """ Pulls a Neopets card """
+        await ctx.defer()
+
         with open("ext/data/neopets.json") as f:
             card = choice(json.load(f))
 
@@ -315,16 +369,20 @@ class Card(commands.Cog,
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.send(file=discord.File(
+            file = discord.File(
                 fp=img_binary,
-                filename=card.rsplit('/', 1)[1].replace('.gif', '.png')))
+                filename=card.rsplit('/', 1)[1].replace('.gif', '.png'))
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'neopets'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+
 
 
     @commands.command()
-    async def sorcery(self, ctx):
+    async def sorcery(self, ctx, reason: Optional[str] = None):
         """ Pulls a Sorcery card """
-
-        # Defer in case multiple requests take too long   
         await ctx.defer()
 
         # Grab random card
@@ -380,16 +438,20 @@ class Card(commands.Cog,
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.send(file=discord.File(
+            file = discord.File(
                 fp=img_binary,
-                filename=f"{card_name}.png"))
+                filename=f"{card_name}.png")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'sorcery'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
 
 
-    @commands.command()
-    async def wow(self, ctx):
+
+    @commands.command(aliases=['warcraft'])
+    async def wow(self, ctx, reason: Optional[str] = None):
         """ Pulls a World of Warcraft TCG card """
-
-        # Defer in case multiple requests take too long
         await ctx.defer()
 
         # Get Google Drive folder ID from weighted lists
@@ -420,16 +482,20 @@ class Card(commands.Cog,
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.send(file=discord.File(
+            file = discord.File(
                 fp=img_binary,
-                filename=f"{card_id}.png"))
+                filename=f"{card_id}.png")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'warcraft'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+
 
 
     @commands.command()
-    async def spellfire(self, ctx):
+    async def spellfire(self, ctx, reason: Optional[str] = None):
         """ Pulls a Spellfire card """
-
-         # Defer in case multiple requests take too long
         await ctx.defer()
 
         with open ("ext/data/spellfire.json") as f:
@@ -447,16 +513,20 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(card["url"])
         img = b64decode(r.json()["content"])
-        await ctx.send(file=discord.File(
+        file = discord.File(
             fp=BytesIO(img),
-            filename=card["path"]))
+            filename=card["path"])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'spellfire'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+
 
 
     @commands.command()
-    async def shadowverse(self, ctx):
+    async def shadowverse(self, ctx, reason: Optional[str] = None):
         """ Pulls a Shadowverse: Evolve card """
-
-        # Defer in case multiple requests take too long
         await ctx.defer()
 
         # Get max card count
@@ -478,12 +548,17 @@ class Card(commands.Cog,
         # Pick card
         card = "https://en.shadowverse-evolve.com{}".format(
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
-        await ctx.send(card)
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}: [⠀]({card})")
+        else:
+            await ctx.send(card)
 
 
     @commands.command(aliases=['swu'])
-    async def starwars(self, ctx):
+    async def starwars(self, ctx, reason: Optional[str] = None):
         """ Pulls a Star Wars Unlimited card """
+        await ctx.defer()
 
         base_url = "https://swudb.com"
 
@@ -497,14 +572,18 @@ class Card(commands.Cog,
             card_path = choice([card["frontImagePath"], card["backImagePath"]])
         else:
             card_path = card["frontImagePath"]
+        card_img = f"{base_url}/images{card_path[1:]}"
 
-        await ctx.send(f"{base_url}/images{card_path[1:]}")
-
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'star wars'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
             
 
     @commands.command(aliases=['bs'])
-    async def battlespirits(self, ctx):
+    async def battlespirits(self, ctx, reason: Optional[str] = None):
         """ Pulls a Battle Spirits card """
+        await ctx.defer()
 
         url = "https://api.bandai-tcg-plus.com/api/user/card/list"
         params = {
@@ -521,16 +600,21 @@ class Card(commands.Cog,
         card = r.json()["success"]["cards"][0]
 
         if "backcard_image_url" in card:
-            await ctx.send(
-                choice([card["image_url"], card["backcard_image_url"]]))
+            card_img = choice([card["image_url"], card["backcard_image_url"]])
         else:
-            await ctx.send(card["image_url"])
+            card_img = card["image_url"]
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'battle spirits'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
 
     @commands.command()
-    async def alphaclash(self, ctx):
+    async def alphaclash(self, ctx, reason: Optional[str] = None):
         """ Pulls an Alpha Clash card """
+        await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/64483da67fc2aee28c8427bf"
         params = {
@@ -545,12 +629,16 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        await ctx.send(card_img)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'alpha clash'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
     @commands.command()
-    async def altered(self, ctx):
+    async def altered(self, ctx, reason: Optional[str] = None):
         """ Pulls an Altered TCG card """
+        await ctx.defer()
 
         url = "https://api.altered.gg/cards"
         params = {
@@ -565,11 +653,14 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["hydra:member"][0]["imagePath"]
 
-        await ctx.send(card_img)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'altered'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
     @commands.command()
-    async def elestrals(self, ctx):
+    async def elestrals(self, ctx, reason: Optional[str] = None):
         """ Pulls an Elestrals card """
         await ctx.defer()
 
@@ -596,14 +687,19 @@ class Card(commands.Cog,
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            await ctx.send(file=discord.File(
+            file = discord.File(
                 fp=img_binary,
-                filename=card_url.rsplit('/', 1)[1]))
+                filename=card_url.rsplit('/', 1)[1])
 
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'elestrals'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
 
     @commands.command()
-    async def fabledsagas(self, ctx):
+    async def fabledsagas(self, ctx, reason: Optional[str] = None):
         """ Pulls a Fabled Sagas card """
+        await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/64626b9a9d5830157996b180"
         params = {
@@ -618,12 +714,15 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        await ctx.send(card_img)
-
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'fabled sagas'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
     @commands.command()
-    async def akora(self, ctx):
+    async def akora(self, ctx, reason: Optional[str] = None):
         """ Pulls an Akora card """
+        await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/636855fc34369ca07c26f17d"
         params = {
@@ -638,12 +737,16 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        await ctx.send(card_img)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'akora'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
     @commands.command()
-    async def metazoo(self, ctx):
+    async def metazoo(self, ctx, reason: Optional[str] = None):
         """ Pulls a MetaZoo card """
+        await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/6362b23bafcb45c0e3070ddf"
         params = {
@@ -658,14 +761,15 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        await ctx.send(card_img)
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'metazoo'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
     @commands.command(aliases=['fow'])
-    async def forceofwill(self, ctx):
+    async def forceofwill(self, ctx, reason: Optional[str] = None):
         """ Pulls a Force of Will card """
-
-        # Defer in case multiple requests take too long
         await ctx.defer()
 
         url = "https://www.fowtcg.com/card_search"
@@ -684,16 +788,18 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         page = html.fromstring(r.text)
 
-        selected_card = choice(page.xpath(
+        card_img = choice(page.xpath(
             "//li[@class='lg:w-4/12 px-4 text-center my-4']/a/img/@src"))
-        await ctx.send(selected_card)
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'force of will'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
 
 
-    @commands.command(aliases=['dm'])
-    async def duelmasters(self, ctx):
+    @commands.command(aliases=['dm', 'duema'])
+    async def duelmasters(self, ctx, reason: Optional[str] = None):
         """ Pulls a Japanese Duel Masters card """
-
-        # Defer in case multiple requests take too long
         await ctx.defer()
 
         url = "https://dm.takaratomy.co.jp"
@@ -711,15 +817,17 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.post(c_url, data=data)
         page = html.fromstring(r.text)
-
         card_img = choice(page.xpath("//div[@id='cardlist']/ul/li/a/img/@src"))
 
-        await ctx.send(f"{url}{card_img}")
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'duel masters'} {reason}: [⠀]({url}/{card_img})")
+        else:
+            await ctx.send(f"{url}/{card_img}")
+
 
     @commands.command()
-    async def wixoss(self, ctx):
+    async def wixoss(self, ctx, reason: Optional[str] = None):
         """ Pulls a Wixoss card """
-        # Defer in case multiple requests take too long
         await ctx.defer()
 
         url = "https://www.takaratomy.co.jp/products/en.wixoss/card/"
@@ -733,9 +841,40 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(req_url, params=params)
         card = choice(r.json()["items"])
+        card_img = f"{url}thumb/{card['card_no']}.jpg"
 
-        await ctx.send(f"{url}thumb/{card['card_no']}.jpg")
-            
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'wixoss'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
+
+
+    @commands.command()
+    async def lightseekers(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Lightseekers card """
+        await ctx.defer()
+
+        url = "https://carddatabase-es.lightseekers.cards/lightseekers-cards/_search"
+        data = {
+            "size": 1,
+            "sort": [{"name.normalized": "asc"}]
+        }
+        r = await self.bot.http_client.post(url, json=data)
+
+        card_count = r.json()["hits"]["total"]
+        data["from"] = randint(0, card_count-1)
+
+        r = await self.bot.http_client.post(url, json=data)
+        card = r.json()["hits"]["hits"][0]
+
+        card_sku = choice([sku for sku in card["_source"]["skus"] if sku["image"]])
+        card_img = f"https://assets.lightseekers.cards/card-database/cards/{card_sku['id']}.jpg"
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'lightseekers'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(card_img)
+
 
     @commands.command(hidden=True)
     async def playingcard(self, ctx):

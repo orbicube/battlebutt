@@ -1619,6 +1619,8 @@ class Gacha(commands.Cog,
             "url": char_data["imgPhaseup"]})
 
         variant = choice(char_outfits)
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"ptn <{variant['url']}>")
+
         embed = discord.Embed(
             title=char,
             description=variant["title"],
