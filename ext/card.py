@@ -992,6 +992,49 @@ class Card(commands.Cog,
             await ctx.send(card_img)
 
 
+    @commands.command()
+    async def vcard(self, ctx, reason: Optional[str] = None):
+        """ Pulls a VCard character """
+        await ctx.defer()
+
+        url = "https://www.vcardtcg.com/cards"
+        headers = {
+            "Next-Action": "003a7707433d51c83145d3bf14c20620319348d78d"
+        }
+        data = []
+
+        r = await self.bot.http_client.post(url, json=data, headers=headers)
+        results = json.loads(r.text.split('\n', 1)[1][2:])
+
+        cards = []
+        for rarity in results.values():
+            if rarity[0]["cardType"] != "TYPE#BOX_TOPPER":
+                cards.extend(rarity)
+
+        card = choice(cards)
+        card_url = choice(list(card["variants"].values()))["url"]
+        r = await self.bot.http_client.get(card_url)
+
+        # Crop borders of card
+        card_img = Image.open(BytesIO(r.content))
+
+        with BytesIO() as img_binary:
+            if ".jpeg" in card_url or ".webp" in card_url:
+                card_img = card_img.crop((41, 41, 898, 1239))
+                card_img.save(img_binary, 'JPEG')
+            else:
+                card_img = card_img.crop((25, 25, 563, 776))
+                card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=card_url.rsplit('/', 1)[1])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'vcard'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+
 
     @commands.command(hidden=True)
     async def playingcard(self, ctx):

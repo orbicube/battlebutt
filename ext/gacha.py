@@ -1644,5 +1644,6 @@ class Gacha(commands.Cog,
         else:
             await ctx.send(embed=embed, file=file)
 
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
