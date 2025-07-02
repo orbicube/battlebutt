@@ -994,7 +994,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def vcard(self, ctx, reason: Optional[str] = None):
-        """ Pulls a VCard character """
+        """ Pulls a VCard """
         await ctx.defer()
 
         url = "https://www.vcardtcg.com/cards"
@@ -1035,6 +1035,22 @@ class Card(commands.Cog,
         else:
             await ctx.send(file=file)
 
+
+    @commands.command()
+    async def vividz(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Vividz card """
+        await ctx.defer()
+
+        url = f"https://vividztcg.com/card/?search=1&pg={randint(1,48)}"
+        r = await self.bot.http_client.get(url)
+        page = html.fromstring(r.text)
+
+        card_img = choice(page.xpath("//ul[@class='list']/li/img/@src"))
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'vividz'} {reason}: [⠀](https://vividztcg.com{card_img})")
+        else:
+            await ctx.send(f"https://vividztcg.com{card_img}")
 
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
