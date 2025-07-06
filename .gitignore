@@ -159,10 +159,13 @@ ext/data/*.db
 ext/data/tags.json
 ext/data/2018lists.json
 ext/dbmigrate.py
+
+# Gacha command jsons
 ext/data/gbf.json
 ext/data/langrisser.json
 ext/data/touhou.json
 ext/data/ptn.json
+ext/data/p5x.json
 
 .bash_history
 /.ssh

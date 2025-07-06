@@ -1646,5 +1646,73 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command(aliases=['p5x'])
+    async def persona5x(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Persona 5 X character """
+        url = "https://lufel.net/"
+
+        with open("ext/data/p5x.json", encoding="utf-8") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        characters = j["characters"]
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 3:
+            r = await self.bot.http_client.get(
+                f"{url}data/kr/characters/characters.js")
+            temp_dict = r.text.split("characterData = ")[1].split("},", 1)[1][:-1]
+            temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
+            temp_dict = temp_dict.replace(',\n        },', '\n        },')
+            temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
+
+            char_dict = json.loads(temp_dict)
+            characters = []
+            for key in list(char_dict.keys()):
+                if "persona3" in char_dict[key]:
+                    title = "S.E.E.S."
+                else:
+                    title = char_dict[key]["codename"].title()
+
+                new_char = {
+                    "key": key,
+                    "name": char_dict[key]["name_en"],
+                    "title": title
+                }
+                
+                characters.append(new_char)
+
+            data = {
+                "updated": int(datetime.utcnow().timestamp()),
+                "characters": characters
+            }
+            with open("ext/data/p5x.json", "w", encoding="utf-8") as f:
+                json.dump(data, f)
+
+        char = choice(characters)
+
+        embed = discord.Embed(
+            title=char["name"],
+            description= char["title"],
+            color=0xf30002)
+
+        r = await self.bot.http_client.get(
+            f"{url}assets/img/character-detail/{char['key']}.webp")
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=f"{char['name'].replace(' ', '')}.png")
+
+        embed.set_image(url=f"attachment://{char['name'].replace(' ', '')}.png")
+        embed.set_footer(text="Persona 5: The Phantom X")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'persona 5 x'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
