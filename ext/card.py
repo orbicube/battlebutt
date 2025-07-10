@@ -98,10 +98,10 @@ class Card(commands.Cog,
         """ Pulls a Digimon card. """
         await ctx.defer()
 
-        # Git tree for cardlist, updated 2025/06/24
-        tree = "c9134433051e001e86a4a2a677227a4d2e55739c"
+        # Git tree for cardlist, updated 2025/07/10
+        tree = "00bef43e2222b3635dd69da0271a840c90a7986c"
         url = ("https://api.github.com/repos/TakaOtaku/"
-            f"Digimon-Card-App/git/trees/{tree}")
+            f"Digimon-Cards/git/trees/{tree}")
         r = await self.bot.http_client.get(url)
         cards = r.json()["tree"]
 
