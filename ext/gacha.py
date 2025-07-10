@@ -1581,7 +1581,7 @@ class Gacha(commands.Cog,
             js_url = page.xpath("//script[@type='module']/@src")[0]
 
             r = await self.bot.http_client.get(f"{url}{js_url}")
-            apikey = re.findall(r'base.co",XX="([^"]+)"', r.text)[0]
+            apikey = re.findall(r'base.co",\w+="([^"]+)"', r.text)[0]
             char_list = re.findall(r'{id:"(\w+)",name:"([^"]+)",imgAv', r.text)
                 
             chars = {}
