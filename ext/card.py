@@ -141,9 +141,9 @@ class Card(commands.Cog,
                 card['image_uris'] = card['card_faces'][randint(0,1)]['image_uris']
             
             if reason and ctx.interaction:
-                await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'magic'} {reason}: [⠀]({card['image_uris']['border_crop']})")
+                await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'magic'} {reason}: [⠀]({card['image_uris']['png']})")
             else:
-                await ctx.send(card['image_uris']['border_crop'])
+                await ctx.send(card['image_uris']['png'])
 
 
     @commands.command(aliases=['fab'])
