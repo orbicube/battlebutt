@@ -463,6 +463,7 @@ class Card(commands.Cog,
         list_url = "https://www.googleapis.com/drive/v3/files"
         list_params = {
             "q": f"'{set_id}' in parents",
+            "pageSize": 500,
             "key": GOOGLE_KEY
         }
         r = await self.bot.http_client.get(list_url, params=list_params)
@@ -610,7 +611,6 @@ class Card(commands.Cog,
             await ctx.send(card_img)
 
 
-
     @commands.command()
     async def alphaclash(self, ctx, reason: Optional[str] = None):
         """ Pulls an Alpha Clash card """
@@ -696,6 +696,7 @@ class Card(commands.Cog,
         else:
             await ctx.send(file=file)
 
+
     @commands.command()
     async def fabledsagas(self, ctx, reason: Optional[str] = None):
         """ Pulls a Fabled Sagas card """
@@ -718,6 +719,7 @@ class Card(commands.Cog,
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'fabled sagas'} {reason}: [⠀]({card_img})")
         else:
             await ctx.send(card_img)
+
 
     @commands.command()
     async def akora(self, ctx, reason: Optional[str] = None):
@@ -1051,6 +1053,63 @@ class Card(commands.Cog,
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'vividz'} {reason}: [⠀](https://vividztcg.com{card_img})")
         else:
             await ctx.send(f"https://vividztcg.com{card_img}")
+
+
+    @commands.command()
+    async def onepiece(self, ctx, reason: Optional[str] = None):
+        """ Pulls a One Piece TCG card """
+        await ctx.defer()
+
+        # Get Google Drive folder ID from weighted lists
+        with open("ext/data/optcg.json") as f:
+            j = json.load(f)
+        sets = list(j.keys())
+        weights = []
+        for s in sets:
+            weights.append(j[s])
+
+        set_id = choices(sets, weights)[0]
+
+        # Get card file from folder list
+        list_url = "https://www.googleapis.com/drive/v3/files"
+        list_params = {
+            "q": f"'{set_id}' in parents",
+            "pageSize": 500,
+            "key": GOOGLE_KEY
+        }
+        r = await self.bot.http_client.get(list_url, params=list_params)
+        found_valid = False
+        while not found_valid:
+            card = choice(r.json()["files"])
+            if "image" in card["mimeType"] and "Playmat" not in card["name"]:
+                found_valid = True
+
+        # Get card image binary
+        get_url = f"https://www.googleapis.com/drive/v3/files/{card['id']}"
+        get_params = {
+            "acknowledgeAbuse": True,
+            "alt": "media",
+            "key": GOOGLE_KEY
+        }
+        r = await self.bot.http_client.get(get_url, params=get_params)
+        card_img = Image.open(BytesIO(r.content))
+
+        # Send to Discord
+        with BytesIO() as img_binary:
+            if "jpeg" in  card["mimeType"]:
+                card_img.save(img_binary, "JPEG")
+            else:
+                card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=card['name'])
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'one piece'} {reason}:", file=file)
+        else:
+            await ctx.send(file=file)
+
 
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
