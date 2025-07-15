@@ -1112,12 +1112,17 @@ class Card(commands.Cog,
 
 
     @commands.command(hidden=True)
-    async def playingcard(self, ctx):
+    async def playingcard(self, ctx, reason: Optional[str] = None):
 
         r = await self.bot.http_client.get(
             "https://www.deckofcardsapi.com/api/deck/new/draw/?count=1&jokers_enabled=True")
 
-        await ctx.send(r.json()["cards"][0]["image"])
+        card_img = r.json()["cards"][0]["image"]
+
+        if reason and ctx.interaction:
+            await ctx.send(f"card {reason}: {card_img}")
+        else:
+            await ctx.send(card_img)
 
 
 async def setup(bot):
