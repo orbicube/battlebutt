@@ -1714,5 +1714,49 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command(aliases=['genshin'])
+    async def genshinimpact(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Genshin Impact character """
+
+        url = "https://genshin-impact.fandom.com"
+        params = {
+            "action": "parse",
+            "page": "Wish/Gallery",
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}/api.php", params=params)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        char = choice(
+            page.xpath("//div[@id='gallery-3']/div[@class='wikia-gallery-item']"))
+
+        char_name = char.xpath(".//div[@class='lightbox-caption']/a/text()")[0]
+        img_url = char.xpath(".//div[@class='thumb']/div/a/@href")[0].replace("/File:", "/Special:FilePath/")
+
+        embed = discord.Embed(
+            title=char_name,
+            color=0xa4ec93)
+
+        r = await self.bot.http_client.get(f"{url}{img_url}", follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=img_url.split("Path/")[1])
+
+        embed.set_image(url=f"attachment://{img_url.split('Path/')[1]}")
+        embed.set_footer(text="Genshin Impact")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'genshin impact'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
