@@ -1114,7 +1114,7 @@ class Card(commands.Cog,
     @commands.command()
     async def wyvern(self, ctx, reason: Optional[str] = None):
         """ Pulls a Wyvern TCG card """
-        
+
         with open("ext/data/wyvern.json") as f:
             j = json.load(f)
         card = choice(j)
@@ -1123,6 +1123,20 @@ class Card(commands.Cog,
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'wyvern'} {reason}: [⠀](https://api.ccgtrader.co.uk{card})")
         else:
             await ctx.send(f"https://api.ccgtrader.co.uk{card}")
+
+
+    @commands.command()
+    async def bellasara(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Bella Sara card """
+
+        with open("ext/data/bellasara.json") as f:
+            j = json.load(f)
+        card = choice(j)
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'bella sara'} {reason}: [⠀](https://bellasara.wiki.gg/wiki/Special:FilePath/{card})")
+        else:
+            await ctx.send(f"https://bellasara.wiki.gg/wiki/Special:FilePath/{card}")
 
 
     @commands.command(hidden=True)
