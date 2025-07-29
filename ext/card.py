@@ -1113,7 +1113,8 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wyvern(self, ctx, reason: Optional[str] = None):
-
+        """ Pulls a Wyvern TCG card """
+        
         with open("ext/data/wyvern.json") as f:
             j = json.load(f)
         card = choice(j)
