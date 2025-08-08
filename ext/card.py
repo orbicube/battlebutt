@@ -1139,6 +1139,33 @@ class Card(commands.Cog,
             await ctx.send(f"https://bellasara.wiki.gg/wiki/Special:FilePath/{card}")
 
 
+    @commands.command()
+    async def hololive(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Hololive card """
+        await ctx.defer()
+
+        url = "https://en.hololive-official-cardgame.com"
+
+        r = await self.bot.http_client.get(f"{url}/cardlist/cardsearch")
+        page = html.fromstring(r.text)
+
+        card_count = int(page.xpath("//span[@class='num bold']/text()")[0])
+        selected_page = randint(1, int(card_count/15)+1)
+
+        params = {
+            "view": "image",
+            "page": selected_page
+        }
+        r = await self.bot.http_client.get(f"{url}/cardlist/cardsearch_ex", params=params)
+        page = html.fromstring(r.text)
+
+        card_img = choice(page.xpath("//li/a/img/@src"))
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'hololive'} {reason}: [⠀]({url}{card_img})")
+        else:
+            await ctx.send(f"{url}{card_img}")
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx, reason: Optional[str] = None):
 
