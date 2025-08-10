@@ -1757,6 +1757,123 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command(aliases=['hsr'])
+    async def honkaistarrabbit(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Honkai Star Rail character """
+
+        url = "https://honkai-star-rail.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "generator": "categorymembers",
+            "prop": "vignetteimages",
+            "gcmtitle": "Category:Playable_Characters",
+            "gcmnamespace": 0,
+            "gcmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        char_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["gcmcontinue"] = results["continue"]["gcmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = []
+            for article in results["query"]["pages"].values():
+                if article["pageid"] not in bad_pages and "pageimage" in article:
+                    char_list.append(article)
+
+        char = choice(char_list)
+
+        embed = discord.Embed(
+            title=char["title"],
+            color=0x648fb8)
+
+        r = await self.bot.http_client.get(
+            f"https://honkai-star-rail.fandom.com/wiki/Special:FilePath/{char['pageimage']}",
+            follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{char['pageimage']}")
+
+        embed.set_image(
+            url=f"attachment://{char['pageimage']}")
+        embed.set_footer(text="Honkai Star Rail")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'honkai star rail'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
+    @commands.command(aliases=['zzz'])
+    async def zenlesszonezero(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Honkai Star Rail character """
+
+        url = "https://zenless-zone-zero.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "generator": "categorymembers",
+            "prop": "vignetteimages",
+            "gcmtitle": "Category:Playable_Agents",
+            "gcmnamespace": 0,
+            "gcmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        char_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["gcmcontinue"] = results["continue"]["gcmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = []
+            for article in results["query"]["pages"].values():
+                if article["pageid"] not in bad_pages and "pageimage" in article:
+                    char_list.append(article)
+
+        char = choice(char_list)
+
+        embed = discord.Embed(
+            title=char["title"],
+            color=0xb9d600)
+
+        r = await self.bot.http_client.get(
+            f"https://zenless-zone-zero.fandom.com/wiki/Special:FilePath/{char['pageimage']}",
+            follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{char['pageimage']}")
+
+        embed.set_image(
+            url=f"attachment://{char['pageimage']}")
+        embed.set_footer(text="Zenless Zone Zero")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'zenless zone zero'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
