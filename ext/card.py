@@ -1166,6 +1166,18 @@ class Card(commands.Cog,
             await ctx.send(f"{url}{card_img}")
 
 
+    @commands.command()
+    async def grottobeasts(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Grotto Beasts card """
+
+        url = f"https://grottobeasts.gitlab.io/assets/img/newcards/GB{randint(1,200):03d}.png"
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'grotto beasts'} {reason}: [⠀]({url})")
+        else:
+            await ctx.send(f"{url}")
+    
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx, reason: Optional[str] = None):
 
