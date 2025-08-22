@@ -1378,14 +1378,25 @@ class Gacha(commands.Cog,
             title=char["name"],
             description=variant["title"],
             color=0x127799)
-        embed.set_image(
-            url=f"https://starocean.fandom.com/wiki/Special:FilePath/{variant['img']}")
+
+        r = await self.bot.http_client.get(f"https://starocean.fandom.com/wiki/Special:FilePath/{variant['img']}", follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=variant['img'])
+
+        embed.set_image(url=f"attachment://{variant['img']}")
         embed.set_footer(text="Star Ocean: Anamnesis")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'star ocean'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'star ocean'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command()
