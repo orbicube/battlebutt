@@ -1193,12 +1193,26 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(url, params=params, headers=headers)
         card = choice(r.json()[0]["result"]["data"]["json"])
-        card_img = choice(card["cardVariants"])["imageUrl"]
+        variant = choice(card["cardVariants"])
+        card_url = variant["imageUrl"]
+        card_id = variant["variantNumber"]
+
+        r = await self.bot.http_client.get(card_url)
+        card_img = Image.open(BytesIO(r.content))
+        if "Battlefield" in card["type"]:
+            card_img = card_img.rotate(270, expand=1)
+        # Send to Discord
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'WEBP')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=f"{card_id}.webp")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'riftbound'} {reason}: [⠀]({card_img})")
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'riftbound'} {reason}:", file=file)
         else:
-            await ctx.send(f"{card_img}")
+            await ctx.send(file=file)
     
 
     @commands.command(hidden=True)
