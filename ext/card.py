@@ -1176,6 +1176,29 @@ class Card(commands.Cog,
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'grotto beasts'} {reason}: [⠀]({url})")
         else:
             await ctx.send(f"{url}")
+
+
+    @commands.command()
+    async def riftbound(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Riftbound card"""
+
+        url = "https://piltoverarchive.com/api/trpc/cards.search"
+        params = {
+            "batch": 1,
+            "input": '{"0":{"json":{"searchQuery":"","colorIds":[],"type":null,"super":null,"rarity":null,"setName":null,"energyRange":{"min":0,"max":12},"mightRange":{"min":0,"max":10},"powerRange":{"min":0,"max":4},"advancedSearchEnabled":false},"meta":{"values":{"type":["undefined"],"super":["undefined"],"rarity":["undefined"],"setName":["undefined"]}}}}'
+        }
+        headers = {
+            "Referer": "https://piltoverarchive.com/cards"
+        }
+
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
+        card = choice(r.json()[0]["result"]["data"]["json"])
+        card_img = choice(card["cardVariants"])["imageUrl"]
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'riftbound'} {reason}: [⠀]({card_img})")
+        else:
+            await ctx.send(f"{card_img}")
     
 
     @commands.command(hidden=True)
