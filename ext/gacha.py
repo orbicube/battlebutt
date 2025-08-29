@@ -487,7 +487,15 @@ class Gacha(commands.Cog,
             else:
                 finished = True
 
-            article_list.extend(results["query"]["categorymembers"])
+            bad_pages = [24917, 64670, 383442, 111081, 579165, 623674, 603920,
+                602461, 658001, 123993, 34471, 34468, 631866, 6665513, 78799,
+                509030, 663419, 635637, 671627, 635810, 640684, 565396, 602786,
+                410778, 124402, 253574, 666612, 603989, 670436, 547889, 410804,
+                78805, 8077, 674121, 292832, 576046, 26980, 74218, 633911, 
+                585580, 650647, 34469, 644422, 34470]
+            for article in results["query"]["categorymembers"]:
+                if article["pageid"] not in bad_pages:
+                    article_list.append(article)
 
         selected_article = choice(article_list)["title"]
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"fgo {selected_article}")
