@@ -1728,6 +1728,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['genshin'])
     async def genshinimpact(self, ctx, reason: Optional[str] = None):
         """ Pulls a Genshin Impact character """
+        await ctx.defer()
 
         url = "https://genshin-impact.fandom.com"
         params = {
@@ -1769,8 +1770,9 @@ class Gacha(commands.Cog,
 
 
     @commands.command(aliases=['hsr'])
-    async def honkaistarrabbit(self, ctx, reason: Optional[str] = None):
+    async def honkaistarrail(self, ctx, reason: Optional[str] = None):
         """ Pulls a Honkai Star Rail character """
+        await ctx.defer()
 
         url = "https://honkai-star-rail.fandom.com/api.php"
         params = {
@@ -1830,6 +1832,7 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['zzz'])
     async def zenlesszonezero(self, ctx, reason: Optional[str] = None):
         """ Pulls a Honkai Star Rail character """
+        await ctx.defer()
 
         url = "https://zenless-zone-zero.fandom.com/api.php"
         params = {
