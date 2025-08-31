@@ -1176,7 +1176,7 @@ class Gacha(commands.Cog,
         char = choice([c for c in r.json() if c["category_label_en"] != "Related parties"])
 
         r = await self.bot.http_client.get(f"{url}/images/{char['id']}")
-        outfit = choice([o for o in r.json() if o["label_en"] == "Racing Outfit"])
+        outfit = choice([o for o in r.json() if o["label_en"] == "Signature Racewear"])
 
         r = await self.bot.http_client.get(outfit["images"][0]["image"])
         char_img = Image.open(BytesIO(r.content))
