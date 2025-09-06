@@ -1171,6 +1171,26 @@ class Card(commands.Cog,
             await ctx.send(file=file)
     
 
+    @commands.command()
+    async def genesis(self, ctx, reason: Optional[str] = None):
+        """ Pulls a Geneis: Battle of Champions card """
+
+        url = "https://www.genesisbattleofchampions.com"
+        r = await self.bot.http_client.get(f"{url}/library")
+        page = html.fromstring(r.text)
+
+        chosen_set = choice(page.xpath("//figure/a/@href"))
+
+        r = await self.bot.http_client.get(f"{url}{chosen_set}")
+        page = html.fromstring(r.text)
+
+        card_url = choice(page.xpath("//div/a/img/@data-src"))
+        if reason and ctx.interaction:
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'genesis: battle of champions'} {reason}: [⠀]({card_url})")
+        else:
+            await ctx.send(f"{card_url}")
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx, reason: Optional[str] = None):
 

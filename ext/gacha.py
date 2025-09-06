@@ -1602,7 +1602,7 @@ class Gacha(commands.Cog,
             r = await self.bot.http_client.get(f"{url}{js_url}")
             apikey = re.findall(r'base.co",\w+="([^"]+)"', r.text)[0]
             char_list = re.findall(r'{id:"(\w+)",name:"([^"]+)",imgAv', r.text)
-                
+
             chars = {}
             for char in char_list:
                 chars[char[1]] = {"id": char[0], "outfits": []}
@@ -1614,6 +1614,7 @@ class Gacha(commands.Cog,
 
             for outfit in r.json():
                 if "!Chief" not in outfit["sinner"]:
+                    outfit["sinner"] = outfit["sinner"].replace("Zero", "000")
                     chars[outfit["sinner"]]["outfits"].append({
                         "title": outfit["name"],
                         "url": outfit["img"]})
