@@ -936,16 +936,25 @@ class Gacha(commands.Cog,
             page.xpath("//div[@class='HeroInfo_Skin_Img']/img/@src"))
         skin = skin.rsplit("/", 1)[0].replace("/thumb", "")
 
+        r = await self.bot.http_client.get(skin, headers=self.headers, timeout=15)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="langrisser.png")
+
         embed = discord.Embed(
             title=name,
             color=0xde181d)
-        embed.set_image(url=skin)
+        embed.set_image(url="attachment://langrisser.png")
         embed.set_footer(text="Langrisser")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'langrisser'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'langrisser'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command()
