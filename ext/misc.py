@@ -146,7 +146,7 @@ class Misc(commands.Cog):
     @commands.Cog.listener("on_message")
     async def yeahthatmakessense(self, message):
 
-        if re.match(r"(?:yeah),?\s(?:that makes sense)\W?$", message.content):
+        if re.match(r"(?:yeah)[,.!]?\s(?:that makes sense)\W?$", message.content):
             await message.channel.send(
                 file=discord.File('ext/data/yeahthatmakessense.wav'))
 
