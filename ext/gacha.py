@@ -1279,11 +1279,18 @@ class Gacha(commands.Cog,
         await ctx.defer()
 
         url = "https://docs.google.com/spreadsheets/d/1q_erxNGausa_O0a1Y0eKtR3r2rKN9-Tnnb6L5kLzbTk/export?format=zip"
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"downloading zip")
         r = await self.bot.http_client.get(url, follow_redirects=True)
+
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"unzipping")
 
         with ZipFile(BytesIO(r.content)) as zipfile:
             with zipfile.open('Gallery.html') as html_page:
+                await self.bot.get_channel(DEBUG_CHANNEL).send(f"reading sheet")
                 page = html.fromstring(html_page.read())
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"finished reading sheet")
 
         chars = []
         rows = page.xpath("//tbody/tr")[2:]
@@ -1305,6 +1312,8 @@ class Gacha(commands.Cog,
                 "img": columns[8].xpath(".//div/img/@src")[0].split("=")[0]
             })
         char = choice(chars)
+
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"{char['img']}")
 
         embed = discord.Embed(
             title=char["name"],
