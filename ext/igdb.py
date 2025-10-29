@@ -51,8 +51,8 @@ class IGDB(commands.Cog):
     }
     game_count = 254151
     game = {}
-    filter_query = "where themes != (42) & (cover != null | summary != null | first_release_date != null | platforms != null) & category != (13);"
-    fields_query = "fields name,cover.url,screenshots.url,summary,first_release_date,platforms.name,slug,category,parent_game.name,parent_game.platforms.name;"
+    filter_query = "where themes != (42) & (cover != null | summary != null | first_release_date != null | platforms != null) & game_type != (13);"
+    fields_query = "fields name,cover.url,screenshots.url,summary,first_release_date,platforms.name,slug,game_type,parent_game.name,parent_game.platforms.name;"
 
 
     def __init__(self, bot):
@@ -96,7 +96,7 @@ class IGDB(commands.Cog):
 
         inherit_plats = False
         # Highlight that it's a mod and highlight game if not obvious
-        if game["category"] == 5:
+        if game["game_type"] == 5:
             cat_name = "Mod"
             if game["parent_game"]["name"] not in game["name"]:
                 cat_name += f" of {game['parent_game']['name']}"
@@ -104,7 +104,7 @@ class IGDB(commands.Cog):
             embed.set_author(name=cat_name)
 
         # Inherit parent game for everything except ports/remakes/remasters
-        if game["category"] and game["category"] not in [3, 8, 9, 10, 11]:
+        if game["game_type"] and game["game_type"] not in [3, 8, 9, 10, 11]:
             inherit_plats = True
 
         # Set platforms if exists
