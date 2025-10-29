@@ -147,7 +147,7 @@ class IGDB(commands.Cog):
                     headers=headers,
                     data=query)
                 game = r.json()[0]
-                if game["category"] != 1 or not ("MP0" in game["name"] or "Tiger" in game["name"]):
+                if game["game_type"] != 1 or not ("MP0" in game["name"] or "Tiger" in game["name"]):
                     allowed_game = True
             except Exception as e:
                 await self.bot.get_channel(ERROR_CHANNEL).send(
