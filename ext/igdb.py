@@ -85,12 +85,12 @@ class IGDB(commands.Cog):
         # Set cover image if exists
         try:
             embed.set_image(
-                url=f"https:{game['cover']['url'].replace('thumb','1080p')}")
+                url=f"https:{game['cover']['url'].replace('thumb','original')}")
         except:
             # Try for screenshots if no box art
             try:
                 embed.set_image(
-                    url=f"https:{choice(game['screenshots'])['url'].replace('thumb','1080p')}")
+                    url=f"https:{choice(game['screenshots'])['url'].replace('thumb','original')}")
             except:
                 pass
 
