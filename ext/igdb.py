@@ -6,12 +6,14 @@ import aiosqlite
 from datetime import datetime
 import time
 from random import randint, choice
+from PIL import Image
+from io import BytesIO
 
 import traceback
 import sys
 
 from ext.util.twitchauth import twitch_auth
-from credentials import TWITCH_ID, TWITCH_SECRET, ERROR_CHANNEL
+from credentials import TWITCH_ID, TWITCH_SECRET, ERROR_CHANNEL, DEBUG_CHANNEL
 
 class IGDB(commands.Cog):
 
@@ -83,16 +85,28 @@ class IGDB(commands.Cog):
             pass
 
         # Set cover image if exists
+        img_url = ""
         try:
-            embed.set_image(
-                url=f"https:{game['cover']['url'].replace('thumb','original')}")
+            img_url = f"https:{game['cover']['url'].replace('thumb','original')}"
         except:
             # Try for screenshots if no box art
             try:
-                embed.set_image(
-                    url=f"https:{choice(game['screenshots'])['url'].replace('thumb','original')}")
+                img_url = f"https:{choice(game['screenshots'])['url'].replace('thumb','original')}"
             except:
+                await self.bot.get_channel(DEBUG_CHANNEL).send(f"/playing: no img?")
                 pass
+
+        if img_url:
+            r = await self.bot.http_client.get(img_url)
+            box_img = Image.open(BytesIO(r.content))
+
+            with BytesIO() as img_binary:
+                box_img.save(img_binary, "WebP")
+                img_binary.seek(0)
+                file = discord.File(fp=img_binary, filename="playing.webp")
+
+            embed.set_image(url="attachment://playing.webp")
+            await self.bot.get_channel(DEBUG_CHANNEL).send(embed.image.url)
 
         inherit_plats = False
         # Highlight that it's a mod and highlight game if not obvious
@@ -121,8 +135,10 @@ class IGDB(commands.Cog):
                 except:
                     pass
 
-        await interaction.response.send_message(embed=embed)
-
+        if img_url:
+            await interaction.response.send_message(embed=embed, file=file)
+        else:    
+            await interaction.response.send_message(embed=embed)
         # Insert URL into database as if the user posted it.
         abe_msg = await interaction.original_response()
         abe_msg.content = f"https://igdb.com/games/{game['slug']}"
