@@ -1476,18 +1476,27 @@ class Gacha(commands.Cog,
             title = titles[selected]
 
         img = page.xpath("//figure[@class='pi-item pi-image']/a/img/@data-image-key")[selected].replace('MI.p', 'FB.p').replace(' ', '_')
+        r = await self.bot.http_client.get(url=f"{url}wiki/Special:FilePath/{img}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{img}")
 
         embed = discord.Embed(
             title=char,
             description=title,
             color=0xb4b3bb)
-        embed.set_image(url=f"{url}wiki/Special:FilePath/{img}")
+        embed.set_image(url=f"attachment://{img}")
         embed.set_footer(text="Goddess of Victory: Nikke")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nikke'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nikke'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['msa'])
