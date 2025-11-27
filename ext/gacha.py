@@ -15,6 +15,7 @@ from PIL import Image
 from urllib.parse import quote
 from lxml import html
 from zipfile import ZipFile
+import os
 
 from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY
 
@@ -273,38 +274,23 @@ class Gacha(commands.Cog,
         """ Pulls a Dragalia Lost character """
         await ctx.defer()
 
-        url = "https://dragalialost.wiki/api.php"
-        params = {
-            "action": "parse",
-            "page": "Adventurer Grid",
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url, params=params)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        url = ("https://api.github.com/repos/orbicube/draglost/git/trees/"
+            "fd97dddadcc4347e5b98dd9e747f6a6bc9b430cd")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
 
-        char = choice(
-            page.xpath("//div[@class='character-grid-entry grid-entry']"))
+        name, title = char["path"][:-4].split("#")
 
-        char_name = char.xpath(".//div[1]/a/text()")[0]
-        char_title = char.xpath(".//div[2]/text()")[0]
-        img = char.xpath(".//div[4]/a/img/@src")[0][13:-10]
-
-        r = await self.bot.http_client.get(
-            f"https://dragalialost.wiki/w/Special:FilePath/{img}",
-            follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img)
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="dragalialost.png")
 
         embed = discord.Embed(
-            title=char_name,
-            description=char_title,
+            title=name,
+            description=title,
             colour=0x3e91f1)
-        embed.set_image(url=f"attachment://{img}")
+        embed.set_image(url="attachment://dragalialost.png")
         embed.set_footer(text="Dragalia Lost")
 
         if reason and ctx.interaction:
@@ -527,21 +513,29 @@ class Gacha(commands.Cog,
         """ Pulls a NieR Re[in]carnation character """
         await ctx.defer()
 
-        with open("ext/data/nier.json") as f:
-            char = choice(json.load(f))
+        url = ("https://api.github.com/repos/orbicube/nierrein/git/trees/"
+            "a5010db7dc892bf89feda0bb305e3f9bc5538858")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
+
+        name, title = char["path"][:-4].split("#")
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="nierreincarnation.png")
 
         embed = discord.Embed(
-            title=char["name"],
-            description=char["title"],
+            title=name,
+            description=title,
             colour=0x3b70c7)
-        embed.set_image(
-            url=f"https://assets.nierrein.guide/ui/costume/{char['id']}/{char['id']}_full.png")
+        embed.set_image(url="attachment://nierreincarnation.png")
         embed.set_footer(text="NieR Re[in]carnation")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nier reincarnation'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nier reincarnation'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['r1999'])
@@ -628,7 +622,7 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
-    @commands.command(aliases=['atelier'])
+    #@commands.command(aliases=['atelier'])
     async def atelieresleriana(self, ctx, reason: Optional[str] = None):
         """ Pulls an Atelier Resleriana character """
         await ctx.defer()
@@ -657,25 +651,29 @@ class Gacha(commands.Cog,
         """ Pulls a SINoALICE character """
         await ctx.defer()
 
-        chars = []
-        with open("ext/data/sinoalice.csv", newline='', encoding='utf-8') as f:
-            reader = csv.reader(f, delimiter=';')
-            for row in reader:
-                chars.append(row)
+        url = ("https://api.github.com/repos/orbicube/sinoalice/git/trees/"
+            "1b0c543065d69fa45d4cebcd539ff900e2517020")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
 
-        char = choice(chars)
+        name, title = char["path"][:-4].split("#")
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="sinoalice.png")
 
         embed = discord.Embed(
-            title=f"{char[1]}",
-            description=f"{char[2]}",
-            color=0xfafafa)
-        embed.set_image(url=f"https://sinoalice.game-db.tw/images/character_l/{char[0]}.png")
+            title=name,
+            description=title,
+            colour=0xfafafa)
+        embed.set_image(url="attachment://sinoalice.png")
         embed.set_footer(text="SINoALICE")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'sinoalice'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'sinoalice'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['touhou'])
@@ -736,29 +734,36 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def worldflipper(self, ctx, reason: Optional[str] = None):
-        """ Pulls a World FLipper character """
+        """ Pulls a World Flipper character """
         await ctx.defer()
 
-        with open("ext/data/worldflipper.json", encoding="utf-8") as f:
-            characters = json.load(f)
+        url = ("https://api.github.com/repos/orbicube/worldflip/git/trees/"
+            "da2abbedf7207fa36707017fe5ad841edd5556ca")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
 
-        url = "https://eliya-bot.herokuapp.com/img/assets/chars/"
+        name, title = char["path"][:-4].split("#")
+        if "_" in title:
+            title = title.replace("_", ":")
+        if "!" in title:
+            title = title[:-1]
 
-        char = choice(characters)
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="worldflipper.png")
+
         embed = discord.Embed(
-            title=char["name"],
-            description=char["title"],
-            color=0xb2d8ee)
-
-        embed.set_image(
-            url=f"{url}{char['id']}/full_shot_{randint(0,1)}.png")
-        embed.set_footer(
-            text= "World Flipper")
+            title=name,
+            description=title,
+            colour=0xb2d8ee)
+        embed.set_image(url="attachment://worldflipper.png")
+        embed.set_footer(text="World Flipper")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'world flipper'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'World Flipper'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['kof'])
@@ -1185,7 +1190,7 @@ class Gacha(commands.Cog,
         char = choice([c for c in r.json() if c["category_label_en"] != "Related parties"])
 
         r = await self.bot.http_client.get(f"{url}/images/{char['id']}")
-        outfit = choice([o for o in r.json() if o["label_en"] == "Signature Racewear"])
+        outfit = choice([o for o in r.json() if o["label_en"] == "Racewear"])
 
         r = await self.bot.http_client.get(outfit["images"][0]["image"])
         char_img = Image.open(BytesIO(r.content))
@@ -1200,7 +1205,7 @@ class Gacha(commands.Cog,
             title = char["name_en"],
             color=0xd88da4)
         embed.set_image(url="attachment://umamusume.png")
-        embed.set_footer(text="Umamusume: Pretty Derby")
+        embed.set_footer(text="Umamusume:@ Pretty Derby")
 
         if reason and ctx.interaction:
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'umamusume'} {reason}:", embed=embed, file=file)
@@ -1373,22 +1378,36 @@ class Gacha(commands.Cog,
         """ Pulls an Echoes of Mana character"""
         await ctx.defer()
 
-        with open("ext/data/echoesofmana.json") as f:
-            char = choice(json.load(f))
-        variant = choice(char["variants"])
+        url = ("https://api.github.com/repos/orbicube/echoesofmana/git/trees/"
+            "2a0b478efb52e81d9a6c490a448430e94676869c")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
+
+        name, title = char["path"][:-4].split("#")
+        if title == "Base":
+            title = ""
+
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="echoesofmana.png")
 
         embed = discord.Embed(
-            title=char["name"],
-            description=variant["title"],
-            color=0xa6bbad)
-        embed.set_image(
-            url=f"https://wikiofmana.com/wiki/Special:FilePath/{variant['img']}")
+            title=name,
+            description=title,
+            colour=0xa6bbad)
+        embed.set_image(url="attachment://echoesofmana.png")
         embed.set_footer(text="Echoes of Mana")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'echoes of mana'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'Echoes of Mana'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['soa'])
