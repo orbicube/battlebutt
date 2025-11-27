@@ -1283,54 +1283,34 @@ class Gacha(commands.Cog,
         """ Pulls an Octopath Traveler: Champions of the Continent character"""
         await ctx.defer()
 
-        url = "https://docs.google.com/spreadsheets/d/1q_erxNGausa_O0a1Y0eKtR3r2rKN9-Tnnb6L5kLzbTk/export?format=zip"
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"downloading zip")
-        r = await self.bot.http_client.get(url, follow_redirects=True)
+        url = ("https://api.github.com/repos/orbicube/octopath/git/trees/"
+            "45fbdaeba65431cf1d82266138c662d9ebc2221b")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
 
+        name = char["path"][:-4]
+        title = ""
+        if " EX" in name:
+            title = "EX"
+            name = name[:-3]
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"unzipping")
-
-        with ZipFile(BytesIO(r.content)) as zipfile:
-            with zipfile.open('Gallery.html') as html_page:
-                await self.bot.get_channel(DEBUG_CHANNEL).send(f"reading sheet")
-                page = html.fromstring(html_page.read())
-
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"finished reading sheet")
-
-        chars = []
-        rows = page.xpath("//tbody/tr")[2:]
-        for row in rows:
-            columns = row.xpath(".//td")[2:]
-
-            three_name = columns[0].xpath(".//text()")
-            if three_name:
-                img = columns[2].xpath(".//div/img/@src")[0].split("=")[0]
-                chars.append({"name": three_name[0], "img": img})
-
-            four_name = columns[3].xpath(".//text()")
-            if four_name:
-                img = columns[5].xpath(".//div/img/@src")[0].split("=")[0]
-                chars.append({"name": four_name[0], "img": img})
-
-            chars.append({
-                "name": columns[6].xpath(".//text()")[0],
-                "img": columns[8].xpath(".//div/img/@src")[0].split("=")[0]
-            })
-        char = choice(chars)
-
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"{char['img']}")
+        r = await self.bot.http_client.get(char["url"], headers=headers)
+        img = b64decode(r.json()["content"])
+        file = discord.File(fp=BytesIO(img), filename="octopath.png")
 
         embed = discord.Embed(
-            title=char["name"],
-            color=0xcabf9e)
-        embed.set_image(url=char["img"])
+            title=name,
+            description=title,
+            colour=0xcabf9e)
+        embed.set_image(url="attachment://octopath.png")
         embed.set_footer(text="Octopath Traveler: Champions of the Continent")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'octopath traveler'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'octopath'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
-
+            await ctx.send(embed=embed, file=file)
+ 
 
     @commands.command()
     async def bravelydefault(self, ctx, reason: Optional[str] = None):
