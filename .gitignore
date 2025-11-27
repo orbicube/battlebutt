@@ -166,6 +166,7 @@ ext/data/langrisser.json
 ext/data/touhou.json
 ext/data/ptn.json
 ext/data/p5x.json
+ext/data/fortnite.json
 
 .bash_history
 /.ssh

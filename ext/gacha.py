@@ -17,7 +17,7 @@ from lxml import html
 from zipfile import ZipFile
 import os
 
-from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY
+from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY, ERROR_CHANNEL
 
 class Gacha(commands.Cog,
     command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
@@ -341,111 +341,138 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def fortnite(self, ctx, reason: Optional[str] = None):
-        """ Posts a Fortnite skin """
-        # Defer in case HTTP requests take too long
+        """ Pulls a Fortnite skin """
         await ctx.defer()
 
-        rarities = {
-            "Common": "#B1B1B1",
-            "Uncommon": "#5BFD00",
-            "Rare": "#00FFF6",
-            "Epic": "#D505FF",
-            "Legendary": "#F68B20",
-            "CUBESeries": "#ff138e",
-            "DCUSeries": "#0031e0",
-            "FrozenSeries": "#afd7ff",
-            "CreatorCollabSeries": "#1be2e4",
-            "LavaSeries": "#f39d09",
-            "MarvelSeries": "#d70204",
-            "PlatformSeries": "#3730FF",
-            "ShadowSeries": "#515151",
-            "SlurpSeries": "#03f1ed",
-            "ColumbusSeries": "#ffaf00"
-        }
+        url = "https://fortnite.fandom.com/api.php"
 
-        # Grab current list of items and pick random one
-        url = "https://fortniteapi.io/v2/items/list"
+        with open("ext/data/fortnite.json", encoding="utf-8") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        characters = j["characters"]
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+            params = {
+                "action": "query",
+                "list": "categorymembers",
+                "cmtitle": "Category:Outfits",
+                "cmlimit": "500",
+                "format": "json"
+            }
+            finished = False
+            article_list = []
+            while not finished:
+                r = await self.bot.http_client.get(url, 
+                    params=params, headers=self.headers)
+                results = r.json()
+
+                if "continue" in results:
+                    params["cmcontinue"] = results["continue"]["cmcontinue"]
+                else:
+                    finished = True
+
+                for article in results["query"]["categorymembers"]:
+                    if article["pageid"] not in j["bad_pages"] and article["ns"] == 0:
+                        article_list.append(
+                            {"pageid": article["pageid"],
+                            "title": article["title"]})
+
+            j["characters"] = article_list
+            j["updated"] = int(datetime.utcnow().timestamp())
+            with open("ext/data/fortnite.json", "w") as f:
+                json.dump(j, f)
+
+        char = choice(characters)
+
         params = {
-            "type": "outfit",
-            "fields": "id,name"
+            "action": "parse",
+            "page": char["title"],
+            "format": "json"
         }
-        headers = {
-            "Authorization": FNAPI_KEY
-        }
-        r = await self.bot.http_client.get(url, params=params, headers=headers)
-        items = r.json()
-        skin = choice(items["items"])
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        images = page.xpath("//aside//img[@class='pi-image-thumbnail']")
 
-        while skin["name"] == "TBD" or not skin["name"] or "_" in skin["name"]:
-            skin = choice(items["items"])
+        featured = []
+        for image in images:
+            img_url = image.xpath("./@data-image-key")[0]
+            if "Featured)" in img_url:
+                featured.append(img_url)
 
-        url = "https://fortniteapi.io/v2/items/get"
-        params = {
-            "id": skin["id"]
-        }
-        r = await self.bot.http_client.get(url, params=params, headers=headers)
-        skin = r.json()["item"]
+        if not featured:
+            await self.bot.get_channel(ERROR_CHANNEL).send(
+                f"No featured image found, potentially bad page: {char['title']} (ID: {char['pageid']})")
+            await testnite(ctx, reason)
 
-        # Start crafting embed with data present for all skins
+        img = choice(featured)
+
+        r = await self.bot.http_client.get(
+            f"https://fortnite.fandom.com/wiki/Special:FilePath/{img}",
+            follow_redirects=True)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img)
+
+        if " (Outfit)" in char["title"]:
+            char["title"] = char["title"][:-9]
+
         embed = discord.Embed(
-            title=skin["name"],
-            description=skin["description"])
-
-        # used to be ass["primaryMode"] == "BattleRoyale", using ass["productTag"] == "Product.BR" temp
-        if skin["displayAssets"]:
-            br_assets = [ass for ass in skin["displayAssets"] if ass["productTag"] == "Product.BR"]
-            embed.set_image(url=choice(br_assets)["background"])
-        else:
-            embed.set_image(url=skin["images"]["background"])
-
-        # Discord embed colour based on rarity/series
-        if skin["series"]:
-            embed.colour = discord.Colour(value=0).from_str(
-                rarities[skin["series"]["id"]])
-        else:
-            embed.colour = discord.Colour(value=0).from_str(
-                rarities[skin["rarity"]["id"]])
-
-        # If it has a unique set name, put it into the description
-        if skin["set"]:
-            if skin["set"]["name"] != skin["name"]:
-                embed.description += f"\n\n{skin['set']['partOf']}"
-
-        # If Shop skin, display price and time since last appearance
-        if skin["price"]:
-            footer_text = f"{skin['price']} V-Bucks •"
-
-            days_ago = datetime.utcnow() - datetime.strptime(
-                skin["lastAppearance"], "%Y-%m-%d")
-            if days_ago.days == 0:
-                embed.set_footer(text=f"{footer_text} Currently in the shop")
-            else:
-                embed.set_footer(text=f"{footer_text} Last seen {days_ago.days} days ago")
-
-        # Format Battle Pass footer
-        elif skin["battlepass"]:
-            bp_format = re.findall(
-                r'Chapter (\d+) - Season (\d+)',
-                skin['battlepass']['displayText']['chapterSeason'])[0]
-            embed.set_footer(text=f"C{bp_format[0]}S{bp_format[1]} Battle Pass")
-            
-        # Extra conditionals
-        elif not skin["battlepass"]:
-            # Battle Pass challenges
-            #if "BattlePass.Paid" in skin["gameplayTags"]:
-            #    season = re.search(
-            #        r'.Season(\d+).BattlePass.Paid', str(skin["gameplayTags"]))
-            #    embed.set_footer(text=f"{calc_season_bp(season)} Battle Pass")
-            # Crew packs
-            if "CrewPack" in skin["gameplayTags"]:
-                crewdate = re.findall(
-                    r'CrewPack.(\w+)(\d+)', str(skin["gameplayTags"]))[0]
-                embed.set_footer(text=f"{crewdate[0]} {crewdate[1]} Crew Pack")
+            title=char["title"],
+            color=0xad2fea)
+        embed.set_image(url=f"attachment://{img}")
+        embed.set_footer(text="Fortnite")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fortnite'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fortnite'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
+
+
+    @commands.command(hidden=True)
+    async def fortfilter(self, ctx):
+
+        with open("ext/data/fortnite.json") as f:
+            j = json.load(f)
+        characters = j["characters"]
+
+        url = "https://fortnite.fandom.com/api.php"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:TBD_Cosmetics",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            for article in results["query"]["categorymembers"]:
+                if article["ns"] == 0:
+                    article_list.append(article)
+
+        bad_pages = j["bad_pages"]
+        for article in article_list:
+            for char in characters:
+                if article["pageid"] == char["pageid"]:
+                    await ctx.send(f"bad page found: {article['title']}")
+                    bad_pages.append(article["pageid"])
+
+        j["bad_pages"] = bad_pages
+        with open("ext/data/fortnite.json", "w") as f:
+            json.dump(j, f)
 
 
     @commands.command(aliases=['fgo'])
@@ -1375,7 +1402,7 @@ class Gacha(commands.Cog,
         with BytesIO() as img_binary:
             char_img.save(img_binary, 'PNG')
             img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="echoesofmana.png")
+            file = discord.File(fp=img_binary, filename=f"echoesofmana.png")
 
         embed = discord.Embed(
             title=name,
