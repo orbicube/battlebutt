@@ -1205,7 +1205,7 @@ class Gacha(commands.Cog,
             title = char["name_en"],
             color=0xd88da4)
         embed.set_image(url="attachment://umamusume.png")
-        embed.set_footer(text="Umamusume:@ Pretty Derby")
+        embed.set_footer(text="Umamusume: Pretty Derby")
 
         if reason and ctx.interaction:
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'umamusume'} {reason}:", embed=embed, file=file)
@@ -1601,13 +1601,24 @@ class Gacha(commands.Cog,
         url = "https://terrabattle.fandom.com"
         if "Guardian_" in variant['img']:
             url = url.replace("e.f", "e2.f")
-        embed.set_image(url=f"{url}/wiki/Special:FilePath/{variant['img']}")
+        url = f"{url}/wiki/Special:FilePath/{variant['img']}"
+        r = await self.bot.http_client.get(url=url, follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=f"{variant['img']}")
+        embed.set_image(url=f"attachment://{variant['img']}")
+
         embed.set_footer(text=f"Terra Battle{' 2' if '2' in url else ' '}")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'terra battle'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'terra battle'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['ptn'])
