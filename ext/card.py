@@ -573,7 +573,7 @@ class Card(commands.Cog,
             card_path = choice([card["frontImagePath"], card["backImagePath"]])
         else:
             card_path = card["frontImagePath"]
-        card_img = f"{base_url}/images/{card_path[1:]}"
+        card_img = f"{base_url}/images{card_path[1:]}"
 
         if reason and ctx.interaction:
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'star wars'} {reason}: [⠀]({card_img})")
