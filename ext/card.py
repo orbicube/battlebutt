@@ -574,7 +574,7 @@ class Card(commands.Cog,
         else:
             card_path = card["frontImagePath"]
         if card_path[0] == "~":
-            card_path = card_path[1;]
+            card_path = card_path[1:]
         card_img = f"{base_url}/images{card_path}"
 
         if reason and ctx.interaction:
