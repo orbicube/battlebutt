@@ -432,49 +432,6 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
-    @commands.command(hidden=True)
-    async def fortfilter(self, ctx):
-
-        with open("ext/data/fortnite.json") as f:
-            j = json.load(f)
-        characters = j["characters"]
-
-        url = "https://fortnite.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:TBD_Cosmetics",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
-
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            for article in results["query"]["categorymembers"]:
-                if article["ns"] == 0:
-                    article_list.append(article)
-
-        bad_pages = j["bad_pages"]
-        for article in article_list:
-            for char in characters:
-                if article["pageid"] == char["pageid"]:
-                    await ctx.send(f"bad page found: {article['title']}")
-                    bad_pages.append(article["pageid"])
-
-        j["bad_pages"] = bad_pages
-        with open("ext/data/fortnite.json", "w") as f:
-            json.dump(j, f)
-
-
     @commands.command(aliases=['fgo'])
     async def fategrandorder(self, ctx, reason: Optional[str] = None):
         """ Pulls a Fate Grand Order character """
