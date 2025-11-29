@@ -1608,6 +1608,8 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['ptn'])
     async def pathtonowhere(self, ctx, reason: Optional[str] = None):
         """ Pulls a Path to Nowhere character """
+        await ctx.defer()
+        
         url = f"https://s1n.gg"
 
         with open("ext/data/ptn.json") as f:
