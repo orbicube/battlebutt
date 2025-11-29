@@ -565,7 +565,7 @@ class Card(commands.Cog,
 
         r = await self.bot.http_client.get(f"{base_url}/api/card/getRandomCard")
 
-        r = await self.bot.http_client.post(f"{base_url}/api/card/getVariantInfo",
+        r = await self.bot.http_client.post(f"{base_url}/api/card/getPrintingInfo",
             json=r.json())
 
         card = r.json()
