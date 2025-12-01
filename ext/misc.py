@@ -45,7 +45,7 @@ class Misc(commands.Cog):
     async def gameawards(self, interaction: discord.Interaction):
         """ Countdown to The Game Awards """
 
-        date = datetime(2025, 12, 11, 12, 30, 0, tzinfo=timezone.utc)
+        date = datetime(2025, 12, 12, 0, 30, 0, tzinfo=timezone.utc)
 
         if discord.utils.utcnow() < date:
             await interaction.response.send_message((
