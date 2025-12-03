@@ -379,7 +379,6 @@ class Card(commands.Cog,
             await ctx.send(file=file)
 
 
-
     @commands.command()
     async def sorcery(self, ctx, reason: Optional[str] = None):
         """ Pulls a Sorcery card """
@@ -392,12 +391,7 @@ class Card(commands.Cog,
 
         # Get random set printing of the card
         card_set = choice(card_json["sets"])
-        set_name = card_set["name"]
-
-        # Get random variant, strip set affix and grab suffix
-        # Card slug format: set_cardname_location_variant
-        card_name = choice(card_set["variants"])["slug"].split("_", 1)[1]
-        card_suffix = "_".join(card_name.rsplit("_", 2)[-2:])
+        card_slug = choice(card_set["variants"])["slug"]
 
         if card_json["guardian"]["type"] == "Site":
             rotate = True
@@ -407,20 +401,20 @@ class Card(commands.Cog,
         # Get set folder from Google Drive
         list_url = "https://www.googleapis.com/drive/v3/files"
         list_params = {
-            "q": f"name = '{set_name}' and '17IrJkRGmIU9fDSTU2JQEU9JlFzb5liLJ' in parents",
+            "q": f"name = '{card_slug}.png' and '17IrJkRGmIU9fDSTU2JQEU9JlFzb5liLJ' in parents",
             "key": GOOGLE_KEY
         }
         r = await self.bot.http_client.get(list_url, params=list_params)
-        folder_id = r.json()["files"][0]["id"]
+        card_id = r.json()["files"][0]["id"]
 
-        list_params["q"] = f"name = '{card_suffix}' and '{folder_id}' in parents"
-        r = await self.bot.http_client.get(list_url, params=list_params)
-        folder_id = r.json()["files"][0]["id"]
+        #list_params["q"] = f"name = '{card_suffix}' and '{folder_id}' in parents"
+        #r = await self.bot.http_client.get(list_url, params=list_params)
+        #folder_id = r.json()["files"][0]["id"]
 
         # Find card id from its set's folder
-        list_params["q"] = f"name = '{card_name}.png' and '{folder_id}' in parents"
-        r = await self.bot.http_client.get(list_url, params=list_params)
-        card_id = r.json()["files"][0]["id"]
+        #list_params["q"] = f"name = '{card_name}.png' and '{folder_id}' in parents"
+        #r = await self.bot.http_client.get(list_url, params=list_params)
+        #card_id = r.json()["files"][0]["id"]
 
         # Get card image data
         get_url = f"https://www.googleapis.com/drive/v3/files/{card_id}"
@@ -440,13 +434,12 @@ class Card(commands.Cog,
             img_binary.seek(0)
             file = discord.File(
                 fp=img_binary,
-                filename=f"{card_name}.png")
+                filename=f"{card_slug}.png")
 
         if reason and ctx.interaction:
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'sorcery'} {reason}:", file=file)
         else:
             await ctx.send(file=file)
-
 
 
     @commands.command(aliases=['warcraft'])
@@ -493,7 +486,6 @@ class Card(commands.Cog,
             await ctx.send(file=file)
 
 
-
     @commands.command()
     async def spellfire(self, ctx, reason: Optional[str] = None):
         """ Pulls a Spellfire card """
@@ -524,7 +516,6 @@ class Card(commands.Cog,
             await ctx.send(file=file)
 
 
-
     @commands.command()
     async def shadowverse(self, ctx, reason: Optional[str] = None):
         """ Pulls a Shadowverse: Evolve card """
@@ -532,7 +523,10 @@ class Card(commands.Cog,
 
         # Get max card count
         url = "https://en.shadowverse-evolve.com/cards/searchresults/"
-        r = await self.bot.http_client.get(url)
+        headers = {
+            "User-Agent": "battlebutt/1.0"
+        }
+        r = await self.bot.http_client.get(url, headers=headers)
         page = html.fromstring(r.text)
 
         # 15 cards per page
@@ -543,17 +537,29 @@ class Card(commands.Cog,
         }
 
         # Get page with cards to pick
-        r = await self.bot.http_client.get(url, params=params)
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
         page = html.fromstring(r.text)
 
         # Pick card
         card = "https://en.shadowverse-evolve.com{}".format(
             choice(page.xpath("//img[@class='object-fit-img']/@src")))
+        card_file = card.rsplit('/', 1)[1]
+
+        r = await self.bot.http_client.get(card, headers=headers)
+        card_img = Image.open(BytesIO(r.content))
+
+        # Send to Discord
+        with BytesIO() as img_binary:
+            card_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(
+                fp=img_binary,
+                filename=card_file)
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}: [⠀]({card})")
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}:", file=file)
         else:
-            await ctx.send(card)
+            await ctx.send(file=file)
 
 
     @commands.command(aliases=['swu'])
@@ -1139,6 +1145,7 @@ class Card(commands.Cog,
     @commands.command()
     async def riftbound(self, ctx, reason: Optional[str] = None):
         """ Pulls a Riftbound card"""
+        await ctx.defer()
 
         url = "https://piltoverarchive.com/api/trpc/cards.search"
         params = {
