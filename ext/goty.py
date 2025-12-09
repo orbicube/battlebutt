@@ -131,8 +131,8 @@ class Goty(commands.GroupCog):
         "first": 1, "second": 2, "third": 3, "fourth": 4, "fifth": 5,
         "sixth": 6, "seventh": 7, "eighth": 8, "ninth": 9, "tenth": 10 
     }
-    year = 2015
-    closing_date = datetime(2025, 8, 1, 7, 0, 0, tzinfo=timezone.utc)
+    year = 2025
+    closing_date = datetime(2026, 1, 1, 9, 0, 0, tzinfo=timezone.utc)
 
     def __init__(self, bot):
         self.bot = bot
