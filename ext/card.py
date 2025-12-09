@@ -128,7 +128,7 @@ class Card(commands.Cog,
         await ctx.defer()
 
         url = "https://api.scryfall.com/cards/random"
-        r = await self.bot.http_client.get(url)
+        r = await self.bot.http_client.get(url, timeout=15)
         card = r.json()
 
         # If it doesn't have an image then try again
