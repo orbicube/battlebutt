@@ -1701,11 +1701,11 @@ class Gacha(commands.Cog,
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 3:
             r = await self.bot.http_client.get(
                 f"{url}data/kr/characters/characters.js")
-            temp_dict = r.text.split("characterData = ")[1].split("},", 1)[1][:-1]
+            temp_dict = r.text.split("characterData = ")[1].split("},", 1)[1][:-2]
             temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
             temp_dict = temp_dict.replace(',\n        },', '\n        },')
             temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
-
+            
             char_dict = json.loads(temp_dict)
             characters = []
             for key in list(char_dict.keys()):
