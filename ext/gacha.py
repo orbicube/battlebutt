@@ -62,9 +62,8 @@ class Gacha(commands.Cog,
         return completes[:25] 
 
 
-    @commands.command(aliases=['gbf'])
+    @commands.command(aliases=['gbf'], hidden=True)
     async def granblue(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Granblue Fantasy character """
         await ctx.defer()
 
         with open("ext/data/gbf.json") as f:
@@ -156,8 +155,7 @@ class Gacha(commands.Cog,
 
 
     @commands.command(aliases=['feh'])
-    async def fireemblem(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Fire Emblem Heroes character """
+    async def fireemblem(self, ctx, reason: Optional[str] = None):    
         await ctx.defer()
 
         params = {
@@ -224,7 +222,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['wotv'])
     async def warofthevisions(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Final Fantasy War of the Visions character """
 
         url = "https://wotv-calc.com/api/gl/units?forBuilder=1"
         headers = self.headers
@@ -248,7 +245,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def arknights(self, ctx, reason: Optional[str] = None):
-        """ Pulls an Arknights character """
 
         url = "https://raw.githubusercontent.com/Aceship/AN-EN-Tags/refs/heads/master/json/gamedata/en_US/gamedata/excel/skin_table.json"
         r = await self.bot.http_client.get(url)
@@ -271,7 +267,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def dragalialost(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Dragalia Lost character """
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/draglost/git/trees/"
@@ -301,7 +296,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['mkt'])
     async def mariokarttour(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Mario Kart Tour character """
         await ctx.defer()
 
         url = "https://www.mariowiki.com/api.php"
@@ -341,7 +335,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def fortnite(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Fortnite skin """
         await ctx.defer()
 
         url = "https://fortnite.fandom.com/api.php"
@@ -434,7 +427,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['fgo'])
     async def fategrandorder(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Fate Grand Order character """
         await ctx.defer()
 
         url = "https://fategrandorder.fandom.com/api.php"
@@ -494,7 +486,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['nier'])
     async def nierreincarnation(self, ctx, reason: Optional[str] = None):
-        """ Pulls a NieR Re[in]carnation character """
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/nierrein/git/trees/"
@@ -524,7 +515,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['r1999'])
     async def reverse1999(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Reverse 1999 character """
         await ctx.defer()
 
         params = {
@@ -608,7 +598,6 @@ class Gacha(commands.Cog,
 
     #@commands.command(aliases=['atelier'])
     async def atelieresleriana(self, ctx, reason: Optional[str] = None):
-        """ Pulls an Atelier Resleriana character """
         await ctx.defer()
 
         # JSON Updated March 29, 2025
@@ -632,7 +621,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def sinoalice(self, ctx, reason: Optional[str] = None):
-        """ Pulls a SINoALICE character """
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/sinoalice/git/trees/"
@@ -662,7 +650,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['touhou'])
     async def touhoulostword(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Touhou LostWord character """
         await ctx.defer()
 
         with open("ext/data/touhou.json") as f:
@@ -718,7 +705,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def worldflipper(self, ctx, reason: Optional[str] = None):
-        """ Pulls a World Flipper character """
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/worldflip/git/trees/"
@@ -752,7 +738,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['kof'])
     async def kofallstar(self, ctx, reason: Optional[str] = None):
-        """ Pulls a KoF Allstar character """
         await ctx.defer()
    
         url = ("https://api.github.com/repos/orbicube/kofchars/git/trees/"
@@ -800,7 +785,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['404gamereset', '404'])
     async def errorgamereset(self, ctx, reason: Optional[str] = None):
-        """ Pulls a 404 GAME RE:SET character """
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/404chars/git/trees/"
@@ -834,7 +818,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def bravefrontier(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Brave Frontier character """
         await ctx.defer()
 
         with open("ext/data/bfunits.txt", encoding="utf-8") as f:
@@ -867,7 +850,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def langrisser(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Langrisser character """
         await ctx.defer()
         
         url = "https://wiki.biligame.com/langrisser/api.php"
@@ -948,7 +930,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def cookierun(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Cookie Run Kingdom character """
         await ctx.defer()
 
         url = "https://cookierunkingdom.fandom.com/api.php"
@@ -999,7 +980,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['mmxd'])
     async def megamanxdive(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Mega Man X DiVE character """
         await ctx.defer()
 
         url = "https://rockman-x-dive.fandom.com/api.php"
@@ -1050,7 +1030,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['saga'])
     async def romancingsaga(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Romancing SaGa re;univerSe character """
         await ctx.defer()
 
         with open("ext/data/romancingsaga.json") as f:
@@ -1071,7 +1050,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['ffbe', 'exvius'])
     async def braveexvius(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Final Fantasy Brave Exvius character """
         await ctx.defer()
 
         url = "https://exvius.fandom.com/api.php"
@@ -1142,7 +1120,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['bbdw'])
     async def blazblue(self, ctx, reason: Optional[str] = None):
-        """ Pulls a BlazBlue Alternative: Dark War character """
         await ctx.defer()
 
         with open("ext/data/bbdw.json", encoding="utf-8") as f:
@@ -1166,7 +1143,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def umamusume(self, ctx, reason: Optional[str] = None):
-        """ Pulls an Uma Musume character """
         await ctx.defer()
 
         url = "https://umapyoi.net/api/v1/character"
@@ -1199,7 +1175,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def afkarena(self, ctx, reason: Optional[str] = None):
-        """ Pulls an AFK Arena character """
         await ctx.defer()
 
         url = "https://afkarena.fandom.com/api.php"
@@ -1264,7 +1239,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['octopath', 'cotc'])
     async def octopathtraveler(self, ctx, reason: Optional[str] = None):
-        """ Pulls an Octopath Traveler: Champions of the Continent character"""
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/octopath/git/trees/"
@@ -1298,7 +1272,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def bravelydefault(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Bravely Default: Brilliant Lights character """
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/bravelydefault/git/trees/"
@@ -1339,7 +1312,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def echoesofmana(self, ctx, reason: Optional[str] = None):
-        """ Pulls an Echoes of Mana character"""
         await ctx.defer()
 
         url = ("https://api.github.com/repos/orbicube/echoesofmana/git/trees/"
@@ -1376,7 +1348,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['soa'])
     async def starocean(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Star Ocean: Anamnesis character"""
         await ctx.defer()
 
         with open("ext/data/starocean.json") as f:
@@ -1410,7 +1381,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def nikke(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Goddess of Victory: Nikke character"""
         await ctx.defer()
 
         url = "https://nikke-goddess-of-victory-international.fandom.com/"
@@ -1485,7 +1455,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['msa'])
     async def metalslug(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Metal SLug Attack character"""
         
         url = ("https://api.github.com/repos/orbicube/msa/git/trees/"
             "3dca6069518ed7ba82bc9e85e2547063689ba155")
@@ -1523,7 +1492,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def anothereden(self, ctx, reason: Optional[str] = None):
-        """ Pulls an Another Eden character """
+        await ctx.defer()
 
         url = "https://anothereden.wiki"
         params = {
@@ -1570,7 +1539,6 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def terrabattle(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Terra Battle character """
 
         with open("ext/data/terrabattle.json") as f:
             chars = json.load(f)
@@ -1607,7 +1575,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['ptn'])
     async def pathtonowhere(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Path to Nowhere character """
         await ctx.defer()
         
         url = f"https://s1n.gg"
@@ -1691,7 +1658,8 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['p5x'])
     async def persona5x(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Persona 5 X character """
+        await ctx.defer()
+
         url = "https://lufel.net/"
 
         with open("ext/data/p5x.json", encoding="utf-8") as f:
@@ -1705,7 +1673,7 @@ class Gacha(commands.Cog,
             temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
             temp_dict = temp_dict.replace(',\n        },', '\n        },')
             temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
-            
+
             char_dict = json.loads(temp_dict)
             characters = []
             for key in list(char_dict.keys()):
@@ -1759,7 +1727,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['genshin'])
     async def genshinimpact(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Genshin Impact character """
         await ctx.defer()
 
         url = "https://genshin-impact.fandom.com"
@@ -1803,7 +1770,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['hsr'])
     async def honkaistarrail(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Honkai Star Rail character """
         await ctx.defer()
 
         url = "https://honkai-star-rail.fandom.com/api.php"
@@ -1863,7 +1829,6 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['zzz'])
     async def zenlesszonezero(self, ctx, reason: Optional[str] = None):
-        """ Pulls a Honkai Star Rail character """
         await ctx.defer()
 
         url = "https://zenless-zone-zero.fandom.com/api.php"
@@ -1919,6 +1884,208 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'zenless zone zero'} {reason}:", embed=embed, file=file)
         else:
             await ctx.send(embed=embed, file=file)
+
+
+    @commands.command()
+    async def dislyte(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
+
+        url = "https://dislyte.fandom.com/"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Esper_galleries",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(f"{url}api.php", 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            article_list.extend(results["query"]["categorymembers"])
+
+        char = choice(article_list)["title"]
+        char_name, char_deity = char.split(")/")[0].split(" (")
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        skin = choice(page.xpath(
+            "//div/table[@class='dis-atable']"))
+        skin_name = skin.xpath("//tbody/tr[1]/th/text()")[0]
+
+        embed = discord.Embed(
+            title=char_name,
+            color=0xadebe3)
+        embed.set_author(name=char_deity)
+        if "Default" not in skin_name:
+            embed.description = skin_name
+
+        char_url = skin.xpath(
+            "//tbody/tr[2]/td/figure/a/img/@data-image-key")[0]
+        r = await self.bot.http_client.get(
+            f"{url}wiki/Special:FilePath/{char_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=char_url)
+
+        embed.set_image(
+            url=f"attachment://{char_url}")
+        embed.set_footer(text="Dislyte")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'dislyte'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
+    @commands.command(aliases=['ff7ec'])
+    async def evercrisis(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
+
+        url = "https://finalfantasy.fandom.com/"
+        params = {
+            "action": "parse",
+            "page": "Final Fantasy VII Ever Crisis gear",
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        skin = choice(page.xpath("//img[not(@alt='Userbox ff7-barret')]"))
+        char_url = skin.xpath("./@data-image-key")[0]
+        char_name = skin.xpath(
+            "./ancestor::table/preceding::h3[1]/span/a/text()")[0]
+        char_title = skin.xpath("./ancestor::tr/td[2]/span/text()")[0]
+
+        embed = discord.Embed(
+            title=char_name,
+            description=char_title,
+            color=0xe9d7b5)
+
+        r = await self.bot.http_client.get(
+            f"{url}wiki/Special:FilePath/{char_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=char_url)
+
+        embed.set_image(
+            url=f"attachment://{char_url}")
+        embed.set_footer(text="Final Fantasy VII Ever Crisis")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'ever crisis'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
+
+    @commands.command()
+    async def foodfantasy(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
+
+        url = "https://food-fantasy.fandom.com/"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Food_Souls",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(f"{url}api.php", 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = [4585, 1752, 29713, 143]
+
+            for article in results["query"]["categorymembers"]:
+                if article["ns"] == 0 and article["pageid"] not in bad_pages:
+                    article_list.append(article)
+
+        char = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        sections = page.xpath("//aside/section[1]/div")
+
+        skin_count = len(sections) - 1
+        selected_skin = randint(1, skin_count)
+
+        skin_name = sections[0].xpath(
+            f"./ul/li[{selected_skin}]/div/text()")[0].strip()
+        if skin_name == "Basic":
+            skin_name = ""
+        if "(SP)" in char:
+            if skin_name:
+                skin_name = "SP " + skin_name
+            else:
+                skin_name = "SP"
+
+            char = char.split(" (")[0]
+
+        embed = discord.Embed(
+            title=char,
+            description=skin_name,
+            color=0xf6be41)
+
+        char_url = sections[selected_skin].xpath(
+            "./div[1]/div/span/a/img/@data-image-key")[0].replace("jpg", "png")
+        r = await self.bot.http_client.get(
+            f"{url}wiki/Special:FilePath/{char_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=char_url)
+
+        embed.set_image(
+            url=f"attachment://{char_url}")
+        embed.set_footer(text="Food Fantasy")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'food fantasy'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
 
 
 async def setup(bot):
