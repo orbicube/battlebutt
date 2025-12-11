@@ -2087,6 +2087,85 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command()
+    async def resonancesolstice(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
+
+        url = "https://wiki.biligame.com/resonance/api.php"
+
+        with open("ext/data/resosol.json", encoding="utf-8") as f:
+            j = json.load(f)
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        characters = j["characters"]
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+            params = {
+                "action": "query",
+                "list": "categorymembers",
+                "cmtitle": "分类:乘员",
+                "cmlimit": "500",
+                "format": "json"
+            }
+
+            finished = False
+            characters = []
+            while not finished:
+                r = await self.bot.http_client.get(url, 
+                    params=params, headers=self.headers, timeout=15)
+                results = r.json()
+
+                if "continue" in results:
+                    params["cmcontinue"] = results["continue"]["cmcontinue"]
+                else:
+                    finished = True
+
+                for c in results["query"]["categorymembers"]:
+                    if c["ns"] != 8:
+                        characters.append(c["title"])
+
+            data = {
+                "updated": int(datetime.utcnow().timestamp()),
+                "characters": characters
+            }
+            with open("ext/data/resosol.json", "w", encoding="utf-8") as f:
+                json.dump(data, f)                
+
+        selected_article = choice(characters)
+        params = {
+            "action": "parse",
+            "page": selected_article,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url,
+            params=params, headers=self.headers, timeout=15)
+        page = html.fromstring(
+            r.json()["parse"]["text"]["*"].replace('\"','"'))
+        info = page.xpath("//div[@class='resp-tab-content'][1]/div")[0]
+
+        char = info.xpath("./div[@class='rh-info']/div[2]/div[2]/text()")[0]
+
+        embed = discord.Embed(
+            title=char,
+            color=0x3f4149)
+
+        char_url = info.xpath("./div[@class='rh-portrait']/img/@src")[0]
+        r = await self.bot.http_client.get(
+            char_url, headers=self.headers, timeout=15)
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="resonancesolstice.png")
+
+        embed.set_image(url="attachment://resonancesolstice.png")
+        embed.set_footer(text="Resonance Solstice")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'resonance solstice'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
