@@ -2325,6 +2325,80 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command()
+    async def ashechoes(self, ctx, reason: Optional[str] = None):
+        url = "https://ashechoes.wiki.gg/"
+
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Echomancer",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(f"{url}api.php", 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = []
+
+            for article in results["query"]["categorymembers"]:
+                if article["ns"] == 0 and article["pageid"] not in bad_pages:
+                    article_list.append(article)
+
+        char = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+ 
+        char_name = page.xpath(
+            "//div/div[1]/table/tbody/tr/td/span/text()")[0].split(" (")[0]
+        img_url = choice(page.xpath("//div/div[2]//a/img/../@href")).replace(
+            "/File:", "/Special:FilePath/")
+        skin_type = img_url.rsplit("-", 1)[1]
+        if "Base" in skin_type:
+            skin_type = ""
+        elif "Senlo" in skin_type:
+            skin_type = "Senlo Mirage"
+
+        embed = discord.Embed(
+            title=char_name,
+            description=skin_type,
+            color=0x43c2ff)
+
+        r = await self.bot.http_client.get(
+            f"{url}{img_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img_url)
+
+        embed.set_image(
+            url=f"attachment://{img_url}")
+        embed.set_footer(text="Ash Echoes")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'ash echoes'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
