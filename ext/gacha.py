@@ -2257,5 +2257,74 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command()
+    async def alchemistcode(self, ctx, reason: Optional[str] = None):
+        url = "https://thealchemistcode.fandom.com/"
+
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Units",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(f"{url}api.php", 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = []
+
+            for article in results["query"]["categorymembers"]:
+                if article["ns"] == 0 and article["pageid"] not in bad_pages:
+                    article_list.append(article)
+
+        char = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        char_name = page.xpath("//aside/h2/text()")[0]
+
+        embed = discord.Embed(
+            title=char_name,
+            color=0xa26a42)
+
+        img_url = page.xpath("//figure/a/img/@data-image-key")[0].replace(
+            "Images2%2C", "Images%2C")
+        r = await self.bot.http_client.get(
+            f"{url}wiki/Special:FilePath/{img_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img_url)
+
+        embed.set_image(
+            url=f"attachment://{img_url}")
+        embed.set_footer(text="The Alchemist Code")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'alchemist code'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
