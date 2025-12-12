@@ -2189,6 +2189,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['wuwa'])
     async def wutheringwaves(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
         url = "https://wutheringwaves.fandom.com/"
         params = {
             "action": "query",
@@ -2259,6 +2260,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def alchemistcode(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
         url = "https://thealchemistcode.fandom.com/"
 
         params = {
@@ -2327,6 +2329,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def ashechoes(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
         url = "https://ashechoes.wiki.gg/"
 
         params = {
