@@ -2165,7 +2165,7 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'resonance solstice'} {reason}:", embed=embed, file=file)
         else:
             await ctx.send(embed=embed, file=file)
-            
+
 
     @commands.command(aliases=['potk'])
     async def phantomofthekill(self, ctx, reason: Optional[str] = None):
@@ -2185,6 +2185,76 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'phantom of the kill'} {reason}:", embed=embed)
         else:
             await ctx.send(embed=embed)
+
+
+    @commands.command(aliases=['wuwa'])
+    async def wutheringwaves(self, ctx, reason: Optional[str] = None):
+        url = "https://wutheringwaves.fandom.com/"
+        params = {
+            "action": "query",
+            "list": "categorymembers",
+            "cmtitle": "Category:Outfits",
+            "cmlimit": "500",
+            "format": "json"
+        }
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(f"{url}api.php", 
+                params=params, headers=self.headers)
+            results = r.json()
+
+            if "continue" in results:
+                params["cmcontinue"] = results["continue"]["cmcontinue"]
+            else:
+                finished = True
+
+            bad_pages = []
+
+            for article in results["query"]["categorymembers"]:
+                if article["ns"] == 0 and article["pageid"] not in bad_pages:
+                    article_list.append(article)
+
+        char = choice(article_list)["title"]
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        info = page.xpath("//aside")[0]
+        outfit = info.xpath("./h2/text()")[0]
+        char_name = info.xpath(
+            "./div[@data-source='character']/div/a/text()")[0]
+
+        embed = discord.Embed(
+            title=char_name,
+            description=outfit,
+            color=0x4a6da1)
+
+        img_url = info.xpath("./figure/a/img/@data-image-key")[0]
+        r = await self.bot.http_client.get(
+            f"{url}wiki/Special:FilePath/{img_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img_url)
+
+        embed.set_image(
+            url=f"attachment://{img_url}")
+        embed.set_footer(text="Wuthering Waves")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'wuthering waves'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
 
 
 async def setup(bot):
