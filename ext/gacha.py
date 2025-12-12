@@ -2165,6 +2165,26 @@ class Gacha(commands.Cog,
             await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'resonance solstice'} {reason}:", embed=embed, file=file)
         else:
             await ctx.send(embed=embed, file=file)
+            
+
+    @commands.command(aliases=['potk'])
+    async def phantomofthekill(self, ctx, reason: Optional[str] = None):
+        with open("./ext/data/potk.json") as f:
+            chars = json.load(f)
+
+        img_url = choice([*chars])
+        char_name = chars[img_url]
+
+        embed = discord.Embed(
+            title=char_name,
+            color=0xaf989a)
+        embed.set_image(url=img_url)
+        embed.set_footer(text="Phantom of the Kill")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'phantom of the kill'} {reason}:", embed=embed)
+        else:
+            await ctx.send(embed=embed)
 
 
 async def setup(bot):
