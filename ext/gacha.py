@@ -1039,13 +1039,25 @@ class Gacha(commands.Cog,
             title=char["name"],
             description=char["title"],
             color=0x8f0000)
-        embed.set_image(url=f"https://rsrs.xyz/assets/gl/texture/style/{char['id']}/style_{char['id']}.png")
+
+        r = await self.bot.http_client.get(
+            f"https://rsrs.xyz/assets/gl/texture/style/{char['id']}/style_{char['id']}.png")
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="romancingsaga.png")
+
+        embed.set_image(url="attachment://romancingsaga.png")
         embed.set_footer(text="Romancing SaGa re;univerSe")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'romancing saga re;universe'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'romancing saga re;universe'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['ffbe', 'exvius'])
