@@ -470,18 +470,32 @@ class Gacha(commands.Cog,
             params=params, headers=self.headers)
         page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
 
-        images = page.xpath("//div[@class='pi-image-collection wds-tabber']/div[@class='wds-tab__content']/figure/a/@href")
-        
+        images = page.xpath("//div[@class='pi-image-collection wds-tabber']/div[@class='wds-tab__content']/figure/a/img/@data-image-key")
+        img_url = choice([i for i in images if 'Sprite' not in i])
+
         embed = discord.Embed(
             title=selected_article,
             color=0xece9d6)
-        embed.set_image(url=choice([i for i in images if 'Sprite' not in i]))
+
+        r = await self.bot.http_client.get(
+            f"https://fategrandorder.fandom.com/wiki/Special:FilePath/{img_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename="fategrandorder.png")
+
+        embed.set_image(
+            url=f"attachment://fategrandorder.png")
         embed.set_footer(text="Fate/Grand Order")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fate/grand order'} {reason}:", embed=embed)
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fate/grand order'} {reason}:", embed=embed, file=file)
         else:
-            await ctx.send(embed=embed)
+            await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['nier'])
