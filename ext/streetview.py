@@ -28,7 +28,7 @@ class StreetView(commands.Cog):
 		("Bangladesh",250000),
 		("Bhutan",20000),
 		("Bolivia",500000),
-		("Bosnia and Herzegovina",20000)
+		("Bosnia and Herzegovina",20000),
 		("Botswana",100000),
 		("Brazil",4000000),
 		("Bulgaria",200000),
