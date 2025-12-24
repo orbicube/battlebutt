@@ -28,6 +28,7 @@ class StreetView(commands.Cog):
 		("Bangladesh",250000),
 		("Bhutan",20000),
 		("Bolivia",500000),
+		("Bosnia and Herzegovina",20000)
 		("Botswana",100000),
 		("Brazil",4000000),
 		("Bulgaria",200000),
@@ -35,8 +36,10 @@ class StreetView(commands.Cog):
 		("Canada",2000000),
 		("Chile",500000),
 		("Colombia",500000),
+		("Costa Rica",100000)
 		("Croatia",100000),
 		("Curaçao",1000),
+		("Cyprus",50000)
 		("Czech Republic",250000),
 		("Denmark",50000),
 		("Dominican Republic",10000),
@@ -80,16 +83,19 @@ class StreetView(commands.Cog):
 		("Malta",2000),
 		("Martinique",500),
 		("Mexico",1500000),
-		("Monaco",50),
-		("Mongolia",100000),
+		("Monaco",100),
+		("Mongolia",200000),
 		("Montenegro",15000),
-		("Netherlands",75000),
+		("Nepal", 100000)
+		("Netherlands",100000),
 		("New Zealand",250000),
+		("Namibia",200000)
 		("Nigeria",500000),
 		("North Macedonia",20000),
 		("Norway",400000),
 		("Oman",50000),
 		("Panama",50000),
+		("Paraguay",500000),
 		("Peru",1000000),
 		("Philippines",300000),
 		("Pitcairn Islands",100),
@@ -122,6 +128,7 @@ class StreetView(commands.Cog):
 		("United Kingdom",250000),
 		("United States",8000000),
 		("Uruguay",80000),
+		("Vietnam", 500000)
 	]
 	gmaps_regions = {
 		"Canada": [
