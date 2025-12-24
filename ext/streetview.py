@@ -39,7 +39,7 @@ class StreetView(commands.Cog):
 		("Costa Rica",100000)
 		("Croatia",100000),
 		("Curaçao",1000),
-		("Cyprus",50000)
+		("Cyprus",50000),
 		("Czech Republic",250000),
 		("Denmark",50000),
 		("Dominican Republic",10000),
