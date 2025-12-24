@@ -86,10 +86,10 @@ class StreetView(commands.Cog):
 		("Monaco",100),
 		("Mongolia",200000),
 		("Montenegro",15000),
-		("Nepal", 100000)
+		("Namibia",200000),
+		("Nepal", 100000),
 		("Netherlands",100000),
 		("New Zealand",250000),
-		("Namibia",200000),
 		("Nigeria",500000),
 		("North Macedonia",20000),
 		("Norway",400000),
