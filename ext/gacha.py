@@ -1603,89 +1603,99 @@ class Gacha(commands.Cog,
     async def pathtonowhere(self, ctx, reason: Optional[str] = None):
         await ctx.defer()
         
-        url = f"https://s1n.gg"
+        url = f"https://pathtonowhere.wiki.gg/"
 
         with open("ext/data/ptn.json") as f:
             j = json.load(f)
         last_up = datetime.utcfromtimestamp(j["updated"])
-        chars = j["chars"]
+        characters = j["characters"]
 
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 2:
-            r = await self.bot.http_client.get(url)
-            page = html.fromstring(r.text)
-            js_url = page.xpath("//script[@type='module']/@src")[0]
+            params = {
+                "action": "query",
+                "list": "categorymembers",
+                "cmtitle": "Category:Sinner Attires",
+                "cmlimit": "500",
+                "format": "json"
+            }
 
-            r = await self.bot.http_client.get(f"{url}{js_url}")
-            apikey = re.findall(r'base.co",\w+="([^"]+)"', r.text)[0]
-            char_list = re.findall(r'{id:"(\w+)",name:"([^"]+)",imgAv', r.text)
+            finished = False
+            characters = []
+            while not finished:
+                r = await self.bot.http_client.get(f"{url}api.php", 
+                    params=params, headers=self.headers)
+                results = r.json()
 
-            chars = {}
-            for char in char_list:
-                chars[char[1]] = {"id": char[0], "outfits": []}
+                if "continue" in results:
+                    params["cmcontinue"] = results["continue"]["cmcontinue"]
+                else:
+                    finished = True
 
-            at_url = f"https://qcropwcwnvrflrzlsucj.supabase.co/rest/v1/attires"
-            r = await self.bot.http_client.get(at_url,
-                params={"select": "img,name,sinner"},
-                headers={"apikey": apikey})
-
-            for outfit in r.json():
-                if "!Chief" not in outfit["sinner"]:
-                    outfit["sinner"] = outfit["sinner"].replace("Zero", "000")
-                    try:
-                        chars[outfit["sinner"]]["outfits"].append({
-                            "title": outfit["name"],
-                            "url": outfit["img"]})
-                    except KeyError:
-                        pass
+                for c in results["query"]["categorymembers"]:
+                    if c["ns"] != 8:
+                        characters.append(c["title"])
 
             data = {
                 "updated": int(datetime.utcnow().timestamp()),
-                "chars": chars
+                "characters": characters
             }
-            with open("ext/data/ptn.json", "w") as f:
-                json.dump(data, f)
-                
-        char = choice(list(chars.keys()))
+            with open("ext/data/ptn.json", "w", encoding="utf-8") as f:
+                json.dump(data, f)                
 
-        r = await self.bot.http_client.get(f"{url}/data/sinners/{chars[char]['id']}.json")
-        char_data = r.json()
+        char = choice(characters)
+        char_name = char.rsplit("/", 1)[0]
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"ptn {char}")
 
-        char_outfits = chars[char]["outfits"]
-        char_outfits.append({
-            "title": "",
-            "url": char_data["imgBase"]})
-        char_outfits.append({
-            "title": "",
-            "url": char_data["imgPhaseup"]})
+        params = {
+            "action": "parse",
+            "page": char,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
 
-        variant = choice(char_outfits)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"ptn <{variant['url']}>")
-
-        embed = discord.Embed(
-            title=char,
-            description=variant["title"],
-            color=0xa21f23)
-
-        headers = self.headers
-        headers["Accept"] = "*/*"
-        r = await self.bot.http_client.get(variant["url"], headers=headers)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"{r.status_code} {r.text[:1900]}")
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{chars[char]['id']}.png")
-
-        embed.set_image(url=f"attachment://{chars[char]['id']}.png")
-        embed.set_footer(text="Path to Nowhere")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'path to nowhere'} {reason}:", embed=embed, file=file)
+        default_imgs = page.xpath("//tr/td/a[@class='image']")
+        skin_imgs = page.xpath("//aside/figure[@data-source='Image']/a")
+        all_imgs = default_imgs + skin_imgs
+        if not all_imgs:
+            await self.bot.get_channel(DEBUG_CHANNEL).send(f"no imgs")
+            await self.pathtonowhere(ctx, reason)
         else:
-            await ctx.send(embed=embed, file=file)
+            selected_img = choice(all_imgs)
+            img_url = selected_img.xpath("./@href")[0].replace("/File:", "/Special:FilePath/")
+
+            if "Skin" not in img_url:
+                title = ""
+            else:
+                if "Skin1" in img_url:
+                    title = "Phase Up"
+                else:
+                    title = selected_img.xpath("../preceding-sibling::h2/text()")[0]
+
+            embed = discord.Embed(
+                title=char_name,
+                description=title,
+                color=0xa21f23)
+
+            r = await self.bot.http_client.get(f"{url}{img_url}",
+                headers=self.headers, follow_redirects=True)
+
+            char_img = Image.open(BytesIO(r.content))
+            char_img = char_img.crop(char_img.getbbox())
+
+            with BytesIO() as img_binary:
+                char_img.save(img_binary, 'PNG')
+                img_binary.seek(0)
+                file = discord.File(fp=img_binary, filename=f"ptn.png")
+
+            embed.set_image(url=f"attachment://ptn.png")
+            embed.set_footer(text="Path to Nowhere")
+
+            if reason and ctx.interaction:
+                await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'path to nowhere'} {reason}:", embed=embed, file=file)
+            else:
+                await ctx.send(embed=embed, file=file)
 
 
     @commands.command(aliases=['p5x'])
