@@ -1631,9 +1631,12 @@ class Gacha(commands.Cog,
             for outfit in r.json():
                 if "!Chief" not in outfit["sinner"]:
                     outfit["sinner"] = outfit["sinner"].replace("Zero", "000")
-                    chars[outfit["sinner"]]["outfits"].append({
-                        "title": outfit["name"],
-                        "url": outfit["img"]})
+                    try:
+                        chars[outfit["sinner"]]["outfits"].append({
+                            "title": outfit["name"],
+                            "url": outfit["img"]})
+                    except KeyError:
+                        pass
 
             data = {
                 "updated": int(datetime.utcnow().timestamp()),

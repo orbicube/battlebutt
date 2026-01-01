@@ -88,7 +88,7 @@ class Card(commands.Cog,
         card = r.json()["data"][0]
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'pokemon'} {reason}: [⠀]({card['card_images'][0]['image_url']})")
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'yugioh'} {reason}: [⠀]({card['card_images'][0]['image_url']})")
         else:
             await ctx.send(card['card_images'][0]['image_url'])
 

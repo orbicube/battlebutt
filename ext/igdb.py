@@ -106,7 +106,6 @@ class IGDB(commands.Cog):
                 file = discord.File(fp=img_binary, filename="playing.webp")
 
             embed.set_image(url="attachment://playing.webp")
-            await self.bot.get_channel(DEBUG_CHANNEL).send(embed.image.url)
 
         inherit_plats = False
         # Highlight that it's a mod and highlight game if not obvious
