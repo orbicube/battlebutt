@@ -1669,7 +1669,7 @@ class Gacha(commands.Cog,
         headers = self.headers
         headers["Accept"] = "*/*"
         r = await self.bot.http_client.get(variant["url"], headers=headers)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"{r.status_code}{r.content[:1950]}")
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"{r.status_code} {r.content[:1900]}")
 
         char_img = Image.open(BytesIO(r.content))
         char_img = char_img.crop(char_img.getbbox())
