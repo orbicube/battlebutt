@@ -529,6 +529,8 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, headers=headers)
         page = html.fromstring(r.text)
 
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.text[:1800]}")
+
         # 15 cards per page
         card_count = page.xpath("//span[@class='num bold']/text()")[0]
         card_count = int(card_count)
