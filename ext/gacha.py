@@ -2445,5 +2445,60 @@ class Gacha(commands.Cog,
             await ctx.send(embed=embed, file=file)
 
 
+    @commands.command()
+    async def endfield(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
+        url = "https://endfield.wiki.gg/"
+
+        params = {
+            "action": "parse",
+            "page": "Operator/List",
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        char = choice(page.xpath("//div[@class='ranger-list']/div/div[2]/a/@title"))
+
+        params["page"] = char
+        r = await self.bot.http_client.get(f"{url}api.php",
+            params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        char_base = choice(page.xpath("//img[@class='character-image']"))
+        try:
+            char_title = char_base.xpath("./../../@data-druid-tab-key")[0]
+        except:
+            char_title = ""
+
+        embed = discord.Embed(
+            title=char,
+            description=char_title,
+            color=0xfff100)
+
+        img_url = char_base.xpath("./../@href")[0].replace("/File:", "/Special:FilePath/")
+        r = await self.bot.http_client.get(
+            f"{url}{img_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img_url)
+
+        embed.set_image(
+            url=f"attachment://{img_url}")
+        embed.set_footer(text="Arknights: Endfield")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'endfield'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+     
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
