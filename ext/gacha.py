@@ -2500,5 +2500,70 @@ class Gacha(commands.Cog,
      
 
 
+    @commands.command(aliases=['pgr'])
+    async def punishinggrayraven(self, ctx, reason: Optional[str] = None):
+        await ctx.defer()
+        url = "https://grayravens.com"
+
+        params = {
+            "action": "parse",
+            "page": "Characters",
+            "format": "json"
+        }
+
+        r = await self.bot.http_client.get(f"{url}/w/api.php", params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        char_name = choice(page.xpath("//table/tbody/tr/td[1]/small/a/text()"))
+
+        params["page"] = f"{char_name}/Gallery"
+        r = await self.bot.http_client.get(f"{url}/w/api.php", params=params, headers=self.headers)
+        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        temp_skins = page.xpath("//section/article/figure[@typeof='mw:File']")
+        skins = []
+        for skin in temp_skins:
+            if not "Generic_-_" in skin.xpath("./../@id")[0]:
+                skins.append(skin)
+
+        skin = choice(skins)
+        if "Generic" in skin.xpath("./../@id")[0]:
+            skin = choice(page.xpath("//div[@class='column-left']/center/div/section/article/figure[@typeof='mw:File']"))
+
+        skin_name = skin.xpath("./../@id")[0][7:].replace("_", " ")
+        if "Generic" in skin_name:
+            if skin_name == "Generic":
+                skin_name = ""
+            else:
+                skin_name = skin_name.split(" - ")[1]
+
+        embed = discord.Embed(
+            title=char_name,
+            description=skin_name,
+            color=0x870328)
+
+        img_url = skin.xpath("./a/@href")[0].replace("/File:", "/Special:FilePath/")
+
+        r = await self.bot.http_client.get(
+            f"{url}{img_url}", follow_redirects=True)
+
+        char_img = Image.open(BytesIO(r.content))
+        char_img = char_img.crop(char_img.getbbox())
+
+        with BytesIO() as img_binary:
+            char_img.save(img_binary, 'PNG')
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=img_url)
+
+        embed.set_image(
+            url=f"attachment://{img_url}")
+        embed.set_footer(text="Punishing Gray Raven")
+
+        if reason and ctx.interaction:
+            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'punishing gray raven'} {reason}:", embed=embed, file=file)
+        else:
+            await ctx.send(embed=embed, file=file)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
