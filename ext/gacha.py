@@ -57,7 +57,7 @@ class Gacha(commands.Cog,
                 f"{selected_comm.name}")
             
             if ctx.interaction:
-                ctx.interaction.extras["rando"] = True
+                ctx.interaction.extras["random"] = True
 
         await selected_comm.__call__(ctx)
 
