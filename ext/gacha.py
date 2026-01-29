@@ -17,6 +17,8 @@ from lxml import html
 from zipfile import ZipFile
 import os
 
+import asyncio
+
 from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY, ERROR_CHANNEL
 
 class Gacha(commands.Cog,
@@ -29,23 +31,35 @@ class Gacha(commands.Cog,
 
     def __init__(self, bot):
         self.bot = bot
+        self.file_regex = re.compile(
+            r'[^\/\\&\?]+\.\w{2,4}(?=(?:[\?&\/].*$|$))')
 
     @commands.hybrid_command()
     @app_commands.describe(game="Gacha you want to pull a character from")
     async def gacha(self, ctx, game: Optional[str] = None, reason: Optional[str] = None):
         """ Pulls a character from a gacha game """
 
-        commands = self.get_commands()
+        commands = [c for c in self.get_commands() if "gacha" not in c.name]
+
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
+
         if ctx.interaction:
-            ctx.interaction.extras = {"rando": False}
+            ctx.interaction.extras = {"random": False}
+
+            if reason:
+                ctx.interaction.extras["reason"] = reason
+
         if not selected_comm:
             selected_comm = choice(commands)
-            await self.bot.get_channel(DEBUG_CHANNEL).send(f"{selected_comm.name}")
+
+            await self.bot.get_channel(DEBUG_CHANNEL).send(
+                f"{selected_comm.name}")
+            
             if ctx.interaction:
                 ctx.interaction.extras["rando"] = True
-        await selected_comm.__call__(ctx, reason)
+
+        await selected_comm.__call__(ctx)
 
 
     @gacha.autocomplete('game')
@@ -59,11 +73,188 @@ class Gacha(commands.Cog,
         if not current:
             completes = sample(completes, len(completes))
 
-        return completes[:25] 
+        return completes[:25]
+
+
+    @commands.command(hidden=True)
+    @commands.is_owner()
+    async def gacha_test(self, ctx, start_from: Optional[str] = None):
+
+        commands = self.get_commands()
+        for c in commands:
+            if "gacha" not in c.name:
+                await ctx.send(f"Calling {c.name}:")
+                await c.__call__(ctx)
+
+                await asyncio.sleep(2)
+
+
+    async def post(self, ctx: commands.Context, img: discord.File|str,
+        game_name: str, color: int, char_name: str, description: str = None,
+        game_short: str = None, author: str = None):
+
+        embed = discord.Embed(
+            title=char_name,
+            description=description,
+            color=color)
+
+        if author:
+            embed.set_author(name=author)
+
+        embed.set_footer(text=game_name)
+
+        msg = ""
+        try:
+            reason = ctx.interaction.extras["reason"]
+
+            if ctx.interaction.extras["random"]:
+                game_short = "gacha"
+            elif not game_short:
+                game_short = game_name.lower()
+
+            msg = f"{game_short} {reason}:"
+        except:
+            pass
+
+        if isinstance(img, str):
+            embed.set_image(url=img)
+            await ctx.send(msg, embed=embed)
+        else:
+            embed.set_image(url=img.uri)
+            await ctx.send(msg, embed=embed, file=img)
+
+
+    async def url_to_file(self, url: str, filename: str = None, 
+        headers: dict = None, resize: float = 0, resample: bool = False):
+
+        if not filename:
+            filename = self.file_regex.findall(url)[1]
+
+        if not headers:
+            headers = self.headers
+
+        r = await self.bot.http_client.get(url=url, headers=headers,
+            follow_redirects=True)
+
+        if 'application/json' in r.headers.get('Content-Type', ''):
+            img = Image.open(BytesIO(b64decode(r.json()["content"])))
+        else:
+            img = Image.open(BytesIO(r.content))
+        img_format = img.format
+
+        img = img.crop(img.getbbox())
+
+        if resize > 0.0:
+            img = img.resize(
+                (img.width*resize, img.height*resize),
+                resample=resample)
+
+        with BytesIO() as img_binary:
+            img.save(img_binary, img_format)
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=filename)
+
+        return file
+
+
+    async def get_github(self, repo: str, tree: str):
+
+        url = f"https://api.github.com/repos/{repo}/git/trees/{tree}"
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+
+        r = await self.bot.http_client.get(url, headers=headers)
+        char = choice(r.json()["tree"])
+
+        file = await self.url_to_file(url=char["url"],
+            filename=char["path"], headers=headers)
+
+        return file, char["path"]
+
+
+    async def get_imageinfo(self, url, filename,
+        reize=0.0, resample=False):
+        params = {
+            "action": "query",
+            "prop": "imageinfo",
+            "titles": f"File:{filename}",
+            "format": "json",
+            "iiprop": "url"
+        }
+
+        r = await self.bot.http_client.get(url=url,
+            params=params, headers=self.headers)
+
+        results = list(r.json()["query"]["pages"].values())
+        img = results[0]["imageinfo"][0]["url"]
+
+        return await self.url_to_file(img)
+
+
+    async def mediawiki_parse(self, url, page):
+
+        params = {
+            "action": "parse",
+            "page": page,
+            "format": "json"
+        }
+        r = await self.bot.http_client.get(url, params=params,
+            headers=self.headers, timeout=15)
+
+        page = html.fromstring(
+            r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        return page
+
+
+    async def mediawiki_category(self, url: str, category: str, 
+        bad_pages: list = [], vignette: bool = False):
+        
+        params = {
+            "action": "query",
+            "format": "json"
+        }
+        if vignette:
+            params["generator"] = "categorymembers"
+            params["prop"] = "vignetteimages"
+            params["gcmtitle"] = category
+            params["gcmnamespace"] = 0
+            params["gcmlimit"] = "500"
+            cont_key = "gcmcontinue"
+        else:
+            params["list"] = "categorymembers"
+            params["cmtitle"] = category
+            params["cmlimit"] = "500"
+            cont_key = "cmcontinue"
+
+        finished = False
+        article_list = []
+        while not finished:
+            r = await self.bot.http_client.get(url, 
+                params=params, headers=self.headers,
+                follow_redirects=True)
+            results = r.json()
+
+            if "continue" in results:
+                params[cont_key] = results["continue"][cont_key]
+            else:
+                finished = True
+
+            if vignette:
+                for page in results["query"]["pages"].values():
+                    if page["pageid"] not in bad_pages:
+                        if "pageimage" in page:
+                            article_list.append(page)
+            else:
+                for article in results["query"]["categorymembers"]:
+                    if article["pageid"] not in bad_pages:
+                        if article["ns"] == 0:
+                            article_list.append(article)
+
+        return article_list
 
 
     @commands.command(aliases=['gbf'], hidden=True)
-    async def granblue(self, ctx, reason: Optional[str] = None):
+    async def granblue(self, ctx):
         await ctx.defer()
 
         with open("ext/data/gbf.json") as f:
@@ -126,186 +317,92 @@ class Gacha(commands.Cog,
         char = choice(characters)
         img = choice(char['arts'])
 
-        r = await self.bot.http_client.get(
-            f"https://gbf.wiki/Special:FilePath/{img}",
-            follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.url_to_file(
+            f"https://gbf.wiki/Special:FilePath/{img}")
 
-        img_path = str(r.url).rsplit('/', 1)[1]
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{img_path}")
-
-        embed = discord.Embed(
-            title=char['name'],
-            description=char['title'],
-            color=0x1ca6ff
-        )
-        embed.set_image(
-            url=f"attachment://{img_path}")
-        embed.set_footer(text="Granblue Fantasy")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'granblue'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Granblue Fantasy", 0x1ca6ff,
+            char["name"], char["title"], "granblue")
 
 
     @commands.command(aliases=['feh'])
-    async def fireemblem(self, ctx, reason: Optional[str] = None):    
+    async def fireemblem(self, ctx):    
         await ctx.defer()
+        url = f"https://feheroes.fandom.com/api.php"
 
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Heroes",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        url = "https://feheroes.fandom.com/api.php"
+        characters = await self.mediawiki_category(url,
+            "Category:Heroes")
+        char = choice(characters)["title"]
 
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"feh {char}")
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
+        page = await self.mediawiki_parse(url, char)
 
-            for article in results["query"]["categorymembers"]:
-                if article["ns"] == 0:
-                    article_list.append(article["title"])
+        img = choice(page.xpath(
+            "//div[@class='fehwiki-tabber']/span/a[1]/@href"))
 
-        selected_article = choice(article_list)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"feh {selected_article}")
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers, timeout=15)
+        file = await self.url_to_file(img)
 
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
-        img = choice(page.xpath("//div[@class='fehwiki-tabber']/span/a[1]/img/@data-image-key"))
-
-        r = await self.bot.http_client.get(
-            f"https://feheroes.fandom.com/wiki/Special:FilePath/{img}",
-            follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'WEBP')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img)
-
-        embed = discord.Embed(
-            title=selected_article.split(":")[0],
-            description=selected_article.split(": ")[1],
-            color=0xc3561f)
-        embed.set_image(url=f"attachment://{img}")
-        embed.set_footer(text="Fire Emblem Heroes")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fire emblem'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Fire Emblem Heroes", 0xc3561f,
+            char.split(":")[0], char.split(": ")[1])
 
 
     @commands.command(aliases=['wotv'])
-    async def warofthevisions(self, ctx, reason: Optional[str] = None):
-
+    async def warofthevisions(self, ctx):
+        await ctx.defer()
         url = "https://wotv-calc.com/api/gl/units?forBuilder=1"
+
         headers = self.headers
         headers["Referer"] = "https://wotv-calc.com/builder/unit"
-
         r = await self.bot.http_client.get(url, headers=headers)
-        character = choice(r.json())
 
-        embed = discord.Embed(
-            title=character["names"]["en"],
-            color=0x2c4584)
-        embed.set_image(
-            url=f"https://wotv-calc.com/assets/units/{character['image']}.webp")
-        embed.set_footer(text="War of the Visions: Final Fantasy Brave Exvius")
+        char = choice(r.json())
+        img = f"https://wotv-calc.com/assets/units/{char['image']}.webp"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'war of the visions'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, img,
+            "War of the Visions: Final Fantasy Brave Exvius",
+            0x2c4584, char["names"]["en"], game_short="war of the visions")
 
 
     @commands.command()
-    async def arknights(self, ctx, reason: Optional[str] = None):
+    async def arknights(self, ctx):
+        await ctx.defer()
+        base_url = "https://raw.githubusercontent.com/Aceship"
 
-        url = "https://raw.githubusercontent.com/Aceship/AN-EN-Tags/refs/heads/master/json/gamedata/en_US/gamedata/excel/skin_table.json"
+        url = (f"{base_url}/AN-EN-Tags/refs/heads/master/json/gamedata/"
+            f"en_US/gamedata/excel/skin_table.json")
         r = await self.bot.http_client.get(url)
 
         skins = r.json()["charSkins"]
-        selected_skin = choice([skin for skin in skins.keys() if "char_" in skin])
+        selected_skin = choice(
+            [skin for skin in skins.keys() if "char_" in skin])
         skin_file = skins[selected_skin]['portraitId'].replace('#','%23')
 
-        embed = discord.Embed(
-            title=skins[selected_skin]["displaySkin"]["modelName"],
-            color=0xfcda16)
-        embed.set_image(url=f"https://raw.githubusercontent.com/Aceship/Arknight-Images/refs/heads/main/characters/{skin_file}.png")
-        embed.set_footer(text="Arknights")
+        img_url = (f"{base_url}/Arknight-Images/refs/heads/main/"
+            f"characters/{skin_file}.png")
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'arknights'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, img_url, "Arknights", 0xfcda16,
+            skins[selected_skin]["displaySkin"]["modelName"])
 
 
     @commands.command()
-    async def dragalialost(self, ctx, reason: Optional[str] = None):
+    async def dragalialost(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/draglost/git/trees/"
+        file, char_path = await self.get_github("orbicube/draglost",
             "fd97dddadcc4347e5b98dd9e747f6a6bc9b430cd")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name, title = char["path"][:-4].split("#")
+        name, title = char_path[:-4].split("#")
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="dragalialost.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            colour=0x3e91f1)
-        embed.set_image(url="attachment://dragalialost.png")
-        embed.set_footer(text="Dragalia Lost")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'dragalia lost'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Dragalia Lost", 0x3e91f1, name, title)
 
 
     @commands.command(aliases=['mkt'])
-    async def mariokarttour(self, ctx, reason: Optional[str] = None):
+    async def mariokarttour(self, ctx):
         await ctx.defer()
-
         url = "https://www.mariowiki.com/api.php"
-        params = {
-            "action": "parse",
-            "page": "Gallery:Mario_Kart_Tour_sprites_and_models",
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url, params=params)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        page = await self.mediawiki_parse(url,
+            "Gallery:Mario_Kart_Tour_sprites_and_models")
 
         characters = page.xpath(
             "//span[@id='In-game_portraits']/../following-sibling::ul[1]/li")
@@ -317,258 +414,111 @@ class Gacha(commands.Cog,
             name, title = name.rsplit(" (", 1)
             title = title[:-1] 
 
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            color=0xe60012)
+        img = character.xpath(".//a[@class='image']/img/@src")[0].rsplit(
+            "/", 1)[0].replace('/thumb', '')
 
-        img = character.xpath(".//a[@class='image']/img/@src")[0].rsplit("/", 1)[0].replace('/thumb', '')
-        embed.set_image(url=img)
-
-        embed.set_footer(text="Mario Kart Tour")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'mario kart tour'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, img, "Mario Kart Tour", 0xe60012, name, title)
 
 
     @commands.command()
-    async def fortnite(self, ctx, reason: Optional[str] = None):
+    async def fortnite(self, ctx):
         await ctx.defer()
-
-        url = "https://fortnite.fandom.com/api.php"
+        url = f"https://fortnite.fandom.com/api.php"
 
         with open("ext/data/fortnite.json", encoding="utf-8") as f:
             j = json.load(f)
         last_up = datetime.utcfromtimestamp(j["updated"])
         characters = j["characters"]
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
-            params = {
-                "action": "query",
-                "list": "categorymembers",
-                "cmtitle": "Category:Outfits",
-                "cmlimit": "500",
-                "format": "json"
-            }
-            finished = False
-            article_list = []
-            while not finished:
-                r = await self.bot.http_client.get(url, 
-                    params=params, headers=self.headers)
-                results = r.json()
+            
+            characters = await self.mediawiki_category(url,
+                "Category:Outfits")
 
-                if "continue" in results:
-                    params["cmcontinue"] = results["continue"]["cmcontinue"]
-                else:
-                    finished = True
-
-                for article in results["query"]["categorymembers"]:
-                    if article["pageid"] not in j["bad_pages"] and article["ns"] == 0:
-                        article_list.append(
-                            {"pageid": article["pageid"],
-                            "title": article["title"]})
-
-            j["characters"] = article_list
+            j["characters"] = characters
             j["updated"] = int(datetime.utcnow().timestamp())
             with open("ext/data/fortnite.json", "w") as f:
                 json.dump(j, f)
 
         char = choice(characters)
 
-        params = {
-            "action": "parse",
-            "page": char["title"],
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char["title"])
+
         images = page.xpath("//aside//img[@class='pi-image-thumbnail']")
 
         featured = []
         for image in images:
-            img_url = image.xpath("./@data-image-key")[0]
-            if "Featured)" in img_url:
+            img_url = image.xpath("../@href")[0]
+            if "%28Featured%29" in img_url:
                 featured.append(img_url)
 
         if not featured:
-            await self.bot.get_channel(ERROR_CHANNEL).send(
-                f"No featured image found, potentially bad page: {char['title']} (ID: {char['pageid']})")
-            await testnite(ctx, reason)
-
-        img = choice(featured)
-
-        r = await self.bot.http_client.get(
-            f"https://fortnite.fandom.com/wiki/Special:FilePath/{img}",
-            follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img)
+            raise ValueError((
+                "No featured image found, potentially bad page: "
+                f"{char['title']} (ID: {char['pageid']})"))
 
         if " (Outfit)" in char["title"]:
             char["title"] = char["title"][:-9]
 
-        embed = discord.Embed(
-            title=char["title"],
-            color=0xad2fea)
-        embed.set_image(url=f"attachment://{img}")
-        embed.set_footer(text="Fortnite")
+        img = choice(featured)
+        file = await self.url_to_file(img)
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fortnite'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Fortnite", 0xad2fea, char["title"])
 
 
     @commands.command(aliases=['fgo'])
-    async def fategrandorder(self, ctx, reason: Optional[str] = None):
+    async def fategrandorder(self, ctx):
         await ctx.defer()
+        url = f"https://fategrandorder.fandom.com/api.php"
 
-        url = "https://fategrandorder.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Servant",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
+        bad_pages = [24917, 64670, 383442, 111081, 579165, 623674, 603920,
+            602461, 658001, 123993, 34471, 34468, 631866, 6665513, 78799,
+            509030, 663419, 635637, 671627, 635810, 640684, 565396, 602786,
+            410778, 124402, 253574, 666612, 603989, 670436, 547889, 410804,
+            78805, 8077, 674121, 292832, 576046, 26980, 74218, 633911, 
+            585580, 650647, 34469, 644422, 34470]
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
+        chars = await self.mediawiki_category(url, 
+            "Category:Servant", bad_pages=bad_pages)
+        char = choice(chars)["title"]
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"fgo {char}")
 
-            bad_pages = [24917, 64670, 383442, 111081, 579165, 623674, 603920,
-                602461, 658001, 123993, 34471, 34468, 631866, 6665513, 78799,
-                509030, 663419, 635637, 671627, 635810, 640684, 565396, 602786,
-                410778, 124402, 253574, 666612, 603989, 670436, 547889, 410804,
-                78805, 8077, 674121, 292832, 576046, 26980, 74218, 633911, 
-                585580, 650647, 34469, 644422, 34470]
-            for article in results["query"]["categorymembers"]:
-                if article["pageid"] not in bad_pages:
-                    article_list.append(article)
+        page = await self.mediawiki_parse(url=url, page=char)
 
-        selected_article = choice(article_list)["title"]
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"fgo {selected_article}")
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        images = page.xpath(("//div[@class='pi-image-collection wds-tabber']"
+            "/div[@class='wds-tab__content']/figure/a/@href"))
+        img = choice([i for i in images if 'Sprite' not in i])
 
-        images = page.xpath("//div[@class='pi-image-collection wds-tabber']/div[@class='wds-tab__content']/figure/a/img/@data-image-key")
-        img_url = choice([i for i in images if 'Sprite' not in i])
+        file = await self.url_to_file(img)
 
-        embed = discord.Embed(
-            title=selected_article,
-            color=0xece9d6)
-
-        r = await self.bot.http_client.get(
-            f"https://fategrandorder.fandom.com/wiki/Special:FilePath/{img_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="fategrandorder.png")
-
-        embed.set_image(
-            url=f"attachment://fategrandorder.png")
-        embed.set_footer(text="Fate/Grand Order")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'fate/grand order'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Fate/Grand Order", 0xece9d6, char)
 
 
     @commands.command(aliases=['nier'])
-    async def nierreincarnation(self, ctx, reason: Optional[str] = None):
+    async def nierreincarnation(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/nierrein/git/trees/"
+        file, char_path = await self.get_github("orbicube/nierrein",
             "a5010db7dc892bf89feda0bb305e3f9bc5538858")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name, title = char["path"][:-4].split("#")
+        name, title = char_path[:-4].split("#")
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="nierreincarnation.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            colour=0x3b70c7)
-        embed.set_image(url="attachment://nierreincarnation.png")
-        embed.set_footer(text="NieR Re[in]carnation")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nier reincarnation'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "NieR Re[in]carnation", 0x3b70c7,
+            name, title)
 
 
     @commands.command(aliases=['r1999'])
-    async def reverse1999(self, ctx, reason: Optional[str] = None):
+    async def reverse1999(self, ctx):
         await ctx.defer()
+        url = f"https://reverse1999.fandom.com/api.php"
 
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Garments",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        url = "https://reverse1999.fandom.com/api.php"
-
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
-
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            for c in results["query"]["categorymembers"]:
-                if c["ns"] == 0:
-                    article_list.append(c["title"])
+        characters = await self.mediawiki_category(url,
+            "Category:Garments")
 
         valid_article = False
         while not valid_article:
-            selected_article = choice(article_list)
-            params = {
-                "action": "parse",
-                "page": selected_article,
-                "format": "json"
-            }
-            r = await self.bot.http_client.get(url,
-                params=params, headers=self.headers, timeout=15)
-
-            page = html.fromstring(
-                r.json()["parse"]["text"]["*"].replace('\"','"'))
+            article = choice(characters)["title"]
+            
+            page = await self.mediawiki_parse(url, article)
             
             try:
                 unreleased_test = page.xpath(
@@ -582,89 +532,51 @@ class Gacha(commands.Cog,
 
         name = skin.xpath(".//div/div/div[2]/text()")[0]
         title = skin.xpath(".//div/div/p/text()")[0][2:]
-        img = skin.xpath(".//figure/a/img/@data-image-key")[0]
+        if "Default" in title:
+            title = ""
+
+        img = skin.xpath(".//figure/a/@href")[0]
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"r1999 {img}")
 
-        r = await self.bot.http_client.get(
-            f"https://reverse1999.fandom.com/wiki/Special:FilePath/{img}",
-            follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.url_to_file(img)
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img)
-
-        embed = discord.Embed(
-            title=name,
-            color=0x53443c)
-        if "Default" not in title:
-            embed.description = title
-        embed.set_image(url=f"attachment://{img}")
-        embed.set_footer(text="Reverse: 1999")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'reverse1999'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Reverse: 1999", 0x53443c, name, title,
+            "reverse 1999")
 
 
     #@commands.command(aliases=['atelier'])
-    async def atelieresleriana(self, ctx, reason: Optional[str] = None):
+    async def atelieresleriana(self, ctx):
         await ctx.defer()
 
         # JSON Updated March 29, 2025
         with open("ext/data/atelier.json") as f:
             char = choice(json.load(f))
 
-        embed = discord.Embed(
-            title=char["name"],
-            description=char["title"],
-            color=0x845b51)
-        embed.set_image(
-            url=f"https://barrelwisdom.com/media/games/resleri/characters/full/{char['slug']}.webp")
-        embed.set_footer(
-            text="Atelier Reseleriana")
+        img = ("https://barrelwisdom.com/media/games/resleri/characters/"
+            f"full/{char['slug']}.webp")
+        game_name = ("Atelier Resleriana: Forgotten Alchemy "
+        "and the Polar Night Liberator")
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'atelier'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, img, game_name, 0x845b51, char["name"],
+            char["title"], "atelier reseleriana")
 
 
     @commands.command()
-    async def sinoalice(self, ctx, reason: Optional[str] = None):
+    async def sinoalice(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/sinoalice/git/trees/"
+        file, char_path = await self.get_github("orbicube/sinoalice",
             "1b0c543065d69fa45d4cebcd539ff900e2517020")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name, title = char["path"][:-4].split("#")
+        name, title = char_path[:-4].split("#")
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="sinoalice.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            colour=0xfafafa)
-        embed.set_image(url="attachment://sinoalice.png")
-        embed.set_footer(text="SINoALICE")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'sinoalice'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "SINoALICE", 0xfafafa, name, title)
 
 
     @commands.command(aliases=['touhou'])
-    async def touhoulostword(self, ctx, reason: Optional[str] = None):
+    async def touhoulostword(self, ctx):
         await ctx.defer()
+        base_url = "https://lostwordchronicle.com"
 
         with open("ext/data/touhou.json") as f:
             j = json.load(f)
@@ -672,7 +584,7 @@ class Gacha(commands.Cog,
         characters = j["characters"]
         if (datetime.utcnow() - last_up) / timedelta(weeks=2) > 1:
             r = await self.bot.http_client.get(
-                "https://lostwordchronicle.com/characters/ajax")
+                f"{base_url}/characters/ajax")
             results = r.json()["data"]
 
             characters = []
@@ -693,74 +605,47 @@ class Gacha(commands.Cog,
         char = choice(characters)
 
         r = await self.bot.http_client.get(
-            f"https://lostwordchronicle.com/lorepedia/characters/{char['id']}")
+            f"{base_url}/lorepedia/characters/{char['id']}")
         page = html.fromstring(r.text)
 
         costumes = page.xpath("//div[@id='character-costume']/div/img/@src")
         picked_costume = randint(0, len(costumes)-1)
 
-        costume_title = page.xpath(
-            f"//div[@id='costume-information']/p[@id='costume-title-{picked_costume}']/text()")[0]
+        costume_title = page.xpath(("//div[@id='costume-information']"
+            f"/p[@id='costume-title-{picked_costume}']/text()"))[0]
 
-        embed = discord.Embed(
-            title=char["name"],
-            description=costume_title,
-            color=0xef5a68)
-        embed.set_image(
-            url=f"https://lostwordchronicle.com{costumes[picked_costume]}")
-        embed.set_footer(
-            text="Touhou LostWord")
+        img_url = f"{base_url}{costumes[picked_costume]}"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'touhou'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, img_url, "Touhou LostWord", 0xef5a68,
+            char["name"], costume_title)
 
 
     @commands.command()
-    async def worldflipper(self, ctx, reason: Optional[str] = None):
+    async def worldflipper(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/worldflip/git/trees/"
+        file, char_path = await self.get_github("orbicube/worldflip",
             "da2abbedf7207fa36707017fe5ad841edd5556ca")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name, title = char["path"][:-4].split("#")
+        name, title = char_path[:-4].split("#")
+
         if "_" in title:
             title = title.replace("_", ":")
         if "!" in title:
             title = title[:-1]
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="worldflipper.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            colour=0xb2d8ee)
-        embed.set_image(url="attachment://worldflipper.png")
-        embed.set_footer(text="World Flipper")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'World Flipper'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "World Flipper", 0xb2d8ee, name, title)
 
 
     @commands.command(aliases=['kof'])
-    async def kofallstar(self, ctx, reason: Optional[str] = None):
+    async def kofallstar(self, ctx):
         await ctx.defer()
-   
-        url = ("https://api.github.com/repos/orbicube/kofchars/git/trees/"
-            "dad49f27c6cc4a766cfbb96c077bac925c146ee1")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name, game = char["path"][:-4].split("#")
+        file, char_path = await self.get_github("orbicube/kofchars",
+            "dad49f27c6cc4a766cfbb96c077bac925c146ee1")
+
+        name, game = char_path[:-4].split("#")
+
         if game[0] == "'" or game[0] == "2" or game[0] == "X":
             game = f"The King of Fighters {game}"
         else:
@@ -775,95 +660,47 @@ class Gacha(commands.Cog,
             }
             game = game_map[game]
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="kofas.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=game,
-            colour=0xfc9a4c)
-        embed.set_image(url="attachment://kofas.png")
-        embed.set_footer(text="The King of Fighters ALLSTAR")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'kof'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "The King of Fighters ALLSTAR", 0xfc9a4c,
+            name, game, "kof")
 
 
     @commands.command(aliases=['404gamereset', '404'])
-    async def errorgamereset(self, ctx, reason: Optional[str] = None):
+    async def errorgamereset(self, ctx):
         await ctx.defer()
-
-        url = ("https://api.github.com/repos/orbicube/404chars/git/trees/"
+        
+        file, char_path = await self.get_github("orbicube/404chars",
             "58b9eb8f0c5e4ea34ec74b103d458458e788482e")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
         try:
-            name, type = char["path"][:-4].split("#")
+            name, type = char_path[:-4].split("#")
         except:
-            name = char["path"][:-4]
+            name = char_path[:-4]
             type = ""
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="404gamereset.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=type,
-            colour=0x7f7f80)
-        embed.set_image(url="attachment://404gamereset.png")
-        embed.set_footer(text="404 GAME RE:SET")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else '404 game reset'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "404 GAME RE:SET", 0x7f7f80,
+            name, type, "404 game reset")
 
 
     @commands.command()
-    async def bravefrontier(self, ctx, reason: Optional[str] = None):
+    async def bravefrontier(self, ctx):
         await ctx.defer()
+        url = "https://bravefrontierglobal.fandom.com/api.php"
 
         with open("ext/data/bfunits.txt", encoding="utf-8") as f:
             title = choice([line.rstrip() for line in f])
 
-        url = "https://bravefrontierglobal.fandom.com/api.php"
-        params = {
-            "action": "parse",
-            "page": title,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, title)
 
-        img = page.xpath(
-            "//div[@class='tabber wds-tabber']/div/div/center/span/a/@href")[0]
+        img = page.xpath(("//div[@class='tabber wds-tabber']/div/div/center"
+            "/span/a/@href"))[0]
 
-        embed = discord.Embed(
-            title=title,
-            colour=0xbfb135)
-        embed.set_image(url=img)
-        embed.set_footer(text="Brave Frontier")
+        file = await self.url_to_file(img)
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'brave frontier'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, file, "Brave Frontier", 0xbfb135, title)
 
 
     @commands.command()
-    async def langrisser(self, ctx, reason: Optional[str] = None):
+    async def langrisser(self, ctx):
         await ctx.defer()
         
         url = "https://wiki.biligame.com/langrisser/api.php"
@@ -873,29 +710,9 @@ class Gacha(commands.Cog,
         last_up = datetime.utcfromtimestamp(j["updated"])
         characters = j["characters"]
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
-            params = {
-                "action": "query",
-                "list": "categorymembers",
-                "cmtitle": "分类:英雄",
-                "cmlimit": "500",
-                "format": "json"
-            }
-
-            finished = False
-            characters = []
-            while not finished:
-                r = await self.bot.http_client.get(url, 
-                    params=params, headers=self.headers, timeout=15)
-                results = r.json()
-
-                if "continue" in results:
-                    params["cmcontinue"] = results["continue"]["cmcontinue"]
-                else:
-                    finished = True
-
-                for c in results["query"]["categorymembers"]:
-                    if c["ns"] != 8:
-                        characters.append(c["title"])
+            
+            characters = await self.mediawiki_category(url,
+                category="分类:英雄")
 
             data = {
                 "updated": int(datetime.utcnow().timestamp()),
@@ -904,271 +721,110 @@ class Gacha(commands.Cog,
             with open("ext/data/langrisser.json", "w", encoding="utf-8") as f:
                 json.dump(data, f)                
 
-        selected_article = choice(characters)
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers, timeout=15)
+        char = choice(characters)["title"]
 
-        page = html.fromstring(
-            r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char)        
 
         name = page.xpath("//div[@class='HeroInfo_Name_EN']/text()")[0]
         skin = choice(
             page.xpath("//div[@class='HeroInfo_Skin_Img']/img/@src"))
         skin = skin.rsplit("/", 1)[0].replace("/thumb", "")
 
-        r = await self.bot.http_client.get(skin, headers=self.headers, timeout=15)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.url_to_file(skin)
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="langrisser.png")
-
-        embed = discord.Embed(
-            title=name,
-            color=0xde181d)
-        embed.set_image(url="attachment://langrisser.png")
-        embed.set_footer(text="Langrisser")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'langrisser'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Langrisser", 0xde181d, name)
 
 
     @commands.command()
-    async def cookierun(self, ctx, reason: Optional[str] = None):
+    async def cookierun(self, ctx):
         await ctx.defer()
 
         url = "https://cookierunkingdom.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Playable_Cookies",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
+        
+        chars = await self.mediawiki_category(url,
+            "Category:Playable_Cookies")
+        char = choice(chars)["title"]
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
+        page = await self.mediawiki_parse(url, char)
 
-            article_list.extend(results["query"]["categorymembers"])
+        img = page.xpath(("//div[@class='pi-image-collection wds-tabber']"
+            "/div/figure/a/@href"))[0]
 
-        selected_article = choice(article_list)["title"]
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        file = await self.url_to_file(img)
 
-        img = page.xpath("//div[@class='pi-image-collection wds-tabber']/div/figure/a/@href")[0]
-
-        embed = discord.Embed(
-            title=selected_article,
-            color=0xc0ab76)
-        embed.set_image(url=img)
-        embed.set_footer(text="Cookie Run: Kingdom")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'cookie run'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
-
+        await self.post(ctx, file, "Cookie Run: Kingdom", 0xc0ab76,
+            char.replace(' Cookie', ''), game_short="cookie run")
 
     @commands.command(aliases=['mmxd'])
-    async def megamanxdive(self, ctx, reason: Optional[str] = None):
+    async def megamanxdive(self, ctx):
         await ctx.defer()
 
         url = "https://rockman-x-dive.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Characters/Playable",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
+        
+        chars = await self.mediawiki_category(url,
+            "Category:Characters/Playable")
+        char = choice(chars)["title"]
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            article_list.extend(results["query"]["categorymembers"])
-
-        selected_article = choice(article_list)["title"]
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
-
+        page = await self.mediawiki_parse(url, char)
         img = page.xpath("//figure[@class='pi-item pi-image']/a/@href")[0]
 
-        embed = discord.Embed(
-            title=selected_article,
-            color=0x1a7acb)
-        embed.set_image(url=img)
-        embed.set_footer(text="Mega Man X DiVE")
+        file = await self.url_to_file(img)
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'mega man x dive'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, file, "Mega Man X DiVE", 0x1a7acb, char)
 
 
     @commands.command(aliases=['saga'])
-    async def romancingsaga(self, ctx, reason: Optional[str] = None):
+    async def romancingsaga(self, ctx):
         await ctx.defer()
 
         with open("ext/data/romancingsaga.json") as f:
             char = choice(json.load(f))
 
-        embed = discord.Embed(
-            title=char["name"],
-            description=char["title"],
-            color=0x8f0000)
+        img = ("https://rsrs.xyz/assets/gl/texture/style/"
+            "{char['id']}/style_{char['id']}.png")
 
-        r = await self.bot.http_client.get(
-            f"https://rsrs.xyz/assets/gl/texture/style/{char['id']}/style_{char['id']}.png")
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="romancingsaga.png")
-
-        embed.set_image(url="attachment://romancingsaga.png")
-        embed.set_footer(text="Romancing SaGa re;univerSe")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'romancing saga re;universe'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, img, "Romancing SaGa re;univerSe", 0x8f0000,
+            char["name"], char["title"])
 
 
     @commands.command(aliases=['ffbe', 'exvius'])
-    async def braveexvius(self, ctx, reason: Optional[str] = None):
+    async def braveexvius(self, ctx):
         await ctx.defer()
 
         url = "https://exvius.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Units",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
+        
+        chars = await self.mediawiki_category(url,
+            "Category:Units")
+        char = choice(chars)["title"]
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"ffbe {char}")
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            article_list.extend(results["query"]["categorymembers"])
-
-        selected_article = choice(article_list)["title"]
-
-        await self.bot.get_channel(DEBUG_CHANNEL).send(
-            f"ffbe {selected_article}")
-
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
-
+        page = await self.mediawiki_parse(url, char)
+        
         variant = choice(page.xpath("//table[@class='wikitable unit ibox']"))
         name = variant.xpath(".//tr[1]/th/text()")[0]
-        img_url = variant.xpath(".//tr[2]/td/span/span/img/@data-image-key")[0]
+        img = variant.xpath(".//tr[2]/td/span/span/img/@src")[0]
 
-        r = await self.bot.http_client.get(
-            f"https://exvius.fandom.com/wiki/Special:FilePath/{img_url}",
-            follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-        char_img = char_img.resize(
-            (char_img.width*3, char_img.height*3),
-            resample=0)
+        file = await self.url_to_file(img, resize=3.0)
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="braveexvius.png")
-
-        embed = discord.Embed(
-            title=name,
-            color=0x9adafe)
-        embed.set_image(url="attachment://braveexvius.png")
-        embed.set_footer(text="Final Fantasy Brave Exvius")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'brave exvius'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Final Fantasy Brave Exvius", 0x9adafe,
+            name, "brave exvius")
 
 
     @commands.command(aliases=['bbdw'])
-    async def blazblue(self, ctx, reason: Optional[str] = None):
+    async def blazblue(self, ctx):
         await ctx.defer()
 
         with open("ext/data/bbdw.json", encoding="utf-8") as f:
             char = choice(json.load(f))
 
-        embed = discord.Embed(
-            title=char["name"],
-            color=0x4986c1)
+        file = await self.url_to_file(choice(char["art"]))
 
-        if char["title"]:
-            embed.description = char["title"]
-
-        embed.set_image(url=choice(char["art"]))
-        embed.set_footer(text="BlazBlue Alternative: Dark War")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'blazblue dark war'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, file, "BlazBlue Alternative: Dark War", 0x4986c1,
+            char["name"], char["title"], "blazblue dark war")
 
 
     @commands.command()
-    async def umamusume(self, ctx, reason: Optional[str] = None):
+    async def umamusume(self, ctx):
         await ctx.defer()
 
         url = "https://umapyoi.net/api/v1/character"
@@ -1178,135 +834,60 @@ class Gacha(commands.Cog,
         r = await self.bot.http_client.get(f"{url}/images/{char['id']}")
         outfit = choice([o for o in r.json() if o["label_en"] == "Racewear"])
 
-        r = await self.bot.http_client.get(outfit["images"][0]["image"])
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.url_to_file(outfit["images"][0]["image"])
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="umamusume.png")
-
-        embed = discord.Embed(
-            title = char["name_en"],
-            color=0xd88da4)
-        embed.set_image(url="attachment://umamusume.png")
-        embed.set_footer(text="Umamusume: Pretty Derby")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'umamusume'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Umamusume: Pretty Derby", 0xd88da4,
+            char["name_en"], game_short = "umamusume")
 
 
     @commands.command()
-    async def afkarena(self, ctx, reason: Optional[str] = None):
+    async def afkarena(self, ctx):
         await ctx.defer()
 
         url = "https://afkarena.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "generator": "categorymembers",
-            "prop": "vignetteimages",
-            "gcmtitle": "Category:Heroes",
-            "gcmnamespace": 0,
-            "gcmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        char_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
 
-            if "continue" in results:
-                params["gcmcontinue"] = results["continue"]["gcmcontinue"]
-            else:
-                finished = True
-
-            bad_pages = [85, 341, 966, 1971, 5566, 5568]
-            for article in results["query"]["pages"].values():
-                if article["pageid"] not in bad_pages and "pageimage" in article:
-                    char_list.append(article)
-
+        bad_pages = [85, 341, 966, 1126, 1971, 3278, 3284, 3297, 5566, 5568]
+        char_list = await self.mediawiki_category(url,
+            "Category:Heroes", bad_pages, vignette=True)
         char = choice(char_list)
 
-        embed = discord.Embed(
-            color=0xd5a749)
+        file = await self.get_imageinfo(url, char['pageimage'])
+
+        title = ""
         if " - " in char["title"]:
             name, title = char["title"].split(" - ")
-            embed.description = title
         else:
             name = char["title"]
-        embed.title = name
 
-        r = await self.bot.http_client.get(
-            f"https://afkarena.fandom.com/wiki/Special:FilePath/{char['pageimage']}",
-            follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{char['pageimage']}")
-
-        embed.set_image(
-            url=f"attachment://{char['pageimage']}")
-        embed.set_footer(text="AFK Arena")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'afk arena'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "AFK Arena", 0xd5a749, name, title)
 
 
     @commands.command(aliases=['octopath', 'cotc'])
-    async def octopathtraveler(self, ctx, reason: Optional[str] = None):
+    async def octopathtraveler(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/octopath/git/trees/"
+        file, char_path = await self.get_github("orbicube/octopath",
             "45fbdaeba65431cf1d82266138c662d9ebc2221b")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name = char["path"][:-4]
+        name = char_path[:-4]
         title = ""
         if " EX" in name:
             title = "EX"
             name = name[:-3]
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        img = b64decode(r.json()["content"])
-        file = discord.File(fp=BytesIO(img), filename="octopath.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            colour=0xcabf9e)
-        embed.set_image(url="attachment://octopath.png")
-        embed.set_footer(text="Octopath Traveler: Champions of the Continent")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'octopath'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
- 
+        await self.post(ctx, file,
+            "Octopath Traveler: Champions of the Continent",
+            0xcabf9e, name, title, "octopath")
 
     @commands.command()
-    async def bravelydefault(self, ctx, reason: Optional[str] = None):
+    async def bravelydefault(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/bravelydefault/git/trees/"
+        file, char_path = await self.get_github("orbicube/bravelydefault",
             "5352a20a1f42bd3e80573201163ea212b65f8ebc")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
 
-        char = choice(r.json()["tree"])
-        name, title = char["path"][:-4].split("#")
+        name, title = char_path[:-4].split("#")
+
         try:
             title_map = {"1star": "★", "3star": "★★★", "5star": "★★★★★"}
             name += f" {title_map[title]}"
@@ -1314,135 +895,54 @@ class Gacha(commands.Cog,
         except:
             pass
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="bravelydefault.png")
-
-        embed = discord.Embed(
-            title = name,
-            description=title,
-            color=0xb0c0b3)
-        embed.set_image(url="attachment://bravelydefault.png")
-        embed.set_footer(text="Bravely Default: Brilliant Lights")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'bravely default'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Bravely Default: Brilliant Lights",
+            0xb0c0b3, name, title, "bravely default")
 
 
     @commands.command()
-    async def echoesofmana(self, ctx, reason: Optional[str] = None):
+    async def echoesofmana(self, ctx):
         await ctx.defer()
 
-        url = ("https://api.github.com/repos/orbicube/echoesofmana/git/trees/"
+        file, char_path = await self.get_github("orbicube/echoesofmana",
             "2a0b478efb52e81d9a6c490a448430e94676869c")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
-        char = choice(r.json()["tree"])
 
-        name, title = char["path"][:-4].split("#")
+        name, title = char_path[:-4].split("#")
         if title == "Base":
             title = ""
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"echoesofmana.png")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            colour=0xa6bbad)
-        embed.set_image(url="attachment://echoesofmana.png")
-        embed.set_footer(text="Echoes of Mana")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'Echoes of Mana'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Echoes of Mana", 0xa6bbad, name, title)
 
 
     @commands.command(aliases=['soa'])
-    async def starocean(self, ctx, reason: Optional[str] = None):
+    async def starocean(self, ctx):
         await ctx.defer()
+        url = "https://starocean.fandom.com/api.php"
 
         with open("ext/data/starocean.json") as f:
             char = choice(json.load(f))
         variant = choice(char["variants"])
 
-        embed = discord.Embed(
-            title=char["name"],
-            description=variant["title"],
-            color=0x127799)
+        file = await self.get_imageinfo(url, variant["img"])
 
-        r = await self.bot.http_client.get(f"https://starocean.fandom.com/wiki/Special:FilePath/{variant['img']}", follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(
-                fp=img_binary,
-                filename=variant['img'])
-
-        embed.set_image(url=f"attachment://{variant['img']}")
-        embed.set_footer(text="Star Ocean: Anamnesis")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'star ocean'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Star Ocean: Anamnesis",
+            0x127799, char["name"], variant["title"], "star ocean")
 
 
     @commands.command()
-    async def nikke(self, ctx, reason: Optional[str] = None):
+    async def nikke(self, ctx):
         await ctx.defer()
-
-        url = "https://nikke-goddess-of-victory-international.fandom.com/"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Playable_characters",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(f"{url}api.php", 
-                params=params, headers=self.headers)
-            results = r.json()
-
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            article_list.extend(results["query"]["categorymembers"])
-
-        char = choice(article_list)["title"]
+        url = ("https://nikke-goddess-of-victory-international"
+            ".fandom.com/api.php")
+        
+        chars = await self.mediawiki_category(url,
+            "Category:Playable_characters")
+        char = choice(characters)["title"]
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"nikke {char}")
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
 
-        titles = page.xpath("//div[@class='pi-image-collection wds-tabber']/div/ul/li/span/text()")
+        page = await self.mediawiki_parse(url, char)
+
+        titles = page.xpath(("//div[@class='pi-image-collection wds-tabber']"
+            "/div/ul/li/span/text()"))
         if titles:
             selected = randint(0, len(titles)-1)
         else:
@@ -1455,155 +955,80 @@ class Gacha(commands.Cog,
         elif selected > 0:
             title = titles[selected]
 
-        img = page.xpath("//figure[@class='pi-item pi-image']/a/img/@data-image-key")[selected].replace('MI.p', 'FB.p').replace(' ', '_')
-        r = await self.bot.http_client.get(url=f"{url}wiki/Special:FilePath/{img}", follow_redirects=True)
+        img = page.xpath(
+            "//figure[@class='pi-item pi-image']/a/@href")[selected].replace(
+            'MI.png/', 'FB.png/')
+        file = await self.url_to_file(img)
 
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{img}")
-
-        embed = discord.Embed(
-            title=char,
-            description=title,
-            color=0xb4b3bb)
-        embed.set_image(url=f"attachment://{img}")
-        embed.set_footer(text="Goddess of Victory: Nikke")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'nikke'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Goddess of Victory: Nikke",
+            0xb4b3bb, char, title, "nikke")
 
 
     @commands.command(aliases=['msa'])
-    async def metalslug(self, ctx, reason: Optional[str] = None):
-        
-        url = ("https://api.github.com/repos/orbicube/msa/git/trees/"
+    async def metalslug(self, ctx):
+  
+        file, char_path = await self.get_github("orbicube/msa",
             "3dca6069518ed7ba82bc9e85e2547063689ba155")
-        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
-        r = await self.bot.http_client.get(url, headers=headers)
 
-        char = choice(r.json()["tree"])
         try:
-            name, title = char["path"][:-4].split("#")
+            name, title = char_path[:-4].split("#")
         except:
-            name = char["path"][:-4]
+            name = char_path[:-4]
             title = ""
 
-        r = await self.bot.http_client.get(char["url"], headers=headers)
-        char_img = Image.open(BytesIO(b64decode(r.json()["content"])))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="metalslug.png")
-
-        embed = discord.Embed(
-            title = name,
-            description=title,
-            color=0xde8a39)
-        embed.set_image(url="attachment://metalslug.png")
-        embed.set_footer(text="Metal Slug Attack")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'metal slug'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Metal Slug Attack", 0xde8a39,
+            name, title, "metal slug")
 
 
     @commands.command()
-    async def anothereden(self, ctx, reason: Optional[str] = None):
+    async def anothereden(self, ctx):
         await ctx.defer()
 
-        url = "https://anothereden.wiki"
-        params = {
-            "action": "parse",
-            "page": "Collection_Tracker",
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}/api.php", params=params)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        url = "https://anothereden.wiki/api.php"
+            
+        page = await self.mediawiki_parse(url, "Collection_Tracker")
 
-        char = choice(page.xpath("//div[@class='tracker-item tracker-character']"))
-        name = char.xpath(".//@data-name")[0]
+        char = choice(page.xpath(
+            "//div[@class='tracker-item tracker-character']"))
+        name = char.xpath("./@data-name")[0]
         if " (" in name:
             name, title = name.split(" (")
             title = title[:-1]
         else:
             title = ""
         img = char.xpath(".//a/img/@src")[0][13:-9].replace("command", "base")
-        r = await self.bot.http_client.get(
-            f"https://anothereden.wiki/w/Special:FilePath/{img}",
-            follow_redirects=True)
+        
+        file = await self.get_imageinfo(url, img)
 
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{img}")
-
-        embed = discord.Embed(
-            title=name,
-            description=title,
-            color=0x5e76af)
-        embed.set_image(
-            url=f"attachment://{img}")
-        embed.set_footer(text="Another Eden")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'another eden'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Another Eden", 0x5e76af, name, title)
 
 
     @commands.command()
-    async def terrabattle(self, ctx, reason: Optional[str] = None):
+    async def terrabattle(self, ctx):
+        await ctx.defer()
+        url = "https://terrabattle.fandom.com/api.php"
 
         with open("ext/data/terrabattle.json") as f:
             chars = json.load(f)
             char = choice(list(chars.keys()))
         variant = choice(chars[char])
 
-        embed = discord.Embed(
-            title=char,
-            description=variant["title"],
-            color=0x648ba5)
-
-        url = "https://terrabattle.fandom.com"
+        game_name = "Terra Battle"
         if "Guardian_" in variant['img']:
             url = url.replace("e.f", "e2.f")
-        url = f"{url}/wiki/Special:FilePath/{variant['img']}"
-        r = await self.bot.http_client.get(url=url, follow_redirects=True)
+            game_name = "Terra Battle 2"
 
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.get_imageinfo(url, variant['img'])
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{variant['img']}")
-        embed.set_image(url=f"attachment://{variant['img']}")
-
-        embed.set_footer(text=f"Terra Battle{' 2' if '2' in url else ' '}")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'terra battle'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, game_name, 0x648ba5, char, variant["title"])
 
 
     @commands.command(aliases=['ptn'])
-    async def pathtonowhere(self, ctx, reason: Optional[str] = None):
+    async def pathtonowhere(self, ctx):
         await ctx.defer()
         
-        url = f"https://pathtonowhere.wiki.gg/"
+        base_url = "https://pathtonowhere.wiki.gg"
+        url = f"{base_url}/api.php"
 
         with open("ext/data/ptn.json") as f:
             j = json.load(f)
@@ -1611,29 +1036,9 @@ class Gacha(commands.Cog,
         characters = j["characters"]
 
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 2:
-            params = {
-                "action": "query",
-                "list": "categorymembers",
-                "cmtitle": "Category:Sinner Attires",
-                "cmlimit": "500",
-                "format": "json"
-            }
-
-            finished = False
-            characters = []
-            while not finished:
-                r = await self.bot.http_client.get(f"{url}api.php", 
-                    params=params, headers=self.headers)
-                results = r.json()
-
-                if "continue" in results:
-                    params["cmcontinue"] = results["continue"]["cmcontinue"]
-                else:
-                    finished = True
-
-                for c in results["query"]["categorymembers"]:
-                    if c["ns"] != 8:
-                        characters.append(c["title"])
+            
+            characters = await self.mediawiki_category(url,
+                "Category:Sinner Attires")
 
             data = {
                 "updated": int(datetime.utcnow().timestamp()),
@@ -1642,18 +1047,11 @@ class Gacha(commands.Cog,
             with open("ext/data/ptn.json", "w", encoding="utf-8") as f:
                 json.dump(data, f)                
 
-        char = choice(characters)
+        char = choice(characters)["title"]
         char_name = char.rsplit("/", 1)[0]
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"ptn {char}")
 
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char)
 
         default_imgs = page.xpath("//tr/td/a[@class='image']")
         skin_imgs = page.xpath("//aside/figure[@data-source='Image']/a")
@@ -1663,43 +1061,27 @@ class Gacha(commands.Cog,
             await self.pathtonowhere(ctx, reason)
         else:
             selected_img = choice(all_imgs)
-            img_url = selected_img.xpath("./@href")[0].replace("/File:", "/Special:FilePath/")
+            img = selected_img.xpath("./@href")[0].rsplit("/File:", 1)[1]
+            
+            await ctx.send(img)
 
-            if "Skin" not in img_url:
+            file = await self.url_to_file(f"{base_url}/images/{img}")
+
+            if "Skin" not in img:
                 title = ""
             else:
-                if "Skin1" in img_url:
+                if "Skin1" in img:
                     title = "Phase Up"
                 else:
-                    title = selected_img.xpath("../preceding-sibling::h2/text()")[0]
+                    title = selected_img.xpath(
+                        "../preceding-sibling::h2/text()")[0]
 
-            embed = discord.Embed(
-                title=char_name,
-                description=title,
-                color=0xa21f23)
-
-            r = await self.bot.http_client.get(f"{url}{img_url}",
-                headers=self.headers, follow_redirects=True)
-
-            char_img = Image.open(BytesIO(r.content))
-            char_img = char_img.crop(char_img.getbbox())
-
-            with BytesIO() as img_binary:
-                char_img.save(img_binary, 'PNG')
-                img_binary.seek(0)
-                file = discord.File(fp=img_binary, filename=f"ptn.png")
-
-            embed.set_image(url=f"attachment://ptn.png")
-            embed.set_footer(text="Path to Nowhere")
-
-            if reason and ctx.interaction:
-                await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'path to nowhere'} {reason}:", embed=embed, file=file)
-            else:
-                await ctx.send(embed=embed, file=file)
+            await self.post(ctx, file, "Path to Nowhere",
+                0xa21f23, char_name, title)
 
 
     @commands.command(aliases=['p5x'])
-    async def persona5x(self, ctx, reason: Optional[str] = None):
+    async def persona5x(self, ctx):
         await ctx.defer()
 
         url = "https://lufel.net/"
@@ -1711,7 +1093,8 @@ class Gacha(commands.Cog,
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 3:
             r = await self.bot.http_client.get(
                 f"{url}data/kr/characters/characters.js")
-            temp_dict = r.text.split("characterData = ")[1].split("},", 1)[1][:-2]
+            temp_dict = r.text.split("characterData = ")[1].split(
+                "},", 1)[1][:-3]
             temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
             temp_dict = temp_dict.replace(',\n        },', '\n        },')
             temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
@@ -1741,349 +1124,125 @@ class Gacha(commands.Cog,
 
         char = choice(characters)
 
-        embed = discord.Embed(
-            title=char["name"],
-            description= char["title"],
-            color=0xf30002)
+        file = await self.url_to_file(
+            f"{url}assets/img/character-detail/{char['key']}.webp",
+            filename=f"{char['name']}.webp")
 
-        r = await self.bot.http_client.get(
-            f"{url}assets/img/character-detail/{char['key']}.webp")
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(
-                fp=img_binary,
-                filename=f"{char['name'].replace(' ', '')}.png")
-
-        embed.set_image(url=f"attachment://{char['name'].replace(' ', '')}.png")
-        embed.set_footer(text="Persona 5: The Phantom X")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'persona 5 x'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Persona 5: The Phantom X",
+            0xf30002, char["name"], char["title"], game_short="persona 5 x")
 
 
     @commands.command(aliases=['genshin'])
-    async def genshinimpact(self, ctx, reason: Optional[str] = None):
+    async def genshinimpact(self, ctx):
         await ctx.defer()
 
-        url = "https://genshin-impact.fandom.com"
-        params = {
-            "action": "parse",
-            "page": "Wish/Gallery",
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}/api.php", params=params)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        url = "https://genshin-impact.fandom.com/api.php"
 
-        char = choice(
-            page.xpath("//div[@id='gallery-3']/div[@class='wikia-gallery-item']"))
+        page = await self.mediawiki_parse(url, "Wish/Gallery")
 
-        char_name = char.xpath(".//div[@class='lightbox-caption']/a/text()")[0]
-        img_url = char.xpath(".//div[@class='thumb']/div/a/@href")[0].replace("/File:", "/Special:FilePath/")
+        char = choice(page.xpath(("//div[@id='gallery-3']"
+            "/div[@class='wikia-gallery-item']")))
 
-        embed = discord.Embed(
-            title=char_name,
-            color=0xa4ec93)
+        char_name = char.xpath(
+            ".//div[@class='lightbox-caption']/a/text()")[0]
+        img = char.xpath(
+            ".//div[@class='thumb']/div/a/img/@data-image-key")[0]
 
-        r = await self.bot.http_client.get(f"{url}{img_url}", follow_redirects=True)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.get_imageinfo(url, img)
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(
-                fp=img_binary,
-                filename=img_url.split("Path/")[1])
-
-        embed.set_image(url=f"attachment://{img_url.split('Path/')[1]}")
-        embed.set_footer(text="Genshin Impact")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'genshin impact'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Genshin Impact", 0xa4ec93, char_name)
 
 
     @commands.command(aliases=['hsr'])
-    async def honkaistarrail(self, ctx, reason: Optional[str] = None):
+    async def honkaistarrail(self, ctx):
         await ctx.defer()
-
         url = "https://honkai-star-rail.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "generator": "categorymembers",
-            "prop": "vignetteimages",
-            "gcmtitle": "Category:Playable_Characters",
-            "gcmnamespace": 0,
-            "gcmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        char_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
 
-            if "continue" in results:
-                params["gcmcontinue"] = results["continue"]["gcmcontinue"]
-            else:
-                finished = True
-
-            bad_pages = []
-            for article in results["query"]["pages"].values():
-                if article["pageid"] not in bad_pages and "pageimage" in article:
-                    char_list.append(article)
+        char_list = await self.mediawiki_category(url,
+            "Category:Playable_Characters", vignette=True)
 
         char = choice(char_list)
 
-        embed = discord.Embed(
-            title=char["title"],
-            color=0x648fb8)
+        file = await self.get_imageinfo(url, char['pageimage'])
 
-        r = await self.bot.http_client.get(
-            f"https://honkai-star-rail.fandom.com/wiki/Special:FilePath/{char['pageimage']}",
-            follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{char['pageimage']}")
-
-        embed.set_image(
-            url=f"attachment://{char['pageimage']}")
-        embed.set_footer(text="Honkai Star Rail")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'honkai star rail'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Honkai Star Rail", 0x648fb8, char["title"])
 
 
     @commands.command(aliases=['zzz'])
-    async def zenlesszonezero(self, ctx, reason: Optional[str] = None):
+    async def zenlesszonezero(self, ctx):
         await ctx.defer()
-
         url = "https://zenless-zone-zero.fandom.com/api.php"
-        params = {
-            "action": "query",
-            "generator": "categorymembers",
-            "prop": "vignetteimages",
-            "gcmtitle": "Category:Playable_Agents",
-            "gcmnamespace": 0,
-            "gcmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        char_list = []
-        while not finished:
-            r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers)
-            results = r.json()
-
-            if "continue" in results:
-                params["gcmcontinue"] = results["continue"]["gcmcontinue"]
-            else:
-                finished = True
-
-            bad_pages = []
-            for article in results["query"]["pages"].values():
-                if article["pageid"] not in bad_pages and "pageimage" in article:
-                    char_list.append(article)
+        
+        char_list = await self.mediawiki_category(url,
+            "Category:Playable_Agents", vignette=True)
 
         char = choice(char_list)
 
-        embed = discord.Embed(
-            title=char["title"],
-            color=0xb9d600)
+        file = await self.get_imageinfo(url, char['pageimage'])
 
-        r = await self.bot.http_client.get(
-            f"https://zenless-zone-zero.fandom.com/wiki/Special:FilePath/{char['pageimage']}",
-            follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=f"{char['pageimage']}")
-
-        embed.set_image(
-            url=f"attachment://{char['pageimage']}")
-        embed.set_footer(text="Zenless Zone Zero")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'zenless zone zero'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Honkai Star Rail", 0xb9d600, char["title"])
 
 
     @commands.command()
-    async def dislyte(self, ctx, reason: Optional[str] = None):
+    async def dislyte(self, ctx):
         await ctx.defer()
+        url = "https://dislyte.fandom.com/api.php"
 
-        url = "https://dislyte.fandom.com/"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Esper_galleries",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(f"{url}api.php", 
-                params=params, headers=self.headers)
-            results = r.json()
+        char_list = await self.mediawiki_category(url,
+            "Category:Esper_galleries")
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            article_list.extend(results["query"]["categorymembers"])
-
-        char = choice(article_list)["title"]
+        char = choice(char_list)["title"]
         char_name, char_deity = char.split(")/")[0].split(" (")
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+
+        page = await self.mediawiki_parse(url, char)
+
         skin = choice(page.xpath(
             "//div/table[@class='dis-atable']"))
         skin_name = skin.xpath("//tbody/tr[1]/th/text()")[0]
+        if "Default" in skin_name:
+            skin_name = ""
 
-        embed = discord.Embed(
-            title=char_name,
-            color=0xadebe3)
-        embed.set_author(name=char_deity)
-        if "Default" not in skin_name:
-            embed.description = skin_name
+        img = skin.xpath(
+            "//tbody/tr[2]/td/figure/a/@href")[0]
+        file = await self.url_to_file(img)
 
-        char_url = skin.xpath(
-            "//tbody/tr[2]/td/figure/a/img/@data-image-key")[0]
-        r = await self.bot.http_client.get(
-            f"{url}wiki/Special:FilePath/{char_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=char_url)
-
-        embed.set_image(
-            url=f"attachment://{char_url}")
-        embed.set_footer(text="Dislyte")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'dislyte'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Dislyte", 0xadebe3,
+            char_name, skin_name, author=char_deity)
 
 
     @commands.command(aliases=['ff7ec'])
-    async def evercrisis(self, ctx, reason: Optional[str] = None):
+    async def evercrisis(self, ctx):
         await ctx.defer()
+        url = "https://finalfantasy.fandom.com/api.php"
 
-        url = "https://finalfantasy.fandom.com/"
-        params = {
-            "action": "parse",
-            "page": "Final Fantasy VII Ever Crisis gear",
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url,
+            "Final Fantasy VII Ever Crisis gear")
 
         skin = choice(page.xpath("//img[not(@alt='Userbox ff7-barret')]"))
-        char_url = skin.xpath("./@data-image-key")[0]
         char_name = skin.xpath(
             "./ancestor::table/preceding::h3[1]/span/a/text()")[0]
         char_title = skin.xpath("./ancestor::tr/td[2]/span/text()")[0]
 
-        embed = discord.Embed(
-            title=char_name,
-            description=char_title,
-            color=0xe9d7b5)
+        img = skin.xpath("../@href")[0]
+        file = await self.url_to_file(img)
 
-        r = await self.bot.http_client.get(
-            f"{url}wiki/Special:FilePath/{char_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=char_url)
-
-        embed.set_image(
-            url=f"attachment://{char_url}")
-        embed.set_footer(text="Final Fantasy VII Ever Crisis")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'ever crisis'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
-
+        await self.post(ctx, file, "Final Fantasy VII Ever Crisis", 0xe9d7b5,
+            char_name, char_title, "ever crisis")
 
 
     @commands.command()
-    async def foodfantasy(self, ctx, reason: Optional[str] = None):
+    async def foodfantasy(self, ctx):
         await ctx.defer()
+        url = "https://food-fantasy.fandom.com/api.php"
 
-        url = "https://food-fantasy.fandom.com/"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Food_Souls",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(f"{url}api.php", 
-                params=params, headers=self.headers)
-            results = r.json()
+        bad_pages = [4585, 1752, 29713, 143]
+        char_list = await self.mediawiki_category(url,
+            "Category:Food_Souls")
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
+        char = choice(char_list)["title"]
 
-            bad_pages = [4585, 1752, 29713, 143]
+        page = await self.mediawiki_parse(url, char)
 
-            for article in results["query"]["categorymembers"]:
-                if article["ns"] == 0 and article["pageid"] not in bad_pages:
-                    article_list.append(article)
-
-        char = choice(article_list)["title"]
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
         sections = page.xpath("//aside/section[1]/div")
 
         skin_count = len(sections) - 1
@@ -2101,36 +1260,16 @@ class Gacha(commands.Cog,
 
             char = char.split(" (")[0]
 
-        embed = discord.Embed(
-            title=char,
-            description=skin_name,
-            color=0xf6be41)
+        img = sections[selected_skin].xpath(
+            "./div[1]/div/span/a/@href")[0]
 
-        char_url = sections[selected_skin].xpath(
-            "./div[1]/div/span/a/img/@data-image-key")[0].replace("jpg", "png")
-        r = await self.bot.http_client.get(
-            f"{url}wiki/Special:FilePath/{char_url}", follow_redirects=True)
+        file = await self.url_to_file(img)
 
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=char_url)
-
-        embed.set_image(
-            url=f"attachment://{char_url}")
-        embed.set_footer(text="Food Fantasy")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'food fantasy'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Food Fantasy", 0xf6be41, char, skin_name)
 
 
     @commands.command()
-    async def resonancesolstice(self, ctx, reason: Optional[str] = None):
+    async def resonancesolstice(self, ctx):
         await ctx.defer()
 
         url = "https://wiki.biligame.com/resonance/api.php"
@@ -2140,29 +1279,9 @@ class Gacha(commands.Cog,
         last_up = datetime.utcfromtimestamp(j["updated"])
         characters = j["characters"]
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
-            params = {
-                "action": "query",
-                "list": "categorymembers",
-                "cmtitle": "分类:乘员",
-                "cmlimit": "500",
-                "format": "json"
-            }
-
-            finished = False
-            characters = []
-            while not finished:
-                r = await self.bot.http_client.get(url, 
-                    params=params, headers=self.headers, timeout=15)
-                results = r.json()
-
-                if "continue" in results:
-                    params["cmcontinue"] = results["continue"]["cmcontinue"]
-                else:
-                    finished = True
-
-                for c in results["query"]["categorymembers"]:
-                    if c["ns"] != 8:
-                        characters.append(c["title"])
+            
+            characters = await self.mediawiki_category(url,
+                category="分类:乘员")
 
             data = {
                 "updated": int(datetime.utcnow().timestamp()),
@@ -2171,354 +1290,147 @@ class Gacha(commands.Cog,
             with open("ext/data/resosol.json", "w", encoding="utf-8") as f:
                 json.dump(data, f)                
 
-        selected_article = choice(characters)
-        params = {
-            "action": "parse",
-            "page": selected_article,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(url,
-            params=params, headers=self.headers, timeout=15)
-        page = html.fromstring(
-            r.json()["parse"]["text"]["*"].replace('\"','"'))
+        char = choice(characters)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+        
         info = page.xpath("//div[@class='resp-tab-content'][1]/div")[0]
+        char_name = info.xpath(
+            "./div[@class='rh-info']/div[2]/div[2]/text()")[0]
+        img = info.xpath("./div[@class='rh-portrait']/img/@src")[0]
 
-        char = info.xpath("./div[@class='rh-info']/div[2]/div[2]/text()")[0]
+        file = await self.url_to_file(img)
 
-        embed = discord.Embed(
-            title=char,
-            color=0x3f4149)
-
-        char_url = info.xpath("./div[@class='rh-portrait']/img/@src")[0]
-        r = await self.bot.http_client.get(
-            char_url, headers=self.headers, timeout=15)
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename="resonancesolstice.png")
-
-        embed.set_image(url="attachment://resonancesolstice.png")
-        embed.set_footer(text="Resonance Solstice")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'resonance solstice'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Resonance Solstice", 0x3f4149, char_name)
 
 
     @commands.command(aliases=['potk'])
-    async def phantomofthekill(self, ctx, reason: Optional[str] = None):
+    async def phantomofthekill(self, ctx):
         with open("./ext/data/potk.json") as f:
             chars = json.load(f)
 
-        img_url = choice([*chars])
-        char_name = chars[img_url]
+        img = choice([*chars])
+        char_name = chars[img]
 
-        embed = discord.Embed(
-            title=char_name,
-            color=0xaf989a)
-        embed.set_image(url=img_url)
-        embed.set_footer(text="Phantom of the Kill")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'phantom of the kill'} {reason}:", embed=embed)
-        else:
-            await ctx.send(embed=embed)
+        await self.post(ctx, img, "Phantom of the Kill", 0xaf989a, char_name)
 
 
     @commands.command(aliases=['wuwa'])
-    async def wutheringwaves(self, ctx, reason: Optional[str] = None):
+    async def wutheringwaves(self, ctx):
         await ctx.defer()
-        url = "https://wutheringwaves.fandom.com/"
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Outfits",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(f"{url}api.php", 
-                params=params, headers=self.headers)
-            results = r.json()
+        url = "https://wutheringwaves.fandom.com/api.php"
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
+        bad_pages = [709]
+        char_list = await self.mediawiki_category(url,
+            "Category:Outfits", bad_pages)
 
-            bad_pages = []
+        char = choice(char_list)["title"]
 
-            for article in results["query"]["categorymembers"]:
-                if article["ns"] == 0 and article["pageid"] not in bad_pages:
-                    article_list.append(article)
-
-        char = choice(article_list)["title"]
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char)
 
         info = page.xpath("//aside")[0]
         outfit = info.xpath("./h2/text()")[0]
         char_name = info.xpath(
             "./div[@data-source='character']/div/a/text()")[0]
 
-        embed = discord.Embed(
-            title=char_name,
-            description=outfit,
-            color=0x4a6da1)
+        img = info.xpath("./figure/a/@href")[0]
+        file = await self.url_to_file(img)
 
-        img_url = info.xpath("./figure/a/img/@data-image-key")[0]
-        r = await self.bot.http_client.get(
-            f"{url}wiki/Special:FilePath/{img_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img_url)
-
-        embed.set_image(
-            url=f"attachment://{img_url}")
-        embed.set_footer(text="Wuthering Waves")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'wuthering waves'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Wuthering Waves", 0x4a6da1,
+            char_name, outfit)
 
 
     @commands.command()
-    async def alchemistcode(self, ctx, reason: Optional[str] = None):
+    async def alchemistcode(self, ctx):
         await ctx.defer()
-        url = "https://thealchemistcode.fandom.com/"
+        url = "https://thealchemistcode.fandom.com/api.php"
 
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Units",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(f"{url}api.php", 
-                params=params, headers=self.headers)
-            results = r.json()
+        char_list = await self.mediawiki_category(url,
+            "Category:Units")
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
+        char = choice(char_list)["title"]
 
-            bad_pages = []
-
-            for article in results["query"]["categorymembers"]:
-                if article["ns"] == 0 and article["pageid"] not in bad_pages:
-                    article_list.append(article)
-
-        char = choice(article_list)["title"]
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char)
 
         char_name = page.xpath("//aside/h2/text()")[0]
-
-        embed = discord.Embed(
-            title=char_name,
-            color=0xa26a42)
-
-        img_url = page.xpath("//figure/a/img/@data-image-key")[0].replace(
+        img = page.xpath("//figure/a/@href")[0].replace(
             "Images2%2C", "Images%2C")
-        r = await self.bot.http_client.get(
-            f"{url}wiki/Special:FilePath/{img_url}", follow_redirects=True)
 
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
+        file = await self.url_to_file(img)
 
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img_url)
-
-        embed.set_image(
-            url=f"attachment://{img_url}")
-        embed.set_footer(text="The Alchemist Code")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'alchemist code'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Alchemist Code", 0xa26a42, char_name)
 
 
     @commands.command()
-    async def ashechoes(self, ctx, reason: Optional[str] = None):
+    async def ashechoes(self, ctx):
         await ctx.defer()
-        url = "https://ashechoes.wiki.gg/"
+        base_url = "https://ashechoes.wiki.gg"
+        url = f"{base_url}/api.php"
 
-        params = {
-            "action": "query",
-            "list": "categorymembers",
-            "cmtitle": "Category:Echomancer",
-            "cmlimit": "500",
-            "format": "json"
-        }
-        finished = False
-        article_list = []
-        while not finished:
-            r = await self.bot.http_client.get(f"{url}api.php", 
-                params=params, headers=self.headers)
-            results = r.json()
+        char_list = await self.mediawiki_category(url,
+            "Category:Echomancer")
+        char = choice(char_list)["title"]
 
-            if "continue" in results:
-                params["cmcontinue"] = results["continue"]["cmcontinue"]
-            else:
-                finished = True
-
-            bad_pages = []
-
-            for article in results["query"]["categorymembers"]:
-                if article["ns"] == 0 and article["pageid"] not in bad_pages:
-                    article_list.append(article)
-
-        char = choice(article_list)["title"]
-        params = {
-            "action": "parse",
-            "page": char,
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char)
  
         char_name = page.xpath(
             "//div/div[1]/table/tbody/tr/td/span/text()")[0].split(" (")[0]
-        img_url = choice(page.xpath("//div/div[2]//a/img/../@href")).replace(
-            "/File:", "/Special:FilePath/")
-        skin_type = img_url.rsplit("-", 1)[1]
+        img = choice(page.xpath("//div/div[2]//a/img/../@href")).rsplit(
+            "/File:", 1)[1]
+        img_url = f"{base_url}/images/{img}"
+
+        skin_type = img.rsplit("-", 1)[1]
         if "Base" in skin_type:
             skin_type = ""
         elif "Senlo" in skin_type:
             skin_type = "Senlo Mirage"
 
-        embed = discord.Embed(
-            title=char_name,
-            description=skin_type,
-            color=0x43c2ff)
+        file = await self.url_to_file(img_url)
 
-        r = await self.bot.http_client.get(
-            f"{url}{img_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img_url)
-
-        embed.set_image(
-            url=f"attachment://{img_url}")
-        embed.set_footer(text="Ash Echoes")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'ash echoes'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Ash Echoes", 0x43c2ff,
+            char_name, skin_type)
 
 
     @commands.command()
-    async def endfield(self, ctx, reason: Optional[str] = None):
+    async def endfield(self, ctx):
         await ctx.defer()
-        url = "https://endfield.wiki.gg/"
+        base_url = "https://endfield.wiki.gg"
+        url = f"{base_url}/api.php"
 
-        params = {
-            "action": "parse",
-            "page": "Operator/List",
-            "format": "json"
-        }
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, "Operator/List")
 
-        char = choice(page.xpath("//div[@class='ranger-list']/div/div[2]/a/@title"))
+        char = choice(page.xpath(
+            "//div[@class='ranger-list']/div/div[2]/a/@title"))
 
-        params["page"] = char
-        r = await self.bot.http_client.get(f"{url}api.php",
-            params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, char)
 
         char_base = choice(page.xpath("//img[@class='character-image']"))
+
         try:
             char_title = char_base.xpath("./../../@data-druid-tab-key")[0]
         except:
             char_title = ""
 
-        embed = discord.Embed(
-            title=char,
-            description=char_title,
-            color=0xfff100)
+        img = char_base.xpath("./../@href")[0].rsplit("/File:", 1)[1]
+        img_url = f"{base_url}/images/{img}"
+        file = await self.url_to_file(img_url)
 
-        img_url = char_base.xpath("./../@href")[0].replace("/File:", "/Special:FilePath/")
-        r = await self.bot.http_client.get(
-            f"{url}{img_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img_url)
-
-        embed.set_image(
-            url=f"attachment://{img_url}")
-        embed.set_footer(text="Arknights: Endfield")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'endfield'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
-     
+        await self.post(ctx, file, "Arknights: Endfield", 0xfff100,
+            char, char_title, "endfield") 
 
 
     @commands.command(aliases=['pgr'])
-    async def punishinggrayraven(self, ctx, reason: Optional[str] = None):
+    async def punishinggrayraven(self, ctx):
         await ctx.defer()
-        url = "https://grayravens.com"
+        base_url = "https://grayravens.com"
+        url = f"{base_url}/w/api.php"
 
-        params = {
-            "action": "parse",
-            "page": "Characters",
-            "format": "json"
-        }
+        page = await self.mediawiki_parse(url, "Characters")
 
-        r = await self.bot.http_client.get(f"{url}/w/api.php", params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        char_name = choice(page.xpath(
+            "//table/tbody/tr/td[1]/small/a/text()"))
 
-        char_name = choice(page.xpath("//table/tbody/tr/td[1]/small/a/text()"))
-
-        params["page"] = f"{char_name}/Gallery"
-        r = await self.bot.http_client.get(f"{url}/w/api.php", params=params, headers=self.headers)
-        page = html.fromstring(r.json()["parse"]["text"]["*"].replace('\"','"'))
+        page = await self.mediawiki_parse(url, f"{char_name}/Gallery")
 
         temp_skins = page.xpath("//section/article/figure[@typeof='mw:File']")
         skins = []
@@ -2528,7 +1440,9 @@ class Gacha(commands.Cog,
 
         skin = choice(skins)
         if "Generic" in skin.xpath("./../@id")[0]:
-            skin = choice(page.xpath("//div[@class='column-left']/center/div/section/article/figure[@typeof='mw:File']"))
+            skin = choice(page.xpath((
+                "//div[@class='column-left']/center/div/"
+                "section/article/figure[@typeof='mw:File']")))
 
         skin_name = skin.xpath("./../@id")[0][7:].replace("_", " ")
         if "Generic" in skin_name:
@@ -2537,32 +1451,11 @@ class Gacha(commands.Cog,
             else:
                 skin_name = skin_name.split(" - ")[1]
 
-        embed = discord.Embed(
-            title=char_name,
-            description=skin_name,
-            color=0x870328)
+        img = skin.xpath("./a/@href")[0].rsplit("/File:", 1)[1]
+        file = await self.get_imageinfo(url, img)
 
-        img_url = skin.xpath("./a/@href")[0].replace("/File:", "/Special:FilePath/")
-
-        r = await self.bot.http_client.get(
-            f"{url}{img_url}", follow_redirects=True)
-
-        char_img = Image.open(BytesIO(r.content))
-        char_img = char_img.crop(char_img.getbbox())
-
-        with BytesIO() as img_binary:
-            char_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(fp=img_binary, filename=img_url)
-
-        embed.set_image(
-            url=f"attachment://{img_url}")
-        embed.set_footer(text="Punishing Gray Raven")
-
-        if reason and ctx.interaction:
-            await ctx.send(f"{'gacha' if ctx.interaction.extras['rando'] else 'punishing gray raven'} {reason}:", embed=embed, file=file)
-        else:
-            await ctx.send(embed=embed, file=file)
+        await self.post(ctx, file, "Punishing Gray Raven", 0x870328,
+            char_name, skin_name)
 
 
 async def setup(bot):
