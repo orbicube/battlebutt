@@ -254,16 +254,46 @@ class Gacha(commands.Cog,
         return article_list
 
 
+    def check_cache(self, filename: str):
+
+        try:            
+            with open(f"ext/data/gacha/{filename}.json",
+                encoding="utf-8") as f:
+                j = json.load(f)
+        except:
+            return []
+
+        if (datetme.utcnow() - j["updated"]) / timedelta(weeks=1) > 3:
+            if "bad_pages" in j.keys():
+                return j["characters"], j["bad_pages"]
+            else:
+                return j["characters"]
+        else:
+            return []
+
+
+    def write_cache(self, filename: str,
+        characters: list, bad_pages: list = [])
+
+        data = {
+            "updated": int(datetime.utcnow().timestamp()),
+            "characters": characters
+        }
+
+        if bad_pages:
+            data["bad_pages"] = bad_pages
+
+        with open(f"ext/data/gacha/{filename}.json", "w",
+            encoding="utf-8") as f:
+            json.dump(data, f)
+
+
     @commands.command(aliases=['gbf'], hidden=True)
     async def granblue(self, ctx):
         await ctx.defer()
 
-        with open("ext/data/gbf.json") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
-        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
-
+        characters = self.check_cache("gbf")
+        if not characters:
             params = {
                 "action": "cargoquery",
                 "tables": "characters",
@@ -308,12 +338,7 @@ class Gacha(commands.Cog,
 
                     characters.append(char)
 
-            data = {
-                "updated": int(datetime.utcnow().timestamp()),
-                "characters": characters
-            }
-            with open("ext/data/gbf.json", "w") as f:
-                json.dump(data, f)
+            self.write_cache("gbf", characters)
 
         char = choice(characters)
         img = choice(char['arts'])
@@ -426,19 +451,13 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = f"https://fortnite.fandom.com/api.php"
 
-        with open("ext/data/fortnite.json", encoding="utf-8") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
-        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+        characters, bad_pages = self.check_cache("fortnite")
+        if not characters:
             
             characters = await self.mediawiki_category(url,
                 "Category:Outfits")
 
-            j["characters"] = characters
-            j["updated"] = int(datetime.utcnow().timestamp())
-            with open("ext/data/fortnite.json", "w") as f:
-                json.dump(j, f)
+            self.write_cache("fortnite", characters, bad_pages)
 
         char = choice(characters)
 
@@ -550,7 +569,7 @@ class Gacha(commands.Cog,
         await ctx.defer()
 
         # JSON Updated March 29, 2025
-        with open("ext/data/atelier.json") as f:
+        with open("ext/data/gacha/atelier.json") as f:
             char = choice(json.load(f))
 
         img = ("https://barrelwisdom.com/media/games/resleri/characters/"
@@ -579,11 +598,8 @@ class Gacha(commands.Cog,
         await ctx.defer()
         base_url = "https://lostwordchronicle.com"
 
-        with open("ext/data/touhou.json") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
-        if (datetime.utcnow() - last_up) / timedelta(weeks=2) > 1:
+        characters = self.check_cache("touhou")
+        if not characters:
             r = await self.bot.http_client.get(
                 f"{base_url}/characters/ajax")
             results = r.json()["data"]
@@ -596,12 +612,7 @@ class Gacha(commands.Cog,
                 }
                 characters.append(char)
 
-            data = {
-                "updated": int(datetime.utcnow().timestamp()),
-                "characters": characters
-            }
-            with open("ext/data/touhou.json", "w") as f:
-                json.dump(data, f)
+            self.write_cache("touhou", characters)
 
         char = choice(characters)
 
@@ -687,7 +698,7 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://bravefrontierglobal.fandom.com/api.php"
 
-        with open("ext/data/bfunits.txt", encoding="utf-8") as f:
+        with open("ext/data/gacha/bfunits.txt", encoding="utf-8") as f:
             title = choice([line.rstrip() for line in f])
 
         page = await self.mediawiki_parse(url, title)
@@ -706,21 +717,13 @@ class Gacha(commands.Cog,
         
         url = "https://wiki.biligame.com/langrisser/api.php"
 
-        with open("ext/data/langrisser.json", encoding="utf-8") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
-        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+        characters = self.check_cache("langrisser")
+        if not characters:
             
             characters = await self.mediawiki_category(url,
                 category="分类:英雄")
 
-            data = {
-                "updated": int(datetime.utcnow().timestamp()),
-                "characters": characters
-            }
-            with open("ext/data/langrisser.json", "w", encoding="utf-8") as f:
-                json.dump(data, f)                
+            self.write_cache("langrisser", characters)              
 
         char = choice(characters)["title"]
 
@@ -778,7 +781,7 @@ class Gacha(commands.Cog,
     async def romancingsaga(self, ctx):
         await ctx.defer()
 
-        with open("ext/data/romancingsaga.json") as f:
+        with open("ext/data/gacha/romancingsaga.json") as f:
             char = choice(json.load(f))
 
         img = ("https://rsrs.xyz/assets/gl/texture/style/"
@@ -815,7 +818,7 @@ class Gacha(commands.Cog,
     async def blazblue(self, ctx):
         await ctx.defer()
 
-        with open("ext/data/bbdw.json", encoding="utf-8") as f:
+        with open("ext/data/gacha/bbdw.json", encoding="utf-8") as f:
             char = choice(json.load(f))
 
         file = await self.url_to_file(choice(char["art"]))
@@ -920,7 +923,7 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://starocean.fandom.com/api.php"
 
-        with open("ext/data/starocean.json") as f:
+        with open("ext/data/gacha/starocean.json") as f:
             char = choice(json.load(f))
         variant = choice(char["variants"])
 
@@ -1010,7 +1013,7 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://terrabattle.fandom.com/api.php"
 
-        with open("ext/data/terrabattle.json") as f:
+        with open("ext/data/gacha/terrabattle.json") as f:
             chars = json.load(f)
             char = choice(list(chars.keys()))
         variant = choice(chars[char])
@@ -1028,26 +1031,16 @@ class Gacha(commands.Cog,
     @commands.command(aliases=['ptn'])
     async def pathtonowhere(self, ctx):
         await ctx.defer()
-        
         base_url = "https://pathtonowhere.wiki.gg"
         url = f"{base_url}/api.php"
 
-        with open("ext/data/ptn.json") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
-
-        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 2:
+        characters = self.check_cache("ptn")
+        if not characters:
             
             characters = await self.mediawiki_category(url,
                 "Category:Sinner Attires")
 
-            data = {
-                "updated": int(datetime.utcnow().timestamp()),
-                "characters": characters
-            }
-            with open("ext/data/ptn.json", "w", encoding="utf-8") as f:
-                json.dump(data, f)                
+            self.write_cache("ptn", characters)            
 
         char = choice(characters)["title"]
         char_name = char.rsplit("/", 1)[0]
@@ -1088,11 +1081,8 @@ class Gacha(commands.Cog,
 
         url = "https://lufel.net/"
 
-        with open("ext/data/p5x.json", encoding="utf-8") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
-        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 3:
+        characters = self.check_cache("p5x")
+        if not characters:
             r = await self.bot.http_client.get(
                 f"{url}data/kr/characters/characters.js")
             temp_dict = r.text.split("characterData = ")[1].split(
@@ -1117,12 +1107,7 @@ class Gacha(commands.Cog,
                 
                 characters.append(new_char)
 
-            data = {
-                "updated": int(datetime.utcnow().timestamp()),
-                "characters": characters
-            }
-            with open("ext/data/p5x.json", "w", encoding="utf-8") as f:
-                json.dump(data, f)
+            self.write_cache("p5x", characters)
 
         char = choice(characters)
 
@@ -1276,21 +1261,13 @@ class Gacha(commands.Cog,
 
         url = "https://wiki.biligame.com/resonance/api.php"
 
-        with open("ext/data/resosol.json", encoding="utf-8") as f:
-            j = json.load(f)
-        last_up = datetime.utcfromtimestamp(j["updated"])
-        characters = j["characters"]
+        characters = self.check_cache("resosol")
         if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
             
             characters = await self.mediawiki_category(url,
                 category="分类:乘员")
 
-            data = {
-                "updated": int(datetime.utcnow().timestamp()),
-                "characters": characters
-            }
-            with open("ext/data/resosol.json", "w", encoding="utf-8") as f:
-                json.dump(data, f)                
+            self.write_cache("resosol", characters)
 
         char = choice(characters)["title"]
 
@@ -1308,7 +1285,7 @@ class Gacha(commands.Cog,
 
     @commands.command(aliases=['potk'])
     async def phantomofthekill(self, ctx):
-        with open("./ext/data/potk.json") as f:
+        with open("./ext/data/gacha/potk.json") as f:
             chars = json.load(f)
 
         img = choice([*chars])
@@ -1512,11 +1489,17 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://mimir.cat"
 
-        r = await self.bot.http_client.get(url)
-        page = html.fromstring(r.text)
+        characters = self.check_cache("aethergazer")
+        if not characters:
+            r = await self.bot.http_client.get(url)
+            page = html.fromstring(r.text)
 
-        char = choice(page.xpath(
-            "//div[@class='character-grid']/a/@href"))
+            characters = page.xpath(
+                "//div[@class='character-grid']/a/@href")
+
+            self.write_cache("aethergazer", characters)
+
+        char = choice(characters)
 
         r = await self.bot.http_client.get((f"{url}/_next/data/mimir"
             f"{char}profile.json"))
