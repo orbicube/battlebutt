@@ -255,7 +255,6 @@ class Gacha(commands.Cog,
 
 
     def check_cache(self, filename: str):
-
         try:            
             with open(f"ext/data/gacha/{filename}.json",
                 encoding="utf-8") as f:
@@ -263,17 +262,20 @@ class Gacha(commands.Cog,
         except:
             return []
 
-        if (datetme.utcnow() - j["updated"]) / timedelta(weeks=1) > 3:
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 3:
+            if "bad_pages" in j.keys():
+                return None, j["bad_pages"]
+            else:
+                return None
+        else:
             if "bad_pages" in j.keys():
                 return j["characters"], j["bad_pages"]
-            else:
-                return j["characters"]
-        else:
-            return []
+            return j["characters"]
 
 
     def write_cache(self, filename: str,
-        characters: list, bad_pages: list = [])
+        characters: list, bad_pages: list = []):
 
         data = {
             "updated": int(datetime.utcnow().timestamp()),
@@ -453,7 +455,6 @@ class Gacha(commands.Cog,
 
         characters, bad_pages = self.check_cache("fortnite")
         if not characters:
-            
             characters = await self.mediawiki_category(url,
                 "Category:Outfits")
 
@@ -468,7 +469,7 @@ class Gacha(commands.Cog,
         featured = []
         for image in images:
             img_url = image.xpath("../@href")[0]
-            if "%28Featured%29" in img_url:
+            if "Featured%29" in img_url or "Pass%29" in img_url:
                 featured.append(img_url)
 
         if not featured:
@@ -1058,8 +1059,6 @@ class Gacha(commands.Cog,
             selected_img = choice(all_imgs)
             img = selected_img.xpath("./@href")[0].rsplit("/File:", 1)[1]
             
-            await ctx.send(img)
-
             file = await self.url_to_file(f"{base_url}/images/{img}")
 
             if "Skin" not in img:
