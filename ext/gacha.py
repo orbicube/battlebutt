@@ -1519,5 +1519,21 @@ class Gacha(commands.Cog,
             char_name, skin_name, author=char_title)
 
 
+    @commands.command()
+    async def convallaria(self, ctx):
+        await ctx.defer()
+
+        file, char_path = await self.get_github("orbicube/convallaria",
+            "577e43145d9e4a8a0a408c9b6c7c7483a1e1d3da")
+
+        try:
+            name, title = char_path[:-4].split("#")
+        except:
+            name = char_path[:-4]
+            title = ""
+
+        await self.post(ctx, file, "Sword of Convallaria", 0x8cc2b3,
+            name, title, game_short="convallaria")
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
