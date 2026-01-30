@@ -36,7 +36,8 @@ class Gacha(commands.Cog,
 
     @commands.hybrid_command()
     @app_commands.describe(game="Gacha you want to pull a character from")
-    async def gacha(self, ctx, game: Optional[str] = None, reason: Optional[str] = None):
+    async def gacha(self, ctx, game: Optional[str] = None,
+        reason: Optional[str] = None):
         """ Pulls a character from a gacha game """
 
         commands = [c for c in self.get_commands() if "gacha" not in c.name]
@@ -829,7 +830,8 @@ class Gacha(commands.Cog,
 
         url = "https://umapyoi.net/api/v1/character"
         r = await self.bot.http_client.get(f"{url}/list")
-        char = choice([c for c in r.json() if c["category_label_en"] != "Related parties"])
+        char = choice([c for c in r.json()
+            if c["category_label_en"] != "Related parties"])
 
         r = await self.bot.http_client.get(f"{url}/images/{char['id']}")
         outfit = choice([o for o in r.json() if o["label_en"] == "Racewear"])
@@ -1456,6 +1458,83 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Punishing Gray Raven", 0x870328,
             char_name, skin_name)
+
+
+    @commands.command()
+    async def etheriarestart(self, ctx):
+        await ctx.defer()
+        url = "https://etheriarestart.fandom.com/api.php"
+
+        char_list = await self.mediawiki_category(url,
+            "Category:Animus", vignette=True)
+
+        char = choice(char_list)
+
+        file = await self.get_imageinfo(url, char["pageimage"])
+
+        await self.post(ctx, file, "Etheria: Restart", 0xdc1a54, 
+            char["title"], game_short="etheria restart")
+
+
+    @commands.command()
+    async def mecharashi(self, ctx):
+        await ctx.defer()
+        # https://ma-us-community.tentree-games.com/?lang=en
+        url = ("https://usma-activity.tentree-games.com/"
+            "common/infodata/mQuery.do")
+        params = {
+            "appkey": 1722917077707,
+            "target": "pilot_data",
+            "type": "list",
+            "lang": "en"
+        }
+
+        r = await self.bot.http_client.get(url, params=params)
+        chars = r.json()["data"]["data"]
+
+        char = choice(chars)
+
+        img = ("https://media.tentree-games.com/media/pictures/community/"
+            f"img/gl/gameInfo/character/{char['AvatarHeroIcon']}.png")
+        file = await self.url_to_file(img)
+
+        await self.post(ctx, file, "Mecharashi", 0xeddadb, char["RealName"])
+
+
+    #@commands.command()
+    async def alchemystars(self, ctx):
+        await ctx.defer()
+        url = "https://alchemystars.fandom.com/api.php"
+
+
+    @commands.command()
+    async def aethergazer(self, ctx):
+        await ctx.defer()
+        url = "https://mimir.cat"
+
+        r = await self.bot.http_client.get(url)
+        page = html.fromstring(r.text)
+
+        char = choice(page.xpath(
+            "//div[@class='character-grid']/a/@href"))
+
+        r = await self.bot.http_client.get((f"{url}/_next/data/mimir"
+            f"{char}profile.json"))
+        char_data = r.json()["pageProps"]["profileData"]
+
+        char_name = char_data["record"]["name"]["en"]
+        char_title = char_data["record"]["title"]["en"]
+
+        skin = choice(char_data["skins"])
+        skin_name = skin["name"]["en"]
+        if char_title in skin_name:
+            skin_name = ""
+
+        file = await self.url_to_file(("https://box.mimir.cat/images/skin/"
+            f"{char_data['record']['game_id']}/{skin['id']}.png"))
+
+        await self.post(ctx, file, "Aether Gazer", 0xf5bdc7,
+            char_name, skin_name, author=char_title)
 
 
 async def setup(bot):
