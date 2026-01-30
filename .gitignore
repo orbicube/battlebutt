@@ -168,6 +168,7 @@ ext/data/ptn.json
 ext/data/p5x.json
 ext/data/fortnite.json
 ext/data/resosol.json
+ext/data/gacha/*.json
 
 .bash_history
 /.ssh
