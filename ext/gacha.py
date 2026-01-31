@@ -147,7 +147,7 @@ class Gacha(commands.Cog,
 
         if resize > 0.0:
             img = img.resize(
-                (img.width*resize, img.height*resize),
+                (int(img.width*resize), int(img.height*resize)),
                 resample=resample)
 
         with BytesIO() as img_binary:
@@ -809,10 +809,12 @@ class Gacha(commands.Cog,
         name = variant.xpath(".//tr[1]/th/text()")[0]
         img = variant.xpath(".//tr[2]/td/span/span/img/@src")[0]
 
+        await self.bot.get_channel(DEBUG_CHANNEL).send(img)
+
         file = await self.url_to_file(img, resize=3.0)
 
         await self.post(ctx, file, "Final Fantasy Brave Exvius", 0x9adafe,
-            name, "brave exvius")
+            name, game_short="brave exvius")
 
 
     @commands.command(aliases=['bbdw'])
