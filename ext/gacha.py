@@ -1477,12 +1477,6 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Mecharashi", 0xeddadb, char["RealName"])
 
 
-    #@commands.command()
-    async def alchemystars(self, ctx):
-        await ctx.defer()
-        url = "https://alchemystars.fandom.com/api.php"
-
-
     @commands.command()
     async def aethergazer(self, ctx):
         await ctx.defer()
@@ -1536,6 +1530,24 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Sword of Convallaria", 0x8cc2b3,
             name, title, game_short="convallaria")
+
+    @commands.command()
+    async def alchemystars(self, ctx):
+        await ctx.defer()
+
+        file, char_path = await self.get_github("orbicube/alchemystars",
+            "58d620289edfffab18e722a80b99e605340b9425")
+
+        try:
+            name, title = char_path[:-4].split("#")
+            if title.endswith("!"):
+                title = title[:-1]
+        except:
+            name = char_path[:-4]
+            title = ""
+
+        await self.post(ctx, file, "Alchemy Stars", 0xaabe4c,
+            name, title)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
