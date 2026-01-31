@@ -126,7 +126,7 @@ class Gacha(commands.Cog,
 
 
     async def url_to_file(self, url: str, filename: str = None, 
-        headers: dict = None, resize: float = 0, resample: bool = False):
+        headers: dict = None, resize: float = 0.0, resample: bool = False):
 
         if not filename:
             filename = self.file_regex.findall(url)[1]
