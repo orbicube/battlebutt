@@ -1528,6 +1528,8 @@ class Gacha(commands.Cog,
 
         try:
             name, title = char_path[:-4].split("#")
+            if title.endswith("!"):
+                title = title[:-1]
         except:
             name = char_path[:-4]
             title = ""
