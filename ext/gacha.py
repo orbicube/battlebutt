@@ -1533,6 +1533,7 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Sword of Convallaria", 0x8cc2b3,
             name, title, game_short="convallaria")
 
+
     @commands.command()
     async def alchemystars(self, ctx):
         await ctx.defer()
@@ -1550,6 +1551,32 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Alchemy Stars", 0xaabe4c,
             name, title)
+
+
+    @commands.command(aliases=['tales'])
+    async def talesoftherays(self, ctx):
+        await ctx.defer()
+        url = "https://tales-of-the-rays.fandom.com/api.php"
+
+        page = await self.mediawiki_parse(url,
+            "Category:Playable_Character")
+
+        chars = page.xpath("//tr")
+
+        char = choice(chars)
+        name = char.xpath("./td[1]/a/text()")[0]
+        game = char.xpath("./td[5]/text()")[0]
+        if game == "Tales of the Rays":
+            game = ""
+
+        img = char.xpath(
+            "./td[2]/figure/span/img/@data-image-key")[0].replace(
+            "-thumbnail-", "-portrait-")
+
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Tales of the Rays", 0xce3434, name, game)
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
