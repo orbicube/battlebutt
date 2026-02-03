@@ -147,8 +147,10 @@ class Misc(commands.Cog):
     async def yeahthatmakessense(self, message):
 
         if re.match(r"(?:yeah)[,.!]?\s(?:that makes sense)\W?$", message.content):
-            await message.channel.send(
-                file=discord.File('ext/data/yeahthatmakessense.wav'))
+            if randint(1,2) == 1:
+                await message.channel.send(
+                    file=discord.File('ext/data/yeahthatmakessense.wav'))
+
 
 async def setup(bot):
     await bot.add_cog(Misc(bot))
