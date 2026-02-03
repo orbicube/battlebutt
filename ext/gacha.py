@@ -565,21 +565,19 @@ class Gacha(commands.Cog,
             "reverse 1999")
 
 
-    #@commands.command(aliases=['atelier'])
+    @commands.command(aliases=['atelier'])
     async def atelieresleriana(self, ctx):
         await ctx.defer()
 
-        # JSON Updated March 29, 2025
-        with open("ext/data/gacha/atelier.json") as f:
-            char = choice(json.load(f))
+        file, char_path = await self.get_github("orbicube/atelier",
+            "46b795e13a53d61d8ef6cb487f1c4ca886b7604e")
 
-        img = ("https://barrelwisdom.com/media/games/resleri/characters/"
-            f"full/{char['slug']}.webp")
+        name, title = char_path[:-5].split("#")
         game_name = ("Atelier Resleriana: Forgotten Alchemy "
-        "and the Polar Night Liberator")
+            "and the Polar Night Liberator")
 
-        await self.post(ctx, img, game_name, 0x845b51, char["name"],
-            char["title"], "atelier reseleriana")
+        await self.post(ctx, file, game_name, 0x845b51,
+            name, title, "atelier resleriana")
 
 
     @commands.command()
