@@ -1587,26 +1587,5 @@ class Gacha(commands.Cog,
             game_short="xenoblade")
 
 
-    @commands.command(aliases=['dmc'])
-    async def devilmaycry(self, ctx):
-        url = "https://dmcpoc.wiki.gg/api.php"
-
-        list_page = await self.mediawiki_parse(url, "Hunter")
-
-        char = choice(list_page.xpath("//tbody/tr"))
-
-        name = char.xpath("./td[2]/a/text()")[0]
-        title = char.xpath("./td[1]/a/text()")[0]
-
-        page_title = char.xpath("./td[1]/a/@href")[0].rsplit('/', 1)[1]
-        char_page = await self.mediawiki_parse(url, page_title)
-
-        img = char_page.xpath("//aside/figure/a/@href")[0].split(":", 1)[1]
-        file = await self.get_imageinfo(url, img)
-
-        await self.post(ctx, file, "Devil May Cry: Peak of Combat", 0xae1f1f,
-            name, title, game_short="devil may cry")
-
-
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
