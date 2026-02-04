@@ -1583,8 +1583,9 @@ class Gacha(commands.Cog,
 
         name = char_path[:-4]
 
-        await self.post(ctx, file, "Xenoblade Chronicles 2", 0x3995e1, name)
-        
+        await self.post(ctx, file, "Xenoblade Chronicles 2", 0x3995e1, name,
+            game_short="xenoblade")
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
