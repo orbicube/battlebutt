@@ -1576,5 +1576,15 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Tales of the Rays", 0xce3434, name, game)
 
 
+    @commands.command()
+    async def xenoblade(self, ctx):
+        file, char_path = await self.get_github("orbicube/xenoblade",
+            "68b8359a5a433cada7b95d971bf3ffb851c2a9b0")
+
+        name = char_path[:-4]
+
+        await self.post(ctx, file, "Xenoblade Chronicles 2", 0x3995e1, name)
+        
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))

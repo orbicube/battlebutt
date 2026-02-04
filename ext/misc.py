@@ -124,7 +124,6 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def ask8ball(self, message):
-
         if self.bot.user in message.mentions:
             if message.content.endswith("?"):
                 with open ("ext/data/8ball.json") as f:
@@ -145,7 +144,6 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener("on_message")
     async def yeahthatmakessense(self, message):
-
         if re.match(r"(?:yeah)[,.!]?\s(?:that makes sense)\W?$", message.content):
             if randint(1,2) == 1:
                 await message.channel.send(
