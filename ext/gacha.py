@@ -1323,18 +1323,24 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://thealchemistcode.fandom.com/api.php"
 
+        bad_pages = [4288, 96108, 108395, 160821, 3150, 4187, 4978, 1790,
+            4434, 73643, 709, 843, 67235, 4705, 66805]
         char_list = await self.mediawiki_category(url,
             "Category:Units")
 
         char = choice(char_list)["title"]
-
         page = await self.mediawiki_parse(url, char)
 
         char_name = page.xpath("//aside/h2/text()")[0]
-        img = page.xpath("//figure/a/@href")[0].replace(
-            "Images2%2C", "Images%2C")
+        title = ""
+        if " (" in char_name:
+            char_name, title = char_name.split(" (", 1)
+            title = title[:-1]
 
-        file = await self.url_to_file(img)
+        img = page.xpath("//figure/a/img/@data-image-name")[0].replace(
+            "Images2,", "Images,")
+
+        file = await self.get_imageinfo(url, img)
 
         await self.post(ctx, file, "Alchemist Code", 0xa26a42, char_name)
 
