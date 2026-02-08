@@ -942,7 +942,7 @@ class Gacha(commands.Cog,
         
         chars = await self.mediawiki_category(url,
             "Category:Playable_characters")
-        char = choice(characters)["title"]
+        char = choice(chars)["title"]
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"nikke {char}")
 
         page = await self.mediawiki_parse(url, char)
