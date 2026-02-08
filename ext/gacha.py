@@ -784,7 +784,7 @@ class Gacha(commands.Cog,
             char = choice(json.load(f))
 
         img = ("https://rsrs.xyz/assets/gl/texture/style/"
-            "{char['id']}/style_{char['id']}.png")
+            f"{char['id']}/style_{char['id']}.png")
 
         await self.post(ctx, img, "Romancing SaGa re;univerSe", 0x8f0000,
             char["name"], char["title"])
