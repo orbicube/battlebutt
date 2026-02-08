@@ -1578,6 +1578,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def xenoblade(self, ctx):
+        await ctx.defer()
         file, char_path = await self.get_github("orbicube/xenoblade",
             "68b8359a5a433cada7b95d971bf3ffb851c2a9b0")
 
@@ -1585,6 +1586,40 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Xenoblade Chronicles 2", 0x3995e1, name,
             game_short="xenoblade")
+
+
+    @commands.command()
+    async def watcherofrealms(self, ctx):
+        await ctx.defer()
+        url = "https://watcher-of-realms.fandom.com/api.php"
+
+        cat_list = [ "Category:Rare", "Category:Epic",
+            "Category:Legendary"]
+
+        chars = [{"title": "Gale"}, {"title": "Josh"}, {"title": "Lancer"},
+            {"title": "Lilia"}, {"title": "Arlow"}, {"title": "Cutter"},
+            {"title": "Halder"}, {"title": "Hayden"}, {"title": "Jonas"},
+            {"title": "Langlyn"}, {"title": "Liam"}, {"title": "Preter"},
+            {"title": "Rogers"}, {"title": "Rum-Nose"}, {"title": "Ryder"},
+            {"title": "Skreef"}, {"title": "Wagrak"}]
+        for cat in cat_list:
+             char_list = await self.mediawiki_category(url, cat)
+             chars.extend(char_list)
+
+        char = choice(chars)
+        page = await self.mediawiki_parse(url, char["title"])
+
+        try:
+            skins_head = page.xpath("//h2/span[@id='Skins']")[0]
+            img = choice(skins_head.xpath(("../followng-sibling::div[1]"
+                "/div/div/div/a/img/@data-image-key")))
+        except:
+            img = page.xpath("//aside/figure/a/img/@data-image-key")[0]
+
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Watcher of Realms", 0x902a1a,
+            char["title"])
 
 
 async def setup(bot):
