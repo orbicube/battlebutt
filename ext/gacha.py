@@ -16,7 +16,7 @@ from urllib.parse import quote
 from lxml import html
 from zipfile import ZipFile
 import os
-
+from copy import copy
 import asyncio
 
 from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY, ERROR_CHANNEL
@@ -112,6 +112,8 @@ class Gacha(commands.Cog,
                 game_short = "gacha"
             elif not game_short:
                 game_short = game_name.lower()
+                if ":" in game_short:
+                    game_short = game_short.replace(":", "")
 
             msg = f"{game_short} {reason}:"
         except:
@@ -132,7 +134,7 @@ class Gacha(commands.Cog,
             filename = self.file_regex.findall(url)[1]
 
         if not headers:
-            headers = self.headers
+            headers = copy(self.headers)
 
         r = await self.bot.http_client.get(url=url, headers=headers,
             follow_redirects=True)
@@ -174,6 +176,10 @@ class Gacha(commands.Cog,
 
     async def get_imageinfo(self, url, filename,
         reize=0.0, resample=False):
+
+        headers = copy(self.headers)
+        headers["Host"] = url[8:].split("/", 1)[0]
+
         params = {
             "action": "query",
             "prop": "imageinfo",
@@ -188,10 +194,15 @@ class Gacha(commands.Cog,
         results = list(r.json()["query"]["pages"].values())
         img = results[0]["imageinfo"][0]["url"]
 
-        return await self.url_to_file(img)
+        headers["Host"] = img[8:].split("/", 1)[0]
+
+        return await self.url_to_file(img, headers=headers)
 
 
     async def mediawiki_parse(self, url, page):
+
+        headers = copy(self.headers)
+        headers["Host"] = url[8:].split("/", 1)[0]
 
         params = {
             "action": "parse",
@@ -199,7 +210,7 @@ class Gacha(commands.Cog,
             "format": "json"
         }
         r = await self.bot.http_client.get(url, params=params,
-            headers=self.headers, timeout=15)
+            headers=headers, timeout=15)
 
         page = html.fromstring(
             r.json()["parse"]["text"]["*"].replace('\"','"'))
@@ -210,6 +221,9 @@ class Gacha(commands.Cog,
     async def mediawiki_category(self, url: str, category: str, 
         bad_pages: list = [], vignette: bool = False):
         
+        headers = copy(self.headers)
+        headers["Host"] = url[8:].split("/", 1)[0]
+
         params = {
             "action": "query",
             "format": "json"
@@ -231,7 +245,7 @@ class Gacha(commands.Cog,
         article_list = []
         while not finished:
             r = await self.bot.http_client.get(url, 
-                params=params, headers=self.headers,
+                params=params, headers=headers,
                 follow_redirects=True)
             results = r.json()
 
@@ -379,7 +393,7 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://wotv-calc.com/api/gl/units?forBuilder=1"
 
-        headers = self.headers
+        headers = copy(self.headers)
         headers["Referer"] = "https://wotv-calc.com/builder/unit"
         r = await self.bot.http_client.get(url, headers=headers)
 
@@ -850,7 +864,7 @@ class Gacha(commands.Cog,
     async def afkarena(self, ctx):
         await ctx.defer()
 
-        url = "https://afkarena.fandom.com/api.php"
+        url = "https://afk-arena.fandom.com/api.php"
 
         bad_pages = [85, 341, 966, 1126, 1971, 3278, 3284, 3297, 5566, 5568]
         char_list = await self.mediawiki_category(url,
@@ -961,10 +975,9 @@ class Gacha(commands.Cog,
         elif selected > 0:
             title = titles[selected]
 
-        img = page.xpath(
-            "//figure[@class='pi-item pi-image']/a/@href")[selected].replace(
-            'MI.png/', 'FB.png/')
-        file = await self.url_to_file(img)
+        img = page.xpath(("//figure[@class='pi-item pi-image']/a/img/"
+            "@data-image-name"))[selected].replace('MI.png', 'FB.png')
+        file = await self.get_imageinfo(url, img)
 
         await self.post(ctx, file, "Goddess of Victory: Nikke",
             0xb4b3bb, char, title, "nikke")
@@ -1020,7 +1033,7 @@ class Gacha(commands.Cog,
         variant = choice(chars[char])
 
         game_name = "Terra Battle"
-        if "Guardian_" in variant['img']:
+        if "Guardian " in variant['img']:
             url = url.replace("e.f", "e2.f")
             game_name = "Terra Battle 2"
 
@@ -1132,7 +1145,7 @@ class Gacha(commands.Cog,
         char_name = char.xpath(
             ".//div[@class='lightbox-caption']/a/text()")[0]
         img = char.xpath(
-            ".//div[@class='thumb']/div/a/img/@data-image-key")[0]
+            ".//div[@class='thumb']/div/a/img/@data-image-name")[0]
 
         file = await self.get_imageinfo(url, img)
 
@@ -1166,7 +1179,8 @@ class Gacha(commands.Cog,
 
         file = await self.get_imageinfo(url, char['pageimage'])
 
-        await self.post(ctx, file, "Honkai Star Rail", 0xb9d600, char["title"])
+        await self.post(ctx, file, "Zenless Zone Zero", 0xb9d600,
+            char["title"])
 
 
     @commands.command()
@@ -1212,7 +1226,7 @@ class Gacha(commands.Cog,
         img = skin.xpath("../@href")[0]
         file = await self.url_to_file(img)
 
-        await self.post(ctx, file, "Final Fantasy VII Ever Crisis", 0xe9d7b5,
+        await self.post(ctx, file, "Final Fantasy VII: Ever Crisis", 0xe9d7b5,
             char_name, char_title, "ever crisis")
 
 
@@ -1261,7 +1275,7 @@ class Gacha(commands.Cog,
         url = "https://wiki.biligame.com/resonance/api.php"
 
         characters = self.check_cache("resosol")
-        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 1:
+        if characters:
             
             characters = await self.mediawiki_category(url,
                 category="分类:乘员")
@@ -1326,7 +1340,7 @@ class Gacha(commands.Cog,
         bad_pages = [4288, 96108, 108395, 160821, 3150, 4187, 4978, 1790,
             4434, 73643, 709, 843, 67235, 4705, 66805]
         char_list = await self.mediawiki_category(url,
-            "Category:Units")
+            "Category:Units", bad_pages=bad_pages)
 
         char = choice(char_list)["title"]
         page = await self.mediawiki_parse(url, char)
@@ -1358,13 +1372,14 @@ class Gacha(commands.Cog,
         page = await self.mediawiki_parse(url, char)
  
         char_name = page.xpath(
-            "//div/div[1]/table/tbody/tr/td/span/text()")[0].split(" (")[0]
-        img = choice(page.xpath("//div/div[2]//a/img/../@href")).rsplit(
+            "//div/div/table/tbody/tr/td/span/text()")[0].split(" (")[0]
+        img = choice(page.xpath(
+            "//div[@class='center']/div//a[@class='image']/@href")).rsplit(
             "/File:", 1)[1]
         img_url = f"{base_url}/images/{img}"
 
-        skin_type = img.rsplit("-", 1)[1]
-        if "Base" in skin_type:
+        skin_type = img.rsplit(".", 1)[0].rsplit("-", 1)[1]
+        if "Base" in skin_type or "S4" in skin_type:
             skin_type = ""
         elif "Senlo" in skin_type:
             skin_type = "Senlo Mirage"
@@ -1438,7 +1453,7 @@ class Gacha(commands.Cog,
         img = skin.xpath("./a/@href")[0].rsplit("/File:", 1)[1]
         file = await self.get_imageinfo(url, img)
 
-        await self.post(ctx, file, "Punishing Gray Raven", 0x870328,
+        await self.post(ctx, file, "Punishing: Gray Raven", 0x870328,
             char_name, skin_name)
 
 
@@ -1455,7 +1470,7 @@ class Gacha(commands.Cog,
         file = await self.get_imageinfo(url, char["pageimage"])
 
         await self.post(ctx, file, "Etheria: Restart", 0xdc1a54, 
-            char["title"], game_short="etheria restart")
+            char["title"])
 
 
     @commands.command()
@@ -1574,7 +1589,7 @@ class Gacha(commands.Cog,
             game = ""
 
         img = char.xpath(
-            "./td[2]/figure/span/img/@data-image-key")[0].replace(
+            "./td[2]/figure/span/img/@data-image-name")[0].replace(
             "-thumbnail-", "-portrait-")
 
         file = await self.get_imageinfo(url, img)
@@ -1624,9 +1639,9 @@ class Gacha(commands.Cog,
             skin = choice(skins_head.xpath(("../following-sibling::div[1]"
                 "/div/div/div/a/img")))
             title, extra = skin.xpath("./@data-caption")[0].split("skin. ", 1)
-            img = skin.xpath("./@data-image-key")[0]
+            img = skin.xpath("./@data-image-name")[0]
         except:
-            img = page.xpath("//aside/figure/a/img/@data-image-key")[0]
+            img = page.xpath("//aside/figure/a/img/@data-image-name")[0]
 
         file = await self.get_imageinfo(url, img)
 
