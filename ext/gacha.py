@@ -1593,33 +1593,39 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://watcher-of-realms.fandom.com/api.php"
 
-        cat_list = [ "Category:Rare", "Category:Epic",
-            "Category:Legendary"]
+        chars = self.check_cache("watcherofrealms.json")
+        if not chars:
+            cat_list = [ "Category:Rare", "Category:Epic",
+                "Category:Legendary"]
+            chars = [{"title": "Gale"}, {"title": "Josh"}, {"title": "Lancer"},
+                {"title": "Lilia"}, {"title": "Arlow"}, {"title": "Cutter"},
+                {"title": "Halder"}, {"title": "Hayden"}, {"title": "Jonas"},
+                {"title": "Langlyn"}, {"title": "Liam"}, {"title": "Preter"},
+                {"title": "Rogers"}, {"title": "Rum-Nose"}, {"title": "Ryder"},
+                {"title": "Skreef"}, {"title": "Wagrak"}]
+            for cat in cat_list:
+                 char_list = await self.mediawiki_category(url, cat)
+                 chars.extend(char_list)
 
-        chars = [{"title": "Gale"}, {"title": "Josh"}, {"title": "Lancer"},
-            {"title": "Lilia"}, {"title": "Arlow"}, {"title": "Cutter"},
-            {"title": "Halder"}, {"title": "Hayden"}, {"title": "Jonas"},
-            {"title": "Langlyn"}, {"title": "Liam"}, {"title": "Preter"},
-            {"title": "Rogers"}, {"title": "Rum-Nose"}, {"title": "Ryder"},
-            {"title": "Skreef"}, {"title": "Wagrak"}]
-        for cat in cat_list:
-             char_list = await self.mediawiki_category(url, cat)
-             chars.extend(char_list)
+            self.write_cache("watcherofrealms.json", chars)
 
-        char = choice(chars)
-        page = await self.mediawiki_parse(url, char["title"])
+        char = choice(chars)["title"]
+        page = await self.mediawiki_parse(url, char)
 
+        title = ""
         try:
             skins_head = page.xpath("//h2/span[@id='Skins']")[0]
-            img = choice(skins_head.xpath(("../followng-sibling::div[1]"
-                "/div/div/div/a/img/@data-image-key")))
+            skin = choice(skins_head.xpath(("../following-sibling::div[1]"
+                "/div/div/div/a/img")))
+            title, extra = skin.xpath("./@data-caption")[0].split("skin. ", 1)
+            img = skin.xpath("./@data-image-key")[0]
         except:
             img = page.xpath("//aside/figure/a/img/@data-image-key")[0]
 
         file = await self.get_imageinfo(url, img)
 
         await self.post(ctx, file, "Watcher of Realms", 0x902a1a,
-            char["title"])
+            char, title)
 
 
 async def setup(bot):
