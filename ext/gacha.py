@@ -18,6 +18,7 @@ from zipfile import ZipFile
 import os
 from copy import copy
 import asyncio
+from urllib.parse import unquote
 
 from credentials import DEBUG_CHANNEL, FNAPI_KEY, GITHUB_KEY, ERROR_CHANNEL
 
@@ -1625,7 +1626,7 @@ class Gacha(commands.Cog,
         await ctx.defer()
         url = "https://watcher-of-realms.fandom.com/api.php"
 
-        chars = self.check_cache("watcherofrealms.json")
+        chars = self.check_cache("watcherofrealms")
         if not chars:
             cat_list = [ "Category:Rare", "Category:Epic",
                 "Category:Legendary"]
@@ -1639,7 +1640,7 @@ class Gacha(commands.Cog,
                  char_list = await self.mediawiki_category(url, cat)
                  chars.extend(char_list)
 
-            self.write_cache("watcherofrealms.json", chars)
+            self.write_cache("watcherofrealms", chars)
 
         char = choice(chars)["title"]
         page = await self.mediawiki_parse(url, char)
@@ -1741,6 +1742,50 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Tribe Nine", 0x0269ef, char_name)
 
+
+    @commands.command()
+    async def mahjongsoul(self, ctx):
+        await ctx.defer()
+        url = "https://files.riichi.moe/"
+
+        chars = self.check_cache("mahjongsoul")
+        if not chars:
+            js = {
+                "n": 1000,
+                "q": ("path like *Mahjong* and path like *Soul* and"
+                    " path like *portraits* and name like *full.png*")
+            }
+
+            r = await self.bot.http_client.post(f"{url}?srch=", json=js,
+                headers=self.headers)
+            file_list = r.json()["hits"]
+
+            chars = {}
+            for f in file_list:
+                f_name = f["rp"]
+
+                bad_folders = ["/reverse/", "/C.C/",
+                    "/Freed%20Jyanshi", "/sataen"]
+                if not any(x in f_name for x in bad_folders):
+                    f_name = f_name.split("/portraits/")[1].rsplit("/full")[0]
+                    print(f_name)
+                    char, title = unquote(f_name).split("/")
+                    chars.setdefault(char, [])
+                    chars[char].append(title)
+
+            self.write_cache("mahjongsoul", chars)
+
+        char = choice(list(chars.keys()))
+        title = choice(chars[char])
+
+        img_url = (f"{url}mjg/game resources and tools/Mahjong Soul/"
+            f"game files/portraits/{char}/{title}/full.png")
+        file = await self.url_to_file(img_url)
+
+        if title == "Default" or title == "Bond":
+            title = ""
+
+        await self.post(ctx, file, "Mahjong Soul", 0xfbd401, char, title)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
