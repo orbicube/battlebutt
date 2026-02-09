@@ -67,7 +67,7 @@ class Gacha(commands.Cog,
     async def gacha_autocomplete(self, interaction: discord.Interaction,
         current: str,) -> list[app_commands.Choice[str]]:
 
-        games = [c.name for c in self.get_commands() if not c.name == "gacha"]
+        games = [c.name for c in self.get_commands() if "gacha" not in c.name]
         completes = [app_commands.Choice(name=game, value=game)
             for game in games if current.lower() in game.lower()]
 
