@@ -1649,5 +1649,44 @@ class Gacha(commands.Cog,
             char, title)
 
 
+    @commands.command()
+    async def pokemonmastersex(self, ctx):
+        await ctx.defer()
+        base_url = "https://bulbapedia.bulbagarden.net"
+        url = f"{base_url}/w/api.php"
+
+        chars = await self.mediawiki_category(url,
+            "Category:Masters EX characters with an EX style")
+        char = choice(chars)["title"]
+        char_name = char.split(" (", 1)[0]
+
+        page = await self.mediawiki_parse(url, char)
+
+        title = ""
+        galleries = page.xpath(
+            "//table[preceding-sibling::h2[1]/span/@id='Gallery']/tbody")
+        if len(galleries) > 1:
+            v = randint(0, len(galleries)-1)
+            gallery = galleries[v]
+
+            var_name = page.xpath((
+                "//h3[preceding-sibling::h2[1]/span/@id='Gallery']"
+                "/span/text()"))[v]
+            if " Suit " in var_name:
+                title = var_name.split(" Suit ", 1)[0] + " Suit "
+            elif " (" in var_name:
+                title = var_name.split(" (", 1)[1][:-1]
+        else:
+            gallery = galleries[0]
+
+        img = choice(
+            gallery.xpath("./tr/td/span/a[contains(@href, 'Spr_')]/img/@src"))
+        img = img.replace("/thumb", "").rsplit("/", 1)[0]
+
+        file = await self.url_to_file(img)
+
+        await self.post(ctx, file, "Pokémon Masters EX", 0xd8bc43,
+            char_name, title)
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
