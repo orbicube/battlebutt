@@ -92,7 +92,8 @@ class Gacha(commands.Cog,
 
     async def post(self, ctx: commands.Context, img: discord.File|str,
         game_name: str, color: int, char_name: str, description: str = None,
-        game_short: str = None, author: str = None):
+        game_short: str = None, author: str = None,
+        thumb: discord.File|str = None):
 
         embed = discord.Embed(
             title=char_name,
@@ -119,12 +120,22 @@ class Gacha(commands.Cog,
         except:
             pass
 
+        files = []
         if isinstance(img, str):
             embed.set_image(url=img)
-            await ctx.send(msg, embed=embed)
         else:
             embed.set_image(url=img.uri)
-            await ctx.send(msg, embed=embed, file=img)
+            files.append(img)
+
+        if thumb:
+            if isinstance(thumb, str):
+                embed.set_thumbnail(url=thumb)
+            else:
+                embed.set_thumbnail(url=thumb.uri)
+                files.append(thumb)
+
+        await ctx.send(msg, embed=embed, files=files)
+  
 
 
     async def url_to_file(self, url: str, filename: str = None, 
@@ -1655,6 +1666,7 @@ class Gacha(commands.Cog,
         base_url = "https://bulbapedia.bulbagarden.net"
         url = f"{base_url}/w/api.php"
 
+        bad_pages = [256430, 256279]
         chars = await self.mediawiki_category(url,
             "Category:Masters EX characters with an EX style")
         char = choice(chars)["title"]
@@ -1662,31 +1674,52 @@ class Gacha(commands.Cog,
 
         page = await self.mediawiki_parse(url, char)
 
-        title = ""
         galleries = page.xpath(
-            "//table[preceding-sibling::h2[1]/span/@id='Gallery']/tbody")
-        if len(galleries) > 1:
-            v = randint(0, len(galleries)-1)
-            gallery = galleries[v]
+            "//table[preceding::h2[1]/span/@id='Gallery']/tbody")
+        v_count = len(galleries)
+        v = randint(0, v_count-1)
 
-            var_name = page.xpath((
-                "//h3[preceding-sibling::h2[1]/span/@id='Gallery']"
-                "/span/text()"))[v]
-            if " Suit " in var_name:
-                title = var_name.split(" Suit ", 1)[0] + " Suit "
-            elif " (" in var_name:
-                title = var_name.split(" (", 1)[1][:-1]
-        else:
-            gallery = galleries[0]
+        infobox = page.xpath("//table[@class='roundy infobox']")[v]
+        var_name = infobox.xpath((".//big/big/b//text()"))[0]
+        title = ""    
+        if " Suit " in var_name:
+            title = var_name.split(" Suit ", 1)[0] + " Suit "
+        if " (" in var_name:
+            title += var_name.split(" (", 1)[1][:-1]
 
-        img = choice(
+        try:
+            imgs = [infobox.xpath(".//a[contains(@href, 'Spr_')]/img/@src")[0]]
+        except:
+            imgs = []
+        gallery = galleries[v]
+        imgs.extend(
             gallery.xpath("./tr/td/span/a[contains(@href, 'Spr_')]/img/@src"))
+        img = choice(imgs)
         img = img.replace("/thumb", "").rsplit("/", 1)[0]
-
         file = await self.url_to_file(img)
 
+        if v > 0:
+            poke = infobox.xpath("./following-sibling::table[1]/tbody")[0]
+        else:
+            if v_count > 1: 
+                head = page.xpath(("//table[@class='roundy infobox'][2]/"
+                    "/preceding-sibling::h2[1]/span/@id"))[0]
+            else:
+                head = "Appearances"
+            tables = page.xpath(("//table[following-sibling::h2/span/"
+                f"@id='{head}'][@class='roundy']/tbody"))
+            poke = choice([t for t in tables if t.xpath(
+                "./tr[1]/th[1]/span[@typeof='mw:File']")])
+
+        poke_img = poke.xpath("./tr/th/span/a/img/@src")[0]
+        poke_img = poke_img.replace("/thumb", "").rsplit("/", 1)[0]
+        poke_file = await self.url_to_file(poke_img)
+
+        poke_name = poke.xpath(("./tr/th[@colspan='2'][not(@class='roundy')]/"
+            "/span/a/span/text()"))[0]
+
         await self.post(ctx, file, "Pokémon Masters EX", 0xd8bc43,
-            char_name, title)
+            char_name, title, author=poke_name, thumb=poke_file)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
