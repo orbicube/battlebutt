@@ -1678,6 +1678,7 @@ class Gacha(commands.Cog,
             "//table[preceding::h2[1]/span/@id='Gallery']/tbody")
         v_count = len(galleries)
         v = randint(0, v_count-1)
+        gallery = galleries[v]
 
         infobox = page.xpath("//table[@class='roundy infobox']")[v]
         var_name = infobox.xpath((".//big/big/b//text()"))[0]
@@ -1691,7 +1692,6 @@ class Gacha(commands.Cog,
             imgs = [infobox.xpath(".//a[contains(@href, 'Spr_')]/img/@src")[0]]
         except:
             imgs = []
-        gallery = galleries[v]
         imgs.extend(
             gallery.xpath("./tr/td/span/a[contains(@href, 'Spr_')]/img/@src"))
         img = choice(imgs)
@@ -1720,6 +1720,27 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Pokémon Masters EX", 0xd8bc43,
             char_name, title, author=poke_name, thumb=poke_file)
+
+
+    @commands.command()
+    async def tribenine(self, ctx):
+        await ctx.defer()
+        url = "https://tribeninegame.fandom.com/api.php"
+
+        page = await self.mediawiki_parse(url, "Characters")
+        chars = []
+        for i in range(0,2):
+            chars.extend(page.xpath(
+                f"//div[@id='gallery-{i}']/div[@class='wikia-gallery-item']"))
+
+        char = choice(chars)
+        char_name = char.xpath("./div[2]/center/a/text()")[0]
+
+        img = char.xpath("./div[1]//img/@data-image-name")[0]
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Tribe Nine", 0x0269ef, char_name)
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
