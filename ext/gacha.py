@@ -1755,7 +1755,6 @@ class Gacha(commands.Cog,
                 "q": ("path like *Mahjong* and path like *Soul* and"
                     " path like *portraits* and name like *full.png*")
             }
-
             r = await self.bot.http_client.post(f"{url}?srch=", json=js,
                 headers=self.headers)
             file_list = r.json()["hits"]
@@ -1786,6 +1785,76 @@ class Gacha(commands.Cog,
             title = ""
 
         await self.post(ctx, file, "Mahjong Soul", 0xfbd401, char, title)
+
+
+    @commands.command()
+    async def guardiantales(self, ctx):
+        url = "https://guardian-tales.fandom.com/api.php"
+
+        bad_pages = [4743, 2526, 172, 4009, 3448]
+        chars = await self.mediawiki_category(url,
+            "Category:Heroes", bad_pages=bad_pages)
+
+        char = choice(chars)["title"]
+        page = await self.mediawiki_parse(url, char)
+
+        name = page.xpath("//aside/h2/text()")[0]
+        try:
+            title = page.xpath("//aside/h2/div/text()")[0]
+        except:
+            title = ""
+
+        img = choice(page.xpath("//aside//figure/a/img/@data-image-name"))
+        img = "Transparent " + img.replace(".jpg", ".png")
+
+        file = await self.get_imageinfo(url, img)
+
+        ex = ""
+        if img.endswith("JP.png"):
+            ex = " (Japan)"
+        elif img.endswith("Ascent.png"):
+            name += " (Ascent)"
+
+
+        await self.post(ctx, file, f"Guardian Tales{ex}", 0x3b6cc1,
+            name, title, game_short="guardian tales")
+
+
+    @commands.command()
+    async def monsterstrike(self, ctx):
+        url = "https://monster-strike-enjp.fandom.com/api.php"
+
+        pedia_page = await self.mediawiki_parse(url, "Monsterpedia")
+        pedia_num = choice(pedia_page.xpath("//table//td/a/@title"))
+
+        list_page = await self.mediawiki_parse(url, pedia_num)
+        char_page = choice(list_page.xpath("//table//td/a/@title"))
+        
+        page = await self.mediawiki_parse(url, char_page)
+        variant = choice(page.xpath("//table[@border='1']"))
+
+        char_id = variant.xpath(".//tr[1]/td[last()]/text()")[0].rstrip()
+
+        try:
+            name = variant.xpath(
+                "./preceding::h2[1]/span[@class='mw-headline']/text()")[0]
+        except:
+            name = char_page
+
+        title = ""
+        if " (" in name:
+            name, title = name.rsplit(" (")
+            title = title[:-1]
+
+        tab_check = variant.xpath("./parent::div[contains(@class, 'wds-tab')]")
+        if tab_check:
+            tab_index = len(variant.xpath("../preceding-sibling::div"))
+            title = variant.xpath(
+                f"../../div[1]/ul/li[{tab_index}]/div/a/text()")[0]
+
+        file = await self.get_imageinfo(url, f"{char_id}.png")
+
+        await self.post(ctx, file, "Monster Strike", 0xde630b, name, title)
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
