@@ -1895,5 +1895,47 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Girls' Frontline", 0xe8b847,
             char, title, game_short="girls frontline")
 
+
+    @commands.command(aliases=["gfl2"])
+    async def gflexilium(self, ctx):
+        await ctx.defer()
+
+        base_url = "https://iopwiki.com"
+        url = f"{base_url}/api.php"
+
+        chars = await self.mediawiki_category(url,
+            "Category:GFL2 Dolls")
+        char = choice(chars)["title"]
+        char_name = char.replace(" (GFL2)", "")
+
+        page = await self.mediawiki_parse(url, char)
+
+        valid_skins = [0]
+        with open(f"ext/data/gacha/gfl2.json", encoding="utf-8") as f:
+            j = json.load(f)
+            try:
+                valid_skins.extend(j[char_name])
+            except: pass
+        skin_index = choice(valid_skins)
+        if skin_index > 0:
+            skin_file = f"ostume{skin_index}.png"
+        else:
+            skin_file = "hole.png"
+        skin = page.xpath(f"//a[contains(@href, '{skin_file}')]")[0]
+        try:
+            skin_name = re.search(r'(?:["“](.+?)["”])|(?: - (.+?)\.)',
+                skin.xpath("./@title")[0]).group(1)
+        except:
+            skin_name = ""
+
+        img = skin.xpath("./img/@src")[0]
+        img = img.replace("/thumb", "").rsplit("/", 1)[0]
+
+        file = await self.url_to_file(f"{base_url}{img}")
+
+        await self.post(ctx, file, "Girls' Frontline 2: Exilium", 0xf0b000,
+            char_name, skin_name, game_short="girls frontline 2")
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
