@@ -1789,6 +1789,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def guardiantales(self, ctx):
+        await ctx.defer()
         url = "https://guardian-tales.fandom.com/api.php"
 
         bad_pages = [4743, 2526, 172, 4009, 3448]
@@ -1822,6 +1823,7 @@ class Gacha(commands.Cog,
 
     @commands.command()
     async def monsterstrike(self, ctx):
+        await ctx.defer()
         url = "https://monster-strike-enjp.fandom.com/api.php"
 
         pedia_page = await self.mediawiki_parse(url, "Monsterpedia")
@@ -1855,6 +1857,43 @@ class Gacha(commands.Cog,
         file = await self.get_imageinfo(url, f"{char_id}.png")
 
         await self.post(ctx, file, "Monster Strike", 0xde630b, name, title)
+
+
+    @commands.command(aliases=['gfl'])
+    async def girlsfrontline(self, ctx):
+        await ctx.defer()
+
+        base_url = "https://iopwiki.com"
+        url = f"{base_url}/api.php"
+
+        chars = await self.mediawiki_category(url,
+            "Category:T-Dolls")
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+        skins = page.xpath("//ul[starts-with(@class, 'gallery')][1]/li")
+
+        skin_regex = r'^\"?(.*?)\"?\s?(?:[fF]ull\s)?artwork'
+        valid_skins = []
+        for skin in skins:
+            skin_img = skin.xpath("./div[1]//img/@src")[0]
+            skin_img = skin_img.replace('thumb/', '').rsplit("/", 1)[0]
+
+            if not "_S.png" in skin_img and not "_D.png" in skin_img:
+                try:
+                    skin_name = skin.xpath("./div[2]/text()")[0]
+                    skin_name = re.match(skin_regex, skin_name).group(1)
+                except:
+                    skin_name = ""
+
+                valid_skins.append((skin_img, skin_name))
+
+        img, title = choice(valid_skins)
+
+        file = await self.url_to_file(f"{base_url}{img}")
+
+        await self.post(ctx, file, "Girls' Frontline", 0xe8b847,
+            char, title, game_short="girls frontline")
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
