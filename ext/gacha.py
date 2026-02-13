@@ -1937,5 +1937,53 @@ class Gacha(commands.Cog,
             char_name, skin_name, game_short="girls frontline 2")
 
 
+    @commands.command(aliases=["cs", "cs2", "csgo"])
+    async def counterstrike(self, ctx):
+        await ctx.defer()
+
+        r = await self.bot.http_client.get((
+            "https://raw.githubusercontent.com/ByMykel/CSGO-API/"
+            "refs/heads/main/public/api/en/skins.json"))
+        skin = choice(r.json())
+
+        name = skin["weapon"]["name"]
+        try:
+            title = skin["pattern"]["name"]
+        except:
+            title = ""
+
+        wear = choice(skin["wears"])["name"]
+
+        stat_trak = ""
+        if skin["stattrak"]:
+            if randint(0,1):
+                stat_trak = "StatTrak™ "
+
+        if "★" in skin["name"]:
+            full_name = f"★ {stat_trak}{name} {f'| {title} ' if title else ''}({wear})"
+        else:
+            full_name = f"{stat_trak}{skin['name']} ({wear})"
+
+        if title:
+            title = f"{title} ({wear})"
+        else:
+            title = f"{wear}"
+
+        r = await self.bot.http_client.get(
+            f"https://steamcommunity.com/market/listings/730/{full_name}")
+        page = r.text
+        try:
+            price = json.loads(page.split(
+                "var line1=", 1)[1].split("\n", 1)[0][:-1])[-1][1]
+            title += f"\n\n${price:.2f}"
+        except:
+            pass
+
+        color = int(skin["rarity"]["color"][1:], 16)
+
+        await self.post(ctx, skin["image"], f"Counter-Strike 2", color,
+            name, title, author=stat_trak, game_short="counter-strike")
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
