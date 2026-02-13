@@ -983,9 +983,9 @@ class Gacha(commands.Cog,
         if ": " in char:
             char, title = char.split(": ")
             if selected > 0:
-                title = f"{title} ({titles[selected]})"
+                title = f"{title} ({titles[selected].strip()})"
         elif selected > 0:
-            title = titles[selected]
+            title = titles[selected].strip()
 
         img = page.xpath(("//figure[@class='pi-item pi-image']/a/img/"
             "@data-image-name"))[selected].replace('MI.png', 'FB.png')
