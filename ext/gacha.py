@@ -2057,5 +2057,24 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Brawlhalla", 0xffd917, char, title)
 
 
+    @commands.command()
+    async def counterside(self, ctx):
+        await ctx.defer()
+        url = "https://counter-side.fandom.com/api.php"
+
+        bad_pages = [3456, 3457]
+        chars = await self.mediawiki_category(url,
+            "Category:Employees", bad_pages=bad_pages)
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+
+        img = page.xpath("//aside//img/@data-image-name")[0]
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Counter:Side", 0xbe2426, char,
+            game_short="counterside")
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
