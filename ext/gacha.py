@@ -2008,5 +2008,54 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Brawl Stars", 0x2491f4, char, title)
 
+
+    @commands.command()
+    async def brawlhalla(self, ctx):
+        await ctx.defer()
+        base_url = "https://brawlhalla.wiki.gg"
+        url = f"{base_url}/api.php"
+
+        chars = await self.mediawiki_category(url,
+            "Category:Legends")
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+
+        skins = page.xpath(
+            "//div[preceding-sibling::h2/span[@id='List_of_Skins']][1]/div")
+
+        skin_index = randint(0, len(skins))
+        if skin_index == 0:
+            infobox = page.xpath("//table[@class='infobox']/tbody//tbody")[0]
+            img = infobox.xpath(
+                "./tr[@class='infobox-swapper pose']/td/a/img/@src")[0]
+            title = infobox.xpath("./tr[5]/th/text()")[0]
+        else:
+            img = skins[skin_index-1].xpath(".//tr[2]//img/@src")[0]
+            title = skins[skin_index-1].xpath(".//tr[1]/th//text()")[0]
+
+        short_names = {
+            "King Zuva": "Zuva",
+            "Lady Vera": "Vera",
+            "Lord Vraxx": "Vraxx",
+            "Queen Nai": "Nai",
+            "Red Raptor": "Raptor",
+            "Sir Roland": "Roland"
+        }
+        try:
+            short_name = short_names[char]
+        except:
+            short_name = char
+
+        title = title.replace(f" {short_name}", '')
+        title = title.replace(f"{short_name} ", '')
+        if title.startswith(", "): title = title[2:]
+
+        img = img.replace("thumb/", "").rsplit("/", 1)[0]
+        file = await self.url_to_file(f"{base_url}{img}")
+
+        await self.post(ctx, file, "Brawlhalla", 0xffd917, char, title)
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
