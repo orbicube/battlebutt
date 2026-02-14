@@ -1985,5 +1985,28 @@ class Gacha(commands.Cog,
             name, title, author=stat_trak, game_short="counter-strike")
 
 
+
+    @commands.command()
+    async def brawlstars(self, ctx):
+        await ctx.defer()
+        url = "https://brawlstars.fandom.com/api.php"
+
+        bad_pages = [65951]
+        chars = await self.mediawiki_category(url,
+            "Category:Brawlers", bad_pages=bad_pages)
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+        skin = choice(page.xpath(
+            "//div[@id='gallery-0']/div[@class='wikia-gallery-item']"))
+
+        img = skin.xpath("./div[1]/div/a/img/@data-image-name")[0]
+        title = skin.xpath("./div[2]/text()")[0]
+        title = "" if title == "Default" else title.split(" (", 1)[0]
+
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Brawl Stars", 0x2491f4, char, title)
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
