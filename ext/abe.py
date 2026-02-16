@@ -56,11 +56,16 @@ class Abe(commands.Cog):
 
         for url in urls:
             # regex because of people using twitter proxies 
-            if re.match(r"https?://(?:.*?twitt\wr.*?|x)\.com", url):
+            if re.match(r"https?://(?:.*?twitt\wr.*?|x.*?)\.com", url):
                 # Store only tweet IDs since format can change
                 tw_id = re.search(r'/status/(\d+)', url)
                 if tw_id:
                     url = f"tw/{tw_id[1]}"
+
+            if re.match(r"https?://.*?bsky.*?\.app", uri):
+                bsky_id = re.search(r"/post/(\w+)", url)
+                if tw_id:
+                    url = f"bsky/{bsky_id[1]}"
 
             elif "youtu.be/" in url:
                 # Expand mobile YouTube links
