@@ -62,7 +62,7 @@ class Abe(commands.Cog):
                 if tw_id:
                     url = f"tw/{tw_id[1]}"
 
-            elif re.match(r"https?://.*?bsky.*?\.app", uri):
+            elif re.match(r"https?://.*?bsky.*?\.app", url):
                 bsky_id = re.search(r"/post/(\w+)", url)
                 if tw_id:
                     url = f"bsky/{bsky_id[1]}"
