@@ -1475,14 +1475,20 @@ class Gacha(commands.Cog,
         url = "https://etheriarestart.fandom.com/api.php"
 
         char_list = await self.mediawiki_category(url,
-            "Category:Animus", vignette=True)
+            "Category:Animus")
+        char = choice(char_list)["title"]
 
-        char = choice(char_list)
+        page = await self.mediawiki_parse(url, char)
 
-        file = await self.get_imageinfo(url, char["pageimage"])
+        title = page.xpath(
+            "//td[preceding-sibling::th[contains(text(),'Title')]]/text()")[0]
+        img = page.xpath(
+            "//span[contains(@class,'animus-illu')]/a/img/@data-image-name")[0]
+
+        file = await self.get_imageinfo(url, img)
 
         await self.post(ctx, file, "Etheria: Restart", 0xdc1a54, 
-            char["title"])
+            char, title)
 
 
     @commands.command()
