@@ -2076,5 +2076,29 @@ class Gacha(commands.Cog,
             game_short="counterside")
 
 
+    @commands.command()
+    async def astra(self, ctx):
+        await ctx.defer()
+        url = "https://knightsofveda.fandom.com/api.php"
+
+        chars = await self.mediawiki_category(url,
+            "Category:5-Star Characters")
+        chars += await self.mediawiki_category(url,
+            "Category:4-Star Characters")
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+
+        try: title = page.xpath(
+            "//aside/h2[@data-image-name='secondary_title']/text()")[0]
+        except: title = ""
+
+        img = page.xpath("//aside/figure[1]/a/img/@data-image-name")[0]
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "ASTRA: Knights of Veda", 0x2a2a77,
+            char, title, game_short="astra")
+
+
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
