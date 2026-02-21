@@ -10,6 +10,10 @@ class Abe(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+        self.tw_regex = re.compile(
+            r"https?://(?:\S*?twitter\S*?|\S*?x\S*?)\.com/\w*/status/(\d+)")
+        self.bsky_regex = re.compile(
+            r"https?://\S*?bsky\S*?\.app/profile/\S+?/post/(\w+)")
 
     @app_commands.command()
     async def abes(self, interaction: discord.Interaction):
@@ -55,17 +59,11 @@ class Abe(commands.Cog):
         urls = [url.lower() for url in urls]
 
         for url in urls:
-            # regex because of people using twitter proxies 
-            if re.match(r"https?://(?:.*?twitt\wr.*?|x.*?)\.com", url):
-                # Store only tweet IDs since format can change
-                tw_id = re.search(r'/status/(\d+)', url)
-                if tw_id:
-                    url = f"tw/{tw_id[1]}"
-
-            elif re.match(r"https?://.*?bsky.*?\.app", url):
-                bsky_id = re.search(r"/post/(\w+)", url)
-                if bsky_id:
-                    url = f"bsky/{bsky_id[1]}"
+            # regex because of people using twitter proxies
+            if tw_id := self.tw_regex.search(url):
+                url = f"tw/{tw_id.group(1)}"
+            elif bsky_id := self.bsky_regex.search(url):
+                url = f"bsky/{bsky_id.group(1)}"
 
             elif "youtu.be/" in url:
                 # Expand mobile YouTube links
@@ -73,7 +71,6 @@ class Abe(commands.Cog):
                 url = (f"https://www.youtube.com/watch?v="
                     f"{yt_url.path.rsplit('/', 1)[1]}"
                     f"{f'&{yt_url.query}' if yt_url.query else ''}")
-
             elif "youtube.com" in url:
                 # Remove cruft from pre-expanded mobile YT links
                 url = url.replace("&feature=youtu.be", "")
