@@ -61,7 +61,7 @@ class Roles(commands.Cog):
 
         old_color = str(role.color).upper()
         if old_gradient := role.secondary_color:
-            old_color = f"{color} -> {str(old_gradient).upper()}"
+            old_color = f"{old_color} -> {str(old_gradient).upper()}"
 
         new_codes = [code.lower()]
         if gradient:
