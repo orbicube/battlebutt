@@ -98,7 +98,7 @@ class Roles(commands.Cog):
         if len(new_colors) == 2:
             role = await role.edit(color=new_colors[0],
                 secondary_color=new_colors[1])
-            new_str = (f"{str(new_colors[0]).upper()} ->"
+            new_str = (f"{str(new_colors[0]).upper()}→"
                 f" {str(new_colors[1]).upper()}")
         else:
             role = await role.edit(color=new_colors[0])
