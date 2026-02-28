@@ -34,7 +34,7 @@ class Roles(commands.Cog):
                 return
             else:
                 color = str(interaction.user.color).upper()
-                if old_gradient := interaction.user.secondary_color:
+                if old_gradient := interaction.user.top_role.secondary_color:
                     color = f"{color}→{str(old_gradient).upper()}"
                 await interaction.response.send_message(
                     f"Your {c_word} is {color}.", ephemeral=True)
@@ -99,7 +99,7 @@ class Roles(commands.Cog):
             role = await role.edit(color=new_colors[0],
                 secondary_color=new_colors[1])
             new_str = (f"{str(new_colors[0]).upper()}→"
-                f" {str(new_colors[1]).upper()}")
+                f"{str(new_colors[1]).upper()}")
         else:
             role = await role.edit(color=new_colors[0])
             new_str = str(new_colors[0]).upper()
