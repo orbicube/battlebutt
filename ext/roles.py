@@ -14,8 +14,10 @@ class Roles(commands.Cog):
     @app_commands.command(name="color", description="Change your role color")
     @app_commands.guild_only()
     @app_commands.describe(
-        code="Hex code (e.g. #123ABC), \"current\", \"random\"")
-    async def color(self, interaction: discord.Interaction, code: str):
+        code="Hex code (e.g. #123ABC), \"current\", \"random\"",
+        gradient="Hex code (e.g. #123ABC), \"random\"")
+    async def color(self, interaction: discord.Interaction, code: str,
+        gradient: Optional[str] = None):
 
         # Color or colour
         c_word = await self.bot.tree.translator.translate(
@@ -32,6 +34,8 @@ class Roles(commands.Cog):
                 return
             else:
                 color = str(interaction.user.color).upper()
+                if old_gradient := interaction.user.secondary_color:
+                    color = f"{color} -> {str(old_gradient).upper()}"
                 await interaction.response.send_message(
                     f"Your {c_word} is {color}.", ephemeral=True)
                 return
@@ -56,37 +60,52 @@ class Roles(commands.Cog):
             role = interaction.guild.get_role(role_id[0])
 
         old_color = str(role.color).upper()
+        if old_gradient := role.secondary_color:
+            old_color = f"{color} -> {str(old_gradient).upper()}"
 
-        if code.lower() == "random":
-            # discord.Color.random() gives somewhat limited results
-            role = await role.edit(color=discord.Color.from_rgb(
-                randint(0,255), randint(0,255), randint(0,255)))
+        new_codes = [code.lower()]
+        if gradient:
+            new_codes.append(gradient.lower())
+        
+        new_colors = []
+        for c in new_codes:
+            if c.lower() == "random":
+                new_color = discord.Color.from_rgb(
+                    randint(0,255), randint(0,255), randint(0,255))
+            else:
+                # Make sure they entered a viable code
+                if not c.startswith("#"):
+                    c = f"#{c}"
+
+                try:
+                    new_color = discord.Color.from_str(c)
+                except ValueError:
+                    await interaction.response.send_message(
+                        "That wasn't a valid hex code.", ephemeral=True)
+                    return
+
+                # Checking against invisible name combos (plus or minus 5)
+                if 49 <= new_color.r <= 49:
+                    if 52 <= new_color.g <= 62:
+                        if 58 <= new_color.b <= 68:
+                            await interaction.response.send_message(
+                                "I'm not letting you turn invisible.",
+                                ephemeral=True)
+                            return
+
+            new_colors.append(new_color)
+
+        if len(new_colors) == 2:
+            role = await role.edit(color=new_colors[0],
+                secondary_color=new_colors[1])
+            new_str = (f"{str(new_colors[0]).upper()} ->"
+                f" {str(new_colors[1]).upper()}")
         else:
-            # Make sure they entered a viable code
-            if not code.startswith("#"):
-                code = f"#{code}"
-            try:
-                new_color = discord.Color.from_str(code)
-            except ValueError:
-                await interaction.response.send_message(
-                    "That wasn't a valid hex code.", ephemeral=True)
-                return
+            role = await role.edit(color=new_colors[0])
+            new_str = str(new_colors[0]).upper()
 
-            # Checking against invisible name combos (plus or minus 5)
-            if 49 <= new_color.r <= 49:
-                if 52 <= new_color.g <= 62:
-                    if 58 <= new_color.b <= 68:
-                        await interaction.response.send_message(
-                            "I'm not letting you turn invisible.",
-                            ephemeral=True)
-                        return
-
-            role = await role.edit(color=new_color)
-
-        await interaction.response.send_message((
-            f"Your {c_word} has been changed from {old_color}"
-            f" to {str(role.color).upper()}."))
-
+        await interaction.response.send_message(
+            f"Your {c_word} has been changed from {old_color} to {new_str}.")
 
     @app_commands.command()
     @app_commands.guild_only()

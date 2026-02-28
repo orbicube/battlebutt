@@ -1273,9 +1273,11 @@ class Gacha(commands.Cog,
             char = char.split(" (")[0]
 
         img = sections[selected_skin].xpath(
-            "./div[1]/div/span/a/@href")[0]
+            "./div[1]/div/span/a/@data-image-name")[0]
+        if img.endswith(".jpg"):
+            img = img.replace(".jpg", ".png")
 
-        file = await self.url_to_file(img)
+        file = await self.get_imageinfo(img)
 
         await self.post(ctx, file, "Food Fantasy", 0xf6be41, char, skin_name)
 
