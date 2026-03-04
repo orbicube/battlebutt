@@ -1776,7 +1776,11 @@ class Gacha(commands.Cog,
                 if not any(x in f_name for x in bad_folders):
                     f_name = f_name.split("/portraits/")[1].rsplit("/full")[0]
                     print(f_name)
-                    char, title = unquote(f_name).split("/")
+                    try:
+                        char, title = unquote(f_name).split("/")
+                    except:
+                        char = unquote(f_name)
+                        title = ""
                     chars.setdefault(char, [])
                     chars[char].append(title)
 
@@ -1786,7 +1790,7 @@ class Gacha(commands.Cog,
         title = choice(chars[char])
 
         img_url = (f"{url}mjg/game resources and tools/Mahjong Soul/"
-            f"game files/portraits/{char}/{title}/full.png")
+            f"game files/portraits/{char}{'/' if title else ''}{title}/full.png")
         file = await self.url_to_file(img_url)
 
         if title == "Default" or title == "Bond":
