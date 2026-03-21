@@ -97,6 +97,7 @@ class IGDB(commands.Cog):
                 pass
 
         if img_url:
+            img_url = img_url.removeprefix("/")
             r = await self.bot.http_client.get(img_url)
             box_img = Image.open(BytesIO(r.content))
 
