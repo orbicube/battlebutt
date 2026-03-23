@@ -1079,7 +1079,7 @@ class Gacha(commands.Cog,
         all_imgs = default_imgs + skin_imgs
         if not all_imgs:
             await self.bot.get_channel(DEBUG_CHANNEL).send(f"no imgs")
-            await self.pathtonowhere(ctx, reason)
+            await self.pathtonowhere(ctx)
         else:
             selected_img = choice(all_imgs)
             img = selected_img.xpath("./@href")[0].rsplit("/File:", 1)[1]
