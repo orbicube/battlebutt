@@ -1289,11 +1289,9 @@ class Gacha(commands.Cog,
         url = "https://wiki.biligame.com/resonance/api.php"
 
         characters = self.check_cache("resosol")
-        if characters:
-            
+        if not characters:
             characters = await self.mediawiki_category(url,
                 category="分类:乘员")
-
             self.write_cache("resosol", characters)
 
         char = choice(characters)["title"]
