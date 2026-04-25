@@ -2109,6 +2109,32 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "ASTRA: Knights of Veda", 0x2a2a77,
             char, title, game_short="astra")
 
+    @commands.command()
+    async def dissidiaduellum(self, ctx):
+        await ctx.defer()
+        url = "https://finalfantasy.fandom.com/api.php"
+
+        chars = await self.mediawiki_category(url,
+            "Category:Characters in Dissidia Duellum Final Fantasy",
+            bad_pages=[599027])
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+
+        char_name = page.xpath("//aside/h2/text()")[0]
+
+        outfit = choice(page.xpath("//aside/div[2]//a"))
+        outfit_name = outfit.xpath("./@title")[0]
+        if outfit_name == char_name:
+            outfit_name = ""
+
+        img = outfit.xpath("./img/@data-image-name")[0]
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Dissidia Duellum Final Fantasy", 0xa8a9a9,
+            char_name, outfit_name)
+
+
 
 async def setup(bot):
     await bot.add_cog(Gacha(bot))
