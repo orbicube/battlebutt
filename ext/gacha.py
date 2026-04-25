@@ -2132,7 +2132,7 @@ class Gacha(commands.Cog,
         file = await self.get_imageinfo(url, img)
 
         await self.post(ctx, file, "Dissidia Duellum Final Fantasy", 0xa8a9a9,
-            char_name, outfit_name)
+            char_name, outfit_name, game_short="dissidia duellum")
 
 
 
