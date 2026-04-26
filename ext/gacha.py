@@ -575,7 +575,7 @@ class Gacha(commands.Cog,
             except:
                 valid_article = True
 
-        skin = choice(page.xpath("//div[@class='psychube']"))
+        skin = choice(page.xpath("//div[@class='psychube garment']"))
 
         name = skin.xpath(".//div/div/div[2]/text()")[0]
         title = skin.xpath(".//div/div/p/text()")[0][2:]
