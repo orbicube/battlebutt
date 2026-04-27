@@ -524,7 +524,9 @@ class Card(commands.Cog,
         # Get max card count
         url = "https://en.shadowverse-evolve.com/cards/searchresults/"
         headers = {
-            "User-Agent": "battlebutt/1.0"
+            "User-Agent": "battlebutt/1.0",
+            "Host": "en.shadowverse-evolve.com",
+            "Referer": "https://en.shadowverse-evolve.com/cards/"
         }
         r = await self.bot.http_client.get(url, headers=headers)
         page = html.fromstring(r.text)
