@@ -525,11 +525,14 @@ class Card(commands.Cog,
             cards = f.read().splitlines()
         card = choice(cards)
 
+        headers = {
+            "User-Agent": "battlebutt/1.0",
+        }
         base_url = "https://en.shadowverse-evolve.com/wordpress/wp-content/images/cardlist/"
-        r = await self.bot.http_client.get(f"{base_url}{card}.png")
+        r = await self.bot.http_client.get(f"{base_url}{card}.png", headers=headers)
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.status_code}")
 
-        
+
         card_img = Image.open(BytesIO(r.content))
 
         # Send to Discord
