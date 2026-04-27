@@ -2109,6 +2109,7 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "ASTRA: Knights of Veda", 0x2a2a77,
             char, title, game_short="astra")
 
+
     @commands.command()
     async def dissidiaduellum(self, ctx):
         await ctx.defer()
@@ -2133,6 +2134,27 @@ class Gacha(commands.Cog,
 
         await self.post(ctx, file, "Dissidia Duellum Final Fantasy", 0xa8a9a9,
             char_name, outfit_name, game_short="dissidia duellum")
+
+
+    @commands.command()
+    async def duetnightabyss(self, ctx):
+        await ctx.defer()
+        url = "https://duetnightabyss.fandom.com"
+
+        chars = await self.mediawiki_category(url,
+            "Category:Playable Characters")
+        char = choice(chars)["title"]
+
+        page = await self.mediawiki_parse(url, char)
+
+        char_name = page.xpath("//aside/h2[1]/text()")[0]
+        char_title = page.xpath("//aside/h2[2]/text()")[0]
+
+        img = page.xpath("//aside/div[1]//a[2]/img/@data-image-name")[0]
+        file = await self.get_imageinfo(url, img)
+
+        await self.post(ctx, file, "Duet Night Abyss", 0x2d3341,
+            char_name, char_title)
 
 
 
