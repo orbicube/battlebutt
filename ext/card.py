@@ -527,6 +527,9 @@ class Card(commands.Cog,
 
         base_url = "https://en.shadowverse-evolve.com/wordpress/wp-content/images/cardlist/"
         r = await self.bot.http_client.get(f"{base_url}{card}.png")
+        await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.status_code}")
+
+        
         card_img = Image.open(BytesIO(r.content))
 
         # Send to Discord
