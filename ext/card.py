@@ -525,28 +525,27 @@ class Card(commands.Cog,
             cards = f.read().splitlines()
         card = choice(cards)
 
-        headers = {
-            "User-Agent": "battlebutt/1.0",
-        }
+        #headers = {
+        #    "User-Agent": "battlebutt/1.0",
+        #}
         base_url = "https://en.shadowverse-evolve.com/wordpress/wp-content/images/cardlist/"
-        r = await self.bot.http_client.get(f"{base_url}{card}.png", headers=headers)
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.status_code}")
+        #r = await self.bot.http_client.get(f"{base_url}{card}.png", headers=headers)
+        #await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.status_code}")
 
-
-        card_img = Image.open(BytesIO(r.content))
+        #card_img = Image.open(BytesIO(r.content))
 
         # Send to Discord
-        with BytesIO() as img_binary:
-            card_img.save(img_binary, 'PNG')
-            img_binary.seek(0)
-            file = discord.File(
-                fp=img_binary,
-                filename=f"{card.rsplit('/')[1]}.png")
+        #with BytesIO() as img_binary:
+        #    card_img.save(img_binary, 'PNG')
+        #    img_binary.seek(0)
+        #    file = discord.File(
+        #        fp=img_binary,
+        #        filename=f"{card.rsplit('/')[1]}.png")
 
         if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}:", file=file)
+            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}: [⠀]({base_url}{card}.png)")
         else:
-            await ctx.send(file=file)
+            await ctx.send(f"{base_url}{card}.png")
 
 
     @commands.command(aliases=['swu'])
