@@ -521,40 +521,12 @@ class Card(commands.Cog,
         """ Pulls a Shadowverse: Evolve card """
         await ctx.defer()
 
-        # Get max card count
-        url = "https://en.shadowverse-evolve.com/cards"
-        headers = {
-            "User-Agent": "battlebutt/1.0",
-            "Host": "en.shadowverse-evolve.com",
-            "Referer": "https://en.shadowverse-evolve.com/cards/"
-        }
-        cookies = {
-            "cardlist_search_sort": "new",
-            "cardlist_view": "image"
-        }
-        r = await self.bot.http_client.get(url, headers=headers, cookies=cookies)
-        page = html.fromstring(r.text)
+        with open("ext/data/card/shadowverse.txt") as f:
+            cards = f.read().splitlines()
+        card = choice(cards)
 
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.status_code}")
-        await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.text[:1800]}")
-
-        # 15 cards per page
-        card_count = page.xpath("//span[@class='num bold']/text()")[0]
-        card_count = int(card_count)
-        params = {
-            "page": randint(1, int((card_count / 15) + 1))
-        }
-
-        # Get page with cards to pick
-        r = await self.bot.http_client.get(url, params=params, headers=headers)
-        page = html.fromstring(r.text)
-
-        # Pick card
-        card = "https://en.shadowverse-evolve.com{}".format(
-            choice(page.xpath("//img[@class='object-fit-img']/@src")))
-        card_file = card.rsplit('/', 1)[1]
-
-        r = await self.bot.http_client.get(card, headers=headers)
+        base_url = "https://en.shadowverse-evolve.com/wordpress/wp-content/images/cardlist/"
+        r = await self.bot.http_client.get(f"{base_url}{card}.png")
         card_img = Image.open(BytesIO(r.content))
 
         # Send to Discord
@@ -563,7 +535,7 @@ class Card(commands.Cog,
             img_binary.seek(0)
             file = discord.File(
                 fp=img_binary,
-                filename=card_file)
+                filename=f"{card.rsplit('/')[1]}.png")
 
         if reason and ctx.interaction:
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}:", file=file)
