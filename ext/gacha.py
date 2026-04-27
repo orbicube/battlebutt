@@ -2142,7 +2142,8 @@ class Gacha(commands.Cog,
         url = "https://duetnightabyss.fandom.com/api.php"
 
         chars = await self.mediawiki_category(url,
-            "Category:Playable Characters")
+            "Category:Playable Characters",
+            bad_pages=[471])
         char = choice(chars)["title"]
 
         page = await self.mediawiki_parse(url, char)
