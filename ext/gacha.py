@@ -2151,7 +2151,8 @@ class Gacha(commands.Cog,
         char_name = page.xpath("//aside/h2[1]/text()")[0]
         char_title = page.xpath("//aside/h2[2]/text()")[0]
 
-        img = page.xpath("//aside/div[1]//a[2]/img/@data-image-name")[0]
+        img = page.xpath(
+            "//aside/div[1]//a/img/@data-image-name")[1]
         file = await self.get_imageinfo(url, img)
 
         await self.post(ctx, file, "Duet Night Abyss", 0x2d3341,
