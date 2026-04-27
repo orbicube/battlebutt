@@ -2139,7 +2139,7 @@ class Gacha(commands.Cog,
     @commands.command()
     async def duetnightabyss(self, ctx):
         await ctx.defer()
-        url = "https://duetnightabyss.fandom.com"
+        url = "https://duetnightabyss.fandom.com/api.php"
 
         chars = await self.mediawiki_category(url,
             "Category:Playable Characters")
