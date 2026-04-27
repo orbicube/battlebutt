@@ -522,7 +522,7 @@ class Card(commands.Cog,
         await ctx.defer()
 
         # Get max card count
-        url = "https://en.shadowverse-evolve.com/cards/searchresults/"
+        url = "https://en.shadowverse-evolve.com/cards"
         headers = {
             "User-Agent": "battlebutt/1.0",
             "Host": "en.shadowverse-evolve.com",
