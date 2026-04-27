@@ -528,7 +528,11 @@ class Card(commands.Cog,
             "Host": "en.shadowverse-evolve.com",
             "Referer": "https://en.shadowverse-evolve.com/cards/"
         }
-        r = await self.bot.http_client.get(url, headers=headers)
+        cookies = {
+            "cardlist_search_sort": "new",
+            "cardlist_view": "image"
+        }
+        r = await self.bot.http_client.get(url, headers=headers, cookies=cookies)
         page = html.fromstring(r.text)
 
         await self.bot.get_channel(DEBUG_CHANNEL).send(f"shadowverse {r.status_code}")
