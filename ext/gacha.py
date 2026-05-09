@@ -1110,12 +1110,13 @@ class Gacha(commands.Cog,
         characters = self.check_cache("p5x")
         if not characters:
             r = await self.bot.http_client.get(
-                f"{url}data/kr/characters/characters.js")
-            temp_dict = r.text.split("characterData = ")[1].split(
-                "},", 1)[1][:-3]
-            temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
-            temp_dict = temp_dict.replace(',\n        },', '\n        },')
-            temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
+                f"{url}data/character_info.js")
+            temp_dict = r.text.split(
+                "Object.assign(window.characterData, ")[1].rsplit(
+                ");", 1)[0]
+            #temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
+            #temp_dict = temp_dict.replace(',\n        },', '\n        },')
+            #temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
 
             char_dict = json.loads(temp_dict)
             characters = []
