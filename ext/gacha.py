@@ -1879,8 +1879,13 @@ class Gacha(commands.Cog,
         base_url = "https://iopwiki.com"
         url = f"{base_url}/api.php"
 
-        chars = await self.mediawiki_category(url,
-            "Category:T-Dolls")
+        chars = check_cache("gfl")
+        if not chars:
+            chars = await self.mediawiki_category(url,
+                "Category:T-Dolls")
+
+            self.write_cache("gfl", chars)
+
         char = choice(chars)["title"]
 
         page = await self.mediawiki_parse(url, char)
@@ -1916,8 +1921,13 @@ class Gacha(commands.Cog,
         base_url = "https://iopwiki.com"
         url = f"{base_url}/api.php"
 
-        chars = await self.mediawiki_category(url,
-            "Category:GFL2 Dolls")
+        chars = check_cache("gfl2")
+        if not chars:
+            chars = await self.mediawiki_category(url,
+                "Category:GFL2 Dolls")
+
+            self.write_cache("gfl2", chars)
+
         char = choice(chars)["title"]
         char_name = char.replace(" (GFL2)", "")
 
