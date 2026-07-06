@@ -56,6 +56,29 @@ class Card(commands.Cog,
         return completes[:25] 
 
 
+    async def tcgplayer_rand(self, game: str):
+        url = "https://mp-search-api.tcgplayer.com/v1/search/request"
+        data = {
+            "filters": {
+                "term" : {
+                    "productLineName": [game],
+                    "productTypeName": ["Cards"]
+                }
+            },
+            "size": 1,
+            "sort": {
+                "field": "product-sorting-name",
+                "order": "asc"
+            }
+        }
+        r = await self.bot.http_client.post(url, json=data)
+        card_count = r.json()["results"][0]["totalResults"]
+        data["from"] = randint(0, card_count-1)
+
+        r = await self.bot.http_client.post(url, json=data)
+        card = r.json()["results"][0]["results"][0]
+          
+
     @commands.command(aliases=['poke'])
     async def pokemon(self, ctx, reason: Optional[str] = None):
         """ Pulls a Pokemon TCG card """
