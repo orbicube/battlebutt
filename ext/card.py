@@ -657,18 +657,18 @@ class Card(commands.Cog,
         """ Pulls an Altered TCG card """
         await ctx.defer()
 
-        url = "https://api.altered.gg/cards"
+        url = "https://cards.alteredcore.org/api/cards"
         params = {
-            "itemsPerPage": 1
+            "itemsPerPage": 1,
         }
         r = await self.bot.http_client.get(url, params=params)
-        pages = r.json()["hydra:totalItems"]
+        pages = r.json()["totalItems"]
 
         selected_page = randint(1, int(pages))
         params["page"] = selected_page
 
         r = await self.bot.http_client.get(url, params=params)
-        card_img = r.json()["hydra:member"][0]["imagePath"]
+        card_img = r.json()["member"][0]["imagePath"]["en"]
 
         if reason and ctx.interaction:
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'altered'} {reason}: [⠀]({card_img})")
