@@ -660,6 +660,8 @@ class Card(commands.Cog,
         url = "https://cards.alteredcore.org/api/cards"
         params = {
             "itemsPerPage": 1,
+            "variation[]": "standard",
+            "rarity[]": ["COMMON", "RARE", "EXALTED"]
         }
         r = await self.bot.http_client.get(url, params=params)
         pages = r.json()["totalItems"]
