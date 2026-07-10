@@ -668,7 +668,8 @@ class Card(commands.Cog,
         params["page"] = selected_page
 
         r = await self.bot.http_client.get(url, params=params)
-        card_img = r.json()["member"][0]["imagePath"]["en"]
+        card = r.json()['member'][0]
+        card_img = f"https://cdn.alteredcore.org/cards/en/{card['set']['reference']}/{card['reference']}.webp"
 
         if reason and ctx.interaction:
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'altered'} {reason}: [⠀]({card_img})")
