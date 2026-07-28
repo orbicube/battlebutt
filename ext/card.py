@@ -10,6 +10,7 @@ from PIL import Image
 from io import BytesIO
 from base64 import b64decode
 from urllib.parse import quote
+from datetime import datetime, timedelta
 
 import json
 
@@ -111,6 +112,34 @@ class Card(commands.Cog,
             files = [img]
 
         await ctx.send(msg, files=files)
+
+
+    def check_cache(self, filename: str):
+        try:
+            with open(f"ext/data/card/{filename}.json",
+                encoding="utf-8") as f:
+                j = json.load(f)
+        except:
+            return []
+
+        last_up = datetime.utcfromtimestamp(j["updated"])
+        if (datetime.utcnow() - last_up) / timedelta(weeks=1) > 3:
+            return None
+        else:
+            return j["cards"]
+
+
+    def write_cache(self, filename: str,
+        cards: list):
+
+        data = {
+            "updated": int(datetime.utcnow().timestamp()),
+            "cards": cards
+        }
+
+        with open(f"ext/data/card/{filename}.json", "w",
+            encoding="utf-8") as f:
+            json.dump(data, f)
 
 
     @commands.command(aliases=['poke'])
@@ -1142,6 +1171,7 @@ class Card(commands.Cog,
 
     @commands.command()
     async def cyberpunk(self, ctx):
+        """ Pulls a Cyberpunk card"""
         await ctx.defer()
 
         url = "https://api.netdeck.gg/api/cards/cyberpunk"
@@ -1159,11 +1189,36 @@ class Card(commands.Cog,
         await self.post(ctx, card_img, "cyberpunk")
 
 
+    @commands.command()
+    async def finalfantasy(self, ctx):
+        """ Pulls a Final Fantasy TCG card """
+        await ctx.defer()
+
+        url = "https://storage.googleapis.com/materiahunter-prod.appspot.com"
+        cards = self.check_cache("fftcg")
+        if not cards:
+            r = await self.bot.http_client.get(
+                f"{url}/json/card-variantsV2.json")
+
+            cards = list(set([
+                f"{url}/images/cards/fftcg/en/{c['imageId']}.jpg"
+                for c in r.json()]))
+
+            self.write_cache("fftcg", cards)
+
+        card_img = choice(cards)
+
+        await self.post(ctx, card_img, "final fantasy")
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
-
-        r = await self.bot.http_client.get(
-            "https://www.deckofcardsapi.com/api/deck/new/draw/?count=1&jokers_enabled=True")
+        url = "https://www.deckofcardsapi.com/api/deck/new/draw/"
+        params = {
+            "count": 1,
+            "jokers_enabled": True
+        }
+        r = await self.bot.http_client.get(url, params=params)
 
         card_img = r.json()["cards"][0]["image"]
 
