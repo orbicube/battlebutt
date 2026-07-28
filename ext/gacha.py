@@ -1872,92 +1872,92 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Monster Strike", 0xde630b, name, title)
 
 
-    @commands.command(aliases=['gfl'])
-    async def girlsfrontline(self, ctx):
-        await ctx.defer()
+    # @commands.command(aliases=['gfl'])
+    # async def girlsfrontline(self, ctx):
+    #     await ctx.defer()
 
-        base_url = "https://iopwiki.com"
-        url = f"{base_url}/api.php"
+    #     base_url = "https://iopwiki.com"
+    #     url = f"{base_url}/api.php"
 
-        chars = check_cache("gfl")
-        if not chars:
-            chars = await self.mediawiki_category(url,
-                "Category:T-Dolls")
+    #     chars = check_cache("gfl")
+    #     if not chars:
+    #         chars = await self.mediawiki_category(url,
+    #             "Category:T-Dolls")
 
-            self.write_cache("gfl", chars)
+    #         self.write_cache("gfl", chars)
 
-        char = choice(chars)["title"]
+    #     char = choice(chars)["title"]
 
-        page = await self.mediawiki_parse(url, char)
-        skins = page.xpath("//ul[starts-with(@class, 'gallery')][1]/li")
+    #     page = await self.mediawiki_parse(url, char)
+    #     skins = page.xpath("//ul[starts-with(@class, 'gallery')][1]/li")
 
-        skin_regex = r'^\"?(.*?)\"?\s?(?:[fF]ull\s)?artwork'
-        valid_skins = []
-        for skin in skins:
-            skin_img = skin.xpath("./div[1]//img/@src")[0]
-            skin_img = skin_img.replace('thumb/', '').rsplit("/", 1)[0]
+    #     skin_regex = r'^\"?(.*?)\"?\s?(?:[fF]ull\s)?artwork'
+    #     valid_skins = []
+    #     for skin in skins:
+    #         skin_img = skin.xpath("./div[1]//img/@src")[0]
+    #         skin_img = skin_img.replace('thumb/', '').rsplit("/", 1)[0]
 
-            if not "_S.png" in skin_img and not "_D.png" in skin_img:
-                try:
-                    skin_name = skin.xpath("./div[2]/text()")[0]
-                    skin_name = re.match(skin_regex, skin_name).group(1)
-                except:
-                    skin_name = ""
+    #         if not "_S.png" in skin_img and not "_D.png" in skin_img:
+    #             try:
+    #                 skin_name = skin.xpath("./div[2]/text()")[0]
+    #                 skin_name = re.match(skin_regex, skin_name).group(1)
+    #             except:
+    #                 skin_name = ""
 
-                valid_skins.append((skin_img, skin_name))
+    #             valid_skins.append((skin_img, skin_name))
 
-        img, title = choice(valid_skins)
+    #     img, title = choice(valid_skins)
 
-        file = await self.url_to_file(f"{base_url}{img}")
+    #     file = await self.url_to_file(f"{base_url}{img}")
 
-        await self.post(ctx, file, "Girls' Frontline", 0xe8b847,
-            char, title, game_short="girls frontline")
+    #     await self.post(ctx, file, "Girls' Frontline", 0xe8b847,
+    #         char, title, game_short="girls frontline")
 
 
-    @commands.command(aliases=["gfl2"])
-    async def gflexilium(self, ctx):
-        await ctx.defer()
+    # @commands.command(aliases=["gfl2"])
+    # async def gflexilium(self, ctx):
+    #     await ctx.defer()
 
-        base_url = "https://iopwiki.com"
-        url = f"{base_url}/api.php"
+    #     base_url = "https://iopwiki.com"
+    #     url = f"{base_url}/api.php"
 
-        chars = check_cache("gfl2")
-        if not chars:
-            chars = await self.mediawiki_category(url,
-                "Category:GFL2 Dolls")
+    #     chars = check_cache("gfl2")
+    #     if not chars:
+    #         chars = await self.mediawiki_category(url,
+    #             "Category:GFL2 Dolls")
 
-            self.write_cache("gfl2", chars)
+    #         self.write_cache("gfl2", chars)
 
-        char = choice(chars)["title"]
-        char_name = char.replace(" (GFL2)", "")
+    #     char = choice(chars)["title"]
+    #     char_name = char.replace(" (GFL2)", "")
 
-        page = await self.mediawiki_parse(url, char)
+    #     page = await self.mediawiki_parse(url, char)
 
-        valid_skins = [0]
-        with open(f"ext/data/gacha/gfl2.json", encoding="utf-8") as f:
-            j = json.load(f)
-            try:
-                valid_skins.extend(j[char_name])
-            except: pass
-        skin_index = choice(valid_skins)
-        if skin_index > 0:
-            skin_file = f"ostume{skin_index}.png"
-        else:
-            skin_file = "hole.png"
-        skin = page.xpath(f"//a[contains(@href, '{skin_file}')]")[0]
-        try:
-            skin_name = re.search(r'(?:["“](.+?)["”])|(?: - (.+?)\.)',
-                skin.xpath("./@title")[0]).group(1)
-        except:
-            skin_name = ""
+    #     valid_skins = [0]
+    #     with open(f"ext/data/gacha/gfl2.json", encoding="utf-8") as f:
+    #         j = json.load(f)
+    #         try:
+    #             valid_skins.extend(j[char_name])
+    #         except: pass
+    #     skin_index = choice(valid_skins)
+    #     if skin_index > 0:
+    #         skin_file = f"ostume{skin_index}.png"
+    #     else:
+    #         skin_file = "hole.png"
+    #     skin = page.xpath(f"//a[contains(@href, '{skin_file}')]")[0]
+    #     try:
+    #         skin_name = re.search(r'(?:["“](.+?)["”])|(?: - (.+?)\.)',
+    #             skin.xpath("./@title")[0]).group(1)
+    #     except:
+    #         skin_name = ""
 
-        img = skin.xpath("./img/@src")[0]
-        img = img.replace("/thumb", "").rsplit("/", 1)[0]
+    #     img = skin.xpath("./img/@src")[0]
+    #     img = img.replace("/thumb", "").rsplit("/", 1)[0]
 
-        file = await self.url_to_file(f"{base_url}{img}")
+    #     file = await self.url_to_file(f"{base_url}{img}")
 
-        await self.post(ctx, file, "Girls' Frontline 2: Exilium", 0xf0b000,
-            char_name, skin_name, game_short="girls frontline 2")
+    #     await self.post(ctx, file, "Girls' Frontline 2: Exilium", 0xf0b000,
+    #         char_name, skin_name, game_short="girls frontline 2")
 
 
     @commands.command(aliases=["cs", "cs2", "csgo"])

@@ -114,7 +114,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['poke'])
-    async def pokemon(self, ctx, reason: Optional[str] = None):
+    async def pokemon(self, ctx):
         """ Pulls a Pokemon TCG card """
         await ctx.defer()
 
@@ -130,7 +130,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['ygo', 'yugi'])
-    async def yugioh(self, ctx, reason: Optional[str] = None):
+    async def yugioh(self, ctx):
         """ Pulls a Yu-Gi-Oh! card """
         await ctx.defer()
 
@@ -145,7 +145,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def digimon(self, ctx, reason: Optional[str] = None):
+    async def digimon(self, ctx):
         """ Pulls a Digimon card. """
         await ctx.defer()
 
@@ -170,7 +170,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['magic'])
-    async def mtg(self, ctx, reason: Optional[str] = None):
+    async def mtg(self, ctx):
         """ Pulls a Magic the Gathering card """
         await ctx.defer()
 
@@ -191,7 +191,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['fab'])
-    async def fleshandblood(self, ctx, reason: Optional[str] = None):
+    async def fleshandblood(self, ctx):
         """ Pulls a Flesh and Blood card """
         await ctx.defer()
 
@@ -210,7 +210,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def gateruler(self, ctx, reason: Optional[str] = None):
+    async def gateruler(self, ctx):
         """ Pulls a Gate Ruler card """
         await ctx.defer()
 
@@ -248,7 +248,7 @@ class Card(commands.Cog,
   
 
     @commands.command(aliases=["cfv", "vanguard", "cardfight"])
-    async def cardfightvanguard(self, ctx, reason: Optional[str] = None):
+    async def cardfightvanguard(self, ctx):
         """ Pulls a Cardfight!! Vanguard card """
         await ctx.defer()
 
@@ -270,7 +270,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def grandarchive(self, ctx, reason: Optional[str] = None):
+    async def grandarchive(self, ctx):
         """ Pulls a Grand Archive card """
         await ctx.defer()
 
@@ -284,7 +284,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def nostalgix(self, ctx, reason: Optional[str] = None):
+    async def nostalgix(self, ctx):
         """ Pulls a Nostalgix card """
         await ctx.defer()
 
@@ -303,7 +303,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def lorcana(self, ctx, reason: Optional[str] = None):
+    async def lorcana(self, ctx):
         """ Pulls a Lorcana card """
         await ctx.defer()
 
@@ -315,7 +315,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def redemption(self, ctx, reason: Optional[str] = None):
+    async def redemption(self, ctx):
         """ Pulls a Redemption card """
         await ctx.defer()
 
@@ -340,7 +340,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def vampire(self, ctx, reason: Optional[str] = None):
+    async def vampire(self, ctx):
         """ Pulls a Vampire: The Eternal Struggle card """
         await ctx.defer()
 
@@ -369,7 +369,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def neopets(self, ctx, reason: Optional[str] = None):
+    async def neopets(self, ctx):
         """ Pulls a Neopets card """
         await ctx.defer()
 
@@ -391,7 +391,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def sorcery(self, ctx, reason: Optional[str] = None):
+    async def sorcery(self, ctx):
         """ Pulls a Sorcery card """
         await ctx.defer()
 
@@ -451,7 +451,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['warcraft'])
-    async def wow(self, ctx, reason: Optional[str] = None):
+    async def wow(self, ctx):
         """ Pulls a World of Warcraft TCG card """
         await ctx.defer()
 
@@ -492,7 +492,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def spellfire(self, ctx, reason: Optional[str] = None):
+    async def spellfire(self, ctx):
         """ Pulls a Spellfire card """
         await ctx.defer()
 
@@ -519,7 +519,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def shadowverse(self, ctx, reason: Optional[str] = None):
+    async def shadowverse(self, ctx):
         """ Pulls a Shadowverse: Evolve card """
         await ctx.defer()
 
@@ -548,7 +548,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['swu'])
-    async def starwars(self, ctx, reason: Optional[str] = None):
+    async def starwars(self, ctx):
         """ Pulls a Star Wars Unlimited card """
         await ctx.defer()
 
@@ -572,7 +572,7 @@ class Card(commands.Cog,
             
 
     @commands.command(aliases=['bs'])
-    async def battlespirits(self, ctx, reason: Optional[str] = None):
+    async def battlespirits(self, ctx):
         """ Pulls a Battle Spirits card """
         await ctx.defer()
 
@@ -598,7 +598,7 @@ class Card(commands.Cog,
         await self.post(ctx, card_img, "battle spirits")
 
     @commands.command()
-    async def alphaclash(self, ctx, reason: Optional[str] = None):
+    async def alphaclash(self, ctx):
         """ Pulls an Alpha Clash card """
         await ctx.defer()
 
@@ -619,7 +619,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def altered(self, ctx, reason: Optional[str] = None):
+    async def altered(self, ctx):
         """ Pulls an Altered TCG card """
         await ctx.defer()
 
@@ -643,7 +643,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def elestrals(self, ctx, reason: Optional[str] = None):
+    async def elestrals(self, ctx):
         """ Pulls an Elestrals card """
         await ctx.defer()
 
@@ -677,7 +677,7 @@ class Card(commands.Cog,
         await self.post(ctx, file, "elestrals")
 
     @commands.command()
-    async def fabledsagas(self, ctx, reason: Optional[str] = None):
+    async def fabledsagas(self, ctx):
         """ Pulls a Fabled Sagas card """
         await ctx.defer()
 
@@ -698,7 +698,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def akora(self, ctx, reason: Optional[str] = None):
+    async def akora(self, ctx):
         """ Pulls an Akora card """
         await ctx.defer()
 
@@ -719,7 +719,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def metazoo(self, ctx, reason: Optional[str] = None):
+    async def metazoo(self, ctx):
         """ Pulls a MetaZoo card """
         await ctx.defer()
 
@@ -740,7 +740,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['fow'])
-    async def forceofwill(self, ctx, reason: Optional[str] = None):
+    async def forceofwill(self, ctx):
         """ Pulls a Force of Will card """
         await ctx.defer()
 
@@ -767,7 +767,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['dm', 'duema'])
-    async def duelmasters(self, ctx, reason: Optional[str] = None):
+    async def duelmasters(self, ctx):
         """ Pulls a Japanese Duel Masters card """
         await ctx.defer()
 
@@ -792,7 +792,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def wixoss(self, ctx, reason: Optional[str] = None):
+    async def wixoss(self, ctx):
         """ Pulls a Wixoss card """
         await ctx.defer()
 
@@ -813,7 +813,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def lightseekers(self, ctx, reason: Optional[str] = None):
+    async def lightseekers(self, ctx):
         """ Pulls a Lightseekers card """
         await ctx.defer()
 
@@ -837,7 +837,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def tombraider(self, ctx, reason: Optional[str] = None):
+    async def tombraider(self, ctx):
         """ Pulls a Tomb Raider card """
 
         params = {
@@ -883,7 +883,7 @@ class Card(commands.Cog,
         await self.post(ctx, card_img, "tomb raider")
 
     @commands.command()
-    async def ageofsigmar(self, ctx, reason: Optional[str] = None):
+    async def ageofsigmar(self, ctx):
         """ Pulls a Warhammer Age of Sigmar card """
 
         card_img = await self.tcgplayer_rand("warhammer-age-of-sigmar-champions-tcg")
@@ -916,7 +916,7 @@ class Card(commands.Cog,
 
 
     @commands.command(aliases=['zwo'])
-    async def zombieworldorder(self, ctx, reason: Optional[str] = None):
+    async def zombieworldorder(self, ctx):
         """ Pulls a Warhammer Age of Sigmar card """
 
         card_img = await self.tcgplayer_rand("zombie-world-order-tcg")
@@ -947,7 +947,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def vividz(self, ctx, reason: Optional[str] = None):
+    async def vividz(self, ctx):
         """ Pulls a Vividz card """
         await ctx.defer()
 
@@ -961,7 +961,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def onepiece(self, ctx, reason: Optional[str] = None):
+    async def onepiece(self, ctx):
         """ Pulls a One Piece TCG card """
         await ctx.defer()
 
@@ -1014,7 +1014,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def wyvern(self, ctx, reason: Optional[str] = None):
+    async def wyvern(self, ctx):
         """ Pulls a Wyvern TCG card """
 
         with open("ext/data/wyvern.json") as f:
@@ -1025,7 +1025,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def bellasara(self, ctx, reason: Optional[str] = None):
+    async def bellasara(self, ctx):
         """ Pulls a Bella Sara card """
 
         with open("ext/data/bellasara.json") as f:
@@ -1035,7 +1035,7 @@ class Card(commands.Cog,
         await self.post(ctx, f"https://bellasara.wiki.gg/wiki/Special:FilePath/{card}", "bella sara")
 
     @commands.command()
-    async def hololive(self, ctx, reason: Optional[str] = None):
+    async def hololive(self, ctx):
         """ Pulls a Hololive card """
         await ctx.defer()
 
@@ -1059,7 +1059,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def grottobeasts(self, ctx, reason: Optional[str] = None):
+    async def grottobeasts(self, ctx):
         """ Pulls a Grotto Beasts card """
 
         url = f"https://grottobeasts.gitlab.io/assets/img/newcards/GB{randint(1,200):03d}.png"
@@ -1068,7 +1068,7 @@ class Card(commands.Cog,
 
 
     @commands.command()
-    async def riftbound(self, ctx, reason: Optional[str] = None):
+    async def riftbound(self, ctx):
         """ Pulls a Riftbound card"""
         await ctx.defer()
 
@@ -1103,8 +1103,9 @@ class Card(commands.Cog,
     
 
     @commands.command()
-    async def genesis(self, ctx, reason: Optional[str] = None):
+    async def genesis(self, ctx):
         """ Pulls a Geneis: Battle of Champions card """
+        await ctx.defer()
 
         url = "https://www.genesisbattleofchampions.com"
         r = await self.bot.http_client.get(f"{url}/library")
@@ -1119,8 +1120,47 @@ class Card(commands.Cog,
         await self.post(ctx, card_url, "genesis: battle of champions")
 
 
+    @commands.command()
+    async def palworld(self, ctx):
+        """ Pulls a Palworld card """
+        await ctx.defer()
+
+        url = "https://palworldtcg.gg"
+        params = {
+            "per_page": 1,
+        }
+        r = await self.bot.http_client.get(f"{url}/api/v1/cards", params=params)
+
+        card_count = r.json()["meta"]["total_pages"]
+        params["page"] = randint(1, card_count)
+
+        r = await self.bot.http_client.get(f"{url}/api/v1/cards", params=params)
+        card_img = r.json()["data"][0]["image_url"]
+
+        await self.post(ctx, f"{url}{card_img}", "palworld")
+
+
+    @commands.command()
+    async def cyberpunk(self, ctx):
+        await ctx.defer()
+
+        url = "https://api.netdeck.gg/api/cards/cyberpunk"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+
+        card_count = r.json()["total"]
+        params["offset"] = randint(0, card_count-1)
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["items"][0]["image_url"]
+
+        await self.post(ctx, card_img, "cyberpunk")
+
+
     @commands.command(hidden=True)
-    async def playingcard(self, ctx, reason: Optional[str] = None):
+    async def playingcard(self, ctx):
 
         r = await self.bot.http_client.get(
             "https://www.deckofcardsapi.com/api/deck/new/draw/?count=1&jokers_enabled=True")
