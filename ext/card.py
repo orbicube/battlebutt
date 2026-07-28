@@ -73,11 +73,18 @@ class Card(commands.Cog,
         }
         r = await self.bot.http_client.post(url, json=data)
         card_count = r.json()["results"][0]["totalResults"]
-        data["from"] = randint(0, card_count-1)
+        data["from"] = randint(0, int(card_count))
+
+        print(data["from"])
 
         r = await self.bot.http_client.post(url, json=data)
-        card = r.json()["results"][0]["results"][0]
-          
+        card = choice(r.json()["results"][0]["results"])
+
+        card_id = int(card["productId"])
+        card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
+
+        return card_img
+
 
     @commands.command(aliases=['poke'])
     async def pokemon(self, ctx, reason: Optional[str] = None):
@@ -239,24 +246,40 @@ class Card(commands.Cog,
         await ctx.defer()
 
         # Get first page to figure out max page
-        url = "https://en.cf-vanguard.com/cardlist/cardsearch"
-        r = await self.bot.http_client.get(url)
-        page = html.fromstring(r.text)
+        #url = "https://en.cf-vanguard.com/cardlist/cardsearch"
+        #r = await self.bot.http_client.get(url)
+        #page = html.fromstring(r.text)
 
         # 24 cards per page
-        card_count = page.xpath("//div[@class='number']/text()")[0]
-        card_count = int(card_count[:-8])
-        params = {
-            "page": randint(1, int((card_count / 24) + 1))
-        }
+        #card_count = page.xpath("//div[@class='number']/text()")[0]
+        #card_count = int(card_count[:-8])
+        #params = {
+        #    "page": randint(1, int((card_count / 24) + 1))
+        #}
 
         # Get page with cards to pick
-        r = await self.bot.http_client.get(url, params=params)
-        page = html.fromstring(r.text)
+        #r = await self.bot.http_client.get(url, params=params)
+        #page = html.fromstring(r.text)
 
         # Pick card
-        card = "https://en.cf-vanguard.com{}".format(
-            choice(page.xpath("//img[@class='object-fit-img']/@src")))
+        #card = "https://en.cf-vanguard.com{}".format(
+        #    choice(page.xpath("//img[@class='object-fit-img']/@src")))
+
+        #card = await self.tcgplayer_rand("cardfight-vanguard")
+
+        url = "https://www.tcgstacked.com/api/v2/search/cards"
+        params = {
+            "tcg": "vanguard",
+            "page": 1,
+            "hitsPerPage": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+
+        card_count = r.json()["pagination"]["totalHits"]
+        params["page"] = randint(1, card_count)
+
+        r = await self.bot.http_client.get(url, params=params)
+        card = r.json()["data"][0]["images"]["large"]
 
         if reason and ctx.interaction:
             await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'cardfight vanguard'} {reason}: [⠀]({card})")
