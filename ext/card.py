@@ -30,14 +30,22 @@ class Card(commands.Cog,
         commands = self.get_commands()
         selected_comm = next((
             c for c in commands if c.name == game or game in c.aliases), None)
+
         if ctx.interaction:
             ctx.interaction.extras = {"rando": False}
+
+            if reason:
+                ctx.interaction.extras["reason"] = reason
+
         if not selected_comm:
             selected_comm = choice(commands)
+
             await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
+
             if ctx.interaction:
                 ctx.interaction.extras["rando"] = True
-        await selected_comm.__call__(ctx, reason)
+
+        await selected_comm.__call__(ctx)
 
 
     @card.autocomplete('game')
@@ -86,6 +94,26 @@ class Card(commands.Cog,
         return card_img
 
 
+    async def post(self, ctx: commands.Context, img: discord.File|str, game_name: str):
+
+        msg = ""
+        try:
+            reason = ctx.interaction.extras["reason"]
+            if ctx.interaction.extras["random"]:
+                game_name = "card"
+            msg = f"{game_name} {reason}:"
+        except:
+            pass
+
+        files = []
+        if isinstance(img, str):
+            msg += f"[⠀]({img})"
+        else:
+            files = [img]
+
+        await ctx.send(msg, files=files)
+
+
     @commands.command(aliases=['poke'])
     async def pokemon(self, ctx, reason: Optional[str] = None):
         """ Pulls a Pokemon TCG card """
@@ -99,10 +127,7 @@ class Card(commands.Cog,
         image_url = page.xpath("//meta[@property='og:image']/@content")[0]
         image_url = image_url.split('?')[0]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'pokemon'} {reason}: [⠀]({image_url})")
-        else:
-            await ctx.send(image_url)
+        await self.post(ctx, image_url, "pokemon")
 
 
     @commands.command(aliases=['ygo', 'yugi'])
@@ -117,10 +142,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card = r.json()["data"][0]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'yugioh'} {reason}: [⠀]({card['card_images'][0]['image_url']})")
-        else:
-            await ctx.send(card['card_images'][0]['image_url'])
+        await self.post(ctx, card['card_images'][0]['image_url'], "yugioh")
 
 
     @commands.command()
@@ -145,11 +167,7 @@ class Card(commands.Cog,
             fp=BytesIO(img),
             filename=card["path"])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'digimon'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
-
+        await self.post(ctx, file, "digimon")
 
 
     @commands.command(aliases=['magic'])
@@ -170,10 +188,7 @@ class Card(commands.Cog,
             if not "image_uris" in card and "card_faces" in card:
                 card['image_uris'] = card['card_faces'][randint(0,1)]['image_uris']
             
-            if reason and ctx.interaction:
-                await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'magic'} {reason}: [⠀]({card['image_uris']['png']})")
-            else:
-                await ctx.send(card['image_uris']['png'])
+            await self.post(ctx, card['image_uris']['png'], "mtg")
 
 
     @commands.command(aliases=['fab'])
@@ -192,10 +207,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card = r.json()["results"][0]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'flesh and blood'} {reason}: [⠀]({card['image']['large']})")
-        else:
-            await ctx.send(card["image"]["large"])
+        await self.post(ctx, card["image"]["large"], "flesh and blood")
 
 
     @commands.command()
@@ -233,39 +245,13 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=card_url.rsplit('/', 1)[1])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'gate ruler'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "gate ruler")
   
-
 
     @commands.command(aliases=["cfv", "vanguard", "cardfight"])
     async def cardfightvanguard(self, ctx, reason: Optional[str] = None):
         """ Pulls a Cardfight!! Vanguard card """
         await ctx.defer()
-
-        # Get first page to figure out max page
-        #url = "https://en.cf-vanguard.com/cardlist/cardsearch"
-        #r = await self.bot.http_client.get(url)
-        #page = html.fromstring(r.text)
-
-        # 24 cards per page
-        #card_count = page.xpath("//div[@class='number']/text()")[0]
-        #card_count = int(card_count[:-8])
-        #params = {
-        #    "page": randint(1, int((card_count / 24) + 1))
-        #}
-
-        # Get page with cards to pick
-        #r = await self.bot.http_client.get(url, params=params)
-        #page = html.fromstring(r.text)
-
-        # Pick card
-        #card = "https://en.cf-vanguard.com{}".format(
-        #    choice(page.xpath("//img[@class='object-fit-img']/@src")))
-
-        #card = await self.tcgplayer_rand("cardfight-vanguard")
 
         url = "https://www.tcgstacked.com/api/v2/search/cards"
         params = {
@@ -281,10 +267,8 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card = r.json()["data"][0]["images"]["large"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'cardfight vanguard'} {reason}: [⠀]({card})")
-        else:
-            await ctx.send(card)
+        await self.post(ctx, card, "cardfight vanguard")
+
 
     @commands.command()
     async def grandarchive(self, ctx, reason: Optional[str] = None):
@@ -297,10 +281,7 @@ class Card(commands.Cog,
         card_slug = choice(card["editions"])["slug"]
         card_url = f"https://ga-index-public.s3.us-west-2.amazonaws.com/cards/{card_slug}.jpg"
         
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'grand archive'} {reason}: [⠀]({card_url})")
-        else:
-            await ctx.send(card_url)
+        await self.post(ctx, card_url, "grand archive")
 
 
     @commands.command()
@@ -319,10 +300,7 @@ class Card(commands.Cog,
         cards = r.json()["data"]
         card_img = choice(cards)["imageUrl"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'nostalgix'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_url, "nostalgix")
 
 
     @commands.command()
@@ -334,10 +312,7 @@ class Card(commands.Cog,
         cards = r.json()
         card_img = choice(cards)["Image"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'lorcana'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "lorcana")
 
 
     @commands.command()
@@ -362,10 +337,7 @@ class Card(commands.Cog,
             fp=BytesIO(img),
             filename=card["path"])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'redemption'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "redemption")
 
 
     @commands.command()
@@ -394,10 +366,7 @@ class Card(commands.Cog,
             fp=BytesIO(img),
             filename=card["path"])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'vampire'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "vampire")
 
 
     @commands.command()
@@ -419,10 +388,7 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=card.rsplit('/', 1)[1].replace('.gif', '.png'))
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'neopets'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "neopets")
 
 
     @commands.command()
@@ -482,10 +448,7 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=f"{card_slug}.png")
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'sorcery'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "sorcery")
 
 
     @commands.command(aliases=['warcraft'])
@@ -526,10 +489,7 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=f"{card_id}.png")
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'warcraft'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "warcraft")
 
 
     @commands.command()
@@ -556,10 +516,7 @@ class Card(commands.Cog,
             fp=BytesIO(img),
             filename=card["path"])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'spellfire'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "spellfire")
 
 
     @commands.command()
@@ -588,10 +545,7 @@ class Card(commands.Cog,
         #        fp=img_binary,
         #        filename=f"{card.rsplit('/')[1]}.png")
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'shadowverse'} {reason}: [⠀]({base_url}{card}.png)")
-        else:
-            await ctx.send(f"{base_url}{card}.png")
+        await self.post(ctx, f"{base_url}{card}.png", "shadowverse")
 
 
     @commands.command(aliases=['swu'])
@@ -615,10 +569,7 @@ class Card(commands.Cog,
             card_path = card_path[1:]
         card_img = f"{base_url}/images{card_path}"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'star wars'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "star wars")
             
 
     @commands.command(aliases=['bs'])
@@ -645,11 +596,7 @@ class Card(commands.Cog,
         else:
             card_img = card["image_url"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'battle spirits'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
-
+        await self.post(ctx, card_img, "battle spirits")
 
     @commands.command()
     async def alphaclash(self, ctx, reason: Optional[str] = None):
@@ -669,10 +616,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'alpha clash'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "alpha clash")
 
 
     @commands.command()
@@ -696,10 +640,7 @@ class Card(commands.Cog,
         card = r.json()['member'][0]
         card_img = f"https://cdn.alteredcore.org/cards/en/{card['set']['reference']}/{card['reference']}.webp"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'altered'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "altered")
 
 
     @commands.command()
@@ -734,11 +675,7 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=card_url.rsplit('/', 1)[1])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'elestrals'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
-
+        await self.post(ctx, file, "elestrals")
 
     @commands.command()
     async def fabledsagas(self, ctx, reason: Optional[str] = None):
@@ -758,10 +695,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'fabled sagas'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "fabled sagas")
 
 
     @commands.command()
@@ -782,10 +716,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'akora'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "akora")
 
 
     @commands.command()
@@ -806,10 +737,7 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card_img = r.json()["data"][0]["imageUrl"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'metazoo'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "akora")
 
 
     @commands.command(aliases=['fow'])
@@ -836,10 +764,7 @@ class Card(commands.Cog,
         card_img = choice(page.xpath(
             "//li[@class='lg:w-4/12 px-4 text-center my-4']/a/img/@src"))
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'force of will'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "force of will")
 
 
     @commands.command(aliases=['dm', 'duema'])
@@ -864,10 +789,7 @@ class Card(commands.Cog,
         page = html.fromstring(r.text)
         card_img = choice(page.xpath("//div[@id='cardlist']/ul/li/a/img/@src"))
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'duel masters'} {reason}: [⠀]({url}/{card_img})")
-        else:
-            await ctx.send(f"{url}/{card_img}")
+        await self.post(ctx, card_img, "duel masters")
 
 
     @commands.command()
@@ -888,10 +810,7 @@ class Card(commands.Cog,
         card = choice(r.json()["items"])
         card_img = f"{url}thumb/{card['card_no']}.jpg"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'wixoss'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "wixoss")
 
 
     @commands.command()
@@ -915,10 +834,7 @@ class Card(commands.Cog,
         card_sku = choice([sku for sku in card["_source"]["skus"] if sku["image"]])
         card_img = f"https://assets.lightseekers.cards/card-database/cards/{card_sku['id']}.jpg"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'lightseekers'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "lightseekers")
 
 
     @commands.command()
@@ -965,76 +881,70 @@ class Card(commands.Cog,
             'File:', 'Special:FilePath/')
         card_img = f"{url.rsplit('/', 1)[0]}{card_path}"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'tomb raider'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
-
+        await self.post(ctx, card_img, "tomb raider")
 
     @commands.command()
     async def ageofsigmar(self, ctx, reason: Optional[str] = None):
         """ Pulls a Warhammer Age of Sigmar card """
 
-        url = "https://mp-search-api.tcgplayer.com/v1/search/request"
-        data = {
-            "filters": {
-                "term" : {
-                    "productLineName": ["warhammer-age-of-sigmar-champions-tcg"],
-                    "productTypeName": ["Cards"]
-                }
-            },
-            "size": 1,
-            "sort": {
-                "field": "product-sorting-name",
-                "order": "asc"
-            }
-        }
-        r = await self.bot.http_client.post(url, json=data)
-        card_count = r.json()["results"][0]["totalResults"]
-        data["from"] = randint(0, card_count-1)
+        card_img = await self.tcgplayer_rand("warhammer-age-of-sigmar-champions-tcg")
 
-        r = await self.bot.http_client.post(url, json=data)
-        card = r.json()["results"][0]["results"][0]
+        #url = "https://mp-search-api.tcgplayer.com/v1/search/request"
+        #data = {
+        #    "filters": {
+        #        "term" : {
+        #            "productLineName": ["warhammer-age-of-sigmar-champions-tcg"],
+        #            "productTypeName": ["Cards"]
+        #        }
+        #    },
+        #    "size": 1,
+        #    "sort": {
+        #        "field": "product-sorting-name",
+        #        "order": "asc"
+        #    }
+        #}
+        #r = await self.bot.http_client.post(url, json=data)
+        #card_count = r.json()["results"][0]["totalResults"]
+        #data["from"] = randint(0, card_count-1)
 
-        card_id = int(card["productId"])
-        card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
+        #r = await self.bot.http_client.post(url, json=data)
+        #card = r.json()["results"][0]["results"][0]
+
+        #card_id = int(card["productId"])
+        #card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
         
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'age of sigmar'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "age of sigmar")
 
 
     @commands.command(aliases=['zwo'])
     async def zombieworldorder(self, ctx, reason: Optional[str] = None):
         """ Pulls a Warhammer Age of Sigmar card """
 
-        url = "https://mp-search-api.tcgplayer.com/v1/search/request"
-        data = {
-            "filters": {
-                "term" : {
-                    "productLineName": ["zombie-world-order-tcg"],
-                    "productTypeName": ["Cards"]
-                }
-            },
-            "size": 1,
-            "from": randint(0,68),
-            "sort": {
-                "field": "product-sorting-name",
-                "order": "asc"
-            }
-        }
-        r = await self.bot.http_client.post(url, json=data)
+        card_img = await self.tcgplayer_rand("zombie-world-order-tcg")
 
-        card = r.json()["results"][0]["results"][0]
+        #url = "https://mp-search-api.tcgplayer.com/v1/search/request"
+        #data = {
+        #    "filters": {
+        #        "term" : {
+        #            "productLineName": ["zombie-world-order-tcg"],
+        #            "productTypeName": ["Cards"]
+        #        }
+        #    },
+        #    "size": 1,
+        #    "from": randint(0,68),
+        #    "sort": {
+        #        "field": "product-sorting-name",
+        #        "order": "asc"
+        #    }
+        #}
+        #r = await self.bot.http_client.post(url, json=data)
 
-        card_id = int(card["productId"])
-        card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
+        #card = r.json()["results"][0]["results"][0]
+
+        #card_id = int(card["productId"])
+        #card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
         
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'zombie world orderr'} {reason}: [⠀]({card_img})")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "zombie world order")
 
 
     @commands.command()
@@ -1048,10 +958,7 @@ class Card(commands.Cog,
 
         card_img = choice(page.xpath("//ul[@class='list']/li/img/@src"))
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'vividz'} {reason}: [⠀](https://vividztcg.com{card_img})")
-        else:
-            await ctx.send(f"https://vividztcg.com{card_img}")
+        await self.post(ctx, card_img, "vividz")
 
 
     @commands.command()
@@ -1104,10 +1011,7 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=card['name'])
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'one piece'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "one piece")
 
 
     @commands.command()
@@ -1118,10 +1022,7 @@ class Card(commands.Cog,
             j = json.load(f)
         card = choice(j)
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'wyvern'} {reason}: [⠀](https://api.ccgtrader.co.uk{card})")
-        else:
-            await ctx.send(f"https://api.ccgtrader.co.uk{card}")
+        await self.post(ctx, f"https://api.ccgtrader.co.uk{card}", "wyvern")
 
 
     @commands.command()
@@ -1132,11 +1033,7 @@ class Card(commands.Cog,
             j = json.load(f)
         card = choice(j)
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'bella sara'} {reason}: [⠀](https://bellasara.wiki.gg/wiki/Special:FilePath/{card})")
-        else:
-            await ctx.send(f"https://bellasara.wiki.gg/wiki/Special:FilePath/{card}")
-
+        await self.post(ctx, f"https://bellasara.wiki.gg/wiki/Special:FilePath/{card}", "bella sara")
 
     @commands.command()
     async def hololive(self, ctx, reason: Optional[str] = None):
@@ -1159,10 +1056,7 @@ class Card(commands.Cog,
         page = html.fromstring(r.text)
 
         card_img = choice(page.xpath("//li/a/img/@src"))
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'hololive'} {reason}: [⠀]({url}{card_img})")
-        else:
-            await ctx.send(f"{url}{card_img}")
+        await self.post(ctx, f"{url}{card_img}", "hololive")
 
 
     @commands.command()
@@ -1171,10 +1065,7 @@ class Card(commands.Cog,
 
         url = f"https://grottobeasts.gitlab.io/assets/img/newcards/GB{randint(1,200):03d}.png"
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'grotto beasts'} {reason}: [⠀]({url})")
-        else:
-            await ctx.send(f"{url}")
+        await self.post(ctx, url, "grotto beasts")
 
 
     @commands.command()
@@ -1209,10 +1100,7 @@ class Card(commands.Cog,
                 fp=img_binary,
                 filename=f"{card_id}.webp")
 
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'riftbound'} {reason}:", file=file)
-        else:
-            await ctx.send(file=file)
+        await self.post(ctx, file, "riftbound")
     
 
     @commands.command()
@@ -1229,10 +1117,7 @@ class Card(commands.Cog,
         page = html.fromstring(r.text)
 
         card_url = choice(page.xpath("//div/a/img/@data-src"))
-        if reason and ctx.interaction:
-            await ctx.send(f"{'card' if ctx.interaction.extras['rando'] else 'genesis: battle of champions'} {reason}: [⠀]({card_url})")
-        else:
-            await ctx.send(f"{card_url}")
+        await self.post(ctx, card_url, "genesis: battle of champions")
 
 
     @commands.command(hidden=True)
@@ -1243,10 +1128,7 @@ class Card(commands.Cog,
 
         card_img = r.json()["cards"][0]["image"]
 
-        if reason and ctx.interaction:
-            await ctx.send(f"card {reason}: {card_img}")
-        else:
-            await ctx.send(card_img)
+        await self.post(ctx, card_img, "card")
 
 
 async def setup(bot):
