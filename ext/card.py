@@ -125,7 +125,7 @@ class Card(commands.Cog,
         tree = "00bef43e2222b3635dd69da0271a840c90a7986c"
         url = ("https://api.github.com/repos/TakaOtaku/"
             f"Digimon-Cards/git/trees/{tree}")
-        r = await self.bot.http_client.get(url)
+        r = await self.bot.http_client.get(url, timeout=10.0)
         cards = r.json()["tree"]
 
         filters = ["-J.", "-j", "-Sample"]
