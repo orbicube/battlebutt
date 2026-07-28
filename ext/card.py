@@ -32,7 +32,7 @@ class Card(commands.Cog,
             c for c in commands if c.name == game or game in c.aliases), None)
 
         if ctx.interaction:
-            ctx.interaction.extras = {"rando": False}
+            ctx.interaction.extras = {"random": False}
 
             if reason:
                 ctx.interaction.extras["reason"] = reason
@@ -43,7 +43,7 @@ class Card(commands.Cog,
             await self.bot.get_channel(DEBUG_CHANNEL).send(selected_comm.name)
 
             if ctx.interaction:
-                ctx.interaction.extras["rando"] = True
+                ctx.interaction.extras["random"] = True
 
         await selected_comm.__call__(ctx)
 
@@ -95,7 +95,6 @@ class Card(commands.Cog,
 
 
     async def post(self, ctx: commands.Context, img: discord.File|str, game_name: str):
-
         msg = ""
         try:
             reason = ctx.interaction.extras["reason"]
