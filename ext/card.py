@@ -1143,6 +1143,14 @@ class Card(commands.Cog,
         await self.post(ctx, card["image_url"], "neuroscape")
 
 
+    @commands.command()
+    async def vibes(self, ctx):
+        await ctx.defer()
+
+        card = await self.netdeck_rand("vibes")
+        await self.post(ctx, card["image_url"], "vibes")
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
         url = "https://www.deckofcardsapi.com/api/deck/new/draw/"
