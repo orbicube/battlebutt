@@ -26,7 +26,6 @@ class Card(commands.Cog,
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
     async def card(self, ctx, game: Optional[str] = None, reason: Optional[str] = None):
-        """ Pulls a TCG card """
         
         commands = self.get_commands()
         selected_comm = next((
@@ -95,6 +94,39 @@ class Card(commands.Cog,
         return card_img
 
 
+    async def netdeck_rand(self, game: str):
+        url = f"https://api.netdeck.gg/api/cards/{game}"
+        params = {
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+
+        card_count = r.json()["total"]
+        params["offset"] = randint(0, card_count-1)
+
+        r = await self.bot.http_client.get(url, params=params)
+        card = r.json()["items"][0]
+
+        return card
+
+
+    async def carde_rand(self, game: int):
+        url = "https://api.admin.carde.io/api/v2/deckbuilder/cards/search-with-filters/"
+        js_data = {
+            "game_id": game,
+            "limit": 1
+        }
+
+        r = await self.bot.http_client.post(url, json=js_data)
+        card_count = r.json()["total"]
+        js_data["offset"] = randint(0, card_count-1)
+
+        r = await self.bot.http_client.post(url, json=js_data)
+        card = r.json()["cards"][0]
+
+        return card
+
+
     async def post(self, ctx: commands.Context, img: discord.File|str, game_name: str):
         msg = ""
         try:
@@ -144,7 +176,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['poke'])
     async def pokemon(self, ctx):
-        """ Pulls a Pokemon TCG card """
         await ctx.defer()
 
         url = "https://pkmncards.com/?random"
@@ -160,7 +191,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['ygo', 'yugi'])
     async def yugioh(self, ctx):
-        """ Pulls a Yu-Gi-Oh! card """
         await ctx.defer()
 
         url = "https://db.ygoprodeck.com/api/v7/cardinfo.php"
@@ -175,7 +205,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def digimon(self, ctx):
-        """ Pulls a Digimon card. """
         await ctx.defer()
 
         # Git tree for cardlist, updated 2025/07/10
@@ -200,7 +229,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['magic'])
     async def mtg(self, ctx):
-        """ Pulls a Magic the Gathering card """
         await ctx.defer()
 
         url = "https://api.scryfall.com/cards/random"
@@ -221,7 +249,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['fab'])
     async def fleshandblood(self, ctx):
-        """ Pulls a Flesh and Blood card """
         await ctx.defer()
 
         url = "https://cards.fabtcg.com/api/search/v1/cards/"
@@ -240,7 +267,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def gateruler(self, ctx):
-        """ Pulls a Gate Ruler card """
         await ctx.defer()
 
         # Get max page number
@@ -278,7 +304,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=["cfv", "vanguard", "cardfight"])
     async def cardfightvanguard(self, ctx):
-        """ Pulls a Cardfight!! Vanguard card """
         await ctx.defer()
 
         url = "https://www.tcgstacked.com/api/v2/search/cards"
@@ -300,7 +325,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def grandarchive(self, ctx):
-        """ Pulls a Grand Archive card """
         await ctx.defer()
 
         r = await self.bot.http_client.get(
@@ -314,7 +338,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def nostalgix(self, ctx):
-        """ Pulls a Nostalgix card """
         await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/63bc844c3e8d2f34e312bc77"
@@ -333,7 +356,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def lorcana(self, ctx):
-        """ Pulls a Lorcana card """
         await ctx.defer()
 
         r = await self.bot.http_client.get("https://api.lorcana-api.com/bulk/cards")
@@ -345,7 +367,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def redemption(self, ctx):
-        """ Pulls a Redemption card """
         await ctx.defer()
 
         # Git tree for cardlist, updated 2025/06/24
@@ -370,7 +391,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def vampire(self, ctx):
-        """ Pulls a Vampire: The Eternal Struggle card """
         await ctx.defer()
 
         # Git tree for cardlist, updated 2024/09/22
@@ -399,7 +419,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def neopets(self, ctx):
-        """ Pulls a Neopets card """
         await ctx.defer()
 
         with open("ext/data/neopets.json") as f:
@@ -421,7 +440,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def sorcery(self, ctx):
-        """ Pulls a Sorcery card """
         await ctx.defer()
 
         # Grab random card
@@ -481,7 +499,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['warcraft'])
     async def wow(self, ctx):
-        """ Pulls a World of Warcraft TCG card """
         await ctx.defer()
 
         # Get Google Drive folder ID from weighted lists
@@ -522,7 +539,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def spellfire(self, ctx):
-        """ Pulls a Spellfire card """
         await ctx.defer()
 
         with open ("ext/data/spellfire.json") as f:
@@ -549,7 +565,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def shadowverse(self, ctx):
-        """ Pulls a Shadowverse: Evolve card """
         await ctx.defer()
 
         with open("ext/data/card/shadowverse.txt") as f:
@@ -578,7 +593,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['swu'])
     async def starwars(self, ctx):
-        """ Pulls a Star Wars Unlimited card """
         await ctx.defer()
 
         base_url = "https://swudb.com"
@@ -602,7 +616,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['bs'])
     async def battlespirits(self, ctx):
-        """ Pulls a Battle Spirits card """
         await ctx.defer()
 
         url = "https://api.bandai-tcg-plus.com/api/user/card/list"
@@ -628,7 +641,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def alphaclash(self, ctx):
-        """ Pulls an Alpha Clash card """
         await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/64483da67fc2aee28c8427bf"
@@ -649,7 +661,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def altered(self, ctx):
-        """ Pulls an Altered TCG card """
         await ctx.defer()
 
         url = "https://cards.alteredcore.org/api/cards"
@@ -673,7 +684,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def elestrals(self, ctx):
-        """ Pulls an Elestrals card """
         await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/64a31866dd516a3cc4c8d45c"
@@ -707,7 +717,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def fabledsagas(self, ctx):
-        """ Pulls a Fabled Sagas card """
         await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/64626b9a9d5830157996b180"
@@ -728,7 +737,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def akora(self, ctx):
-        """ Pulls an Akora card """
         await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/636855fc34369ca07c26f17d"
@@ -749,7 +757,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def metazoo(self, ctx):
-        """ Pulls a MetaZoo card """
         await ctx.defer()
 
         url = "https://play-api.carde.io/v1/cards/6362b23bafcb45c0e3070ddf"
@@ -770,7 +777,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['fow'])
     async def forceofwill(self, ctx):
-        """ Pulls a Force of Will card """
         await ctx.defer()
 
         url = "https://www.fowtcg.com/card_search"
@@ -797,7 +803,6 @@ class Card(commands.Cog,
 
     @commands.command(aliases=['dm', 'duema'])
     async def duelmasters(self, ctx):
-        """ Pulls a Japanese Duel Masters card """
         await ctx.defer()
 
         url = "https://dm.takaratomy.co.jp"
@@ -822,7 +827,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wixoss(self, ctx):
-        """ Pulls a Wixoss card """
         await ctx.defer()
 
         url = "https://www.takaratomy.co.jp/products/en.wixoss/card/"
@@ -843,7 +847,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def lightseekers(self, ctx):
-        """ Pulls a Lightseekers card """
         await ctx.defer()
 
         url = "https://carddatabase-es.lightseekers.cards/lightseekers-cards/_search"
@@ -867,7 +870,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def tombraider(self, ctx):
-        """ Pulls a Tomb Raider card """
 
         params = {
             "action": "query",
@@ -913,71 +915,18 @@ class Card(commands.Cog,
 
     @commands.command()
     async def ageofsigmar(self, ctx):
-        """ Pulls a Warhammer Age of Sigmar card """
-
-        card_img = await self.tcgplayer_rand("warhammer-age-of-sigmar-champions-tcg")
-
-        #url = "https://mp-search-api.tcgplayer.com/v1/search/request"
-        #data = {
-        #    "filters": {
-        #        "term" : {
-        #            "productLineName": ["warhammer-age-of-sigmar-champions-tcg"],
-        #            "productTypeName": ["Cards"]
-        #        }
-        #    },
-        #    "size": 1,
-        #    "sort": {
-        #        "field": "product-sorting-name",
-        #        "order": "asc"
-        #    }
-        #}
-        #r = await self.bot.http_client.post(url, json=data)
-        #card_count = r.json()["results"][0]["totalResults"]
-        #data["from"] = randint(0, card_count-1)
-
-        #r = await self.bot.http_client.post(url, json=data)
-        #card = r.json()["results"][0]["results"][0]
-
-        #card_id = int(card["productId"])
-        #card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
-        
+        card_img = await self.tcgplayer_rand("warhammer-age-of-sigmar-champions-tcg")        
         await self.post(ctx, card_img, "age of sigmar")
 
 
     @commands.command(aliases=['zwo'])
     async def zombieworldorder(self, ctx):
-        """ Pulls a Warhammer Age of Sigmar card """
-
         card_img = await self.tcgplayer_rand("zombie-world-order-tcg")
-
-        #url = "https://mp-search-api.tcgplayer.com/v1/search/request"
-        #data = {
-        #    "filters": {
-        #        "term" : {
-        #            "productLineName": ["zombie-world-order-tcg"],
-        #            "productTypeName": ["Cards"]
-        #        }
-        #    },
-        #    "size": 1,
-        #    "from": randint(0,68),
-        #    "sort": {
-        #        "field": "product-sorting-name",
-        #        "order": "asc"
-        #    }
-        #}
-        #r = await self.bot.http_client.post(url, json=data)
-
-        #card = r.json()["results"][0]["results"][0]
-
-        #card_id = int(card["productId"])
-        #card_img = f"https://tcgplayer-cdn.tcgplayer.com/product/{card_id}_in_1000x1000.jpg"
-        
         await self.post(ctx, card_img, "zombie world order")
 
 
     @commands.command()
     async def vividz(self, ctx):
-        """ Pulls a Vividz card """
         await ctx.defer()
 
         url = f"https://vividztcg.com/card/?search=1&pg={randint(1,48)}"
@@ -991,7 +940,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def onepiece(self, ctx):
-        """ Pulls a One Piece TCG card """
         await ctx.defer()
 
         # Get Google Drive folder ID from weighted lists
@@ -1044,7 +992,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def wyvern(self, ctx):
-        """ Pulls a Wyvern TCG card """
 
         with open("ext/data/wyvern.json") as f:
             j = json.load(f)
@@ -1055,7 +1002,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def bellasara(self, ctx):
-        """ Pulls a Bella Sara card """
 
         with open("ext/data/bellasara.json") as f:
             j = json.load(f)
@@ -1065,7 +1011,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def hololive(self, ctx):
-        """ Pulls a Hololive card """
         await ctx.defer()
 
         url = "https://en.hololive-official-cardgame.com"
@@ -1089,7 +1034,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def grottobeasts(self, ctx):
-        """ Pulls a Grotto Beasts card """
 
         url = f"https://grottobeasts.gitlab.io/assets/img/newcards/GB{randint(1,200):03d}.png"
 
@@ -1098,42 +1042,28 @@ class Card(commands.Cog,
 
     @commands.command()
     async def riftbound(self, ctx):
-        """ Pulls a Riftbound card"""
         await ctx.defer()
 
-        url = "https://piltoverarchive.com/api/trpc/cards.search"
-        params = {
-            "batch": 1,
-            "input": '{"0":{"json":{"searchQuery":"","colorIds":[],"type":null,"super":null,"rarity":null,"setName":null,"energyRange":{"min":0,"max":12},"mightRange":{"min":0,"max":10},"powerRange":{"min":0,"max":4},"advancedSearchEnabled":false},"meta":{"values":{"type":["undefined"],"super":["undefined"],"rarity":["undefined"],"setName":["undefined"]}}}}'
-        }
-        headers = {
-            "Referer": "https://piltoverarchive.com/cards"
-        }
+        card = await self.carde_rand(3)
+        r = await self.bot.http_client.get(card["image_url"])
 
-        r = await self.bot.http_client.get(url, params=params, headers=headers)
-        card = choice(r.json()[0]["result"]["data"]["json"])
-        variant = choice(card["cardVariants"])
-        card_url = variant["imageUrl"]
-        card_id = variant["variantNumber"]
-
-        r = await self.bot.http_client.get(card_url)
         card_img = Image.open(BytesIO(r.content))
-        if "Battlefield" in card["type"]:
+        if "Battlefield" in card["card_type"]:
             card_img = card_img.rotate(270, expand=1)
+
         # Send to Discord
         with BytesIO() as img_binary:
             card_img.save(img_binary, 'WEBP')
             img_binary.seek(0)
             file = discord.File(
                 fp=img_binary,
-                filename=f"{card_id}.webp")
+                filename=f"{card['collector_number']}.webp")
 
         await self.post(ctx, file, "riftbound")
     
 
     @commands.command()
     async def genesis(self, ctx):
-        """ Pulls a Geneis: Battle of Champions card """
         await ctx.defer()
 
         url = "https://www.genesisbattleofchampions.com"
@@ -1151,7 +1081,6 @@ class Card(commands.Cog,
 
     @commands.command()
     async def palworld(self, ctx):
-        """ Pulls a Palworld card """
         await ctx.defer()
 
         url = "https://palworldtcg.gg"
@@ -1171,27 +1100,14 @@ class Card(commands.Cog,
 
     @commands.command()
     async def cyberpunk(self, ctx):
-        """ Pulls a Cyberpunk card"""
         await ctx.defer()
 
-        url = "https://api.netdeck.gg/api/cards/cyberpunk"
-        params = {
-            "limit": 1
-        }
-        r = await self.bot.http_client.get(url, params=params)
-
-        card_count = r.json()["total"]
-        params["offset"] = randint(0, card_count-1)
-
-        r = await self.bot.http_client.get(url, params=params)
-        card_img = r.json()["items"][0]["image_url"]
-
-        await self.post(ctx, card_img, "cyberpunk")
+        card = await self.netdeck_rand("cyberpunk")
+        await self.post(ctx, card["image_url"], "cyberpunk")
 
 
     @commands.command()
     async def finalfantasy(self, ctx):
-        """ Pulls a Final Fantasy TCG card """
         await ctx.defer()
 
         url = "https://storage.googleapis.com/materiahunter-prod.appspot.com"
@@ -1209,6 +1125,22 @@ class Card(commands.Cog,
         card_img = choice(cards)
 
         await self.post(ctx, card_img, "final fantasy")
+
+
+    @commands.command()
+    async def cataclysmarcade(self, ctx):
+        await ctx.defer()
+
+        card = await self.netdeck_rand("ca")
+        await self.post(ctx, card["image_url"], "cataclysm arcade")
+
+
+    @commands.command()
+    async def neuroscape(self, ctx):
+        await ctx.defer()
+
+        card = await self.carde_rand(134)
+        await self.post(ctx, card["image_url"], "neuroscape")
 
 
     @commands.command(hidden=True)
