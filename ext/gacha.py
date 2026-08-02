@@ -1411,13 +1411,11 @@ class Gacha(commands.Cog,
         base_url = "https://endfield.wiki.gg"
         url = f"{base_url}/api.php"
 
-        page = await self.mediawiki_parse(url, "Operator/List")
-
-        char = choice(page.xpath(
-            "//div[@class='ranger-list']/div/div[2]/a/@title"))
+        char_list = await self.mediawiki_category(url,
+            "Category:Operators")
+        char = choice(char_list)["title"]
 
         page = await self.mediawiki_parse(url, char)
-
         char_base = choice(page.xpath("//img[@class='character-image']"))
 
         try:
