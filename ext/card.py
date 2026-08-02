@@ -822,7 +822,7 @@ class Card(commands.Cog,
         page = html.fromstring(r.text)
         card_img = choice(page.xpath("//div[@id='cardlist']/ul/li/a/img/@src"))
 
-        await self.post(ctx, card_img, "duel masters")
+        await self.post(ctx, f"{url}/{card_img}", "duel masters")
 
 
     @commands.command()
