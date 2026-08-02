@@ -935,7 +935,7 @@ class Card(commands.Cog,
 
         card_img = choice(page.xpath("//ul[@class='list']/li/img/@src"))
 
-        await self.post(ctx, card_img, "vividz")
+        await self.post(ctx, f"https://vividztcg.com{card_img}", "vividz")
 
 
     @commands.command()
