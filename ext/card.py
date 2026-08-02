@@ -1151,6 +1151,26 @@ class Card(commands.Cog,
         await self.post(ctx, card["image_url"], "vibes")
 
 
+    @commands.command()
+    async def xrossstars(self, ctx):
+        await ctx.defer()
+
+        url = "https://api.xross-stars.com/v1/cards"
+        params = {
+            "page": 1,
+            "limit": 1
+        }
+        r = await self.bot.http_client.get(url, params=params)
+
+        card_count = r.json()["page_info"]["total_count"]
+        params["page"] = randint(1, card_count)
+
+        r = await self.bot.http_client.get(url, params=params)
+        card_img = r.json()["cards"][0]["image_url"]
+
+        await self.post(ctx, card_img, "xross stars")
+
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
         url = "https://www.deckofcardsapi.com/api/deck/new/draw/"
@@ -1163,6 +1183,8 @@ class Card(commands.Cog,
         card_img = r.json()["cards"][0]["image"]
 
         await self.post(ctx, card_img, "card")
+
+
 
 
 async def setup(bot):
