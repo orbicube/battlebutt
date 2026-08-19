@@ -1171,6 +1171,23 @@ class Card(commands.Cog,
         await self.post(ctx, card_img, "xross stars")
 
 
+    @commands.command()
+    async def primal(self, ctx):
+        await ctx.defer()
+
+        url = "https://api.primaltcg.com/"
+        params = {
+            "type": "Character|Ability|Strategy|Field"
+        }
+        r = await self.bot.http_client.get(f"{url}api/v1/guest/post", params=params)
+
+        cards = r.json()["posts"]
+        card = choice(cards)
+        card_img = card["image"]
+
+        await self.post(ctx, f"{url}{card_img}", "primal")
+        
+
     @commands.command(hidden=True)
     async def playingcard(self, ctx):
         url = "https://www.deckofcardsapi.com/api/deck/new/draw/"

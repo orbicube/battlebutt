@@ -10,7 +10,7 @@ from time import time
 from datetime import datetime, timedelta
 from random import choice, choices, randint, sample
 from base64 import b64decode
-from io import BytesIO
+from io import BytesIO, StringIO
 from PIL import Image
 from urllib.parse import quote
 from lxml import html
@@ -2169,6 +2169,51 @@ class Gacha(commands.Cog,
         await self.post(ctx, file, "Duet Night Abyss", 0x2d3341,
             char_name, char_title)
 
+
+    @commands.command()
+    async def wizardry(self, ctx):
+        await ctx.defer()
+
+        url = ("https://api.github.com/repos/itsnicksia/"
+            "wizardry-daphne-guide/git/")
+        headers = { "Authorization": f"Bearer {GITHUB_KEY}" }
+
+        # Updated 19th Aug 2026
+        data_blob = "fff9e5d6383145910a49964fd3d065ba146184c9"
+        data_url = f"{url}blobs/{data_blob}"
+        r = await self.bot.http_client.get(data_url, headers=headers)
+
+        decoded = b64decode(r.json()["content"]).decode('utf-8')
+        chars = csv.DictReader(StringIO(decoded))
+        chars = [char for char in chars if char["Rarity"] != "Anonymous"]
+        char = choice(chars)
+
+        char_skins = [char["Primary Class"]]
+        if char["Secondary Class"]:
+            char_skins.append(char["Secondary Class"])
+
+            if char["Personal Request"]:
+                char_skins.append(
+                    f"{char['Primary Class']} Personal Request")
+                char_skins.append(
+                    f"{char['Secondary Class']} Personal Request")
+
+        if char["Alternate Style"]:
+            char_skins.append(char["Alternate Style"])
+
+        skin = choice(char_skins)
+        if "Personal Request" in skin:
+            display_skin = skin[:-17]
+        else:
+            display_skin = skin
+        formatted_skin = skin.lower().replace(" ", "-")
+
+        img_url = ("https://wizardry.fasterthoughts.io/adventurers/"
+            f"{char['Rarity'].lower()}-adventurers/img/"
+            f"{char['Name'].lower()}-{formatted_skin}.jpg")
+
+        await self.post(ctx, img_url, "Wizardry Variants Daphne", 0x9d0d12,
+            char["Name"], display_skin, game_short="wizardry")
 
 
 async def setup(bot):
