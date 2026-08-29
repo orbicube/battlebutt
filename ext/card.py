@@ -448,10 +448,9 @@ class Card(commands.Cog,
         card_json = choice(r.json())
 
         # Get random set printing of the card
-        card_set = choice(card_json["sets"])
-        card_slug = choice(card_set["variants"])["slug"]
+        card_slug = choice(card_json["printings"])["slug"]
 
-        if card_json["guardian"]["type"] == "Site":
+        if card_json["engine"]["type"] == "Site":
             rotate = True
         else:
             rotate = False
