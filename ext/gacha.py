@@ -2135,8 +2135,11 @@ class Gacha(commands.Cog,
 
         char_name = page.xpath("//aside/h2/text()")[0]
 
-        outfit = choice(page.xpath("//aside/div[2]//a"))
-        outfit_name = outfit.xpath("./@title")[0]
+
+        outfit = choice(page.xpath("//table[1]//a[@class='mw-file-description image']"))
+        outfit_name = outfit.xpath("../../../th/b/text()")[0]
+        #outfit = choice(page.xpath("//aside/div[2]//a"))
+        #outfit_name = outfit.xpath("./@title")[0]
         if outfit_name == char_name:
             outfit_name = ""
 
