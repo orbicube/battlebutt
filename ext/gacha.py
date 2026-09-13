@@ -1112,8 +1112,10 @@ class Gacha(commands.Cog,
             r = await self.bot.http_client.get(
                 f"{url}data/character_info.js")
             temp_dict = r.text.split(
-                "Object.assign(window.characterData, ")[1].rsplit(
+                "Object.assign(window.characterData, ")[1].split(
                 ");", 1)[0]
+
+            #print(temp_dict[-15:])
             #temp_dict = "{\n" + temp_dict.replace(',\n    },', '\n    },')
             #temp_dict = temp_dict.replace(',\n        },', '\n        },')
             #temp_dict = temp_dict.replace('},\n\n    ', '},\n     ')
