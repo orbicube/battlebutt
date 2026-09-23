@@ -623,12 +623,15 @@ class Card(commands.Cog,
             "limit": 1,
             "offset": 0
         }
-        r = await self.bot.http_client.get(url, params=params)
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
 
         count = r.json()["success"]["total"]
         params["offset"] = randint(0, int(count)-1)
 
-        r = await self.bot.http_client.get(url, params=params)
+        r = await self.bot.http_client.get(url, params=params, headers=headers)
         card = r.json()["success"]["cards"][0]
 
         if "backcard_image_url" in card:
