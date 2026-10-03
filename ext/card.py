@@ -11,8 +11,9 @@ from io import BytesIO
 from base64 import b64decode
 from urllib.parse import quote
 from datetime import datetime, timedelta
-
 import json
+import re
+from copy import copy
 
 from credentials import DEBUG_CHANNEL, GOOGLE_KEY
 
@@ -20,8 +21,14 @@ class Card(commands.Cog,
     command_attrs={"cooldown": commands.CooldownMapping.from_cooldown(
         2, 15, commands.BucketType.user)}):
 
+    headers = {
+        "User-Agent": "battlebutt/1.0"
+    }
+
     def __init__(self, bot):
         self.bot = bot
+        self.file_regex = re.compile(
+            r'[^\/\\&\?]+\.\w{2,4}(?=(?:[\?&\/].*$|$))')
 
     @commands.hybrid_command()
     @app_commands.describe(game="TCG you want to pull a card from")
@@ -107,7 +114,9 @@ class Card(commands.Cog,
         r = await self.bot.http_client.get(url, params=params)
         card = r.json()["items"][0]
 
-        return card
+        file = await self.url_to_file(url=card["image_url"])
+
+        return file
 
 
     async def carde_rand(self, game: int):
@@ -172,6 +181,39 @@ class Card(commands.Cog,
         with open(f"ext/data/card/{filename}.json", "w",
             encoding="utf-8") as f:
             json.dump(data, f)
+
+
+    async def url_to_file(self, url: str, filename: str = None, 
+        headers: dict = None, resize: float = 0.0, resample: bool = False):
+
+        if not filename:
+            filename = self.file_regex.findall(url)[1]
+
+        if not headers:
+            headers = copy(self.headers)
+
+        r = await self.bot.http_client.get(url=url, headers=headers,
+            follow_redirects=True)
+
+        if 'application/json' in r.headers.get('Content-Type', ''):
+            img = Image.open(BytesIO(b64decode(r.json()["content"])))
+        else:
+            img = Image.open(BytesIO(r.content))
+        img_format = img.format
+
+        img = img.crop(img.getbbox())
+
+        if resize > 0.0:
+            img = img.resize(
+                (int(img.width*resize), int(img.height*resize)),
+                resample=resample)
+
+        with BytesIO() as img_binary:
+            img.save(img_binary, img_format)
+            img_binary.seek(0)
+            file = discord.File(fp=img_binary, filename=filename)
+
+        return file
 
 
     @commands.command(aliases=['poke'])
@@ -1105,7 +1147,7 @@ class Card(commands.Cog,
         await ctx.defer()
 
         card = await self.netdeck_rand("cyberpunk")
-        await self.post(ctx, card["image_url"], "cyberpunk")
+        await self.post(ctx, card, "cyberpunk")
 
 
     @commands.command()
