@@ -393,7 +393,7 @@ class Card(commands.Cog,
         cards = r.json()["data"]
         card_img = choice(cards)["imageUrl"]
 
-        await self.post(ctx, card_url, "nostalgix")
+        await self.post(ctx, card_img, "nostalgix")
 
 
     @commands.command()
